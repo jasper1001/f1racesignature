@@ -21,7 +21,8 @@
       "Bash(node_modules/.bin/next lint *)",
       "Bash(git init *)",
       "Bash(git remote *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git push *)"
     ]
   }
 }

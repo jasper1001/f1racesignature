@@ -5,11 +5,11 @@ import { motion } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
 import { GalleryCard } from './GalleryCard'
 import { GALLERY_ITEMS } from '@/lib/gallery'
-import { isRaceFree } from '@/lib/freemium'
+
 import { fetchCircuits, fetchTelemetry } from '@/lib/data'
 import type { Circuit, Telemetry } from '@/lib/types'
 
-const FILTERS = ['All', 'Free', 'Hamilton', 'Verstappen', 'Senna', 'Schumacher', 'Premium']
+const FILTERS = ['All', 'Hamilton', 'Verstappen', 'Senna', 'Schumacher']
 
 export function GalleryGrid() {
   const [activeFilter, setActiveFilter] = useState('All')
@@ -21,8 +21,6 @@ export function GalleryGrid() {
 
   const filtered = GALLERY_ITEMS.filter((item) => {
     if (activeFilter === 'All') return true
-    if (activeFilter === 'Free') return !item.isPremium || isRaceFree(item.raceId)
-    if (activeFilter === 'Premium') return item.isPremium && !isRaceFree(item.raceId)
     return item.driverId === activeFilter.toLowerCase()
   })
 

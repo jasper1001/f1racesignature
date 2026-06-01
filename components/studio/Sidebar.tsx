@@ -206,22 +206,34 @@ export function Sidebar({ drivers, races, mobile = false }: SidebarProps) {
         <Section title="Export Format">
           <div className="space-y-1">
             {EXPORT_FORMATS.map((f) => {
+              const isAvailable = f.id === 'poster_portrait'
               const active = exportFormat === f.id
               return (
                 <button
                   key={f.id}
-                  onClick={() => handleExportFormat(f.id as ExportFormat)}
-                  className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-left transition-all cursor-pointer ${
+                  onClick={() => isAvailable && handleExportFormat(f.id as ExportFormat)}
+                  disabled={!isAvailable}
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-left transition-all ${
+                    !isAvailable
+                      ? 'opacity-50 cursor-not-allowed'
+                      : 'cursor-pointer'
+                  } ${
                     active
                       ? 'bg-white/8 border border-[#333333]'
                       : 'border border-transparent hover:border-[#1a1a1a] hover:bg-white/3'
                   }`}
                 >
                   <div>
-                    <div className="text-xs font-medium text-white">{f.name}</div>
+                    <div className={`text-xs font-medium ${isAvailable ? 'text-white' : 'text-[#555555]'}`}>
+                      {f.name}
+                    </div>
                     <div className="text-[10px] text-[#444444]">{f.width}×{f.height}</div>
                   </div>
-                  {!f.isFree && <LockBadge className="text-[#444444] ml-2" />}
+                  {!isAvailable && (
+                    <span className="text-[9px] font-mono text-[#555555] border border-[#2a2a2a] rounded px-1.5 py-0.5 ml-2 whitespace-nowrap">
+                      SOON
+                    </span>
+                  )}
                 </button>
               )
             })}
