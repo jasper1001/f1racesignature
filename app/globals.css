@@ -1,0 +1,112 @@
+@import "tailwindcss";
+
+@theme {
+  --color-black: #030303;
+  --color-surface: #0a0a0a;
+  --color-surface-2: #111111;
+  --color-surface-3: #1a1a1a;
+  --color-border: #222222;
+  --color-gold: #d4a017;
+  --color-gold-light: #e8b84b;
+  --color-gold-dim: #8b6914;
+  --color-racing-red: #e8002d;
+  --color-text: #f5f5f5;
+  --color-text-dim: #888888;
+  --color-text-muted: #555555;
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+}
+
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #030303;
+    color: #f5f5f5;
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: rgba(212, 160, 23, 0.3);
+    color: #f5f5f5;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0a0a0a;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .text-gold {
+    color: var(--color-gold);
+  }
+
+  .bg-surface {
+    background-color: var(--color-surface);
+  }
+
+  .bg-surface-2 {
+    background-color: var(--color-surface-2);
+  }
+
+  .bg-surface-3 {
+    background-color: var(--color-surface-3);
+  }
+
+  .border-surface {
+    border-color: var(--color-border);
+  }
+
+  .glow-gold {
+    box-shadow: 0 0 20px rgba(212, 160, 23, 0.3);
+  }
+
+  .glow-red {
+    box-shadow: 0 0 20px rgba(232, 0, 45, 0.3);
+  }
+
+  .text-dim {
+    color: var(--color-text-dim);
+  }
+
+  .text-muted {
+    color: var(--color-text-muted);
+  }
+
+  .gradient-gold {
+    background: linear-gradient(135deg, #d4a017, #e8b84b);
+  }
+
+  .noise-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+}

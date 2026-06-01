@@ -1,0 +1,244 @@
+'use client'
+
+import { motion, AnimatePresence } from 'framer-motion'
+import { LockBadge } from '@/components/ui/LockBadge'
+import { useStudioStore } from '@/lib/store'
+import { isDriverFree, isRaceFree, isVizModeFree, isThemeFree, isExportFree, UPGRADE_REASONS } from '@/lib/freemium'
+import { THEMES, VIZ_MODES, EXPORT_FORMATS } from '@/lib/themes'
+import { Analytics } from '@/lib/analytics'
+import type { Driver, Race, VizMode, ArtTheme, ExportFormat } from '@/lib/types'
+
+interface SidebarProps {
+  drivers: Driver[]
+  races: Race[]
+  mobile?: boolean
+}
+
+export function Sidebar({ drivers, races, mobile = false }: SidebarProps) {
+  const {
+    selectedDriverId,
+    selectedRaceId,
+    vizMode,
+    theme,
+    exportFormat,
+    setDriver,
+    setRace,
+    setVizMode,
+    setTheme,
+    setExportFormat,
+    openUpgradeModal,
+  } = useStudioStore()
+
+  const driverRaces = races.filter((r) => r.driverId === selectedDriverId)
+
+  const handleDriverSelect = (driverId: string) => {
+    if (!isDriverFree(driverId)) {
+      Analytics.upgradeModalOpened('driver')
+      openUpgradeModal(UPGRADE_REASONS.driver)
+      return
+    }
+    Analytics.driverSelected(driverId)
+    setDriver(driverId)
+  }
+
+  const handleRaceSelect = (raceId: string) => {
+    if (!isRaceFree(raceId)) {
+      Analytics.upgradeModalOpened('race')
+      openUpgradeModal(UPGRADE_REASONS.race)
+      return
+    }
+    Analytics.raceSelected(raceId)
+    setRace(raceId)
+  }
+
+  const handleVizMode = (mode: VizMode) => {
+    if (!isVizModeFree(mode)) {
+      Analytics.upgradeModalOpened('vizMode')
+      openUpgradeModal(UPGRADE_REASONS.vizMode)
+      return
+    }
+    Analytics.vizModeChanged(mode)
+    setVizMode(mode)
+  }
+
+  const handleTheme = (t: ArtTheme) => {
+    if (!isThemeFree(t)) {
+      Analytics.upgradeModalOpened('theme')
+      openUpgradeModal(UPGRADE_REASONS.theme)
+      return
+    }
+    Analytics.themeChanged(t)
+    setTheme(t)
+  }
+
+  const handleExportFormat = (f: ExportFormat) => {
+    if (!isExportFree(f)) {
+      Analytics.upgradeModalOpened('exportFormat')
+      openUpgradeModal(UPGRADE_REASONS.exportFormat)
+      return
+    }
+    Analytics.exportFormatChanged(f)
+    setExportFormat(f)
+  }
+
+  return (
+    <aside className={`bg-[#0a0a0a] overflow-y-auto ${mobile ? 'w-full h-full' : 'w-60 flex-shrink-0 border-r border-[#111111] h-full'}`}>
+      <div className="p-4 space-y-6">
+        {/* Driver */}
+        <Section title="Driver">
+          <div className="grid grid-cols-2 gap-1.5">
+            {drivers.map((d) => {
+              const free = isDriverFree(d.id)
+              const active = selectedDriverId === d.id
+              return (
+                <button
+                  key={d.id}
+                  onClick={() => handleDriverSelect(d.id)}
+                  className={`relative flex items-center gap-2 px-3 py-2 rounded-lg text-left transition-all text-xs cursor-pointer ${
+                    active
+                      ? 'bg-white/8 border border-[#333333] text-white'
+                      : 'bg-transparent border border-[#1a1a1a] text-[#666666] hover:text-white hover:border-[#2a2a2a]'
+                  }`}
+                >
+                  <span
+                    className="w-2 h-2 rounded-full flex-shrink-0"
+                    style={{ backgroundColor: d.color }}
+                  />
+                  <span className="truncate font-medium">{d.shortName}</span>
+                  {!free && (
+                    <LockBadge className="ml-auto text-[#555555]" />
+                  )}
+                </button>
+              )
+            })}
+          </div>
+        </Section>
+
+        {/* Race */}
+        <Section title="Race">
+          <div className="space-y-1">
+            {driverRaces.length === 0 && (
+              <p className="text-[#444444] text-xs px-1 py-2">Select a driver first</p>
+            )}
+            {driverRaces.map((r) => {
+              const free = isRaceFree(r.id)
+              const active = selectedRaceId === r.id
+              return (
+                <button
+                  key={r.id}
+                  onClick={() => handleRaceSelect(r.id)}
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-left transition-all cursor-pointer ${
+                    active
+                      ? 'bg-white/8 border border-[#333333]'
+                      : 'border border-transparent hover:border-[#1a1a1a] hover:bg-white/3'
+                  }`}
+                >
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xs font-medium text-white truncate">{r.circuit.toUpperCase()} {r.year}</div>
+                    <div className="text-[10px] text-[#555555] mt-0.5">{r.lapTime}</div>
+                  </div>
+                  {!free && <LockBadge className="text-[#444444] ml-2" />}
+                </button>
+              )
+            })}
+          </div>
+        </Section>
+
+        {/* Visualization Mode */}
+        <Section title="Visualization">
+          <div className="space-y-1">
+            {VIZ_MODES.map((vm) => {
+              const active = vizMode === vm.id
+              return (
+                <button
+                  key={vm.id}
+                  onClick={() => handleVizMode(vm.id as VizMode)}
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-left transition-all cursor-pointer ${
+                    active
+                      ? 'bg-white/8 border border-[#333333]'
+                      : 'border border-transparent hover:border-[#1a1a1a] hover:bg-white/3'
+                  }`}
+                >
+                  <div>
+                    <div className="text-xs font-medium text-white">{vm.name}</div>
+                    <div className="text-[10px] text-[#444444] mt-0.5">{vm.description}</div>
+                  </div>
+                  {!isVizModeFree(vm.id as VizMode) && <LockBadge className="text-[#444444] ml-2" />}
+                </button>
+              )
+            })}
+          </div>
+        </Section>
+
+        {/* Theme */}
+        <Section title="Artistic Theme">
+          <div className="grid grid-cols-2 gap-1.5">
+            {THEMES.map((t) => {
+              const active = theme === t.id
+              return (
+                <button
+                  key={t.id}
+                  onClick={() => handleTheme(t.id as ArtTheme)}
+                  className={`relative flex flex-col gap-2 px-3 py-2.5 rounded-lg text-left transition-all cursor-pointer ${
+                    active
+                      ? 'border border-[#444444]'
+                      : 'border border-[#1a1a1a] hover:border-[#2a2a2a]'
+                  }`}
+                  style={{ background: t.bg }}
+                >
+                  <div className="flex items-center justify-between">
+                    <div
+                      className="w-5 h-1.5 rounded-full"
+                      style={{ backgroundColor: t.primaryLine }}
+                    />
+                    {!isThemeFree(t.id as ArtTheme) && <LockBadge className="text-[#555555]" />}
+                  </div>
+                  <span className="text-[10px] font-medium" style={{ color: t.textColor }}>
+                    {t.name}
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+        </Section>
+
+        {/* Export Format */}
+        <Section title="Export Format">
+          <div className="space-y-1">
+            {EXPORT_FORMATS.map((f) => {
+              const active = exportFormat === f.id
+              return (
+                <button
+                  key={f.id}
+                  onClick={() => handleExportFormat(f.id as ExportFormat)}
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-left transition-all cursor-pointer ${
+                    active
+                      ? 'bg-white/8 border border-[#333333]'
+                      : 'border border-transparent hover:border-[#1a1a1a] hover:bg-white/3'
+                  }`}
+                >
+                  <div>
+                    <div className="text-xs font-medium text-white">{f.name}</div>
+                    <div className="text-[10px] text-[#444444]">{f.width}×{f.height}</div>
+                  </div>
+                  {!f.isFree && <LockBadge className="text-[#444444] ml-2" />}
+                </button>
+              )
+            })}
+          </div>
+        </Section>
+      </div>
+    </aside>
+  )
+}
+
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <h3 className="text-[10px] font-medium text-[#444444] uppercase tracking-widest mb-2.5">
+        {title}
+      </h3>
+      {children}
+    </div>
+  )
+}

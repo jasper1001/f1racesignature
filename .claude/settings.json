@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(curl -s \"https://raw.githubusercontent.com/f1laps/f1-track-vectors/main/\")",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:api.github.com)",
+      "Bash(gh api *)",
+      "Bash(node scripts/generate-circuits.mjs)",
+      "Bash(node -e ' *)",
+      "Bash(python scripts/fetch_telemetry.py)",
+      "Bash(python -c ' *)",
+      "Bash(curl -s http://localhost:3000)",
+      "Bash(curl -s http://localhost:3000/data/telemetry/hamilton_silverstone_2020.json)",
+      "Bash(node -e \"const d=JSON.parse\\(require\\('fs'\\).readFileSync\\('/dev/stdin','utf8'\\)\\); console.log\\('served points:', d.points.length, 'top speed:', d.topSpeed\\)\")",
+      "Bash(curl -s \"http://localhost:3000/data/telemetry/hamilton_silverstone_2020.json\")",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('points:', len\\(d['points']\\), 'topSpeed:', d['topSpeed'], 'x0:', d['points'][0]['x']\\)\")",
+      "Bash(npx next *)",
+      "Bash(node_modules/.bin/next lint *)",
+      "Bash(git init *)",
+      "Bash(git remote *)",
+      "Bash(git add *)"
+    ]
+  }
+}

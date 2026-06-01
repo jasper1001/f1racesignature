@@ -1,0 +1,90 @@
+[
+  {
+    "id": "hamilton",
+    "name": "Lewis Hamilton",
+    "shortName": "HAM",
+    "team": "Mercedes",
+    "nationality": "British",
+    "color": "#00d2be",
+    "isFree": true,
+    "championships": 7,
+    "bio": "The most decorated driver in F1 history. Seven world titles defined by clinical precision, wet-weather mastery, and an unrivalled competitive hunger."
+  },
+  {
+    "id": "verstappen",
+    "name": "Max Verstappen",
+    "shortName": "VER",
+    "team": "Red Bull Racing",
+    "nationality": "Dutch",
+    "color": "#1e41ff",
+    "isFree": true,
+    "championships": 4,
+    "bio": "Redefining the ceiling of what's possible in a Formula 1 car. Fearless, unyielding, and devastatingly fast in all conditions."
+  },
+  {
+    "id": "schumacher",
+    "name": "Michael Schumacher",
+    "shortName": "MSC",
+    "team": "Ferrari",
+    "nationality": "German",
+    "color": "#dc0000",
+    "isFree": false,
+    "championships": 7,
+    "bio": "The benchmark against which all greats are measured. An athlete who combined raw pace with relentless dedication to elevate the sport itself."
+  },
+  {
+    "id": "senna",
+    "name": "Ayrton Senna",
+    "shortName": "SEN",
+    "team": "McLaren",
+    "nationality": "Brazilian",
+    "color": "#38b000",
+    "isFree": false,
+    "championships": 3,
+    "bio": "The purest racing driver who ever lived. His qualifying laps in Monaco were performances that transcended sport and entered the realm of art."
+  },
+  {
+    "id": "prost",
+    "name": "Alain Prost",
+    "shortName": "PRO",
+    "team": "McLaren",
+    "nationality": "French",
+    "color": "#ff6b00",
+    "isFree": false,
+    "championships": 4,
+    "bio": "The Professor. Where others attacked corners, Prost solved them — extracting every tenth through intellect, smoothness, and relentless consistency."
+  },
+  {
+    "id": "lauda",
+    "name": "Niki Lauda",
+    "shortName": "LAU",
+    "team": "Ferrari",
+    "nationality": "Austrian",
+    "color": "#e8002d",
+    "isFree": false,
+    "championships": 3,
+    "bio": "Courage incarnate. His return to racing 40 days after a near-fatal inferno at the Nürburgring is the most extraordinary act in motorsport history."
+  },
+  {
+    "id": "alonso",
+    "name": "Fernando Alonso",
+    "shortName": "ALO",
+    "team": "Renault",
+    "nationality": "Spanish",
+    "color": "#ffd700",
+    "isFree": false,
+    "championships": 2,
+    "bio": "The complete racing driver. Gifted in qualifying, masterful in strategy, and capable of performances that defy the limits of his machinery."
+  },
+  {
+    "id": "vettel",
+    "name": "Sebastian Vettel",
+    "shortName": "VET",
+    "team": "Red Bull Racing",
+    "nationality": "German",
+    "color": "#1e41ff",
+    "isFree": false,
+    "championships": 4,
+    "bio": "Four consecutive world titles built on dominance, precision, and an encyclopedic technical understanding of every car he ever drove."
+  }
+]
