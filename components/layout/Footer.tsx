@@ -33,6 +33,20 @@ export function Footer() {
               <span className="text-[#666666]">Privacy</span>
               <span className="text-[#666666]">Terms</span>
             </div>
+            <div className="flex flex-col gap-2">
+              <span className="text-[#333333] font-medium uppercase tracking-widest text-xs">More</span>
+              <a
+                href="https://jascodingvibe.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#666666] hover:text-white transition-colors inline-flex items-center gap-1.5"
+              >
+                More Projects
+                <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+                  <path d="M3.5 3h5.5v5.5M9 3L3 9" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </a>
+            </div>
           </div>
         </div>
 
@@ -40,10 +54,22 @@ export function Footer() {
           <p className="text-[#333333] text-xs">
             © {new Date().getFullYear()} F1RaceSignature. All rights reserved.
           </p>
-          <p className="text-[#222222] text-xs">
-            Data for artistic purposes only. Not affiliated with Formula 1 or FIA.
+          <p className="text-[#333333] text-xs">
+            Built by{' '}
+            <a
+              href="https://jascodingvibe.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#d4a017] hover:text-[#e8b84b] transition-colors"
+            >
+              JasCodingVibe
+            </a>
           </p>
         </div>
+
+        <p className="mt-4 text-[#222222] text-xs text-center sm:text-left">
+          Data for artistic purposes only. Not affiliated with Formula 1 or FIA.
+        </p>
       </div>
     </footer>
   )
