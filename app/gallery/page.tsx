@@ -1,6 +1,21 @@
+import type { Metadata } from 'next'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { GalleryGrid } from '@/components/gallery/GalleryGrid'
+
+export const metadata: Metadata = {
+  title: 'Gallery — Legendary F1 Drives as Art',
+  description:
+    'A curated museum of legendary Formula 1 drives rendered as collectible poster art — Senna at Monaco, Schumacher at Spa, Verstappen at Abu Dhabi, and more.',
+  alternates: { canonical: '/gallery' },
+  openGraph: {
+    title: 'Gallery — Legendary F1 Drives as Art',
+    description:
+      'A curated museum of legendary Formula 1 drives rendered as collectible poster art.',
+    url: '/gallery',
+    type: 'website',
+  },
+}
 
 export default function GalleryPage() {
   return (
