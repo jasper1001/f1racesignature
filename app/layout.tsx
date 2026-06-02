@@ -80,6 +80,9 @@ export const metadata: Metadata = {
     icon: '/favicon.svg',
     shortcut: '/favicon.svg',
   },
+  verification: {
+    google: '3f3qJMCfNOHhuenfPZcNEthUo7efQmOrIPp4Y-5SmNQ',
+  },
 }
 
 export default function RootLayout({
