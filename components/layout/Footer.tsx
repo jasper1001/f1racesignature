@@ -19,6 +19,19 @@ export function Footer() {
             <p className="text-[#444444] text-sm max-w-xs">
               Where speed becomes art. F1 telemetry rendered as museum-quality collectible prints.
             </p>
+
+            <a
+              href="https://ko-fi.com/jascodingvibes"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-5 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#d4a017] text-black text-sm font-semibold hover:bg-[#e8b84b] hover:scale-[1.03] active:scale-100 transition-all shadow-[0_0_24px_rgba(212,160,23,0.25)]"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M4 5h13a3 3 0 0 1 0 6h-1M4 5v8a4 4 0 0 0 4 4h5a4 4 0 0 0 4-4v-2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M7 2v1.5M10 2v1.5M13 2v1.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+              </svg>
+              Support on Ko-fi
+            </a>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-8 text-sm">
