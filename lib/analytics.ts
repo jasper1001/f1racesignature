@@ -46,4 +46,13 @@ export const Analytics = {
   studioOpened: () => trackEvent('studio_opened'),
 
   pageViewed: (page: string) => trackEvent('page_view', { page_path: page }),
+
+  // Generic UI click — fired by the global ClickTracker for any button/link
+  uiClick: (params: {
+    label: string
+    element: string
+    href?: string
+    section?: string
+    page: string
+  }) => trackEvent('ui_click', params),
 }
