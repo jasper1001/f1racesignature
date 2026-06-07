@@ -300,7 +300,7 @@ export function PosterPreview({
               {/* Bottom branding */}
               <line x1={L} y1={POSTER_H - 28} x2={R} y2={POSTER_H - 28} stroke={theme.borderColor} strokeWidth="1" opacity="0.35" />
               <text x={L} y={POSTER_H - 12} fill={theme.textDim} fontSize="8" fontFamily="monospace" letterSpacing="3" opacity="0.5">WHERE SPEED BECOMES ART</text>
-              <text x={R} y={POSTER_H - 12} textAnchor="end" fill={theme.primaryLine} fontSize="8" fontFamily="monospace" letterSpacing="2" opacity="0.7">F1RACESIGNATURE.COM</text>
+              <text x={R} y={POSTER_H - 12} textAnchor="end" fill={theme.primaryLine} fontSize="8" fontFamily="monospace" letterSpacing="2" opacity="0.7">F1RACESIGNATURE.VERCEL.APP</text>
             </>
           )
         })()}

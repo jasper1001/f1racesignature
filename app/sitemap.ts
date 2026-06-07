@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next'
 
-const SITE_URL = 'https://f1racesignature.com'
+const SITE_URL = 'https://f1racesignature.vercel.app'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date()

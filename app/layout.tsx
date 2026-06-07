@@ -5,7 +5,7 @@ import './globals.css'
 import { Providers } from '@/components/Providers'
 
 const GA_MEASUREMENT_ID = 'G-HVKDBEVYBD'
-const SITE_URL = 'https://f1racesignature.com'
+const SITE_URL = 'https://f1racesignature.vercel.app'
 
 const inter = Inter({
   subsets: ['latin'],
