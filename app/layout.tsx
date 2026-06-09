@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import Script from 'next/script'
 import { Inter, Playfair_Display } from 'next/font/google'
 import './globals.css'
@@ -83,6 +83,13 @@ export const metadata: Metadata = {
   verification: {
     google: '3f3qJMCfNOHhuenfPZcNEthUo7efQmOrIPp4Y-5SmNQ',
   },
+}
+
+export const viewport: Viewport = {
+  themeColor: '#030303',
+  colorScheme: 'dark',
+  width: 'device-width',
+  initialScale: 1,
 }
 
 export default function RootLayout({

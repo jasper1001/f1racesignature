@@ -22,7 +22,9 @@
       "Bash(git init *)",
       "Bash(git remote *)",
       "Bash(git add *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(sed -i \"s|https://f1racesignature\\\\.com|https://f1racesignature.vercel.app|g\" app/layout.tsx app/robots.ts app/sitemap.ts)",
+      "Bash(sed -i \"s|F1RACESIGNATURE\\\\.COM|F1RACESIGNATURE.VERCEL.APP|g\" components/studio/PosterPreview.tsx)"
     ]
   }
 }
