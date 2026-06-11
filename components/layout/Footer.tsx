@@ -40,6 +40,7 @@ export function Footer() {
               <Link href="/" className="text-[#666666] hover:text-white transition-colors">Home</Link>
               <Link href="/studio" className="text-[#666666] hover:text-white transition-colors">Studio</Link>
               <Link href="/gallery" className="text-[#666666] hover:text-white transition-colors">Gallery</Link>
+              <Link href="/results" className="text-[#666666] hover:text-white transition-colors">2026 Season</Link>
             </div>
             <div className="flex flex-col gap-2">
               <span className="text-[#333333] font-medium uppercase tracking-widest text-xs">Legal</span>

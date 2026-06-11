@@ -81,9 +81,7 @@ export function FeaturedGallery() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.08 }}
             >
-              <Link href="/gallery" className="block">
-                <FeaturedCardLoader item={item} index={i} circuits={circuits} />
-              </Link>
+              <FeaturedCardLoader item={item} index={i} circuits={circuits} />
             </motion.div>
           ))}
         </div>

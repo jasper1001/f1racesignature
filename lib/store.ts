@@ -9,6 +9,12 @@ interface StudioStore extends StudioState {
   setVizMode: (mode: VizMode) => void
   setTheme: (theme: ArtTheme) => void
   setExportFormat: (format: ExportFormat) => void
+  applyConfig: (config: {
+    driverId?: string
+    raceId?: string
+    vizMode?: VizMode
+    theme?: ArtTheme
+  }) => void
   openUpgradeModal: (reason: string) => void
   closeUpgradeModal: () => void
 }
@@ -32,6 +38,14 @@ export const useStudioStore = create<StudioStore>((set) => ({
   setTheme: (theme) => set({ theme }),
 
   setExportFormat: (exportFormat) => set({ exportFormat }),
+
+  applyConfig: ({ driverId, raceId, vizMode, theme }) =>
+    set((state) => ({
+      selectedDriverId: driverId ?? state.selectedDriverId,
+      selectedRaceId: raceId ?? state.selectedRaceId,
+      vizMode: vizMode ?? state.vizMode,
+      theme: theme ?? state.theme,
+    })),
 
   openUpgradeModal: (reason) =>
     set({ showUpgradeModal: true, upgradeModalReason: reason }),

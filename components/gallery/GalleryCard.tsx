@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import type { GalleryItem, Circuit, Telemetry, ThemeConfig } from '@/lib/types'
 import { THEMES } from '@/lib/themes'
@@ -69,14 +70,17 @@ export function GalleryCard({ item, index, circuit, telemetry }: GalleryCardProp
   const theme = THEMES.find((t) => t.id === item.theme) ?? THEMES[0]
   const isLocked = item.isPremium && !isRaceFree(item.raceId)
 
+  const studioUrl = `/studio?driver=${item.driverId}&race=${item.raceId}&theme=${item.theme}&viz=${item.vizMode}`
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.04 }}
     >
-      <div
-        className="group cursor-pointer"
+      <Link
+        href={studioUrl}
+        className="group cursor-pointer block"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         onClick={() => Analytics.galleryItemClicked(item.id)}
@@ -214,7 +218,7 @@ export function GalleryCard({ item, index, circuit, telemetry }: GalleryCardProp
             )}
           </div>
         </div>
-      </div>
+      </Link>
     </motion.div>
   )
 }

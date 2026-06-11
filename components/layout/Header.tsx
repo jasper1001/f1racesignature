@@ -10,6 +10,7 @@ const NAV_LINKS = [
   { href: '/', label: 'Home' },
   { href: '/studio', label: 'Studio' },
   { href: '/gallery', label: 'Gallery' },
+  { href: '/results', label: '2026 Season' },
 ]
 
 export function Header() {

@@ -24,7 +24,11 @@
       "Bash(git add *)",
       "Bash(git push *)",
       "Bash(sed -i \"s|https://f1racesignature\\\\.com|https://f1racesignature.vercel.app|g\" app/layout.tsx app/robots.ts app/sitemap.ts)",
-      "Bash(sed -i \"s|F1RACESIGNATURE\\\\.COM|F1RACESIGNATURE.VERCEL.APP|g\" components/studio/PosterPreview.tsx)"
+      "Bash(sed -i \"s|F1RACESIGNATURE\\\\.COM|F1RACESIGNATURE.VERCEL.APP|g\" components/studio/PosterPreview.tsx)",
+      "WebFetch(domain:api.jolpi.ca)",
+      "WebFetch(domain:f1racesignature.vercel.app)",
+      "Read(//tmp/**)",
+      "Bash(curl -s -o /tmp/results.html -w \"HTTP %{http_code}, %{size_download} bytes\\\\n\" http://localhost:3000/results)"
     ]
   }
 }

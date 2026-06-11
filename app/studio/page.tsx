@@ -13,6 +13,7 @@ import { useStudioStore } from '@/lib/store'
 import { fetchDrivers, fetchRaces, fetchTelemetry, fetchCircuits } from '@/lib/data'
 import { themeById } from '@/lib/themes'
 import { Analytics } from '@/lib/analytics'
+import type { VizMode, ArtTheme } from '@/lib/types'
 
 const ZOOM_STEP = 0.15
 const ZOOM_MIN  = 0.4
@@ -22,8 +23,27 @@ type MobileTab = 'controls' | 'preview' | 'stats'
 
 export default function StudioPage() {
   const { selectedDriverId, selectedRaceId, vizMode, theme } = useStudioStore()
+  const applyConfig = useStudioStore((s) => s.applyConfig)
   const [zoom, setZoom] = useState(0.85)
   const [mobileTab, setMobileTab] = useState<MobileTab>('preview')
+
+  // Apply a preset passed in via URL (e.g. clicking a gallery poster)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const driverId = params.get('driver') ?? undefined
+    const raceId = params.get('race') ?? undefined
+    const viz = params.get('viz') ?? undefined
+    const themeParam = params.get('theme') ?? undefined
+    if (driverId || raceId || viz || themeParam) {
+      applyConfig({
+        driverId,
+        raceId,
+        vizMode: viz as VizMode | undefined,
+        theme: themeParam as ArtTheme | undefined,
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const zoomIn    = useCallback(() => setZoom((z) => Math.min(ZOOM_MAX, +(z + ZOOM_STEP).toFixed(2))), [])
   const zoomOut   = useCallback(() => setZoom((z) => Math.max(ZOOM_MIN, +(z - ZOOM_STEP).toFixed(2))), [])
