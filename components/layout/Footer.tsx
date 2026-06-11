@@ -24,6 +24,7 @@ export function Footer() {
               href="https://ko-fi.com/jascodingvibes"
               target="_blank"
               rel="noopener noreferrer"
+              data-track="footer_kofi_support"
               className="mt-5 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#d4a017] text-black text-sm font-semibold hover:bg-[#e8b84b] hover:scale-[1.03] active:scale-100 transition-all shadow-[0_0_24px_rgba(212,160,23,0.25)]"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -53,6 +54,7 @@ export function Footer() {
                 href="https://jascodingvibe.vercel.app/"
                 target="_blank"
                 rel="noopener noreferrer"
+                data-track="footer_more_projects"
                 className="text-[#666666] hover:text-white transition-colors inline-flex items-center gap-1.5"
               >
                 More Projects
@@ -74,6 +76,7 @@ export function Footer() {
               href="https://jascodingvibe.vercel.app/"
               target="_blank"
               rel="noopener noreferrer"
+              data-track="footer_builtby_jascodingvibe"
               className="text-[#d4a017] hover:text-[#e8b84b] transition-colors"
             >
               JasCodingVibe
