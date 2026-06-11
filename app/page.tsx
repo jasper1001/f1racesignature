@@ -47,9 +47,14 @@ export default function HomePage() {
             </p>
             <p className="text-[#777777] leading-relaxed">
               Choose from legendary drives by Ayrton Senna, Lewis Hamilton, Michael Schumacher, Max
-              Verstappen, and more. Visualize the lap as a racing line, a blue-to-red speed heatmap, a
-              three-sector split, or an overtake map — then apply one of eight artistic themes and
-              export a high-resolution poster, free.
+              Verstappen, Charles Leclerc, Lando Norris and more. Visualize the lap as a racing line, a
+              blue-to-red speed heatmap, a three-sector split, or an overtake map — then apply one of
+              eight artistic themes and export a high-resolution poster, free.
+            </p>
+            <p className="text-[#555555] text-sm leading-relaxed mt-6">
+              Browse the full <a href="/drivers" className="text-[#d4a017] hover:underline">driver collection</a>,
+              explore the <a href="/gallery" className="text-[#d4a017] hover:underline">poster gallery</a>, or
+              follow the <a href="/results" className="text-[#d4a017] hover:underline">live 2026 F1 season standings</a>.
             </p>
           </div>
         </section>

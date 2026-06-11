@@ -14,7 +14,11 @@ export const FAQ_ITEMS: FaqItem[] = [
   },
   {
     q: 'Which drivers and races can I create posters for?',
-    a: 'You can create posters for icons including Ayrton Senna, Lewis Hamilton, Michael Schumacher, Max Verstappen, Alain Prost, Niki Lauda, Fernando Alonso, and Sebastian Vettel — across legendary races like Monaco 1984, Silverstone 2020, Spa, Suzuka, Monza, Interlagos, and Abu Dhabi 2021.',
+    a: 'Twelve drivers and over twenty races. Icons including Ayrton Senna, Lewis Hamilton, Michael Schumacher, Max Verstappen, Alain Prost, Niki Lauda, Fernando Alonso, and Sebastian Vettel, plus modern stars Charles Leclerc, Lando Norris, George Russell, and Carlos Sainz — across legendary drives like Monaco 1984, Silverstone 2020, Leclerc\'s home win at Monaco 2024, Norris\' maiden win at Miami 2024, and Abu Dhabi 2021.',
+  },
+  {
+    q: 'Can I see the live 2026 F1 season standings?',
+    a: 'Yes. The 2026 Season page shows live driver standings, constructor standings, the most recent race result, and the full race calendar — pulled from official F1 timing data and updated automatically throughout the season.',
   },
   {
     q: 'What visualizations are available?',

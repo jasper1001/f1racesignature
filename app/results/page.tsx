@@ -14,18 +14,20 @@ import {
 
 export const revalidate = 3600
 
-export const metadata: Metadata = {
-  title: 'F1 2026 Season — Live Results & Standings',
-  description:
-    'Live 2026 Formula 1 results, driver championship standings, constructor standings, and the full race calendar — real data, updated automatically.',
-  alternates: { canonical: '/results' },
-  openGraph: {
-    title: 'F1 2026 Season — Live Results & Standings',
-    description:
-      'Live 2026 Formula 1 results, championship standings, and the full race calendar.',
-    url: '/results',
-    type: 'website',
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  const { round, standings } = await getDriverStandings()
+  const leader = standings[0]
+  const roundSuffix = round && round !== '0' ? ` — After Round ${round}` : ''
+  const title = `F1 2026 Standings & Results${roundSuffix}`
+  const description = leader
+    ? `Live 2026 Formula 1 standings: ${leader.Driver.givenName} ${leader.Driver.familyName} leads on ${leader.points} points after round ${round}. Full driver and constructor standings, latest results, and the race calendar — real F1 data, updated automatically.`
+    : 'Live 2026 Formula 1 results, driver and constructor standings, and the full race calendar — real data, updated automatically.'
+  return {
+    title,
+    description,
+    alternates: { canonical: '/results' },
+    openGraph: { title, description, url: '/results', type: 'website' },
+  }
 }
 
 export default async function ResultsPage() {
@@ -39,8 +41,25 @@ export default async function ResultsPage() {
 
   const { round, standings: drivers } = driverData
 
+  const standingsJsonLd = drivers.length
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'ItemList',
+        name: `F1 ${season} Driver Standings`,
+        numberOfItems: drivers.length,
+        itemListElement: drivers.slice(0, 20).map((d, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: `${d.Driver.givenName} ${d.Driver.familyName} — ${d.points} pts`,
+        })),
+      }
+    : null
+
   return (
     <>
+      {standingsJsonLd && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(standingsJsonLd) }} />
+      )}
       <Header />
       <main className="pt-14 min-h-screen">
         {/* Hero */}
