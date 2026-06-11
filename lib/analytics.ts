@@ -54,6 +54,10 @@ export const Analytics = {
 
   shareClicked: (method: string) => trackEvent('share_clicked', { method }),
 
+  lapPlayed: () => trackEvent('lap_played'),
+
+  posterSaved: (raceId: string) => trackEvent('poster_saved', { race_id: raceId }),
+
   studioOpened: () => trackEvent('studio_opened'),
 
   pageViewed: (page: string) => trackEvent('page_view', { page_path: page }),

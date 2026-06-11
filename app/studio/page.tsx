@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Header } from '@/components/layout/Header'
@@ -10,7 +10,10 @@ import { StatsPanel } from '@/components/studio/StatsPanel'
 import { ExportButton } from '@/components/studio/ExportButton'
 import { SurpriseButton } from '@/components/studio/SurpriseButton'
 import { ShareButton } from '@/components/studio/ShareButton'
+import { PlayButton } from '@/components/studio/PlayButton'
+import { SaveButton } from '@/components/studio/SaveButton'
 import { UpgradeModal } from '@/components/studio/UpgradeModal'
+import Link from 'next/link'
 import { useStudioStore } from '@/lib/store'
 import { fetchDrivers, fetchRaces, fetchTelemetry, fetchCircuits } from '@/lib/data'
 import { themeById } from '@/lib/themes'
@@ -28,6 +31,27 @@ export default function StudioPage() {
   const applyConfig = useStudioStore((s) => s.applyConfig)
   const [zoom, setZoom] = useState(0.85)
   const [mobileTab, setMobileTab] = useState<MobileTab>('preview')
+
+  // Lap playback
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [progress, setProgress] = useState(0)
+  const rafRef = useRef<number | null>(null)
+  const PLAYBACK_MS = 7000
+
+  useEffect(() => {
+    if (!isPlaying) return
+    let start: number | null = null
+    const tick = (ts: number) => {
+      if (start === null) start = ts
+      const p = ((ts - start) % PLAYBACK_MS) / PLAYBACK_MS
+      setProgress(p)
+      rafRef.current = requestAnimationFrame(tick)
+    }
+    rafRef.current = requestAnimationFrame(tick)
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current)
+    }
+  }, [isPlaying])
 
   // Apply a preset passed in via URL (e.g. clicking a gallery poster)
   useEffect(() => {
@@ -150,7 +174,9 @@ export default function StudioPage() {
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 2v8M2 6h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
                 </button>
               </div>
+              <PlayButton isPlaying={isPlaying} onToggle={() => setIsPlaying((p) => !p)} disabled={!telemetry} />
               <SurpriseButton />
+              <SaveButton />
               <ShareButton />
               <ExportButton />
             </div>
@@ -162,13 +188,13 @@ export default function StudioPage() {
               <EmptyState />
             ) : (
               <div className="poster-wrapper" style={{ transform: `scale(${zoom})`, transformOrigin: 'center center', transition: 'transform 0.15s ease' }}>
-                <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compareDriver={compareEnabled ? compareDriver : null} compareTelemetry={compareEnabled ? compareTelemetry : null} />
+                <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compareDriver={compareEnabled ? compareDriver : null} compareTelemetry={compareEnabled ? compareTelemetry : null} playbackProgress={isPlaying ? progress : null} />
               </div>
             )}
           </div>
         </main>
 
-        <StatsPanel driver={selectedDriver} race={selectedRace} telemetry={telemetry} />
+        <StatsPanel driver={selectedDriver} race={selectedRace} telemetry={telemetry} compareDriver={compareEnabled ? compareDriver : null} compareTelemetry={compareEnabled ? compareTelemetry : null} />
       </div>
 
       {/* ── Mobile layout ── */}
@@ -191,7 +217,9 @@ export default function StudioPage() {
                     {activeTheme.name}
                   </div>
                   <div className="flex items-center gap-2">
+                    <PlayButton isPlaying={isPlaying} onToggle={() => setIsPlaying((p) => !p)} disabled={!telemetry} />
                     <SurpriseButton />
+                    <SaveButton />
                     <ShareButton />
                     <ExportButton />
                   </div>
@@ -212,7 +240,7 @@ export default function StudioPage() {
                         marginBottom: '-310px',
                       }}
                     >
-                      <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compareDriver={compareEnabled ? compareDriver : null} compareTelemetry={compareEnabled ? compareTelemetry : null} />
+                      <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compareDriver={compareEnabled ? compareDriver : null} compareTelemetry={compareEnabled ? compareTelemetry : null} playbackProgress={isPlaying ? progress : null} />
                     </div>
                   )}
                 </div>
@@ -222,7 +250,7 @@ export default function StudioPage() {
             {mobileTab === 'stats' && (
               <motion.div key="stats" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} transition={{ duration: 0.2 }} className="absolute inset-0 overflow-y-auto">
                 <div className="w-full">
-                  <StatsPanel driver={selectedDriver} race={selectedRace} telemetry={telemetry} mobile />
+                  <StatsPanel driver={selectedDriver} race={selectedRace} telemetry={telemetry} mobile compareDriver={compareEnabled ? compareDriver : null} compareTelemetry={compareEnabled ? compareTelemetry : null} />
                 </div>
               </motion.div>
             )}

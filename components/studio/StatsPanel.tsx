@@ -8,9 +8,17 @@ interface StatsPanelProps {
   race: Race | null
   telemetry: Telemetry | null
   mobile?: boolean
+  compareDriver?: Driver | null
+  compareTelemetry?: Telemetry | null
 }
 
-export function StatsPanel({ driver, race, telemetry, mobile = false }: StatsPanelProps) {
+function lapSecs(s: string): number {
+  const [m, sec] = s.split(':')
+  return parseInt(m) * 60 + parseFloat(sec)
+}
+
+export function StatsPanel({ driver, race, telemetry, mobile = false, compareDriver = null, compareTelemetry = null }: StatsPanelProps) {
+  const comparing = Boolean(compareDriver && compareTelemetry && telemetry)
   if (!driver) {
     return (
       <div className={`flex items-center justify-center bg-[#0a0a0a] ${mobile ? 'w-full min-h-[60vh]' : 'w-56 flex-shrink-0 border-l border-[#111111]'}`}>
@@ -77,6 +85,49 @@ export function StatsPanel({ driver, race, telemetry, mobile = false }: StatsPan
                 <SectorBox label="S3" value={`${telemetry.sectors.s3Time.toFixed(1)}`} color="#c800ff" />
               </div>
             </StatGroup>
+
+            {/* Head-to-head sector delta */}
+            {comparing && compareDriver && compareTelemetry && (
+              <div className="rounded-xl border border-[#1a1a1a] p-3">
+                <h4 className="text-[10px] font-medium text-[#d4a017] uppercase tracking-widest mb-3">
+                  Head to Head
+                </h4>
+                <div className="flex items-center justify-between text-xs mb-2">
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: driver.color }} />
+                    <span className="text-white font-medium">{driver.shortName}</span>
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="text-white font-medium">{compareDriver.shortName}</span>
+                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: compareDriver.color }} />
+                  </span>
+                </div>
+                {([
+                  ['S1', telemetry.sectors.s1Time, compareTelemetry.sectors.s1Time],
+                  ['S2', telemetry.sectors.s2Time, compareTelemetry.sectors.s2Time],
+                  ['S3', telemetry.sectors.s3Time, compareTelemetry.sectors.s3Time],
+                  ['LAP', lapSecs(telemetry.lapTime), lapSecs(compareTelemetry.lapTime)],
+                ] as [string, number, number][]).map(([label, a, b]) => {
+                  const aWins = a < b
+                  return (
+                    <div key={label} className="flex items-center justify-between text-xs py-1 border-t border-[#111111]">
+                      <span className={`font-mono ${aWins ? 'text-[#00e676]' : 'text-[#666666]'}`}>{a.toFixed(3)}</span>
+                      <span className="text-[#444444] text-[10px] font-medium px-2">{label}</span>
+                      <span className={`font-mono ${!aWins ? 'text-[#00e676]' : 'text-[#666666]'}`}>{b.toFixed(3)}</span>
+                    </div>
+                  )
+                })}
+                {(() => {
+                  const d = lapSecs(compareTelemetry.lapTime) - lapSecs(telemetry.lapTime)
+                  const faster = d < 0 ? compareDriver.shortName : driver.shortName
+                  return (
+                    <p className="text-center text-[10px] text-[#d4a017] mt-2 font-mono">
+                      {faster} faster by {Math.abs(d).toFixed(3)}s
+                    </p>
+                  )
+                })()}
+              </div>
+            )}
 
             <StatGroup title="Telemetry">
               <StatRow label="Top Speed" value={`${telemetry.topSpeed} km/h`} highlight />

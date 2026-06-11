@@ -4,6 +4,7 @@ import { Hero } from '@/components/landing/Hero'
 import { HowItWorks } from '@/components/landing/HowItWorks'
 import { FeaturedGallery } from '@/components/landing/FeaturedGallery'
 import { FAQ } from '@/components/landing/FAQ'
+import { ThisWeekendBanner } from '@/components/landing/ThisWeekendBanner'
 import { FAQ_ITEMS } from '@/lib/faq'
 
 const faqJsonLd = {
@@ -26,6 +27,7 @@ export default function HomePage() {
       />
       <Header />
       <main className="pt-14">
+        <ThisWeekendBanner />
         <Hero />
         <HowItWorks />
         <FeaturedGallery />

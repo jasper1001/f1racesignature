@@ -11,6 +11,7 @@ const NAV_LINKS = [
   { href: '/studio', label: 'Studio' },
   { href: '/gallery', label: 'Gallery' },
   { href: '/drivers', label: 'Drivers' },
+  { href: '/garage', label: 'My Garage' },
   { href: '/results', label: '2026 Season' },
 ]
 

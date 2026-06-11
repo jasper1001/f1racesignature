@@ -8,6 +8,7 @@ import { SpeedHeatmap } from '@/components/visualizations/SpeedHeatmap'
 import { SectorSplit } from '@/components/visualizations/SectorSplit'
 import { OvertakeMap } from '@/components/visualizations/OvertakeMap'
 import { VIZ_MODES } from '@/lib/themes'
+import { interpolateColor } from '@/lib/data'
 
 const POSTER_W = 600
 const POSTER_H = 800
@@ -24,6 +25,8 @@ interface PosterPreviewProps {
   // Head-to-head comparison (second lap on the same circuit)
   compareDriver?: Driver | null
   compareTelemetry?: Telemetry | null
+  // Lap playback: 0..1 progress, or null when not playing
+  playbackProgress?: number | null
 }
 
 function parseLapSeconds(s: string): number {
@@ -96,10 +99,12 @@ export function PosterPreview({
   isFreeTier = true,
   compareDriver = null,
   compareTelemetry = null,
+  playbackProgress = null,
 }: PosterPreviewProps) {
   const svgRef = useRef<SVGSVGElement>(null)
 
   const isComparing = Boolean(compareTelemetry && compareTelemetry.points.length > 1)
+  const isPlaying = playbackProgress !== null
 
   const toPosterSpace = (tel: Telemetry | null) =>
     tel?.points.map((pt) => ({
@@ -138,6 +143,47 @@ export function PosterPreview({
       case 'overtake_map':  return <OvertakeMap {...props} />
       default:              return <RacingLine {...props} />
     }
+  }
+
+  // Animated lap playback: faint full line + bright trail + speed-coloured car
+  const renderPlayback = () => {
+    if (!telemetry || vizPoints.length < 2 || playbackProgress === null) return null
+    const pts = vizPoints.map((p) => ({ x: p.x * POSTER_W, y: p.y * POSTER_H, speed: p.speed }))
+    const n = pts.length
+    const speeds = pts.map((p) => p.speed)
+    const minS = Math.min(...speeds)
+    const maxS = Math.max(...speeds)
+
+    const headF = playbackProgress * (n - 1)
+    const headIdx = Math.min(n - 1, Math.floor(headF))
+    const frac = headF - headIdx
+    const a = pts[headIdx]
+    const b = pts[Math.min(n - 1, headIdx + 1)]
+    const hx = a.x + (b.x - a.x) * frac
+    const hy = a.y + (b.y - a.y) * frac
+    const hSpeed = a.speed + (b.speed - a.speed) * frac
+    const t = (hSpeed - minS) / (maxS - minS || 1)
+    const carColor = t < 0.5
+      ? interpolateColor(theme.slowColor, theme.midColor, t * 2)
+      : interpolateColor(theme.midColor, theme.fastColor, (t - 0.5) * 2)
+
+    const fullPath = pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ')
+    const trail = pts.slice(0, headIdx + 1)
+    const trailPath = trail.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ') + ` L ${hx.toFixed(1)} ${hy.toFixed(1)}`
+
+    return (
+      <g>
+        <path d={fullPath} fill="none" stroke={driverColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.15" />
+        <path d={trailPath} fill="none" stroke={carColor} strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.95" />
+        <circle cx={hx} cy={hy} r="9" fill={carColor} opacity="0.25" />
+        <circle cx={hx} cy={hy} r="4.5" fill={carColor} />
+        <circle cx={hx} cy={hy} r="2" fill="#ffffff" opacity="0.85" />
+        {/* speed readout */}
+        <text x={CIRCUIT_AREA.x + CIRCUIT_AREA.w - 8} y={CIRCUIT_AREA.y + 16} textAnchor="end" fill={carColor} fontSize="16" fontFamily="monospace" fontWeight="700">
+          {Math.round(hSpeed)} km/h
+        </text>
+      </g>
+    )
   }
 
   const statsY = CIRCUIT_AREA.y + CIRCUIT_AREA.h + 20
@@ -230,8 +276,8 @@ export function PosterPreview({
         {/* Circuit area */}
         {circuit && <CircuitBackground circuit={circuit} theme={theme} />}
 
-        {/* Visualization overlay */}
-        {renderViz()}
+        {/* Visualization overlay — or animated playback when playing */}
+        {isPlaying ? renderPlayback() : renderViz()}
 
         {/* Compare legend — both drivers, lap times, delta */}
         {isComparing && compareDriver && driver && telemetry && compareTelemetry && (() => {
