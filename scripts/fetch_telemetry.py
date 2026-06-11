@@ -126,6 +126,43 @@ RACES = [
         championshipPoints=[25,43,68,93,118,137,156,181,206,231,256,264,289,304,329,392],
         overrideLapTime="1:47.302", overrideDriver="vettel",
     ),
+
+    # ── New modern drivers (real FastF1 sessions) ──
+    dict(
+        id="leclerc_monza_2019", driverId="leclerc", circuitId="monza",
+        year=2019, gp="Italian Grand Prix", session="Q", driver="LEC",
+        championshipPoints=[10,10,26,36,57,57,75,82,82,98,104,116,128,138,148,164],
+    ),
+    dict(
+        id="leclerc_monaco_2024", driverId="leclerc", circuitId="monaco",
+        year=2024, gp="Monaco Grand Prix", session="Q", driver="LEC",
+        championshipPoints=[28,47,59,71,98,113,138,150,160,175,185,200,210,230,245,260],
+    ),
+    dict(
+        id="norris_miami_2024", driverId="norris", circuitId="miami",
+        year=2024, gp="Miami Grand Prix", session="Q", driver="NOR",
+        championshipPoints=[8,20,27,37,62,77,96,113,131,156,181,206,231,256,281,300],
+    ),
+    dict(
+        id="russell_saopaulo_2022", driverId="russell", circuitId="interlagos",
+        year=2022, gp="São Paulo Grand Prix", session="Q", driver="RUS",
+        championshipPoints=[16,37,49,66,99,116,128,143,158,170,182,203,218,240,265,275],
+    ),
+    dict(
+        id="sainz_singapore_2023", driverId="sainz", circuitId="marina_bay",
+        year=2023, gp="Singapore Grand Prix", session="Q", driver="SAI",
+        championshipPoints=[12,20,32,44,66,78,98,112,128,142,154,168,180,200,206,200],
+    ),
+    dict(
+        id="verstappen_suzuka_2022", driverId="verstappen", circuitId="suzuka",
+        year=2022, gp="Japanese Grand Prix", session="Q", driver="VER",
+        championshipPoints=[25,44,69,94,119,144,169,194,219,244,269,341,366,391,416,454],
+    ),
+    dict(
+        id="hamilton_hungary_2020", driverId="hamilton", circuitId="hungaroring",
+        year=2020, gp="Hungarian Grand Prix", session="Q", driver="HAM",
+        championshipPoints=[25,50,75,88,113,138,157,182,207,232,250,275,300,325,332,347],
+    ),
 ]
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -304,11 +341,33 @@ for race in RACES:
         print(f"  FAILED: {e}")
 
 # ── Update circuits.json with FastF1-derived paths ────────────────────────────
+# Names/locations for circuits not already present in circuits.json
+NEW_CIRCUIT_META = {
+    "miami":      {"name": "Miami International Autodrome", "location": "Miami, USA"},
+    "marina_bay": {"name": "Marina Bay Street Circuit",    "location": "Singapore"},
+}
+
 for circuit_id, path in circuit_paths.items():
     if circuit_id in circuits_data:
         circuits_data[circuit_id]["path"] = path
         circuits_data[circuit_id]["source"] = "fastf1"
         print(f"Updated circuit path: {circuit_id}")
+    else:
+        meta = NEW_CIRCUIT_META.get(circuit_id, {"name": circuit_id, "location": ""})
+        circuits_data[circuit_id] = {
+            "id": circuit_id,
+            "name": meta["name"],
+            "location": meta["location"],
+            "lapLength": 0,
+            "corners": 0,
+            "drsZones": 0,
+            "viewBox": f"0 0 {SVG_W} {SVG_H}",
+            "path": path,
+            "sector1End": 0.33,
+            "sector2End": 0.67,
+            "source": "fastf1",
+        }
+        print(f"Added new circuit: {circuit_id}")
 
 with open(CIRC_FILE, "w") as f:
     json.dump(circuits_data, f, indent=2)

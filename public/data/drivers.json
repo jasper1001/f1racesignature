@@ -86,5 +86,49 @@
     "isFree": false,
     "championships": 4,
     "bio": "Four consecutive world titles built on dominance, precision, and an encyclopedic technical understanding of every car he ever drove."
+  },
+  {
+    "id": "leclerc",
+    "name": "Charles Leclerc",
+    "shortName": "LEC",
+    "team": "Ferrari",
+    "nationality": "Monégasque",
+    "color": "#dc0000",
+    "isFree": false,
+    "championships": 0,
+    "bio": "Ferrari's prince and the fastest qualifier of his generation. A single lap from Leclerc in a red car is one of the most thrilling sights in modern Formula 1."
+  },
+  {
+    "id": "norris",
+    "name": "Lando Norris",
+    "shortName": "NOR",
+    "team": "McLaren",
+    "nationality": "British",
+    "color": "#ff8000",
+    "isFree": false,
+    "championships": 0,
+    "bio": "The cornerstone of McLaren's resurgence. Blazing one-lap pace, fearless wheel-to-wheel racing, and the smile that made a new generation fall for F1."
+  },
+  {
+    "id": "russell",
+    "name": "George Russell",
+    "shortName": "RUS",
+    "team": "Mercedes",
+    "nationality": "British",
+    "color": "#00d2be",
+    "isFree": false,
+    "championships": 0,
+    "bio": "Mr. Saturday turned race winner. Ice-cool precision and relentless consistency that earned him the most coveted seat in the sport at Mercedes."
+  },
+  {
+    "id": "sainz",
+    "name": "Carlos Sainz",
+    "shortName": "SAI",
+    "team": "Ferrari",
+    "nationality": "Spanish",
+    "color": "#dc0000",
+    "isFree": false,
+    "championships": 0,
+    "bio": "The Smooth Operator. A racer's racer who ended Red Bull's record-breaking 2023 win streak — clinical, calculating, and devastating in a straight fight."
   }
 ]
