@@ -21,15 +21,27 @@ export function Sidebar({ drivers, races, mobile = false }: SidebarProps) {
     vizMode,
     theme,
     exportFormat,
+    compareEnabled,
+    compareRaceId,
     setDriver,
     setRace,
     setVizMode,
     setTheme,
     setExportFormat,
+    toggleCompare,
+    setCompareRace,
     openUpgradeModal,
   } = useStudioStore()
 
   const driverRaces = races.filter((r) => r.driverId === selectedDriverId)
+
+  // Races on the SAME circuit as the current selection (for head-to-head)
+  const primaryRace = races.find((r) => r.id === selectedRaceId)
+  const compareCandidates = primaryRace
+    ? races.filter((r) => r.circuit === primaryRace.circuit && r.id !== primaryRace.id)
+    : []
+
+  const driverById = (id: string) => drivers.find((d) => d.id === id)
 
   const handleDriverSelect = (driverId: string) => {
     if (!isDriverFree(driverId)) {
@@ -168,6 +180,58 @@ export function Sidebar({ drivers, races, mobile = false }: SidebarProps) {
               )
             })}
           </div>
+        </Section>
+
+        {/* Compare — head to head */}
+        <Section title="Compare Laps">
+          <button
+            onClick={() => {
+              Analytics.compareToggled(!compareEnabled)
+              toggleCompare()
+            }}
+            className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-left transition-all cursor-pointer border ${
+              compareEnabled ? 'bg-white/8 border-[#333333]' : 'border-[#1a1a1a] hover:border-[#2a2a2a]'
+            }`}
+          >
+            <div className="text-xs font-medium text-white">Head-to-head overlay</div>
+            <span
+              className={`relative w-8 h-4 rounded-full transition-colors ${compareEnabled ? 'bg-[#d4a017]' : 'bg-[#2a2a2a]'}`}
+            >
+              <span
+                className={`absolute top-0.5 w-3 h-3 rounded-full bg-white transition-all ${compareEnabled ? 'left-4' : 'left-0.5'}`}
+              />
+            </span>
+          </button>
+
+          {compareEnabled && (
+            <div className="mt-2 space-y-1">
+              {compareCandidates.length === 0 ? (
+                <p className="text-[10px] text-[#555555] px-1 py-2">
+                  No other laps on this circuit yet. Pick a race at Monaco, Monza, Spa, Interlagos or Suzuka to compare.
+                </p>
+              ) : (
+                compareCandidates.map((r) => {
+                  const cd = driverById(r.driverId)
+                  const active = compareRaceId === r.id
+                  return (
+                    <button
+                      key={r.id}
+                      onClick={() => setCompareRace(r.id)}
+                      className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left transition-all cursor-pointer ${
+                        active ? 'bg-white/8 border border-[#333333]' : 'border border-transparent hover:border-[#1a1a1a] hover:bg-white/3'
+                      }`}
+                    >
+                      <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: cd?.color ?? '#888' }} />
+                      <div className="flex-1 min-w-0">
+                        <div className="text-xs font-medium text-white truncate">{cd?.shortName} · {r.year}</div>
+                        <div className="text-[10px] text-[#555555]">{r.lapTime}</div>
+                      </div>
+                    </button>
+                  )
+                })
+              )}
+            </div>
+          )}
         </Section>
 
         {/* Theme */}

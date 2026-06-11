@@ -8,6 +8,8 @@ import { Sidebar } from '@/components/studio/Sidebar'
 import { PosterPreview } from '@/components/studio/PosterPreview'
 import { StatsPanel } from '@/components/studio/StatsPanel'
 import { ExportButton } from '@/components/studio/ExportButton'
+import { SurpriseButton } from '@/components/studio/SurpriseButton'
+import { ShareButton } from '@/components/studio/ShareButton'
 import { UpgradeModal } from '@/components/studio/UpgradeModal'
 import { useStudioStore } from '@/lib/store'
 import { fetchDrivers, fetchRaces, fetchTelemetry, fetchCircuits } from '@/lib/data'
@@ -22,7 +24,7 @@ const ZOOM_MAX  = 2.0
 type MobileTab = 'controls' | 'preview' | 'stats'
 
 export default function StudioPage() {
-  const { selectedDriverId, selectedRaceId, vizMode, theme } = useStudioStore()
+  const { selectedDriverId, selectedRaceId, vizMode, theme, compareEnabled, compareRaceId } = useStudioStore()
   const applyConfig = useStudioStore((s) => s.applyConfig)
   const [zoom, setZoom] = useState(0.85)
   const [mobileTab, setMobileTab] = useState<MobileTab>('preview')
@@ -73,6 +75,15 @@ export default function StudioPage() {
     queryKey: ['telemetry', selectedRace?.telemetryFile],
     queryFn: () => fetchTelemetry(selectedRace!.telemetryFile),
     enabled: Boolean(selectedRace?.telemetryFile),
+  })
+
+  // Compare (head-to-head) lap
+  const compareRace = races.find((r) => r.id === compareRaceId) ?? null
+  const compareDriver = compareRace ? (drivers.find((d) => d.id === compareRace.driverId) ?? null) : null
+  const { data: compareTelemetry = null } = useQuery({
+    queryKey: ['telemetry', compareRace?.telemetryFile],
+    queryFn: () => fetchTelemetry(compareRace!.telemetryFile),
+    enabled: Boolean(compareEnabled && compareRace?.telemetryFile),
   })
 
   const activeTheme = themeById(theme)
@@ -139,6 +150,8 @@ export default function StudioPage() {
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 2v8M2 6h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
                 </button>
               </div>
+              <SurpriseButton />
+              <ShareButton />
               <ExportButton />
             </div>
           </div>
@@ -149,7 +162,7 @@ export default function StudioPage() {
               <EmptyState />
             ) : (
               <div className="poster-wrapper" style={{ transform: `scale(${zoom})`, transformOrigin: 'center center', transition: 'transform 0.15s ease' }}>
-                <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier />
+                <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compareDriver={compareEnabled ? compareDriver : null} compareTelemetry={compareEnabled ? compareTelemetry : null} />
               </div>
             )}
           </div>
@@ -177,7 +190,11 @@ export default function StudioPage() {
                     <span className="w-2 h-2 rounded-full" style={{ backgroundColor: activeTheme.primaryLine, opacity: 0.7 }} />
                     {activeTheme.name}
                   </div>
-                  <ExportButton />
+                  <div className="flex items-center gap-2">
+                    <SurpriseButton />
+                    <ShareButton />
+                    <ExportButton />
+                  </div>
                 </div>
                 {/* Poster — scaled to fit mobile screen */}
                 <div className="flex-1 flex items-center justify-center overflow-auto p-4">
@@ -195,7 +212,7 @@ export default function StudioPage() {
                         marginBottom: '-310px',
                       }}
                     >
-                      <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier />
+                      <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compareDriver={compareEnabled ? compareDriver : null} compareTelemetry={compareEnabled ? compareTelemetry : null} />
                     </div>
                   )}
                 </div>

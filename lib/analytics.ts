@@ -47,6 +47,13 @@ export const Analytics = {
   galleryItemClicked: (itemId: string) =>
     trackEvent('gallery_item_clicked', { item_id: itemId }),
 
+  compareToggled: (enabled: boolean) =>
+    trackEvent('compare_toggled', { enabled }),
+
+  surpriseMe: () => trackEvent('surprise_me'),
+
+  shareClicked: (method: string) => trackEvent('share_clicked', { method }),
+
   studioOpened: () => trackEvent('studio_opened'),
 
   pageViewed: (page: string) => trackEvent('page_view', { page_path: page }),

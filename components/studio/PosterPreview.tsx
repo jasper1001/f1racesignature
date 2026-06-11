@@ -21,6 +21,14 @@ interface PosterPreviewProps {
   theme: ThemeConfig
   vizMode: VizMode
   isFreeTier?: boolean
+  // Head-to-head comparison (second lap on the same circuit)
+  compareDriver?: Driver | null
+  compareTelemetry?: Telemetry | null
+}
+
+function parseLapSeconds(s: string): number {
+  const [m, sec] = s.split(':')
+  return parseInt(m) * 60 + parseFloat(sec)
 }
 
 function CircuitBackground({ circuit, theme }: { circuit: Circuit; theme: ThemeConfig }) {
@@ -86,21 +94,40 @@ export function PosterPreview({
   theme,
   vizMode,
   isFreeTier = true,
+  compareDriver = null,
+  compareTelemetry = null,
 }: PosterPreviewProps) {
   const svgRef = useRef<SVGSVGElement>(null)
 
+  const isComparing = Boolean(compareTelemetry && compareTelemetry.points.length > 1)
+
+  const toPosterSpace = (tel: Telemetry | null) =>
+    tel?.points.map((pt) => ({
+      ...pt,
+      x: (pt.x * CIRCUIT_AREA.w + CIRCUIT_AREA.x) / POSTER_W,
+      y: (pt.y * CIRCUIT_AREA.h + CIRCUIT_AREA.y) / POSTER_H,
+    })) ?? []
+
   // Map raw 0-1 telemetry coords into poster-space 0-1
   // Viz components then multiply by POSTER_W/H to get final pixels.
-  const vizPoints = telemetry?.points.map((pt) => ({
-    ...pt,
-    x: (pt.x * CIRCUIT_AREA.w + CIRCUIT_AREA.x) / POSTER_W,
-    y: (pt.y * CIRCUIT_AREA.h + CIRCUIT_AREA.y) / POSTER_H,
-  })) ?? []
+  const vizPoints = toPosterSpace(telemetry)
+  const comparePoints = toPosterSpace(compareTelemetry)
 
   const driverColor = driver?.color ?? theme.primaryLine
+  const compareColor = compareDriver?.color ?? theme.fastColor
 
   const renderViz = () => {
     if (!telemetry || vizPoints.length === 0) return null
+
+    // In compare mode both laps render as racing lines in their driver colours.
+    if (isComparing) {
+      return (
+        <>
+          <RacingLine points={vizPoints} theme={theme} width={POSTER_W} height={POSTER_H} driverColor={driverColor} />
+          <RacingLine points={comparePoints} theme={theme} width={POSTER_W} height={POSTER_H} driverColor={compareColor} />
+        </>
+      )
+    }
 
     const props = { points: vizPoints, theme, width: POSTER_W, height: POSTER_H, driverColor }
 
@@ -177,20 +204,24 @@ export function PosterPreview({
           fontStyle="italic"
           letterSpacing="1"
         >
-          {driver?.name ?? 'Select a Driver'}
+          {isComparing && compareDriver
+            ? `${driver?.shortName ?? ''} vs ${compareDriver.shortName}`
+            : driver?.name ?? 'Select a Driver'}
         </text>
 
-        {/* Viz mode badge — centred below driver name */}
+        {/* Badge — viz mode, or HEAD TO HEAD when comparing */}
         {(() => {
-          const vizLabel = VIZ_MODES.find((v) => v.id === vizMode)?.name ?? vizMode
-          const badgeW = vizLabel.length * 6.2 + 24
+          const label = isComparing
+            ? 'HEAD TO HEAD'
+            : (VIZ_MODES.find((v) => v.id === vizMode)?.name ?? vizMode).toUpperCase()
+          const badgeW = label.length * 6.2 + 24
           return (
             <g transform={`translate(${POSTER_W / 2 - badgeW / 2}, 56)`}>
               <rect width={badgeW} height="14" rx="3" fill={theme.primaryLine} opacity="0.12" />
               <rect width={badgeW} height="14" rx="3" fill="none" stroke={theme.primaryLine} strokeWidth="0.5" opacity="0.3" />
               <text x={badgeW / 2} y="10" textAnchor="middle" fill={theme.primaryLine}
                 fontSize="7" fontFamily="monospace" letterSpacing="2" opacity="0.9">
-                {vizLabel.toUpperCase()}
+                {label}
               </text>
             </g>
           )
@@ -201,6 +232,30 @@ export function PosterPreview({
 
         {/* Visualization overlay */}
         {renderViz()}
+
+        {/* Compare legend — both drivers, lap times, delta */}
+        {isComparing && compareDriver && driver && telemetry && compareTelemetry && (() => {
+          const lx = CIRCUIT_AREA.x + 8
+          const ly = CIRCUIT_AREA.y + 12
+          const delta = parseLapSeconds(compareTelemetry.lapTime) - parseLapSeconds(telemetry.lapTime)
+          const faster = delta === 0 ? null : delta < 0 ? compareDriver.shortName : driver.shortName
+          return (
+            <g fontFamily="monospace">
+              <rect x={lx - 8} y={ly - 12} width="168" height="56" rx="6" fill={theme.bg} opacity="0.55" />
+              <circle cx={lx + 4} cy={ly + 2} r="4" fill={driverColor} />
+              <text x={lx + 14} y={ly + 5} fill={theme.textColor} fontSize="10">{driver.shortName}</text>
+              <text x={lx + 150} y={ly + 5} textAnchor="end" fill={driverColor} fontSize="10" fontWeight="600">{telemetry.lapTime}</text>
+              <circle cx={lx + 4} cy={ly + 20} r="4" fill={compareColor} />
+              <text x={lx + 14} y={ly + 23} fill={theme.textColor} fontSize="10">{compareDriver.shortName}</text>
+              <text x={lx + 150} y={ly + 23} textAnchor="end" fill={compareColor} fontSize="10" fontWeight="600">{compareTelemetry.lapTime}</text>
+              {faster && (
+                <text x={lx + 150} y={ly + 38} textAnchor="end" fill={theme.fastColor} fontSize="8">
+                  {faster} faster by {Math.abs(delta).toFixed(3)}s
+                </text>
+              )}
+            </g>
+          )
+        })()}
 
         {/* ── Stats section ── */}
         {(() => {
