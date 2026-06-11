@@ -59,6 +59,49 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* Live 2026 Standings teaser */}
+        <section className="py-20 border-t border-[#0f0f0f]">
+          <div className="max-w-4xl mx-auto px-6">
+            <a
+              href="/results"
+              className="group block rounded-2xl border border-[#1a1a1a] bg-[#0a0a0a] p-6 md:p-8 hover:border-[#d4a017]/40 transition-colors relative overflow-hidden"
+            >
+              <div
+                className="absolute inset-0 opacity-[0.04]"
+                style={{
+                  backgroundImage:
+                    'linear-gradient(rgba(255,255,255,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.4) 1px, transparent 1px)',
+                  backgroundSize: '40px 40px',
+                }}
+              />
+              <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="w-2 h-2 rounded-full bg-[#38b000] animate-pulse" />
+                    <span className="text-[#38b000] text-xs font-medium uppercase tracking-widest">Live Now</span>
+                  </div>
+                  <h2
+                    className="text-2xl md:text-3xl text-white"
+                    style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+                  >
+                    Follow the 2026 F1 Season
+                  </h2>
+                  <p className="text-[#666666] text-sm mt-2 max-w-md">
+                    Live driver and constructor standings, latest race results, and the full calendar —
+                    real F1 data, updated automatically.
+                  </p>
+                </div>
+                <span className="inline-flex items-center gap-2 px-5 py-3 bg-white/5 text-white font-medium rounded-xl border border-white/10 group-hover:bg-[#d4a017] group-hover:text-black group-hover:border-[#d4a017] transition-all whitespace-nowrap self-start">
+                  View Standings
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
+              </div>
+            </a>
+          </div>
+        </section>
+
         <FAQ />
 
         {/* CTA section */}

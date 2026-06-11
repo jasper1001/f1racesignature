@@ -40,6 +40,9 @@ export function ExportButton() {
       link.download = `f1racesignature-${selectedDriverId}-${selectedRaceId}.png`
       link.href = canvas.toDataURL('image/png', 1.0)
       link.click()
+
+      // Fired only on a successful download — this is the real conversion.
+      Analytics.exportCompleted(exportFormat, selectedDriverId, selectedRaceId)
     } finally {
       setIsExporting(false)
     }

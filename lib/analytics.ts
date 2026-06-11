@@ -37,6 +37,10 @@ export const Analytics = {
   exportClicked: (format: string, driverId: string, raceId: string) =>
     trackEvent('export_clicked', { format, driver_id: driverId, race_id: raceId }),
 
+  // Conversion: fires only after the poster PNG actually downloads
+  exportCompleted: (format: string, driverId: string, raceId: string) =>
+    trackEvent('export_completed', { format, driver_id: driverId, race_id: raceId }),
+
   upgradeModalOpened: (reason: string) =>
     trackEvent('upgrade_modal_opened', { reason }),
 
