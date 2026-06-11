@@ -1,24 +1,27 @@
 import type { Driver, Race, Circuit, Telemetry } from './types'
 
-const NO_CACHE = { cache: 'no-store' } as const
+// Static data files are immutable per deploy — let the browser cache them.
+// Combined with TanStack Query's in-memory cache, each file is fetched at most
+// once per session and repeat selections are instant (no network call).
+const CACHE = { cache: 'force-cache' } as const
 
 export async function fetchDrivers(): Promise<Driver[]> {
-  const res = await fetch('/data/drivers.json', NO_CACHE)
+  const res = await fetch('/data/drivers.json', CACHE)
   return res.json()
 }
 
 export async function fetchRaces(): Promise<Race[]> {
-  const res = await fetch('/data/races.json', NO_CACHE)
+  const res = await fetch('/data/races.json', CACHE)
   return res.json()
 }
 
 export async function fetchCircuits(): Promise<Record<string, Circuit>> {
-  const res = await fetch('/data/circuits.json', NO_CACHE)
+  const res = await fetch('/data/circuits.json', CACHE)
   return res.json()
 }
 
 export async function fetchTelemetry(fileKey: string): Promise<Telemetry> {
-  const res = await fetch(`/data/telemetry/${fileKey}.json`, NO_CACHE)
+  const res = await fetch(`/data/telemetry/${fileKey}.json`, CACHE)
   return res.json()
 }
 

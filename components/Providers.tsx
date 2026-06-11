@@ -10,8 +10,13 @@ export function Providers({ children }: { children: React.ReactNode }) {
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 0,
+            // Static data is immutable per deploy — cache for the whole session.
+            staleTime: Infinity,
+            gcTime: Infinity,
             refetchOnWindowFocus: false,
+            refetchOnMount: false,
+            refetchOnReconnect: false,
+            retry: 1,
           },
         },
       }),
