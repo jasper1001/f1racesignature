@@ -53,6 +53,11 @@ export default function StudioPage() {
     }
   }, [isPlaying])
 
+  // Any change to the poster config stops playback so the change is visible
+  useEffect(() => {
+    setIsPlaying(false)
+  }, [selectedDriverId, selectedRaceId, vizMode, theme, compareEnabled, compareRaceId])
+
   // Apply a preset passed in via URL (e.g. clicking a gallery poster)
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -178,7 +183,7 @@ export default function StudioPage() {
               <SurpriseButton />
               <SaveButton />
               <ShareButton />
-              <ExportButton />
+              <ExportButton onBeforeExport={() => setIsPlaying(false)} />
             </div>
           </div>
 
@@ -221,7 +226,7 @@ export default function StudioPage() {
                     <SurpriseButton />
                     <SaveButton />
                     <ShareButton />
-                    <ExportButton />
+                    <ExportButton onBeforeExport={() => setIsPlaying(false)} />
                   </div>
                 </div>
                 {/* Poster — scaled to fit mobile screen */}

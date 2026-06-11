@@ -7,7 +7,7 @@ import { isExportFree, UPGRADE_REASONS } from '@/lib/freemium'
 import { EXPORT_FORMATS } from '@/lib/themes'
 import { Analytics } from '@/lib/analytics'
 
-export function ExportButton() {
+export function ExportButton({ onBeforeExport }: { onBeforeExport?: () => void } = {}) {
   const [isExporting, setIsExporting] = useState(false)
   const { selectedDriverId, selectedRaceId, exportFormat, openUpgradeModal } = useStudioStore()
 
@@ -20,6 +20,9 @@ export function ExportButton() {
       return
     }
     if (!selectedDriverId || !selectedRaceId) return
+
+    // Stop any lap playback so the export captures the full static poster
+    onBeforeExport?.()
 
     setIsExporting(true)
     Analytics.exportClicked(exportFormat, selectedDriverId, selectedRaceId)
