@@ -126,13 +126,54 @@ export function PosterPreview({
   const renderViz = () => {
     if (!telemetry || vizPoints.length === 0) return null
 
-    // In compare mode both laps render as racing lines in their driver colours.
-    if (isComparing) {
+    // In compare mode: render a speed-delta map.
+    // The circuit is coloured segment-by-segment based on who was faster at
+    // each point. One overlapping line engulfs the other, so we never do that.
+    if (isComparing && comparePoints.length > 1) {
+      const n = Math.min(vizPoints.length, comparePoints.length)
+
+      // Full circuit base (dark road surface so segments pop)
+      const basePath = vizPoints.slice(0, n).map((p, i) =>
+        `${i === 0 ? 'M' : 'L'} ${(p.x * POSTER_W).toFixed(1)} ${(p.y * POSTER_H).toFixed(1)}`
+      ).join(' ')
+
+      // Group consecutive points by which driver is faster into coloured runs
+      type Seg = { d: string; d1: boolean }
+      const segs: Seg[] = []
+      const faster = (i: number) => vizPoints[i].speed >= comparePoints[i].speed
+      let cur: Seg = {
+        d: `M ${(vizPoints[0].x * POSTER_W).toFixed(1)} ${(vizPoints[0].y * POSTER_H).toFixed(1)}`,
+        d1: faster(0),
+      }
+      for (let i = 1; i < n; i++) {
+        const f = faster(i)
+        if (f !== cur.d1) {
+          segs.push(cur)
+          cur = {
+            d: `M ${(vizPoints[i - 1].x * POSTER_W).toFixed(1)} ${(vizPoints[i - 1].y * POSTER_H).toFixed(1)}`,
+            d1: f,
+          }
+        }
+        cur.d += ` L ${(vizPoints[i].x * POSTER_W).toFixed(1)} ${(vizPoints[i].y * POSTER_H).toFixed(1)}`
+      }
+      segs.push(cur)
+
       return (
-        <>
-          <RacingLine points={vizPoints} theme={theme} width={POSTER_W} height={POSTER_H} driverColor={driverColor} />
-          <RacingLine points={comparePoints} theme={theme} width={POSTER_W} height={POSTER_H} driverColor={compareColor} />
-        </>
+        <g>
+          {/* Base road */}
+          <path d={basePath} fill="none" stroke="#1e1e1e" strokeWidth="10" strokeLinecap="round" strokeLinejoin="round" />
+          {segs.map((s, i) => {
+            const color = s.d1 ? driverColor : compareColor
+            return (
+              <g key={i}>
+                {/* Glow halo */}
+                <path d={s.d} fill="none" stroke={color} strokeWidth="14" strokeLinecap="round" strokeLinejoin="round" opacity="0.18" />
+                {/* Crisp line */}
+                <path d={s.d} fill="none" stroke={color} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" opacity="0.95" />
+              </g>
+            )
+          })}
+        </g>
       )
     }
 
