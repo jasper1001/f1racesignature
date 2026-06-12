@@ -13,6 +13,8 @@ import { ShareButton } from '@/components/studio/ShareButton'
 import { PlayButton } from '@/components/studio/PlayButton'
 import { SaveButton } from '@/components/studio/SaveButton'
 import { UpgradeModal } from '@/components/studio/UpgradeModal'
+import { OnboardingModal } from '@/components/studio/OnboardingModal'
+import { hasSeen, markSeen } from '@/lib/onboarding'
 import Link from 'next/link'
 import { useStudioStore } from '@/lib/store'
 import { fetchDrivers, fetchRaces, fetchTelemetry, fetchCircuits } from '@/lib/data'
@@ -90,6 +92,16 @@ export default function StudioPage() {
     return () => window.removeEventListener('wheel', onWheel)
   }, [])
 
+  // First-visit onboarding
+  const [showOnboarding, setShowOnboarding] = useState(false)
+  useEffect(() => {
+    if (!hasSeen('studio_tour')) setShowOnboarding(true)
+  }, [])
+  const closeOnboarding = () => {
+    markSeen('studio_tour')
+    setShowOnboarding(false)
+  }
+
   useEffect(() => { Analytics.studioOpened() }, [])
 
   const { data: drivers = [] } = useQuery({ queryKey: ['drivers'],  queryFn: fetchDrivers })
@@ -160,6 +172,14 @@ export default function StudioPage() {
           {/* Toolbar */}
           <div className="flex-shrink-0 border-b border-[#0f0f0f] px-6 py-2.5 flex items-center justify-between bg-[#030303]/60 backdrop-blur-sm">
             <div className="flex items-center gap-3 text-xs">
+              <button
+                onClick={() => setShowOnboarding(true)}
+                title="How it works"
+                data-track="studio_help"
+                className="w-5 h-5 flex items-center justify-center rounded-full border border-[#2a2a2a] text-[#666666] hover:text-[#d4a017] hover:border-[#d4a017]/50 transition-colors cursor-pointer text-[11px] font-bold"
+              >
+                ?
+              </button>
               <span className="text-[#333333] font-mono uppercase tracking-widest">Studio</span>
               {selectedDriver && <><span className="text-[#1a1a1a]">/</span><span className="text-[#555555]">{selectedDriver.name}</span></>}
               {selectedRace   && <><span className="text-[#1a1a1a]">/</span><span className="text-[#555555]">{selectedRace.circuit} {selectedRace.year}</span></>}
@@ -217,7 +237,14 @@ export default function StudioPage() {
               <motion.div key="preview" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="absolute inset-0 flex flex-col">
                 {/* Mini toolbar */}
                 <div className="flex-shrink-0 flex items-center justify-between px-4 py-2 border-b border-[#0f0f0f] bg-[#030303]/80">
-                  <div className="flex items-center gap-1.5 text-[#333333] text-xs font-mono">
+                  <div className="flex items-center gap-2 text-[#333333] text-xs font-mono">
+                    <button
+                      onClick={() => setShowOnboarding(true)}
+                      title="How it works"
+                      className="w-5 h-5 flex items-center justify-center rounded-full border border-[#2a2a2a] text-[#666666] text-[11px] font-bold"
+                    >
+                      ?
+                    </button>
                     <span className="w-2 h-2 rounded-full" style={{ backgroundColor: activeTheme.primaryLine, opacity: 0.7 }} />
                     {activeTheme.name}
                   </div>
@@ -280,6 +307,7 @@ export default function StudioPage() {
       </div>
 
       <UpgradeModal />
+      <OnboardingModal isOpen={showOnboarding} onClose={closeOnboarding} />
     </>
   )
 }

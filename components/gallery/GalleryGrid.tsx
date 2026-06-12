@@ -1,11 +1,12 @@
 'use client'
 
-import { useState, useMemo } from 'react'
-import { motion } from 'framer-motion'
+import { useState, useMemo, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
 import { GalleryCard } from './GalleryCard'
 import { GALLERY_ITEMS } from '@/lib/gallery'
 import { fetchCircuits, fetchTelemetry } from '@/lib/data'
+import { hasSeen, markSeen } from '@/lib/onboarding'
 import type { Circuit, Telemetry } from '@/lib/types'
 
 // Readable names for circuit ids (fallback if circuits.json hasn't loaded)
@@ -42,6 +43,15 @@ type Filter = { type: 'all' } | { type: 'driver'; value: string } | { type: 'tra
 
 export function GalleryGrid() {
   const [filter, setFilter] = useState<Filter>({ type: 'all' })
+  const [showTip, setShowTip] = useState(false)
+
+  useEffect(() => {
+    if (!hasSeen('gallery_tip')) setShowTip(true)
+  }, [])
+  const dismissTip = () => {
+    markSeen('gallery_tip')
+    setShowTip(false)
+  }
 
   const { data: circuits = {} } = useQuery({ queryKey: ['circuits'], queryFn: fetchCircuits })
 
@@ -77,6 +87,30 @@ export function GalleryGrid() {
 
   return (
     <div>
+      {/* Onboarding tip */}
+      <AnimatePresence>
+        {showTip && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="overflow-hidden"
+          >
+            <div className="flex items-center gap-3 mb-6 rounded-xl border border-[#d4a017]/20 bg-[#d4a017]/5 px-4 py-3">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="text-[#d4a017] flex-shrink-0">
+                <path d="M12 2a7 7 0 0 0-4 12.7V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.3A7 7 0 0 0 12 2zM9 21h6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <p className="text-[#aaaaaa] text-xs flex-1">
+                <span className="text-white font-medium">Tip:</span> tap any poster to open it in the Studio — then change the driver, theme, or visualization and make it your own.
+              </p>
+              <button onClick={dismissTip} className="text-[#666666] hover:text-white transition-colors flex-shrink-0 cursor-pointer" aria-label="Dismiss">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* All + count */}
       <div className="flex items-center justify-between mb-4">
         <button onClick={() => setFilter({ type: 'all' })} className={chipClass(filter.type === 'all')}>
