@@ -53,16 +53,20 @@ export function Header() {
                 </Link>
               )
             })}
-            <Link href="/studio" className="ml-2 px-4 py-1.5 text-sm font-medium bg-[#d4a017] text-black rounded-lg hover:bg-[#e8b84b] transition-colors">
-              Create Poster
-            </Link>
+            {pathname !== '/studio' && (
+              <Link href="/studio" className="ml-2 px-4 py-1.5 text-sm font-medium bg-[#d4a017] text-black rounded-lg hover:bg-[#e8b84b] transition-colors">
+                Create Poster
+              </Link>
+            )}
           </nav>
 
           {/* Mobile: Create Poster + hamburger */}
           <div className="flex md:hidden items-center gap-2">
-            <Link href="/studio" className="px-3 py-1.5 text-xs font-medium bg-[#d4a017] text-black rounded-lg hover:bg-[#e8b84b] transition-colors">
-              Create
-            </Link>
+            {pathname !== '/studio' && (
+              <Link href="/studio" className="px-3 py-1.5 text-xs font-medium bg-[#d4a017] text-black rounded-lg hover:bg-[#e8b84b] transition-colors">
+                Create
+              </Link>
+            )}
             <button
               onClick={() => setMenuOpen((o) => !o)}
               className="w-9 h-9 flex flex-col items-center justify-center gap-1.5 text-[#888888] hover:text-white transition-colors"
