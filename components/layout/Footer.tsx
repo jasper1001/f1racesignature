@@ -45,8 +45,10 @@ export function Footer() {
             </div>
             <div className="flex flex-col gap-2">
               <span className="text-[#333333] font-medium uppercase tracking-widest text-xs">Legal</span>
-              <span className="text-[#666666]">Privacy</span>
-              <span className="text-[#666666]">Terms</span>
+              <Link href="/terms" className="text-[#666666] hover:text-white transition-colors">Terms &amp; Conditions</Link>
+              <Link href="/cookies" className="text-[#666666] hover:text-white transition-colors">Cookie Policy</Link>
+              <Link href="/about" className="text-[#666666] hover:text-white transition-colors">About</Link>
+              <Link href="/about#contact" className="text-[#666666] hover:text-white transition-colors">Contact</Link>
             </div>
             <div className="flex flex-col gap-2">
               <span className="text-[#333333] font-medium uppercase tracking-widest text-xs">More</span>
