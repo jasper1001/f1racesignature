@@ -223,7 +223,7 @@ export default function StudioPage() {
       </div>
 
       {/* ── Mobile layout ── */}
-      <div className="flex md:hidden flex-col h-screen pt-14" style={{ background: '#030303' }}>
+      <div className="flex md:hidden flex-col h-screen pt-14 overflow-x-hidden" style={{ background: '#030303' }}>
         {/* Mobile tab content */}
         <div className="flex-1 overflow-hidden relative">
           <AnimatePresence mode="wait">
@@ -236,19 +236,19 @@ export default function StudioPage() {
             {mobileTab === 'preview' && (
               <motion.div key="preview" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="absolute inset-0 flex flex-col">
                 {/* Mini toolbar */}
-                <div className="flex-shrink-0 flex items-center justify-between px-4 py-2 border-b border-[#0f0f0f] bg-[#030303]/80">
-                  <div className="flex items-center gap-2 text-[#333333] text-xs font-mono">
+                <div className="flex-shrink-0 flex items-center gap-2 px-4 py-2 border-b border-[#0f0f0f] bg-[#030303]/80">
+                  <div className="flex items-center gap-2 text-[#333333] text-xs font-mono min-w-0 flex-1">
                     <button
                       onClick={() => setShowOnboarding(true)}
                       title="How it works"
-                      className="w-5 h-5 flex items-center justify-center rounded-full border border-[#2a2a2a] text-[#666666] text-[11px] font-bold"
+                      className="w-5 h-5 flex-shrink-0 flex items-center justify-center rounded-full border border-[#2a2a2a] text-[#666666] text-[11px] font-bold"
                     >
                       ?
                     </button>
-                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: activeTheme.primaryLine, opacity: 0.7 }} />
-                    {activeTheme.name}
+                    <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: activeTheme.primaryLine, opacity: 0.7 }} />
+                    <span className="truncate">{activeTheme.name}</span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-shrink-0">
                     <PlayButton isPlaying={isPlaying} onToggle={() => setIsPlaying((p) => !p)} disabled={!telemetry} />
                     <SurpriseButton />
                     <SaveButton />
