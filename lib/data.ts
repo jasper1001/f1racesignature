@@ -1,27 +1,25 @@
 import type { Driver, Race, Circuit, Telemetry } from './types'
 
-// Static data files are immutable per deploy — let the browser cache them.
-// Combined with TanStack Query's in-memory cache, each file is fetched at most
-// once per session and repeat selections are instant (no network call).
-const CACHE = { cache: 'force-cache' } as const
-
+// Default fetch revalidates against the CDN (so new drivers/races appear after a
+// deploy), while TanStack Query's staleTime: Infinity means each file is fetched
+// at most once per session — repeat selections stay instant and bandwidth stays low.
 export async function fetchDrivers(): Promise<Driver[]> {
-  const res = await fetch('/data/drivers.json', CACHE)
+  const res = await fetch('/data/drivers.json')
   return res.json()
 }
 
 export async function fetchRaces(): Promise<Race[]> {
-  const res = await fetch('/data/races.json', CACHE)
+  const res = await fetch('/data/races.json')
   return res.json()
 }
 
 export async function fetchCircuits(): Promise<Record<string, Circuit>> {
-  const res = await fetch('/data/circuits.json', CACHE)
+  const res = await fetch('/data/circuits.json')
   return res.json()
 }
 
 export async function fetchTelemetry(fileKey: string): Promise<Telemetry> {
-  const res = await fetch(`/data/telemetry/${fileKey}.json`, CACHE)
+  const res = await fetch(`/data/telemetry/${fileKey}.json`)
   return res.json()
 }
 
