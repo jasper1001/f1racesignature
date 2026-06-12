@@ -42,13 +42,15 @@ function CircuitBackground({ circuit, theme }: { circuit: Circuit; theme: ThemeC
     <g>
       <g transform={`translate(${CIRCUIT_AREA.x}, ${CIRCUIT_AREA.y}) scale(${scaleX}, ${scaleY})`}>
         {/* Outer kerb / run-off glow */}
-        <path d={circuit.path} fill="none" stroke="#ffffff" strokeWidth="22" strokeLinecap="round" strokeLinejoin="round" opacity="0.04" />
+        <path d={circuit.path} fill="none" stroke="#ffffff" strokeWidth="42" strokeLinecap="round" strokeLinejoin="round" opacity="0.05" />
+        {/* White curb border */}
+        <path d={circuit.path} fill="none" stroke="#ffffff" strokeWidth="32" strokeLinecap="round" strokeLinejoin="round" opacity="0.08" />
         {/* Asphalt track surface */}
-        <path d={circuit.path} fill="none" stroke="#3a3a3a" strokeWidth="14" strokeLinecap="round" strokeLinejoin="round" opacity="0.9" />
+        <path d={circuit.path} fill="none" stroke="#3a3a3a" strokeWidth="26" strokeLinecap="round" strokeLinejoin="round" opacity="0.95" />
         {/* Track highlight edge */}
-        <path d={circuit.path} fill="none" stroke="#555555" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" opacity="0.6" />
+        <path d={circuit.path} fill="none" stroke="#606060" strokeWidth="16" strokeLinecap="round" strokeLinejoin="round" opacity="0.55" />
         {/* Centre dashed line */}
-        <path d={circuit.path} fill="none" stroke="#666666" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" opacity="0.4" strokeDasharray="5 5" />
+        <path d={circuit.path} fill="none" stroke="#888888" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.35" strokeDasharray="8 8" />
       </g>
     </g>
   )
