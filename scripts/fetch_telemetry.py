@@ -163,6 +163,38 @@ RACES = [
         year=2020, gp="Hungarian Grand Prix", session="Q", driver="HAM",
         championshipPoints=[25,50,75,88,113,138,157,182,207,232,250,275,300,325,332,347],
     ),
+
+    # ── More modern drivers ──
+    dict(
+        id="perez_baku_2021", driverId="perez", circuitId="baku",
+        year=2021, gp="Azerbaijan Grand Prix", session="Q", driver="PER",
+        championshipPoints=[18,22,32,54,79,104,129,150,170,190,205,224,249,274,299,300],
+    ),
+    dict(
+        id="ricciardo_monaco_2018", driverId="ricciardo", circuitId="monaco",
+        year=2018, gp="Monaco Grand Prix", session="Q", driver="RIC",
+        championshipPoints=[37,52,72,82,107,122,140,150,160,170,180,190,170,150,140,170],
+    ),
+    dict(
+        id="ricciardo_monza_2021", driverId="ricciardo", circuitId="monza",
+        year=2021, gp="Italian Grand Prix", session="Q", driver="RIC",
+        championshipPoints=[10,20,30,40,55,70,85,100,115,140,150,160,170,180,105,115],
+    ),
+    dict(
+        id="gasly_monza_2020", driverId="gasly", circuitId="monza",
+        year=2020, gp="Italian Grand Prix", session="Q", driver="GAS",
+        championshipPoints=[0,8,12,16,20,45,50,57,63,75,82,90,100,109,75,75],
+    ),
+    dict(
+        id="ocon_hungary_2021", driverId="ocon", circuitId="hungaroring",
+        year=2021, gp="Hungarian Grand Prix", session="Q", driver="OCO",
+        championshipPoints=[0,8,12,16,20,45,52,58,66,74,82,90,100,74,74,74],
+    ),
+    dict(
+        id="piastri_hungary_2024", driverId="piastri", circuitId="hungaroring",
+        year=2024, gp="Hungarian Grand Prix", session="Q", driver="PIA",
+        championshipPoints=[12,24,38,50,66,82,98,124,148,170,192,222,237,262,292,292],
+    ),
 ]
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -345,6 +377,7 @@ for race in RACES:
 NEW_CIRCUIT_META = {
     "miami":      {"name": "Miami International Autodrome", "location": "Miami, USA"},
     "marina_bay": {"name": "Marina Bay Street Circuit",    "location": "Singapore"},
+    "baku":       {"name": "Baku City Circuit",            "location": "Baku, Azerbaijan"},
 }
 
 for circuit_id, path in circuit_paths.items():

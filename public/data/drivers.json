@@ -130,5 +130,60 @@
     "isFree": false,
     "championships": 0,
     "bio": "The Smooth Operator. A racer's racer who ended Red Bull's record-breaking 2023 win streak — clinical, calculating, and devastating in a straight fight."
+  },
+  {
+    "id": "perez",
+    "name": "Sergio Pérez",
+    "shortName": "PER",
+    "team": "Red Bull Racing",
+    "nationality": "Mexican",
+    "color": "#1e41ff",
+    "isFree": false,
+    "championships": 0,
+    "bio": "The king of tyre management and street circuits. Checo's racecraft and ability to make a set of tyres last forever made him the perfect wingman to a champion."
+  },
+  {
+    "id": "ricciardo",
+    "name": "Daniel Ricciardo",
+    "shortName": "RIC",
+    "team": "McLaren",
+    "nationality": "Australian",
+    "color": "#e8911f",
+    "isFree": false,
+    "championships": 0,
+    "bio": "The Honey Badger. A late-braking assassin with the widest smile in the paddock — when Ricciardo sent it down the inside, no gap was ever truly closed."
+  },
+  {
+    "id": "gasly",
+    "name": "Pierre Gasly",
+    "shortName": "GAS",
+    "team": "AlphaTauri",
+    "nationality": "French",
+    "color": "#3b82f6",
+    "isFree": false,
+    "championships": 0,
+    "bio": "From the depths of a demotion to the top step at Monza. Gasly's against-all-odds victory is one of the most emotional fairy tales in modern Formula 1."
+  },
+  {
+    "id": "ocon",
+    "name": "Esteban Ocon",
+    "shortName": "OCO",
+    "team": "Alpine",
+    "nationality": "French",
+    "color": "#0093cc",
+    "isFree": false,
+    "championships": 0,
+    "bio": "Cool, calculated and relentless under pressure. Ocon held off a charging champion for lap after lap in Hungary to seize a maiden win against the odds."
+  },
+  {
+    "id": "piastri",
+    "name": "Oscar Piastri",
+    "shortName": "PIA",
+    "team": "McLaren",
+    "nationality": "Australian",
+    "color": "#ff8000",
+    "isFree": false,
+    "championships": 0,
+    "bio": "Ice-cold from the moment he arrived. A junior-category steamroller whose maturity and racecraft made him a Grand Prix winner faster than almost anyone expected."
   }
 ]

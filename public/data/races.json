@@ -284,5 +284,83 @@
     "description": "Pole by nearly a second, lights-to-flag domination, and a record-equalling eighth win at a single circuit. Hamilton at the absolute peak of his powers.",
     "isFree": false,
     "telemetryFile": "hamilton_hungary_2020"
+  },
+  {
+    "id": "perez_baku_2021",
+    "driverId": "perez",
+    "name": "Azerbaijan Grand Prix 2021",
+    "circuit": "baku",
+    "circuitName": "Baku City Circuit",
+    "year": 2021,
+    "location": "Baku, Azerbaijan",
+    "lapTime": "1:41.630",
+    "description": "Amid late-race chaos on the streets of Baku, Pérez kept his head while others lost theirs to claim a famous victory and announce his value to Red Bull.",
+    "isFree": false,
+    "telemetryFile": "perez_baku_2021"
+  },
+  {
+    "id": "ricciardo_monaco_2018",
+    "driverId": "ricciardo",
+    "name": "Monaco Grand Prix 2018",
+    "circuit": "monaco",
+    "circuitName": "Circuit de Monaco",
+    "year": 2018,
+    "location": "Monte Carlo, Monaco",
+    "lapTime": "1:10.810",
+    "description": "Redemption two years in the making. Ricciardo nursed a power-stricken car for 50 laps to convert a record-breaking pole into the win that got away in 2016.",
+    "isFree": false,
+    "telemetryFile": "ricciardo_monaco_2018"
+  },
+  {
+    "id": "ricciardo_monza_2021",
+    "driverId": "ricciardo",
+    "name": "Italian Grand Prix 2021",
+    "circuit": "monza",
+    "circuitName": "Autodromo Nazionale Monza",
+    "year": 2021,
+    "location": "Monza, Italy",
+    "lapTime": "1:19.995",
+    "description": "A McLaren one-two at the temple of speed, and the Honey Badger back on top after years in the wilderness. A shoey on the Monza podium completed the fairy tale.",
+    "isFree": false,
+    "telemetryFile": "ricciardo_monza_2021"
+  },
+  {
+    "id": "gasly_monza_2020",
+    "driverId": "gasly",
+    "name": "Italian Grand Prix 2020",
+    "circuit": "monza",
+    "circuitName": "Autodromo Nazionale Monza",
+    "year": 2020,
+    "location": "Monza, Italy",
+    "lapTime": "1:19.909",
+    "description": "The most improbable win of the modern era. Months after being dropped by Red Bull, Gasly held off McLaren to the line at Monza for an unforgettable maiden victory.",
+    "isFree": false,
+    "telemetryFile": "gasly_monza_2020"
+  },
+  {
+    "id": "ocon_hungary_2021",
+    "driverId": "ocon",
+    "name": "Hungarian Grand Prix 2021",
+    "circuit": "hungaroring",
+    "circuitName": "Hungaroring",
+    "year": 2021,
+    "location": "Budapest, Hungary",
+    "lapTime": "1:16.653",
+    "description": "Ocon led every lap and withstood relentless pressure from a four-time champion behind to convert chaos into the maiden Grand Prix win of his career.",
+    "isFree": false,
+    "telemetryFile": "ocon_hungary_2021"
+  },
+  {
+    "id": "piastri_hungary_2024",
+    "driverId": "piastri",
+    "name": "Hungarian Grand Prix 2024",
+    "circuit": "hungaroring",
+    "circuitName": "Hungaroring",
+    "year": 2024,
+    "location": "Budapest, Hungary",
+    "lapTime": "1:15.249",
+    "description": "Composure beyond his years. Piastri controlled the Hungaroring to take his maiden victory, confirming McLaren had unearthed a future champion.",
+    "isFree": false,
+    "telemetryFile": "piastri_hungary_2024"
   }
 ]
