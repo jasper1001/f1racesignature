@@ -208,14 +208,16 @@ export default function StudioPage() {
           </div>
 
           {/* Canvas */}
-          <div className="flex-1 flex items-center justify-center p-6 overflow-auto" style={{ minHeight: 0 }}>
-            {!selectedDriver ? (
-              <EmptyState />
-            ) : (
-              <div className="poster-wrapper" style={{ zoom: zoom }}>
-                <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compareDriver={compareEnabled ? compareDriver : null} compareTelemetry={compareEnabled ? compareTelemetry : null} playbackProgress={isPlaying ? progress : null} />
-              </div>
-            )}
+          <div className="flex-1 overflow-auto" style={{ minHeight: 0 }}>
+            <div className="flex items-center justify-center p-6" style={{ minHeight: '100%' }}>
+              {!selectedDriver ? (
+                <EmptyState />
+              ) : (
+                <div className="poster-wrapper" style={{ zoom: zoom }}>
+                  <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compareDriver={compareEnabled ? compareDriver : null} compareTelemetry={compareEnabled ? compareTelemetry : null} playbackProgress={isPlaying ? progress : null} />
+                </div>
+              )}
+            </div>
           </div>
         </main>
 
