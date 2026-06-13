@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { RADIO_QUOTES, type RadioQuote } from '@/lib/games/teamRadioData'
 import { ShareButtons } from '@/components/games/ShareButtons'
@@ -97,6 +97,7 @@ export function TeamRadioGame() {
   }
 
   function handleRestart() {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
     setRounds(buildRounds())
     setCurrent(0)
     setSelected(null)

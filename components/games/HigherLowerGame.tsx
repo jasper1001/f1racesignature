@@ -50,6 +50,7 @@ function getRating(n: number): string {
 type Phase = 'playing' | 'revealing' | 'over'
 
 export function HigherLowerGame() {
+  const gameRef        = useRef<HTMLDivElement>(null)
   const recentPairsRef = useRef<Set<string>>(new Set())
   const timerRef       = useRef<ReturnType<typeof setTimeout> | null>(null)
   const firstRound     = useRef(true)
@@ -133,6 +134,7 @@ export function HigherLowerGame() {
   }
 
   function handlePlayAgain() {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
     Analytics.hlPlayAgain()
     setStreak(0)
     firstRound.current = true

@@ -132,6 +132,7 @@ export function PredictDriverGame() {
   }
 
   function handlePlayAgain() {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
     if (mode === 'endless') {
       const pool = getPool(difficulty)
       setMystery(pool[Math.floor(Math.random() * pool.length)])

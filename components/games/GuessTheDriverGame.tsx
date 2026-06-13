@@ -154,9 +154,15 @@ export function GuessTheDriverGame() {
   const [finalScore, setFinalScore] = useState(0)
   const [isNewBest, setIsNewBest] = useState(false)
   const [stats, setStats] = useState<Stats>(loadStats)
+  const gameRef = useRef<HTMLDivElement>(null)
   const lastDriverId = useRef<string | undefined>(undefined)
 
   const startRound = useCallback(() => {
+    const el = gameRef.current
+    if (el) {
+      const y = el.getBoundingClientRect().top + window.scrollY - 72
+      window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' })
+    }
     const d = pickDriver(lastDriverId.current)
     lastDriverId.current = d.id
     setDriver(d)
@@ -210,7 +216,7 @@ export function GuessTheDriverGame() {
   const potential = scorePotential(revealedCount)
 
   return (
-    <div className="space-y-4">
+    <div ref={gameRef} className="space-y-4">
       <AnimatePresence mode="wait">
 
         {/* ── IDLE ── */}

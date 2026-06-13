@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
 import { ShareButtons } from '@/components/games/ShareButtons'
@@ -108,8 +108,14 @@ export function TrackOutlineGame() {
   const [finalScore, setFinalScore]     = useState(0)
   const [isNewBest, setIsNewBest]       = useState(false)
   const [stats, setStats]               = useState<Stats>(loadStats)
+  const gameRef = useRef<HTMLDivElement>(null)
   const startGame = useCallback(() => {
     if (circuits.length < 4) return
+    const el = gameRef.current
+    if (el) {
+      const y = el.getBoundingClientRect().top + window.scrollY - 72
+      window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' })
+    }
     const q = generateQuestion(circuits, [])
     setAnswer(q.answer)
     setOptions(q.options)
@@ -168,7 +174,7 @@ export function TrackOutlineGame() {
   }
 
   return (
-    <div className="space-y-4">
+    <div ref={gameRef} className="space-y-4">
       <AnimatePresence mode="wait">
 
         {/* ── IDLE ── */}

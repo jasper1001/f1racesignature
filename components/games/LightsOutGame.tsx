@@ -78,6 +78,7 @@ export function LightsOutGame() {
   const [isNewBest, setIsNewBest] = useState(false)
   const [showSparks, setShowSparks] = useState(false)
 
+  const gameRef   = useRef<HTMLDivElement>(null)
   const goTimeRef = useRef<number | null>(null)
   const timersRef = useRef<ReturnType<typeof setTimeout>[]>([])
 
@@ -89,6 +90,11 @@ export function LightsOutGame() {
   useEffect(() => () => clearTimers(), [])
 
   const startGame = useCallback(() => {
+    const el = gameRef.current
+    if (el) {
+      const y = el.getBoundingClientRect().top + window.scrollY - 72
+      window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' })
+    }
     clearTimers()
     setLitCount(0)
     setReactionTime(null)
@@ -146,7 +152,7 @@ export function LightsOutGame() {
   const isClickable = phase === 'countdown' || phase === 'go'
 
   return (
-    <div className="select-none space-y-4">
+    <div ref={gameRef} className="select-none space-y-4">
       {/* Main panel */}
       <div
         onClick={isClickable ? handlePanelClick : undefined}
@@ -289,6 +295,10 @@ function ResultPanel({
   onPlayAgain: () => void
 }) {
   const rating = getRating(ms)
+  const displayLabel = isNewBest && rating.label === 'Keep Practicing' ? 'Getting Faster!' : rating.label
+  const displaySub = isNewBest && rating.label === 'Keep Practicing'
+    ? 'New personal best! Keep pushing to reach the next tier.'
+    : rating.sub
 
   return (
     <motion.div
@@ -322,9 +332,9 @@ function ResultPanel({
 
       <div>
         <p className="text-lg font-semibold" style={{ color: rating.color }}>
-          {rating.label}
+          {displayLabel}
         </p>
-        <p className="text-white text-sm mt-1">{rating.sub}</p>
+        <p className="text-white text-sm mt-1">{displaySub}</p>
       </div>
 
       <div className="flex flex-col gap-3 w-full">

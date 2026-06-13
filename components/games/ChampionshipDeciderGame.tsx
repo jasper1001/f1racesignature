@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { SCENARIOS, getRating, type Scenario, type StrategyOption, type ResultType } from '@/lib/games/strategyScenarios'
 import { ShareButtons } from '@/components/games/ShareButtons'
@@ -55,8 +55,14 @@ export function ChampionshipDeciderGame() {
   const [finalPerfect, setFinalPerfect] = useState(0)
   const [isNewBest, setIsNewBest]       = useState(false)
   const [stats, setStats]               = useState<Stats>(loadStats)
+  const gameRef = useRef<HTMLDivElement>(null)
 
   const startGame = useCallback(() => {
+    const el = gameRef.current
+    if (el) {
+      const y = el.getBoundingClientRect().top + window.scrollY - 72
+      window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' })
+    }
     const shuffled = shuffle(SCENARIOS)
     setScenarios(shuffled)
     setIndex(0)
@@ -105,7 +111,7 @@ export function ChampionshipDeciderGame() {
   const total   = scenarios.length
 
   return (
-    <div className="space-y-4">
+    <div ref={gameRef} className="space-y-4">
       <AnimatePresence mode="wait">
 
         {/* ── IDLE ── */}
