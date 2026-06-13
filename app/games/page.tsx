@@ -34,6 +34,15 @@ const GAMES = [
       'Clues about an F1 driver are revealed one at a time. Identify them early for maximum points. 53 drivers across every era.',
     duration: '~1 minute',
   },
+  {
+    id: 'track-outline',
+    href: '/games/track-outline',
+    tag: 'Circuit Knowledge',
+    title: 'Track Outline Quiz',
+    description:
+      'A circuit silhouette is shown — no name, no labels. Pick the correct track from four options and build your streak.',
+    duration: '~1 minute',
+  },
 ]
 
 export default function GamesPage() {
