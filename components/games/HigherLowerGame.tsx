@@ -10,6 +10,7 @@ import {
   type HLStat,
 } from '@/lib/games/higherLowerData'
 import { Analytics } from '@/lib/analytics'
+import { shareResult } from '@/lib/shareResult'
 
 // ── Persistence ───────────────────────────────────────────────────────────────
 
@@ -141,18 +142,9 @@ export function HigherLowerGame() {
 
   async function handleShare() {
     Analytics.hlShareClicked(streak)
-    const rating = getRating(streak)
-    const text = `🏎️ Higher or Lower: F1 Edition\nStreak: ${streak} — ${rating}\nTest your F1 knowledge at racesignature.com/games/higher-lower`
-
-    if (typeof navigator !== 'undefined' && navigator.share) {
-      try { await navigator.share({ text, title: 'Higher or Lower: F1 Edition' }) } catch {}
-    } else if (typeof navigator !== 'undefined' && navigator.clipboard) {
-      try {
-        await navigator.clipboard.writeText(text)
-        setCopied(true)
-        setTimeout(() => setCopied(false), 2000)
-      } catch {}
-    }
+    const text = `🏎️ Higher or Lower: F1 Edition\nStreak: ${streak} — ${getRating(streak)}\nracesignature.com/games/higher-lower`
+    const res = await shareResult(text)
+    if (res === 'copied') { setCopied(true); setTimeout(() => setCopied(false), 2000) }
   }
 
   if (phase === 'over') {

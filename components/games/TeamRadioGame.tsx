@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { RADIO_QUOTES, type RadioQuote } from '@/lib/games/teamRadioData'
+import { shareResult } from '@/lib/shareResult'
 
 const ROUNDS = 10
 const POINTS_PER_CORRECT = 100
@@ -321,6 +322,13 @@ function ResultScreen({
   const correct = score / POINTS_PER_CORRECT
   const result = getResultMessage(score)
   const isNewBest = score >= bestScore && score > 0
+  const [copied, setCopied] = useState(false)
+
+  async function handleShare() {
+    const text = `🏎️ Team Radio Guess\n${score}/${maxScore} — ${result.title}\nracesignature.com/games/team-radio`
+    const res = await shareResult(text)
+    if (res === 'copied') { setCopied(true); setTimeout(() => setCopied(false), 2000) }
+  }
 
   return (
     <motion.div
@@ -380,23 +388,27 @@ function ResultScreen({
       </div>
 
       {/* Actions */}
-      <div className="flex flex-col sm:flex-row items-center gap-3">
+      <div className="flex flex-col gap-2">
         <button
-          onClick={onRestart}
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#d4a017] text-black font-semibold rounded-xl hover:bg-[#e8b84b] transition-all active:scale-95"
+          onClick={handleShare}
+          className="w-full inline-flex items-center justify-center px-8 py-4 border border-[#1f1f1f] bg-[#0d0d0d] text-white font-medium rounded-xl hover:border-[#2a2a2a] active:scale-95 transition-all"
         >
-          Play Again
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path d="M2 7a5 5 0 1 1 1.4 3.4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M2 10.5V7h3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+          {copied ? '✓ Copied!' : '↗ Share Result'}
         </button>
-        <a
-          href="/games"
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/5 text-white font-medium rounded-xl border border-white/10 hover:bg-white/8 transition-all"
-        >
-          All Games
-        </a>
+        <div className="flex flex-col sm:flex-row gap-2">
+          <button
+            onClick={onRestart}
+            className="flex-1 inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#d4a017] text-black font-semibold rounded-xl hover:bg-[#e8b84b] transition-all active:scale-95"
+          >
+            Play Again
+          </button>
+          <a
+            href="/games"
+            className="flex-1 inline-flex items-center justify-center px-8 py-4 bg-white/5 text-white font-medium rounded-xl border border-white/10 hover:bg-white/8 transition-all"
+          >
+            All Games
+          </a>
+        </div>
       </div>
     </motion.div>
   )

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { shareResult } from '@/lib/shareResult'
 
 const LIGHT_INTERVAL = 800
 const MIN_GO_DELAY = 200
@@ -288,6 +289,13 @@ function ResultPanel({
   onPlayAgain: () => void
 }) {
   const rating = getRating(ms)
+  const [copied, setCopied] = useState(false)
+
+  async function handleShare() {
+    const text = `🏎️ Lights Out — F1 Reaction Test\n⚡ ${ms}ms — ${rating.label}\nracesignature.com/games/lights-out`
+    const res = await shareResult(text)
+    if (res === 'copied') { setCopied(true); setTimeout(() => setCopied(false), 2000) }
+  }
 
   return (
     <motion.div
@@ -316,7 +324,7 @@ function ResultPanel({
         <span className="text-6xl font-bold font-mono" style={{ color: rating.color }}>
           {ms}
         </span>
-        <span className="text-xl text-[#333333] font-mono">ms</span>
+        <span className="text-xl text-white/30 font-mono">ms</span>
       </motion.div>
 
       <div>
@@ -326,12 +334,20 @@ function ResultPanel({
         <p className="text-white text-sm mt-1">{rating.sub}</p>
       </div>
 
-      <button
-        onClick={(e) => { e.stopPropagation(); onPlayAgain() }}
-        className="w-full px-6 py-3 bg-[#d4a017] text-black font-semibold rounded-xl hover:bg-[#e8b84b] transition-all hover:scale-[1.02] active:scale-100 cursor-pointer"
-      >
-        Play Again
-      </button>
+      <div className="flex flex-col gap-2 w-full">
+        <button
+          onClick={handleShare}
+          className="w-full px-6 py-3 border border-[#1f1f1f] bg-[#0d0d0d] text-white font-medium rounded-xl hover:border-[#2a2a2a] active:scale-95 transition-all cursor-pointer"
+        >
+          {copied ? '✓ Copied!' : '↗ Share Result'}
+        </button>
+        <button
+          onClick={(e) => { e.stopPropagation(); onPlayAgain() }}
+          className="w-full px-6 py-3 bg-[#d4a017] text-black font-semibold rounded-xl hover:bg-[#e8b84b] transition-all hover:scale-[1.02] active:scale-100 cursor-pointer"
+        >
+          Play Again
+        </button>
+      </div>
     </motion.div>
   )
 }

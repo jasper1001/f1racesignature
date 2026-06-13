@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { shareResult } from '@/lib/shareResult'
 import {
   DRIVERS,
   getPool,
@@ -520,6 +521,18 @@ function ResultScreen({
 }) {
   const streak = loadDailyStreak()
   const endless = loadEndlessStats()
+  const [copied, setCopied] = useState(false)
+
+  async function handleShare() {
+    const guessCount = guesses.length
+    const result = won
+      ? `Solved in ${guessCount} ${guessCount === 1 ? 'guess' : 'guesses'}`
+      : 'Not solved'
+    const modeLabel = mode === 'daily' ? ' (Daily)' : ''
+    const text = `🏎️ Predict the Driver${modeLabel}\n${result} — ${mystery.name}\nracesignature.com/games/predict-driver`
+    const res = await shareResult(text)
+    if (res === 'copied') { setCopied(true); setTimeout(() => setCopied(false), 2000) }
+  }
 
   return (
     <motion.div
@@ -621,25 +634,33 @@ function ResultScreen({
       )}
 
       {/* Actions */}
-      <div className="flex flex-col sm:flex-row gap-2">
-        {mode === 'endless' ? (
-          <button
-            onClick={onPlayAgain}
-            className="flex-1 py-4 bg-[#d4a017] text-black font-semibold rounded-xl hover:bg-[#e8b84b] transition-all active:scale-95"
-          >
-            Play Again
-          </button>
-        ) : (
-          <p className="flex-1 py-4 text-center text-white text-sm font-mono">
-            Come back tomorrow for a new driver.
-          </p>
-        )}
+      <div className="flex flex-col gap-2">
         <button
-          onClick={onBackToSetup}
-          className="flex-1 py-4 bg-white/5 text-white font-medium rounded-xl border border-white/10 hover:bg-white/8 transition-all"
+          onClick={handleShare}
+          className="w-full py-3.5 border border-[#1f1f1f] bg-[#0d0d0d] text-white font-medium rounded-xl hover:border-[#2a2a2a] active:scale-95 transition-all"
         >
-          Change Mode
+          {copied ? '✓ Copied!' : '↗ Share Result'}
         </button>
+        <div className="flex flex-col sm:flex-row gap-2">
+          {mode === 'endless' ? (
+            <button
+              onClick={onPlayAgain}
+              className="flex-1 py-4 bg-[#d4a017] text-black font-semibold rounded-xl hover:bg-[#e8b84b] transition-all active:scale-95"
+            >
+              Play Again
+            </button>
+          ) : (
+            <p className="flex-1 py-4 text-center text-white text-sm font-mono">
+              Come back tomorrow for a new driver.
+            </p>
+          )}
+          <button
+            onClick={onBackToSetup}
+            className="flex-1 py-4 bg-white/5 text-white font-medium rounded-xl border border-white/10 hover:bg-white/8 transition-all"
+          >
+            Change Mode
+          </button>
+        </div>
       </div>
     </motion.div>
   )

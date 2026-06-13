@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { DRIVERS, CLUE_DEFS, scorePotential, type DriverEntry } from '@/lib/games/guessDriverData'
+import { shareResult } from '@/lib/shareResult'
 
 const STATS_KEY = 'f1rs_games_guess_driver'
 
@@ -153,7 +154,14 @@ export function GuessTheDriverGame() {
   const [finalScore, setFinalScore] = useState(0)
   const [isNewBest, setIsNewBest] = useState(false)
   const [stats, setStats] = useState<Stats>(loadStats)
+  const [copied, setCopied] = useState(false)
   const lastDriverId = useRef<string | undefined>(undefined)
+
+  async function handleShare(driverName: string, score: number) {
+    const text = `🏎️ Guess the Driver\n✓ ${driverName} — +${score} pts\nracesignature.com/games/guess-the-driver`
+    const res = await shareResult(text)
+    if (res === 'copied') { setCopied(true); setTimeout(() => setCopied(false), 2000) }
+  }
 
   const startRound = useCallback(() => {
     const d = pickDriver(lastDriverId.current)
@@ -339,7 +347,7 @@ export function GuessTheDriverGame() {
               <span className="text-5xl font-bold font-mono" style={{ color: finalScore === 100 ? '#d4a017' : finalScore === 80 ? '#c0c0c0' : finalScore === 60 ? '#cd7f32' : '#555555' }}>
                 +{finalScore}
               </span>
-              <span className="text-lg text-[#333333] font-mono">pts</span>
+              <span className="text-lg text-white/20 font-mono">pts</span>
             </motion.div>
 
             <div className="rounded-xl border border-[#1a1a1a] bg-[#060606] px-5 py-4 text-left">
@@ -347,12 +355,20 @@ export function GuessTheDriverGame() {
               <p className="text-white text-sm leading-relaxed">{driver.fact}</p>
             </div>
 
-            <button
-              onClick={startRound}
-              className="w-full px-6 py-3 bg-[#d4a017] text-black font-semibold rounded-xl hover:bg-[#e8b84b] transition-all hover:scale-[1.02] active:scale-100 cursor-pointer"
-            >
-              Next Driver
-            </button>
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={() => handleShare(driver.name, finalScore)}
+                className="w-full px-6 py-3 border border-[#1f1f1f] bg-[#0d0d0d] text-white font-medium rounded-xl hover:border-[#2a2a2a] active:scale-95 transition-all cursor-pointer"
+              >
+                {copied ? '✓ Copied!' : '↗ Share Result'}
+              </button>
+              <button
+                onClick={startRound}
+                className="w-full px-6 py-3 bg-[#d4a017] text-black font-semibold rounded-xl hover:bg-[#e8b84b] transition-all hover:scale-[1.02] active:scale-100 cursor-pointer"
+              >
+                Next Driver
+              </button>
+            </div>
           </motion.div>
         )}
 
