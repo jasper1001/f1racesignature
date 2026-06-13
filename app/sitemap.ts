@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { getAllDrivers, getAllRaces } from '@/lib/serverData'
 
-const SITE_URL = 'https://f1racesignature.vercel.app'
+const SITE_URL = 'https://f1racesignature.site'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date()
