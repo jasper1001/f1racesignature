@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -10,16 +10,16 @@ import type { Circuit } from '@/lib/types'
 const STATS_KEY = 'f1rs_games_track_outline'
 const TOTAL_ROUNDS = 10
 
-// ── Circuit facts ─────────────────────────────────────────────────────────────
+// â”€â”€ Circuit facts â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const CIRCUIT_FACTS: Record<string, string> = {
-  monaco:      'Monaco is the slowest circuit on the calendar — yet a win here is considered the most prestigious in all of Formula 1.',
+  monaco:      'Monaco is the slowest circuit on the calendar â€” yet a win here is considered the most prestigious in all of Formula 1.',
   silverstone: 'Silverstone hosted the very first Formula 1 World Championship race in 1950 and has been on the calendar almost every year since.',
-  suzuka:      'Suzuka\'s figure-8 layout is unique in F1 — cars cross directly over themselves via an underpass at the first chicane.',
+  suzuka:      'Suzuka\'s figure-8 layout is unique in F1 â€” cars cross directly over themselves via an underpass at the first chicane.',
   spa:         'Spa-Francorchamps is the longest circuit on the calendar at 7.004 km. Its weather is so unpredictable it can rain on one sector while the sun shines on another.',
   monza:       'Known as the "Temple of Speed", Monza has been on the calendar continuously since the championship began in 1950.',
-  abu_dhabi:   'The Yas Marina Circuit is the only track in F1 with a hotel — the Yas Viceroy — built directly over part of the circuit.',
+  abu_dhabi:   'The Yas Marina Circuit is the only track in F1 with a hotel â€” the Yas Viceroy â€” built directly over part of the circuit.',
   bahrain:     'The Bahrain International Circuit was the first in the Middle East to host a Formula 1 Grand Prix when it opened in 2004.',
-  baku:        'The Baku City Circuit features the longest straight in modern F1 — over 2 km — and one of the narrowest sections at just 7.6 metres wide.',
+  baku:        'The Baku City Circuit features the longest straight in modern F1 â€” over 2 km â€” and one of the narrowest sections at just 7.6 metres wide.',
   hungaroring: 'The Hungaroring was the first permanent circuit behind the Iron Curtain when it hosted the inaugural Hungarian Grand Prix in 1986.',
   interlagos:  'Interlagos runs anticlockwise, which is unusual for Formula 1. It also sits 800 metres above sea level.',
   marina_bay:  'The Marina Bay Street Circuit in Singapore was the first night race in Formula 1 history when it debuted in 2008.',
@@ -29,12 +29,12 @@ const CIRCUIT_FACTS: Record<string, string> = {
 function getGameRating(score: number) {
   if (score === 10) return { label: 'Perfect Lap',      color: '#d4a017', sub: 'You know every corner of the F1 calendar.' }
   if (score >= 8)  return { label: 'F1 Expert',         color: '#c0c0c0', sub: 'You clearly spend your weekends watching qualifying.' }
-  if (score >= 6)  return { label: 'Circuit Analyst',   color: '#cd7f32', sub: 'Solid knowledge — keep studying the map.' }
+  if (score >= 6)  return { label: 'Circuit Analyst',   color: '#cd7f32', sub: 'Solid knowledge â€” keep studying the map.' }
   if (score >= 4)  return { label: 'Getting There',     color: '#888888', sub: 'A few more races and you\'ll be an expert.' }
   return           { label: 'Keep Watching',             color: '#555555', sub: 'Time to study the Formula 1 calendar.' }
 }
 
-// ── Stats ─────────────────────────────────────────────────────────────────────
+// â”€â”€ Stats â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 interface Stats {
   bestScore: number
   totalCorrect: number
@@ -53,7 +53,7 @@ function saveStats(s: Stats) {
   if (typeof window !== 'undefined') localStorage.setItem(STATS_KEY, JSON.stringify(s))
 }
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
+// â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr]
   for (let i = a.length - 1; i > 0; i--) {
@@ -76,7 +76,7 @@ function strokeWidthFromViewBox(viewBox: string): number {
   return w * 0.02
 }
 
-// ── Circuit silhouette ────────────────────────────────────────────────────────
+// â”€â”€ Circuit silhouette â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function CircuitSilhouette({ circuit, flash }: { circuit: Circuit; flash: 'none' | 'correct' | 'wrong' }) {
   const sw = strokeWidthFromViewBox(circuit.viewBox)
   const color = flash === 'correct' ? '#38b000' : flash === 'wrong' ? '#e8002d' : '#ffffff'
@@ -91,7 +91,7 @@ function CircuitSilhouette({ circuit, flash }: { circuit: Circuit; flash: 'none'
   )
 }
 
-// ── Main game ─────────────────────────────────────────────────────────────────
+// â”€â”€ Main game â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 type Phase = 'idle' | 'question' | 'answered' | 'finished'
 
 export function TrackOutlineGame() {
@@ -131,7 +131,7 @@ export function TrackOutlineGame() {
 
   const handleNext = useCallback(() => {
     if (round >= TOTAL_ROUNDS) {
-      // End of game — sessionCorrect already includes this round's result
+      // End of game â€” sessionCorrect already includes this round's result
       const score = sessionCorrect
       const newBest = score > stats.bestScore
       const newStats: Stats = {
@@ -162,7 +162,7 @@ export function TrackOutlineGame() {
   if (circuits.length === 0) {
     return (
       <div className="rounded-2xl border border-[#1a1a1a] bg-[#080808] p-8 text-center">
-        <p className="text-[#555555] text-sm font-mono">Loading circuits…</p>
+        <p className="text-[#555555] text-sm font-mono">Loading circuitsâ€¦</p>
       </div>
     )
   }
@@ -171,7 +171,7 @@ export function TrackOutlineGame() {
     <div className="space-y-4">
       <AnimatePresence mode="wait">
 
-        {/* ── IDLE ── */}
+        {/* â”€â”€ IDLE â”€â”€ */}
         {phase === 'idle' && (
           <motion.div key="idle" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
             className="rounded-2xl border border-[#1a1a1a] bg-[#080808] p-8 text-center space-y-5"
@@ -184,7 +184,7 @@ export function TrackOutlineGame() {
               ))}
             </div>
             <p className="text-white text-sm leading-relaxed max-w-sm mx-auto">
-              A circuit silhouette is shown — no name, no labels.
+              A circuit silhouette is shown â€” no name, no labels.
               Pick the correct track from four options.
               10 circuits, then your final score.
             </p>
@@ -196,7 +196,7 @@ export function TrackOutlineGame() {
           </motion.div>
         )}
 
-        {/* ── QUESTION / ANSWERED ── */}
+        {/* â”€â”€ QUESTION / ANSWERED â”€â”€ */}
         {(phase === 'question' || phase === 'answered') && answer && (
           <motion.div key="question" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4">
 
@@ -260,7 +260,7 @@ export function TrackOutlineGame() {
                       {isCorrect ? 'Correct!' : `It was ${answer.name}`}
                     </p>
                     <p className="text-white text-sm leading-relaxed">
-                      {CIRCUIT_FACTS[answer.id] ?? `${answer.name} — ${answer.location}.`}
+                      {CIRCUIT_FACTS[answer.id] ?? `${answer.name} â€” ${answer.location}.`}
                     </p>
                   </div>
                   <button onClick={handleNext}
@@ -274,7 +274,7 @@ export function TrackOutlineGame() {
           </motion.div>
         )}
 
-        {/* ── FINISHED ── */}
+        {/* â”€â”€ FINISHED â”€â”€ */}
         {phase === 'finished' && (() => {
           const rating = getGameRating(finalScore)
           return (
@@ -287,7 +287,7 @@ export function TrackOutlineGame() {
                   transition={{ type: 'spring', stiffness: 300, damping: 14 }}
                   className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#d4a017]/10 border border-[#d4a017]/30 rounded-full text-[#d4a017] text-xs font-mono uppercase tracking-widest"
                 >
-                  ★ New Personal Best
+                  â˜… New Personal Best
                 </motion.div>
               )}
 
@@ -310,8 +310,8 @@ export function TrackOutlineGame() {
 
               <div className="flex flex-col gap-3">
                 <ShareButtons
-                  text={`🏎️ Track Outline Quiz\n${finalScore}/10 — ${rating.label}\nracesignature.com/games/track-outline`}
-                  url="https://racesignature.com/games/track-outline"
+                  text={`ðŸŽï¸ Track Outline Quiz\n${finalScore}/10 â€” ${rating.label}\nf1racesignature.site/games/track-outline`}
+                  url="https://f1racesignature.site/games/track-outline"
                 />
                 <button onClick={startGame}
                   className="w-full px-6 py-3 bg-[#d4a017] text-black font-semibold rounded-xl hover:bg-[#e8b84b] transition-all hover:scale-[1.02] active:scale-100 cursor-pointer"
@@ -343,3 +343,4 @@ export function TrackOutlineGame() {
     </div>
   )
 }
+

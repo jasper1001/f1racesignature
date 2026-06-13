@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -21,7 +21,7 @@ const MAX_GUESSES = 6
 type GameMode = 'daily' | 'endless'
 type Phase = 'setup' | 'game' | 'result'
 
-// ── LocalStorage helpers ─────────────────────────────────────────────────────
+// â”€â”€ LocalStorage helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function loadDailyState(difficulty: Difficulty) {
   try {
@@ -54,7 +54,7 @@ function saveDailyStreak(s: { current: number; best: number }) {
   try { localStorage.setItem('predict_daily_streak', JSON.stringify(s)) } catch {}
 }
 
-// ── Main component ────────────────────────────────────────────────────────────
+// â”€â”€ Main component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function PredictDriverGame() {
   const [phase, setPhase] = useState<Phase>('setup')
@@ -169,7 +169,7 @@ export function PredictDriverGame() {
   return null
 }
 
-// ── Setup screen ──────────────────────────────────────────────────────────────
+// â”€â”€ Setup screen â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const DIFFICULTIES: { key: Difficulty; label: string; desc: string }[] = [
   { key: 'rookie',   label: 'Rookie',   desc: 'World champions only' },
@@ -193,11 +193,11 @@ function SetupScreen({ onStart }: { onStart: (m: GameMode, d: Difficulty) => voi
         <p className="text-white text-[10px] font-mono uppercase tracking-widest mb-3">How to play</p>
         <ul className="space-y-2 text-white text-sm leading-relaxed">
           <li className="flex gap-2.5">
-            <span className="text-[#d4a017] shrink-0">—</span>
+            <span className="text-[#d4a017] shrink-0">â€”</span>
             Guess the mystery F1 driver in <span className="text-[#d4a017]">6 attempts</span>.
           </li>
           <li className="flex gap-2.5">
-            <span className="text-[#d4a017] shrink-0">—</span>
+            <span className="text-[#d4a017] shrink-0">â€”</span>
             Each guess reveals colour hints across 7 attributes.
           </li>
           <li className="flex gap-2.5">
@@ -216,7 +216,7 @@ function SetupScreen({ onStart }: { onStart: (m: GameMode, d: Difficulty) => voi
             <span className="shrink-0 flex items-center gap-1">
               <span className="inline-block w-3 h-3 rounded-sm bg-[#993333]/20 border border-[#993333]/30" />
             </span>
-            <span><span className="text-[#cc4444]">Red</span> = no match. ↑↓ arrows show which direction to guess.</span>
+            <span><span className="text-[#cc4444]">Red</span> = no match. â†‘â†“ arrows show which direction to guess.</span>
           </li>
         </ul>
       </div>
@@ -235,7 +235,7 @@ function SetupScreen({ onStart }: { onStart: (m: GameMode, d: Difficulty) => voi
                   : 'border-[#1a1a1a] bg-[#080808] text-white hover:border-[#2a2a2a]'
               }`}
             >
-              {m === 'daily' ? '📅 Daily' : '∞ Endless'}
+              {m === 'daily' ? 'ðŸ“… Daily' : 'âˆž Endless'}
             </button>
           ))}
         </div>
@@ -274,7 +274,7 @@ function SetupScreen({ onStart }: { onStart: (m: GameMode, d: Difficulty) => voi
   )
 }
 
-// ── Game screen ───────────────────────────────────────────────────────────────
+// â”€â”€ Game screen â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const COLUMNS = [
   { key: 'nationality',   label: 'NAT',    flex: 1.8, minWidth: 88 },
@@ -308,7 +308,7 @@ function GameScreen({
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <span className="text-white text-[10px] font-mono uppercase tracking-widest">
-          {mode === 'daily' ? 'Daily' : 'Endless'} · {difficulty}
+          {mode === 'daily' ? 'Daily' : 'Endless'} Â· {difficulty}
         </span>
         <div className="flex items-center gap-1.5">
           {Array.from({ length: MAX_GUESSES }, (_, i) => (
@@ -394,7 +394,7 @@ function GameScreen({
   )
 }
 
-// ── Hint cell ─────────────────────────────────────────────────────────────────
+// â”€â”€ Hint cell â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const COLOR_CLASSES: Record<HintColor, string> = {
   green:  'bg-[#0d2010] border-[#38b000]/35 text-[#38b000]',
@@ -413,14 +413,14 @@ function HintCell({ hint, colFlex, colMinWidth }: { hint: CellHint; colFlex: num
       </span>
       {hint.direction && (
         <span className="text-sm font-bold leading-none mt-1">
-          {hint.direction === 'up' ? '↑' : '↓'}
+          {hint.direction === 'up' ? 'â†‘' : 'â†“'}
         </span>
       )}
     </div>
   )
 }
 
-// ── Driver search / autocomplete ──────────────────────────────────────────────
+// â”€â”€ Driver search / autocomplete â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function DriverSearch({
   guessedIds,
@@ -468,7 +468,7 @@ function DriverSearch({
         disabled={disabled}
         onChange={e => { setQuery(e.target.value); setOpen(true) }}
         onFocus={() => query && setOpen(true)}
-        placeholder={disabled ? 'No guesses remaining' : 'Search for a driver…'}
+        placeholder={disabled ? 'No guesses remaining' : 'Search for a driverâ€¦'}
         className="w-full px-4 py-3.5 rounded-xl border border-[#1a1a1a] bg-[#080808] text-white text-sm placeholder-[#888888] focus:outline-none focus:border-[#d4a017]/40 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
       />
 
@@ -489,7 +489,7 @@ function DriverSearch({
               >
                 <span className="text-white text-sm">{driver.name}</span>
                 <span className="text-[#aaaaaa] text-xs font-mono">
-                  {driver.nationality} · {driver.debutYear}
+                  {driver.nationality} Â· {driver.debutYear}
                 </span>
               </button>
             ))}
@@ -500,7 +500,7 @@ function DriverSearch({
   )
 }
 
-// ── Result screen ─────────────────────────────────────────────────────────────
+// â”€â”€ Result screen â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function ResultScreen({
   mystery,
@@ -527,7 +527,7 @@ function ResultScreen({
       ? `Solved in ${guessCount} ${guessCount === 1 ? 'guess' : 'guesses'}`
       : 'Not solved'
     const modeLabel = mode === 'daily' ? ' (Daily)' : ''
-    return `🏎️ Predict the Driver${modeLabel}\n${outcome} — ${mystery.name}\nracesignature.com/games/predict-driver`
+    return `ðŸŽï¸ Predict the Driver${modeLabel}\n${outcome} â€” ${mystery.name}\nf1racesignature.site/games/predict-driver`
   })()
 
   return (
@@ -549,7 +549,7 @@ function ResultScreen({
             {mystery.name}
           </h2>
           <p className="text-white text-sm mt-1">
-            {mystery.nationality} · {mystery.championships > 0 ? `${mystery.championships}× World Champion` : 'No championships'} · Debuted {mystery.debutYear}
+            {mystery.nationality} Â· {mystery.championships > 0 ? `${mystery.championships}Ã— World Champion` : 'No championships'} Â· Debuted {mystery.debutYear}
           </p>
         </div>
 
@@ -621,7 +621,7 @@ function ResultScreen({
                   {g.driver.name}
                 </span>
                 {g.driver.id === mystery.id && (
-                  <span className="text-[#38b000] text-xs">✓</span>
+                  <span className="text-[#38b000] text-xs">âœ“</span>
                 )}
               </div>
             ))}
@@ -633,7 +633,7 @@ function ResultScreen({
       <div className="flex flex-col gap-3">
         <ShareButtons
           text={shareText}
-          url="https://racesignature.com/games/predict-driver"
+          url="https://f1racesignature.site/games/predict-driver"
         />
         <div className="flex flex-col sm:flex-row gap-2">
           {mode === 'endless' ? (
@@ -659,3 +659,4 @@ function ResultScreen({
     </motion.div>
   )
 }
+

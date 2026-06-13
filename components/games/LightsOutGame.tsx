@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -191,7 +191,7 @@ export function LightsOutGame() {
               className="text-center"
             >
               <p className="text-white text-sm mb-6 max-w-xs leading-relaxed">
-                Watch all five lights illuminate. The moment they go out — tap as fast as you can. Don&apos;t jump the start.
+                Watch all five lights illuminate. The moment they go out â€” tap as fast as you can. Don&apos;t jump the start.
               </p>
               <button
                 onClick={(e) => { e.stopPropagation(); startGame() }}
@@ -209,7 +209,7 @@ export function LightsOutGame() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
-              <p className="text-[#555555] text-xs font-mono uppercase tracking-widest">Get ready…</p>
+              <p className="text-[#555555] text-xs font-mono uppercase tracking-widest">Get readyâ€¦</p>
             </motion.div>
           )}
 
@@ -264,8 +264,8 @@ export function LightsOutGame() {
           className="grid grid-cols-3 gap-3"
         >
           {[
-            { label: 'Best', value: stats.personalBest !== null ? `${stats.personalBest}ms` : '—' },
-            { label: 'Average', value: avgTime !== null ? `${avgTime}ms` : '—' },
+            { label: 'Best', value: stats.personalBest !== null ? `${stats.personalBest}ms` : 'â€”' },
+            { label: 'Average', value: avgTime !== null ? `${avgTime}ms` : 'â€”' },
             { label: 'Attempts', value: String(stats.attempts) },
           ].map((s) => (
             <div key={s.label} className="rounded-xl border border-[#141414] bg-[#070707] px-3 py-3 text-center">
@@ -304,7 +304,7 @@ function ResultPanel({
           transition={{ type: 'spring', stiffness: 320, damping: 14 }}
           className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#d4a017]/10 border border-[#d4a017]/30 rounded-full text-[#d4a017] text-xs font-mono uppercase tracking-widest"
         >
-          ★ New Personal Best
+          â˜… New Personal Best
         </motion.div>
       )}
 
@@ -329,8 +329,8 @@ function ResultPanel({
 
       <div className="flex flex-col gap-3 w-full">
         <ShareButtons
-          text={`🏎️ Lights Out — F1 Reaction Test\n⚡ ${ms}ms — ${rating.label}\nracesignature.com/games/lights-out`}
-          url="https://racesignature.com/games/lights-out"
+          text={`ðŸŽï¸ Lights Out â€” F1 Reaction Test\nâš¡ ${ms}ms â€” ${rating.label}\nf1racesignature.site/games/lights-out`}
+          url="https://f1racesignature.site/games/lights-out"
         />
         <button
           onClick={(e) => { e.stopPropagation(); onPlayAgain() }}
@@ -342,3 +342,4 @@ function ResultPanel({
     </motion.div>
   )
 }
+

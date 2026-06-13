@@ -1,9 +1,9 @@
-'use client'
+﻿'use client'
 
 import { useState } from 'react'
 import { shareResult } from '@/lib/shareResult'
 
-// ── SVG icons ─────────────────────────────────────────────────────────────────
+// â”€â”€ SVG icons â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function XIcon() {
   return (
@@ -30,7 +30,7 @@ function CopyIcon() {
   )
 }
 
-// ── Component ─────────────────────────────────────────────────────────────────
+// â”€â”€ Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 interface ShareButtonsProps {
   /** The text to share / copy (plain text, newlines OK) */
@@ -88,7 +88,7 @@ export function ShareButtons({ text, url }: ShareButtonsProps) {
           className={`${base} text-white border border-[#1f1f1f] bg-[#0d0d0d] hover:border-[#333] hover:bg-[#111]`}
         >
           {copied ? (
-            <span className="text-[#38b000] text-xs">✓ Copied</span>
+            <span className="text-[#38b000] text-xs">âœ“ Copied</span>
           ) : (
             <>
               <CopyIcon />
@@ -100,3 +100,4 @@ export function ShareButtons({ text, url }: ShareButtonsProps) {
     </div>
   )
 }
+
