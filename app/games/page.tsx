@@ -52,6 +52,15 @@ const GAMES = [
       'Relive real F1 strategy moments and decide what you would do from the pit wall. Abu Dhabi 2021. Monaco 2016. Turkey 2020.',
     duration: '~10 minutes',
   },
+  {
+    id: 'team-radio',
+    href: '/games/team-radio',
+    tag: 'F1 Knowledge',
+    title: 'Team Radio Guess',
+    description:
+      'Famous quotes from the pit wall. A transmission plays — you pick the driver. 30 legendary radio moments across every era.',
+    duration: '~3 minutes',
+  },
 ]
 
 export default function GamesPage() {
