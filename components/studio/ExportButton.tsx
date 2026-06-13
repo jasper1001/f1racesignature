@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { Button } from '@/components/ui/Button'
 import { useStudioStore } from '@/lib/store'
 import { isExportFree, UPGRADE_REASONS } from '@/lib/freemium'
 import { EXPORT_FORMATS } from '@/lib/themes'
@@ -65,24 +64,26 @@ export function ExportButton({ onBeforeExport }: { onBeforeExport?: () => void }
   const canExport = Boolean(selectedDriverId && selectedRaceId)
 
   return (
-    <Button
+    <button
       onClick={handleExport}
-      variant="gold"
-      size="md"
-      isLoading={isExporting}
       disabled={!canExport || isExporting}
-      className="sm:min-w-[140px]"
+      title="Export poster"
+      data-track="studio_export"
+      className="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium bg-[#d4a017] text-black border border-[#d4a017]/30 rounded-lg hover:bg-[#e8b84b] transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
     >
       {isExporting ? (
-        <span className="hidden sm:inline">Exporting…</span>
+        <>
+          <span className="inline-block w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin flex-shrink-0" />
+          <span className="hidden sm:inline">Exporting…</span>
+        </>
       ) : (
         <>
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="flex-shrink-0">
             <path d="M7 1v8M4 6l3 3 3-3M2 10v1.5A1.5 1.5 0 003.5 13h7A1.5 1.5 0 0012 11.5V10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
           <span className="hidden sm:inline">Export Poster</span>
         </>
       )}
-    </Button>
+    </button>
   )
 }
