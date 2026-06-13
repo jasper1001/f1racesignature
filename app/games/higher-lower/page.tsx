@@ -13,6 +13,7 @@ export const metadata: Metadata = {
     description: 'Does Hamilton have more wins than Schumacher? Test your F1 stat knowledge.',
     url: '/games/higher-lower',
     type: 'website',
+    images: [{ url: '/opengraph-image', width: 1200, height: 630 }],
   },
 }
 

@@ -13,6 +13,7 @@ export const metadata: Metadata = {
     description: 'Identify the F1 driver from clues. Fewer clues = higher score.',
     url: '/games/guess-the-driver',
     type: 'website',
+    images: [{ url: '/opengraph-image', width: 1200, height: 630 }],
   },
 }
 

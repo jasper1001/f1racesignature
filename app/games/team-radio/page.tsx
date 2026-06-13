@@ -13,6 +13,7 @@ export const metadata: Metadata = {
     description: 'Who said it on the radio? Guess the driver behind 30 iconic F1 transmissions.',
     url: '/games/team-radio',
     type: 'website',
+    images: [{ url: '/opengraph-image', width: 1200, height: 630 }],
   },
 }
 

@@ -14,6 +14,7 @@ export const metadata: Metadata = {
     description: 'Test your F1 reflexes. React the moment the lights go out.',
     url: '/games/lights-out',
     type: 'website',
+    images: [{ url: '/opengraph-image', width: 1200, height: 630 }],
   },
 }
 

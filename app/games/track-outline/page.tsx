@@ -13,6 +13,7 @@ export const metadata: Metadata = {
     description: 'Identify F1 circuits from their silhouettes. No labels, no clues.',
     url: '/games/track-outline',
     type: 'website',
+    images: [{ url: '/opengraph-image', width: 1200, height: 630 }],
   },
 }
 

@@ -13,6 +13,7 @@ export const metadata: Metadata = {
     description: 'Can you identify the mystery F1 driver in 6 guesses?',
     url: '/games/predict-driver',
     type: 'website',
+    images: [{ url: '/opengraph-image', width: 1200, height: 630 }],
   },
 }
 

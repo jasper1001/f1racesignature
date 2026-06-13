@@ -13,6 +13,7 @@ export const metadata: Metadata = {
     description: 'Real F1 strategy scenarios. You decide from the pit wall.',
     url: '/games/championship-decider',
     type: 'website',
+    images: [{ url: '/opengraph-image', width: 1200, height: 630 }],
   },
 }
 
