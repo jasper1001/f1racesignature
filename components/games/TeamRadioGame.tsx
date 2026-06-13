@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -134,7 +134,7 @@ export function TeamRadioGame() {
                 exit={{ opacity: 0, scale: 0.8 }}
               >
                 <p className="text-[#444444] text-[10px] font-mono uppercase tracking-widest mb-0.5">Streak</p>
-                <p className="text-[#38b000] text-xl font-mono">{streak}Ã—</p>
+                <p className="text-[#38b000] text-xl font-mono">{streak}×</p>
               </motion.div>
             )}
           </AnimatePresence>
@@ -184,7 +184,7 @@ export function TeamRadioGame() {
               </span>
             </div>
             <span className="text-[#2a2a2a] text-[10px] font-mono uppercase tracking-wider">
-              {quote.race}&nbsp;Â·&nbsp;{quote.year}
+              {quote.race}&nbsp;·&nbsp;{quote.year}
             </span>
           </div>
 
@@ -279,7 +279,7 @@ export function TeamRadioGame() {
             >
               {selected === quote.driver
                 ? `+${POINTS_PER_CORRECT} points`
-                : `No points â€” it was ${quote.driver}`}
+                : `No points — it was ${quote.driver}`}
             </span>
             <button
               onClick={handleNext}
@@ -344,7 +344,7 @@ function ResultScreen({
         <div className="relative px-6 py-10 md:px-10 md:py-12 text-center">
           {isNewBest && (
             <p className="text-[#d4a017] text-[10px] font-mono uppercase tracking-widest mb-4">
-              â˜… New best score
+              ★ New best score
             </p>
           )}
 
@@ -374,7 +374,7 @@ function ResultScreen({
             <div className="w-px h-8 bg-[#111111]" />
             <div>
               <p className="text-[#333333] text-[10px] font-mono uppercase tracking-widest mb-1">Best Streak</p>
-              <p className="text-white text-xl font-mono">{bestStreak}Ã—</p>
+              <p className="text-white text-xl font-mono">{bestStreak}×</p>
             </div>
           </div>
         </div>
@@ -383,7 +383,7 @@ function ResultScreen({
       {/* Actions */}
       <div className="flex flex-col gap-3">
         <ShareButtons
-          text={`ðŸŽï¸ Team Radio Guess\n${score}/${maxScore} â€” ${result.title}\nf1racesignature.site/games/team-radio`}
+          text={`🏎️ Team Radio Guess\n${score}/${maxScore} — ${result.title}\nf1racesignature.site/games/team-radio`}
           url="https://f1racesignature.site/games/team-radio"
         />
         <div className="flex flex-col sm:flex-row gap-2">
@@ -404,4 +404,3 @@ function ResultScreen({
     </motion.div>
   )
 }
-

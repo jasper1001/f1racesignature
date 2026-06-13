@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -30,7 +30,7 @@ function pickDriver(exclude?: string): DriverEntry {
   return pool[Math.floor(Math.random() * pool.length)]
 }
 
-// â”€â”€ Autocomplete input â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Autocomplete input ────────────────────────────────────────────────────────
 function AutocompleteInput({
   onGuess,
   disabled,
@@ -87,7 +87,7 @@ function AutocompleteInput({
         onFocus={() => { if (filtered.length > 0) setOpen(true) }}
         onKeyDown={handleKeyDown}
         disabled={disabled}
-        placeholder="Type a driver nameâ€¦"
+        placeholder="Type a driver name…"
         autoComplete="off"
         spellCheck={false}
         className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#222222] rounded-xl text-white text-sm font-mono placeholder-[#333333] focus:outline-none focus:border-[#d4a017]/50 transition-colors disabled:opacity-40"
@@ -117,7 +117,7 @@ function AutocompleteInput({
   )
 }
 
-// â”€â”€ Clue card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Clue card ─────────────────────────────────────────────────────────────────
 function ClueCard({ label, value, index }: { label: string; value: string | number; index: number }) {
   return (
     <motion.div
@@ -132,7 +132,7 @@ function ClueCard({ label, value, index }: { label: string; value: string | numb
   )
 }
 
-// â”€â”€ Score badge â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Score badge ───────────────────────────────────────────────────────────────
 function ScoreBadge({ score }: { score: number }) {
   const color = score === 100 ? '#d4a017' : score === 80 ? '#c0c0c0' : score === 60 ? '#cd7f32' : '#555555'
   return (
@@ -143,7 +143,7 @@ function ScoreBadge({ score }: { score: number }) {
   )
 }
 
-// â”€â”€ Main game â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Main game ─────────────────────────────────────────────────────────────────
 type Phase = 'idle' | 'playing' | 'correct' | 'failed'
 
 export function GuessTheDriverGame() {
@@ -213,7 +213,7 @@ export function GuessTheDriverGame() {
     <div className="space-y-4">
       <AnimatePresence mode="wait">
 
-        {/* â”€â”€ IDLE â”€â”€ */}
+        {/* ── IDLE ── */}
         {phase === 'idle' && (
           <motion.div
             key="idle"
@@ -248,7 +248,7 @@ export function GuessTheDriverGame() {
           </motion.div>
         )}
 
-        {/* â”€â”€ PLAYING â”€â”€ */}
+        {/* ── PLAYING ── */}
         {phase === 'playing' && driver && (
           <motion.div key="playing" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4">
             {/* Header */}
@@ -276,7 +276,7 @@ export function GuessTheDriverGame() {
               <div className="flex flex-wrap gap-2">
                 {wrongGuesses.map(g => (
                   <span key={g} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#1a0505] border border-[#e8002d]/20 text-[#e8002d] text-xs font-mono">
-                    {g} âœ•
+                    {g} ✕
                   </span>
                 ))}
               </div>
@@ -304,7 +304,7 @@ export function GuessTheDriverGame() {
           </motion.div>
         )}
 
-        {/* â”€â”€ CORRECT â”€â”€ */}
+        {/* ── CORRECT ── */}
         {phase === 'correct' && driver && (
           <motion.div
             key="correct"
@@ -320,7 +320,7 @@ export function GuessTheDriverGame() {
                 transition={{ type: 'spring', stiffness: 300, damping: 14 }}
                 className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#d4a017]/10 border border-[#d4a017]/30 rounded-full text-[#d4a017] text-xs font-mono uppercase tracking-widest"
               >
-                â˜… New Personal Best
+                ★ New Personal Best
               </motion.div>
             )}
 
@@ -350,7 +350,7 @@ export function GuessTheDriverGame() {
 
             <div className="flex flex-col gap-3">
               <ShareButtons
-                text={`ðŸŽï¸ Guess the Driver\nâœ“ ${driver.name} â€” +${finalScore} pts\nf1racesignature.site/games/guess-the-driver`}
+                text={`🏎️ Guess the Driver\n✓ ${driver.name} — +${finalScore} pts\nf1racesignature.site/games/guess-the-driver`}
                 url="https://f1racesignature.site/games/guess-the-driver"
               />
               <button
@@ -363,7 +363,7 @@ export function GuessTheDriverGame() {
           </motion.div>
         )}
 
-        {/* â”€â”€ FAILED â”€â”€ */}
+        {/* ── FAILED ── */}
         {phase === 'failed' && driver && (
           <motion.div
             key="failed"
@@ -417,4 +417,3 @@ export function GuessTheDriverGame() {
     </div>
   )
 }
-

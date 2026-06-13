@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -12,7 +12,7 @@ import {
 import { Analytics } from '@/lib/analytics'
 import { ShareButtons } from '@/components/games/ShareButtons'
 
-// â”€â”€ Persistence â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Persistence ───────────────────────────────────────────────────────────────
 
 interface Persist {
   bestStreak: number
@@ -35,7 +35,7 @@ function savePersist(s: Persist) {
   try { localStorage.setItem('hl_f1_persist', JSON.stringify(s)) } catch {}
 }
 
-// â”€â”€ Rating â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Rating ────────────────────────────────────────────────────────────────────
 
 function getRating(n: number): string {
   if (n >= 16) return 'World Champion Brain'
@@ -45,7 +45,7 @@ function getRating(n: number): string {
   return 'Backmarker'
 }
 
-// â”€â”€ Main component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Main component ────────────────────────────────────────────────────────────
 
 type Phase = 'playing' | 'revealing' | 'over'
 
@@ -156,7 +156,7 @@ export function HigherLowerGame() {
   return (
     <div className="w-full">
 
-      {/* â”€â”€ Streak header â”€â”€ */}
+      {/* ── Streak header ── */}
       <div className="flex items-center justify-between mb-6">
         {/* Streak */}
         <div className="flex items-center gap-2.5">
@@ -180,7 +180,7 @@ export function HigherLowerGame() {
                 animate={{ scale: 1 }}
                 className="text-base leading-none"
               >
-                ðŸ”¥
+                🔥
               </motion.span>
             )}
           </div>
@@ -192,7 +192,7 @@ export function HigherLowerGame() {
         </div>
       </div>
 
-      {/* â”€â”€ Stat badge â”€â”€ */}
+      {/* ── Stat badge ── */}
       <div className="text-center mb-5">
         <AnimatePresence mode="wait">
           <motion.span
@@ -214,7 +214,7 @@ export function HigherLowerGame() {
         </AnimatePresence>
       </div>
 
-      {/* â”€â”€ Head-to-head cards â”€â”€ */}
+      {/* ── Head-to-head cards ── */}
       <div className="flex flex-col md:flex-row gap-3 mb-4">
 
         {/* Driver A */}
@@ -327,7 +327,7 @@ export function HigherLowerGame() {
         </motion.div>
       </div>
 
-      {/* â”€â”€ Reveal feedback â”€â”€ */}
+      {/* ── Reveal feedback ── */}
       <AnimatePresence>
         {phase === 'revealing' && (
           <motion.div
@@ -349,7 +349,7 @@ export function HigherLowerGame() {
                 className="text-base font-bold mb-1"
                 style={{ color: isCorrect ? '#38b000' : '#cc4444' }}
               >
-                {isCorrect ? 'âœ“ Correct!' : 'âœ— Wrong!'}
+                {isCorrect ? '✓ Correct!' : '✗ Wrong!'}
               </p>
               <p className="text-white text-sm">
                 <span className="font-semibold">{driverB.name}</span> has{' '}
@@ -375,7 +375,7 @@ export function HigherLowerGame() {
         )}
       </AnimatePresence>
 
-      {/* â”€â”€ Action buttons â”€â”€ */}
+      {/* ── Action buttons ── */}
       {phase === 'playing' && (
         <div className="grid grid-cols-2 gap-3 mt-2">
           <button
@@ -386,7 +386,7 @@ export function HigherLowerGame() {
               boxShadow: '0 4px 24px rgba(22,163,74,0.3)',
             }}
           >
-            <span className="relative z-10">â†‘ Higher</span>
+            <span className="relative z-10">↑ Higher</span>
             <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200" style={{ background: 'rgba(255,255,255,0.08)' }} />
           </button>
           <button
@@ -397,7 +397,7 @@ export function HigherLowerGame() {
               boxShadow: '0 4px 24px rgba(220,38,38,0.3)',
             }}
           >
-            <span className="relative z-10">â†“ Lower</span>
+            <span className="relative z-10">↓ Lower</span>
             <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200" style={{ background: 'rgba(255,255,255,0.08)' }} />
           </button>
         </div>
@@ -412,20 +412,20 @@ export function HigherLowerGame() {
             boxShadow: '0 4px 20px rgba(212,160,23,0.25)',
           }}
         >
-          {isCorrect ? 'Next Round â†’' : 'See Results â†’'}
+          {isCorrect ? 'Next Round →' : 'See Results →'}
         </button>
       )}
     </div>
   )
 }
 
-// â”€â”€ End screen â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── End screen ────────────────────────────────────────────────────────────────
 
 const RATINGS = [
-  { label: 'Backmarker',          range: '0â€“2'  },
-  { label: 'Midfield Fighter',    range: '3â€“5'  },
-  { label: 'Points Finisher',     range: '6â€“10' },
-  { label: 'Podium Contender',    range: '11â€“15' },
+  { label: 'Backmarker',          range: '0–2'  },
+  { label: 'Midfield Fighter',    range: '3–5'  },
+  { label: 'Points Finisher',     range: '6–10' },
+  { label: 'Podium Contender',    range: '11–15' },
   { label: 'World Champion Brain', range: '16+'  },
 ]
 
@@ -512,7 +512,7 @@ function EndScreen({
                   fontWeight: r.label === rating ? 700 : 400,
                 }}
               >
-                {r.label === rating ? 'â–¶ ' : ''}{r.label}
+                {r.label === rating ? '▶ ' : ''}{r.label}
               </span>
               <span
                 className="text-xs font-mono"
@@ -528,7 +528,7 @@ function EndScreen({
       {/* Actions */}
       <div className="flex flex-col gap-3">
         <ShareButtons
-          text={`ðŸŽï¸ Higher or Lower: F1 Edition\nStreak: ${streak} â€” ${getRating(streak)}\nf1racesignature.site/games/higher-lower`}
+          text={`🏎️ Higher or Lower: F1 Edition\nStreak: ${streak} — ${getRating(streak)}\nf1racesignature.site/games/higher-lower`}
           url="https://f1racesignature.site/games/higher-lower"
         />
         <button
@@ -545,4 +545,3 @@ function EndScreen({
     </motion.div>
   )
 }
-

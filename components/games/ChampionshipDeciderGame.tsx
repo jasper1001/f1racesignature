@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -108,7 +108,7 @@ export function ChampionshipDeciderGame() {
     <div className="space-y-4">
       <AnimatePresence mode="wait">
 
-        {/* â”€â”€ IDLE â”€â”€ */}
+        {/* ── IDLE ── */}
         {phase === 'idle' && (
           <motion.div key="idle" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
             className="rounded-2xl border border-[#1a1a1a] bg-[#080808] p-8 text-center space-y-5"
@@ -124,10 +124,10 @@ export function ChampionshipDeciderGame() {
               Make the call from the pit wall and see how you score against history.
             </p>
             <div className="flex flex-wrap justify-center gap-x-5 gap-y-1.5 text-xs font-mono">
-              <span style={{ color: RESULT_STYLES['Perfect Call'].color }}>â— Perfect Call = 100 pts</span>
-              <span style={{ color: RESULT_STYLES['Smart but Risky'].color }}>â— Smart but Risky = 75 pts</span>
-              <span style={{ color: RESULT_STYLES['Understandable Mistake'].color }}>â— Understandable Mistake = 50 pts</span>
-              <span style={{ color: RESULT_STYLES['Strategy Disaster'].color }}>â— Strategy Disaster = 0 pts</span>
+              <span style={{ color: RESULT_STYLES['Perfect Call'].color }}>● Perfect Call = 100 pts</span>
+              <span style={{ color: RESULT_STYLES['Smart but Risky'].color }}>● Smart but Risky = 75 pts</span>
+              <span style={{ color: RESULT_STYLES['Understandable Mistake'].color }}>● Understandable Mistake = 50 pts</span>
+              <span style={{ color: RESULT_STYLES['Strategy Disaster'].color }}>● Strategy Disaster = 0 pts</span>
             </div>
             <button onClick={startGame}
               className="px-8 py-3 bg-[#d4a017] text-black font-semibold rounded-xl hover:bg-[#e8b84b] transition-all hover:scale-105 active:scale-100 cursor-pointer"
@@ -137,7 +137,7 @@ export function ChampionshipDeciderGame() {
           </motion.div>
         )}
 
-        {/* â”€â”€ QUESTION / ANSWERED â”€â”€ */}
+        {/* ── QUESTION / ANSWERED ── */}
         {(phase === 'question' || phase === 'answered') && current && (
           <motion.div
             key={`q-${index}`}
@@ -165,7 +165,7 @@ export function ChampionshipDeciderGame() {
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="text-[#d4a017] text-[10px] font-mono uppercase tracking-widest mb-1.5">
-                      {current.grandPrix} Â· {current.year}
+                      {current.grandPrix} · {current.year}
                     </p>
                     <h3 className="text-white text-lg font-semibold" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
                       {current.title}
@@ -183,7 +183,7 @@ export function ChampionshipDeciderGame() {
                 <ul className="space-y-2">
                   {current.context.map((line, i) => (
                     <li key={i} className="flex items-start gap-2.5 text-white text-sm leading-relaxed">
-                      <span className="text-[#333333] mt-0.5 shrink-0 text-base leading-none">â€º</span>
+                      <span className="text-[#333333] mt-0.5 shrink-0 text-base leading-none">›</span>
                       {line}
                     </li>
                   ))}
@@ -273,7 +273,7 @@ export function ChampionshipDeciderGame() {
           </motion.div>
         )}
 
-        {/* â”€â”€ FINISHED â”€â”€ */}
+        {/* ── FINISHED ── */}
         {phase === 'finished' && (() => {
           const rating = getRating(finalScore)
           const maxScore = SCENARIOS.length * 100
@@ -288,7 +288,7 @@ export function ChampionshipDeciderGame() {
                   className="flex justify-center"
                 >
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#d4a017]/10 border border-[#d4a017]/30 rounded-full text-[#d4a017] text-xs font-mono uppercase tracking-widest">
-                    â˜… New Personal Best
+                    ★ New Personal Best
                   </span>
                 </motion.div>
               )}
@@ -322,7 +322,7 @@ export function ChampionshipDeciderGame() {
 
               <div className="space-y-3">
                 <ShareButtons
-                  text={`ðŸŽï¸ Championship Decider Quiz\n${finalScore}/${SCENARIOS.length * 100} â€” ${rating.label}\nf1racesignature.site/games/championship-decider`}
+                  text={`🏎️ Championship Decider Quiz\n${finalScore}/${SCENARIOS.length * 100} — ${rating.label}\nf1racesignature.site/games/championship-decider`}
                   url="https://f1racesignature.site/games/championship-decider"
                 />
                 <button onClick={startGame}
@@ -342,13 +342,13 @@ export function ChampionshipDeciderGame() {
 
       </AnimatePresence>
 
-      {/* Stats bar â€” shown on idle if games have been played */}
+      {/* Stats bar — shown on idle if games have been played */}
       {phase === 'idle' && stats.gamesPlayed > 0 && (
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-3 gap-3">
           {[
             { label: 'Best Score', value: String(stats.bestScore) },
             { label: 'Games',      value: String(stats.gamesPlayed) },
-            { label: 'Best Rating', value: stats.bestRating || 'â€”' },
+            { label: 'Best Rating', value: stats.bestRating || '—' },
           ].map(s => (
             <div key={s.label} className="rounded-xl border border-[#141414] bg-[#070707] px-3 py-3 text-center">
               <p className="text-white text-sm font-mono font-bold truncate">{s.value}</p>
@@ -360,4 +360,3 @@ export function ChampionshipDeciderGame() {
     </div>
   )
 }
-
