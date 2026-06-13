@@ -45,6 +45,11 @@ export function ShareButtons({ text, url }: ShareButtonsProps) {
   const tweetHref = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`
   const fbHref    = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`
 
+  function handleFbShare(e: React.MouseEvent) {
+    e.preventDefault()
+    window.open(fbHref, 'fb-share', 'width=580,height=400,noopener,noreferrer')
+  }
+
   async function handleCopy() {
     const res = await shareResult(text)
     if (res === 'copied' || res === 'shared') {
@@ -72,15 +77,10 @@ export function ShareButtons({ text, url }: ShareButtonsProps) {
         </a>
 
         {/* Facebook */}
-        <a
-          href={fbHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={base}
-        >
+        <button onClick={handleFbShare} className={base}>
           <FacebookIcon />
           <span className="hidden sm:inline text-sm">Share</span>
-        </a>
+        </button>
 
         {/* Copy / native share */}
         <button onClick={handleCopy} className={base}>
