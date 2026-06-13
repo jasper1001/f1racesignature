@@ -3,6 +3,7 @@ import Script from 'next/script'
 import { Inter, Playfair_Display } from 'next/font/google'
 import './globals.css'
 import { Providers } from '@/components/Providers'
+import { CookieBanner } from '@/components/layout/CookieBanner'
 
 const GA_MEASUREMENT_ID = 'G-HVKDBEVYBD'
 const SITE_URL = 'https://f1racesignature.site'
@@ -150,6 +151,21 @@ export default function RootLayout({
           })}
         </Script>
 
+        {/* Google Consent Mode v2 — deny by default until user accepts */}
+        <Script id="google-consent-init" strategy="beforeInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('consent', 'default', {
+              analytics_storage: 'denied',
+              ad_storage: 'denied',
+              ad_user_data: 'denied',
+              ad_personalization: 'denied',
+              wait_for_update: 500,
+            });
+          `}
+        </Script>
+
         {/* Google tag (gtag.js) */}
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
@@ -166,6 +182,7 @@ export default function RootLayout({
       </head>
       <body>
         <Providers>{children}</Providers>
+        <CookieBanner />
       </body>
     </html>
   )
