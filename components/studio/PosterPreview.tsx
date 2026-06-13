@@ -78,7 +78,7 @@ function Watermark({ theme }: { theme: ThemeConfig }) {
       {/* Top-left corner tag */}
       <text
         x={CIRCUIT_AREA.x + 8}
-        y={CIRCUIT_AREA.y + 16}
+        y={50}
         fill={theme.primaryLine}
         fontSize="7"
         fontFamily="monospace"
