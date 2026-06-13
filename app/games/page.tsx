@@ -40,8 +40,17 @@ const GAMES = [
     tag: 'Circuit Knowledge',
     title: 'Track Outline Quiz',
     description:
-      'A circuit silhouette is shown — no name, no labels. Pick the correct track from four options and build your streak.',
-    duration: '~1 minute',
+      'A circuit silhouette is shown — no name, no labels. Pick the correct track from four options across 10 rounds.',
+    duration: '~2 minutes',
+  },
+  {
+    id: 'championship-decider',
+    href: '/games/championship-decider',
+    tag: 'F1 Strategy',
+    title: 'Championship Decider',
+    description:
+      'Relive real F1 strategy moments and decide what you would do from the pit wall. Abu Dhabi 2021. Monaco 2016. Turkey 2020.',
+    duration: '~10 minutes',
   },
 ]
 
