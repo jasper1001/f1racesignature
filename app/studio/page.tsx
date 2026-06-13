@@ -212,7 +212,7 @@ export default function StudioPage() {
             {!selectedDriver ? (
               <EmptyState />
             ) : (
-              <div className="poster-wrapper" style={{ transform: `scale(${zoom})`, transformOrigin: 'center center', transition: 'transform 0.15s ease' }}>
+              <div className="poster-wrapper" style={{ zoom: zoom }}>
                 <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compareDriver={compareEnabled ? compareDriver : null} compareTelemetry={compareEnabled ? compareTelemetry : null} playbackProgress={isPlaying ? progress : null} />
               </div>
             )}
