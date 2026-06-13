@@ -25,6 +25,15 @@ const GAMES = [
       'Watch all five starting lights illuminate one by one. The moment they go dark — tap as fast as you can. Don\'t jump the start.',
     duration: '~30 seconds',
   },
+  {
+    id: 'guess-the-driver',
+    href: '/games/guess-the-driver',
+    tag: 'F1 Knowledge',
+    title: 'Guess the Driver',
+    description:
+      'Clues about an F1 driver are revealed one at a time. Identify them early for maximum points. 53 drivers across every era.',
+    duration: '~1 minute',
+  },
 ]
 
 export default function GamesPage() {
