@@ -17,57 +17,69 @@ export const metadata: Metadata = {
   },
 }
 
+const ACCENT = '#ef4444'
+
 export default function LightsOutPage() {
   return (
     <>
       <Header />
       <main className="pt-14 min-h-screen" style={{ background: '#030303' }}>
-        {/* Breadcrumb */}
-        <div className="border-b border-[#0a0a0a] py-4 px-6">
-          <div className="max-w-lg mx-auto">
-            <Link
-              href="/games"
-              className="inline-flex items-center gap-1.5 text-[#888888] text-xs font-mono uppercase tracking-widest hover:text-white transition-colors"
-            >
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M9 6H3M5 3L2 6l3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              Mini Games
-            </Link>
-          </div>
+
+        {/* Hero */}
+        <div className="relative border-b border-[#0f0f0f] py-16 px-6 text-center overflow-hidden">
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.035) 1px, transparent 1px)',
+              backgroundSize: '28px 28px',
+            }}
+          />
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: `radial-gradient(ellipse 60% 40% at 50% 0%, ${ACCENT}14 0%, transparent 70%)`,
+            }}
+          />
+
+          <Link
+            href="/games"
+            className="relative inline-flex items-center gap-1.5 text-white text-xs font-mono uppercase tracking-widest hover:text-[#ef4444] transition-colors mb-6"
+          >
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M8 2L4 6l4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            Mini Games
+          </Link>
+
+          <p className="relative text-xs font-mono uppercase tracking-widest mb-4" style={{ color: ACCENT }}>
+            Reaction Test
+          </p>
+          <h1
+            className="relative text-4xl md:text-5xl text-white mb-4"
+            style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+          >
+            Lights Out
+          </h1>
+          <p className="relative text-white text-sm max-w-sm mx-auto leading-relaxed">
+            Five lights illuminate one by one. React the instant they all go dark.
+            Jump the start and you&apos;ll have to go again.
+          </p>
         </div>
 
         <div className="max-w-lg mx-auto px-6 py-12">
-          {/* Header */}
-          <div className="text-center mb-10">
-            <p className="text-[#444444] text-xs font-mono uppercase tracking-widest mb-3">
-              Reaction Test
-            </p>
-            <h1
-              className="text-4xl md:text-5xl text-white mb-4"
-              style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
-            >
-              Lights Out
-            </h1>
-            <p className="text-white text-sm max-w-sm mx-auto leading-relaxed">
-              Five lights illuminate one by one. React the instant they all go dark.
-              Jump the start and you&apos;ll have to go again.
-            </p>
-          </div>
-
           {/* Ratings reference */}
           <div className="grid grid-cols-2 gap-2 mb-8">
             {[
-              { label: 'Under 180ms', rating: 'Elite Reflexes', color: '#d4a017' },
-              { label: '180 – 250ms', rating: 'F1 Driver Level', color: '#c0c0c0' },
-              { label: '251 – 350ms', rating: 'Great Reaction', color: '#cd7f32' },
-              { label: 'Above 350ms', rating: 'Keep Practicing', color: '#444444' },
+              { label: 'Under 180ms', rating: 'Elite Reflexes',   color: '#d4a017' },
+              { label: '180 – 250ms', rating: 'F1 Driver Level',  color: '#c0c0c0' },
+              { label: '251 – 350ms', rating: 'Great Reaction',   color: '#cd7f32' },
+              { label: 'Above 350ms', rating: 'Keep Practicing',  color: '#888888' },
             ].map((r) => (
               <div
                 key={r.rating}
                 className="rounded-xl border border-[#111111] bg-[#060606] px-3 py-2.5"
               >
-                <p className="text-[10px] font-mono text-[#888888] uppercase tracking-wider">{r.label}</p>
+                <p className="text-[10px] font-mono text-white uppercase tracking-wider opacity-50">{r.label}</p>
                 <p className="text-xs font-medium mt-0.5" style={{ color: r.color }}>{r.rating}</p>
               </div>
             ))}
