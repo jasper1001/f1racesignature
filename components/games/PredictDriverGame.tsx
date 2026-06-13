@@ -271,13 +271,13 @@ function SetupScreen({ onStart }: { onStart: (m: GameMode, d: Difficulty) => voi
 // ── Game screen ───────────────────────────────────────────────────────────────
 
 const COLUMNS = [
-  { key: 'nationality', label: 'NAT',    width: 110 },
-  { key: 'championships', label: 'TITLES', width: 68 },
-  { key: 'wins',          label: 'WINS',   width: 68 },
-  { key: 'poles',         label: 'POLES',  width: 68 },
-  { key: 'debutYear',     label: 'DEBUT',  width: 68 },
-  { key: 'status',        label: 'STATUS', width: 82 },
-  { key: 'teams',         label: 'TEAMS',  width: 160 },
+  { key: 'nationality',   label: 'NAT',    width: 124 },
+  { key: 'championships', label: 'TITLES', width: 76 },
+  { key: 'wins',          label: 'WINS',   width: 76 },
+  { key: 'poles',         label: 'POLES',  width: 76 },
+  { key: 'debutYear',     label: 'DEBUT',  width: 76 },
+  { key: 'status',        label: 'STATUS', width: 90 },
+  { key: 'teams',         label: 'TEAMS',  width: 180 },
 ] as const
 
 function GameScreen({
@@ -323,12 +323,12 @@ function GameScreen({
 
       {/* Column headers */}
       <div className="mb-2 overflow-x-auto" ref={gridRef}>
-        <div className="flex gap-1 min-w-max">
-          <div className="w-[140px] shrink-0" />
+        <div className="flex gap-1.5 min-w-max">
+          <div className="w-[152px] shrink-0" />
           {COLUMNS.map(col => (
             <div
               key={col.key}
-              className="text-[#333333] text-[9px] font-mono uppercase tracking-widest text-center"
+              className="text-[#555555] text-[11px] font-mono uppercase tracking-wider text-center"
               style={{ width: col.width, flexShrink: 0 }}
             >
               {col.label}
@@ -339,18 +339,18 @@ function GameScreen({
 
       {/* Guess rows */}
       <div className="overflow-x-auto mb-5">
-        <div className="min-w-max space-y-1.5">
+        <div className="min-w-max space-y-2">
           {guesses.map((g, i) => (
             <motion.div
               key={g.driver.id}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.25, delay: i * 0.04 }}
-              className="flex gap-1"
+              className="flex gap-1.5"
             >
               {/* Driver name cell */}
-              <div className="w-[140px] shrink-0 flex items-center px-3 py-2.5 rounded-lg border border-[#1a1a1a] bg-[#080808]">
-                <span className="text-white text-xs font-medium truncate">{g.driver.name}</span>
+              <div className="w-[152px] shrink-0 flex items-center px-3 rounded-lg border border-[#1a1a1a] bg-[#080808]" style={{ minHeight: 52 }}>
+                <span className="text-white text-sm font-medium leading-snug">{g.driver.name}</span>
               </div>
               {/* Hint cells */}
               {COLUMNS.map(col => (
@@ -365,12 +365,12 @@ function GameScreen({
 
           {/* Empty remaining rows */}
           {Array.from({ length: remaining }, (_, i) => (
-            <div key={`empty-${i}`} className="flex gap-1 opacity-20">
-              <div className="w-[140px] shrink-0 h-10 rounded-lg border border-[#111111]" />
+            <div key={`empty-${i}`} className="flex gap-1.5 opacity-20">
+              <div className="w-[152px] shrink-0 h-13 rounded-lg border border-[#111111]" />
               {COLUMNS.map(col => (
                 <div
                   key={col.key}
-                  className="h-10 rounded-lg border border-[#111111]"
+                  className="h-13 rounded-lg border border-[#111111]"
                   style={{ width: col.width, flexShrink: 0 }}
                 />
               ))}
@@ -387,7 +387,7 @@ function GameScreen({
       />
 
       {/* Scroll hint on mobile */}
-      <p className="text-[#222222] text-[10px] font-mono text-center mt-3 md:hidden">
+      <p className="text-[#444444] text-xs font-mono text-center mt-3 md:hidden">
         ← scroll to see all attributes →
       </p>
     </div>
@@ -405,14 +405,14 @@ const COLOR_CLASSES: Record<HintColor, string> = {
 function HintCell({ hint, width }: { hint: CellHint; width: number }) {
   return (
     <div
-      className={`flex flex-col items-center justify-center rounded-lg border text-center px-1 py-1.5 ${COLOR_CLASSES[hint.color]}`}
-      style={{ width, flexShrink: 0, minHeight: 40 }}
+      className={`flex flex-col items-center justify-center rounded-lg border text-center px-1.5 py-2 ${COLOR_CLASSES[hint.color]}`}
+      style={{ width, flexShrink: 0, minHeight: 52 }}
     >
-      <span className="text-[10px] font-mono leading-tight truncate w-full text-center">
+      <span className="text-xs font-mono leading-snug break-words w-full text-center">
         {hint.display}
       </span>
       {hint.direction && (
-        <span className="text-[11px] leading-none mt-0.5">
+        <span className="text-sm font-bold leading-none mt-1">
           {hint.direction === 'up' ? '↑' : '↓'}
         </span>
       )}
