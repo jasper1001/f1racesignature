@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
-import { shareResult } from '@/lib/shareResult'
+import { ShareButtons } from '@/components/games/ShareButtons'
 import { fetchCircuits } from '@/lib/data'
 import type { Circuit } from '@/lib/types'
 
@@ -108,14 +108,6 @@ export function TrackOutlineGame() {
   const [finalScore, setFinalScore]     = useState(0)
   const [isNewBest, setIsNewBest]       = useState(false)
   const [stats, setStats]               = useState<Stats>(loadStats)
-  const [copied, setCopied]             = useState(false)
-
-  async function handleShare(score: number, ratingLabel: string) {
-    const text = `🏎️ Track Outline Quiz\n${score}/10 — ${ratingLabel}\nracesignature.com/games/track-outline`
-    const res = await shareResult(text)
-    if (res === 'copied') { setCopied(true); setTimeout(() => setCopied(false), 2000) }
-  }
-
   const startGame = useCallback(() => {
     if (circuits.length < 4) return
     const q = generateQuestion(circuits, [])
@@ -316,13 +308,11 @@ export function TrackOutlineGame() {
                 <p className="text-white text-sm mt-1">{rating.sub}</p>
               </div>
 
-              <div className="flex flex-col gap-2">
-                <button
-                  onClick={() => handleShare(finalScore, rating.label)}
-                  className="w-full px-6 py-3 border border-[#1f1f1f] bg-[#0d0d0d] text-white font-medium rounded-xl hover:border-[#2a2a2a] active:scale-95 transition-all cursor-pointer"
-                >
-                  {copied ? '✓ Copied!' : '↗ Share Result'}
-                </button>
+              <div className="flex flex-col gap-3">
+                <ShareButtons
+                  text={`🏎️ Track Outline Quiz\n${finalScore}/10 — ${rating.label}\nracesignature.com/games/track-outline`}
+                  url="https://racesignature.com/games/track-outline"
+                />
                 <button onClick={startGame}
                   className="w-full px-6 py-3 bg-[#d4a017] text-black font-semibold rounded-xl hover:bg-[#e8b84b] transition-all hover:scale-[1.02] active:scale-100 cursor-pointer"
                 >

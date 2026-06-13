@@ -10,7 +10,7 @@ import {
   type HLStat,
 } from '@/lib/games/higherLowerData'
 import { Analytics } from '@/lib/analytics'
-import { shareResult } from '@/lib/shareResult'
+import { ShareButtons } from '@/components/games/ShareButtons'
 
 // ── Persistence ───────────────────────────────────────────────────────────────
 
@@ -61,7 +61,6 @@ export function HigherLowerGame() {
   const [streak,     setStreak]     = useState(0)
   const [bestStreak, setBestStreak] = useState(0)
   const [isCorrect,  setIsCorrect]  = useState<boolean | null>(null)
-  const [copied,     setCopied]     = useState(false)
 
   useEffect(() => {
     setBestStreak(loadPersist().bestStreak)
@@ -140,21 +139,12 @@ export function HigherLowerGame() {
     startRound()
   }
 
-  async function handleShare() {
-    Analytics.hlShareClicked(streak)
-    const text = `🏎️ Higher or Lower: F1 Edition\nStreak: ${streak} — ${getRating(streak)}\nracesignature.com/games/higher-lower`
-    const res = await shareResult(text)
-    if (res === 'copied') { setCopied(true); setTimeout(() => setCopied(false), 2000) }
-  }
-
   if (phase === 'over') {
     return (
       <EndScreen
         streak={streak}
         bestStreak={bestStreak}
         onPlayAgain={handlePlayAgain}
-        onShare={handleShare}
-        copied={copied}
       />
     )
   }
@@ -443,14 +433,10 @@ function EndScreen({
   streak,
   bestStreak,
   onPlayAgain,
-  onShare,
-  copied,
 }: {
   streak: number
   bestStreak: number
   onPlayAgain: () => void
-  onShare: () => void
-  copied: boolean
 }) {
   const rating  = getRating(streak)
   const persist = loadPersist()
@@ -540,13 +526,11 @@ function EndScreen({
       </div>
 
       {/* Actions */}
-      <div className="flex flex-col gap-2">
-        <button
-          onClick={onShare}
-          className="w-full py-3.5 rounded-xl border border-[#1f1f1f] bg-[#0d0d0d] text-white font-medium hover:border-[#2a2a2a] active:scale-95 transition-all"
-        >
-          {copied ? '✓ Copied to clipboard!' : '↗ Share Result'}
-        </button>
+      <div className="flex flex-col gap-3">
+        <ShareButtons
+          text={`🏎️ Higher or Lower: F1 Edition\nStreak: ${streak} — ${getRating(streak)}\nracesignature.com/games/higher-lower`}
+          url="https://racesignature.com/games/higher-lower"
+        />
         <button
           onClick={onPlayAgain}
           className="w-full py-3.5 rounded-xl font-semibold text-black active:scale-95 transition-all"

@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { SCENARIOS, getRating, type Scenario, type StrategyOption, type ResultType } from '@/lib/games/strategyScenarios'
-import { shareResult } from '@/lib/shareResult'
+import { ShareButtons } from '@/components/games/ShareButtons'
 
 const STATS_KEY = 'f1rs_games_strategy'
 
@@ -55,7 +55,6 @@ export function ChampionshipDeciderGame() {
   const [finalPerfect, setFinalPerfect] = useState(0)
   const [isNewBest, setIsNewBest]       = useState(false)
   const [stats, setStats]               = useState<Stats>(loadStats)
-  const [copied, setCopied]             = useState(false)
 
   const startGame = useCallback(() => {
     const shuffled = shuffle(SCENARIOS)
@@ -321,18 +320,11 @@ export function ChampionshipDeciderGame() {
                 </div>
               </div>
 
-              <div className="space-y-2.5">
-                <button
-                  onClick={async () => {
-                    const maxScore = SCENARIOS.length * 100
-                    const text = `🏎️ Championship Decider Quiz\n${finalScore}/${maxScore} — ${rating.label}\nracesignature.com/games/championship-decider`
-                    const res = await shareResult(text)
-                    if (res === 'copied') { setCopied(true); setTimeout(() => setCopied(false), 2000) }
-                  }}
-                  className="w-full px-6 py-3 border border-[#1f1f1f] bg-[#0d0d0d] text-white font-medium rounded-xl hover:border-[#2a2a2a] active:scale-95 transition-all cursor-pointer"
-                >
-                  {copied ? '✓ Copied!' : '↗ Share Result'}
-                </button>
+              <div className="space-y-3">
+                <ShareButtons
+                  text={`🏎️ Championship Decider Quiz\n${finalScore}/${SCENARIOS.length * 100} — ${rating.label}\nracesignature.com/games/championship-decider`}
+                  url="https://racesignature.com/games/championship-decider"
+                />
                 <button onClick={startGame}
                   className="w-full px-6 py-3 bg-[#d4a017] text-black font-semibold rounded-xl hover:bg-[#e8b84b] transition-all hover:scale-[1.02] active:scale-100 cursor-pointer"
                 >

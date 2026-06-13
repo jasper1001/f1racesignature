@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { DRIVERS, CLUE_DEFS, scorePotential, type DriverEntry } from '@/lib/games/guessDriverData'
-import { shareResult } from '@/lib/shareResult'
+import { ShareButtons } from '@/components/games/ShareButtons'
 
 const STATS_KEY = 'f1rs_games_guess_driver'
 
@@ -154,14 +154,7 @@ export function GuessTheDriverGame() {
   const [finalScore, setFinalScore] = useState(0)
   const [isNewBest, setIsNewBest] = useState(false)
   const [stats, setStats] = useState<Stats>(loadStats)
-  const [copied, setCopied] = useState(false)
   const lastDriverId = useRef<string | undefined>(undefined)
-
-  async function handleShare(driverName: string, score: number) {
-    const text = `🏎️ Guess the Driver\n✓ ${driverName} — +${score} pts\nracesignature.com/games/guess-the-driver`
-    const res = await shareResult(text)
-    if (res === 'copied') { setCopied(true); setTimeout(() => setCopied(false), 2000) }
-  }
 
   const startRound = useCallback(() => {
     const d = pickDriver(lastDriverId.current)
@@ -355,13 +348,11 @@ export function GuessTheDriverGame() {
               <p className="text-white text-sm leading-relaxed">{driver.fact}</p>
             </div>
 
-            <div className="flex flex-col gap-2">
-              <button
-                onClick={() => handleShare(driver.name, finalScore)}
-                className="w-full px-6 py-3 border border-[#1f1f1f] bg-[#0d0d0d] text-white font-medium rounded-xl hover:border-[#2a2a2a] active:scale-95 transition-all cursor-pointer"
-              >
-                {copied ? '✓ Copied!' : '↗ Share Result'}
-              </button>
+            <div className="flex flex-col gap-3">
+              <ShareButtons
+                text={`🏎️ Guess the Driver\n✓ ${driver.name} — +${finalScore} pts\nracesignature.com/games/guess-the-driver`}
+                url="https://racesignature.com/games/guess-the-driver"
+              />
               <button
                 onClick={startRound}
                 className="w-full px-6 py-3 bg-[#d4a017] text-black font-semibold rounded-xl hover:bg-[#e8b84b] transition-all hover:scale-[1.02] active:scale-100 cursor-pointer"

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { RADIO_QUOTES, type RadioQuote } from '@/lib/games/teamRadioData'
-import { shareResult } from '@/lib/shareResult'
+import { ShareButtons } from '@/components/games/ShareButtons'
 
 const ROUNDS = 10
 const POINTS_PER_CORRECT = 100
@@ -322,13 +322,6 @@ function ResultScreen({
   const correct = score / POINTS_PER_CORRECT
   const result = getResultMessage(score)
   const isNewBest = score >= bestScore && score > 0
-  const [copied, setCopied] = useState(false)
-
-  async function handleShare() {
-    const text = `🏎️ Team Radio Guess\n${score}/${maxScore} — ${result.title}\nracesignature.com/games/team-radio`
-    const res = await shareResult(text)
-    if (res === 'copied') { setCopied(true); setTimeout(() => setCopied(false), 2000) }
-  }
 
   return (
     <motion.div
@@ -388,13 +381,11 @@ function ResultScreen({
       </div>
 
       {/* Actions */}
-      <div className="flex flex-col gap-2">
-        <button
-          onClick={handleShare}
-          className="w-full inline-flex items-center justify-center px-8 py-4 border border-[#1f1f1f] bg-[#0d0d0d] text-white font-medium rounded-xl hover:border-[#2a2a2a] active:scale-95 transition-all"
-        >
-          {copied ? '✓ Copied!' : '↗ Share Result'}
-        </button>
+      <div className="flex flex-col gap-3">
+        <ShareButtons
+          text={`🏎️ Team Radio Guess\n${score}/${maxScore} — ${result.title}\nracesignature.com/games/team-radio`}
+          url="https://racesignature.com/games/team-radio"
+        />
         <div className="flex flex-col sm:flex-row gap-2">
           <button
             onClick={onRestart}

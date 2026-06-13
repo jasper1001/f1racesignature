@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { shareResult } from '@/lib/shareResult'
+import { ShareButtons } from '@/components/games/ShareButtons'
 import {
   DRIVERS,
   getPool,
@@ -521,18 +521,14 @@ function ResultScreen({
 }) {
   const streak = loadDailyStreak()
   const endless = loadEndlessStats()
-  const [copied, setCopied] = useState(false)
-
-  async function handleShare() {
+  const shareText = (() => {
     const guessCount = guesses.length
-    const result = won
+    const outcome = won
       ? `Solved in ${guessCount} ${guessCount === 1 ? 'guess' : 'guesses'}`
       : 'Not solved'
     const modeLabel = mode === 'daily' ? ' (Daily)' : ''
-    const text = `🏎️ Predict the Driver${modeLabel}\n${result} — ${mystery.name}\nracesignature.com/games/predict-driver`
-    const res = await shareResult(text)
-    if (res === 'copied') { setCopied(true); setTimeout(() => setCopied(false), 2000) }
-  }
+    return `🏎️ Predict the Driver${modeLabel}\n${outcome} — ${mystery.name}\nracesignature.com/games/predict-driver`
+  })()
 
   return (
     <motion.div
@@ -634,13 +630,11 @@ function ResultScreen({
       )}
 
       {/* Actions */}
-      <div className="flex flex-col gap-2">
-        <button
-          onClick={handleShare}
-          className="w-full py-3.5 border border-[#1f1f1f] bg-[#0d0d0d] text-white font-medium rounded-xl hover:border-[#2a2a2a] active:scale-95 transition-all"
-        >
-          {copied ? '✓ Copied!' : '↗ Share Result'}
-        </button>
+      <div className="flex flex-col gap-3">
+        <ShareButtons
+          text={shareText}
+          url="https://racesignature.com/games/predict-driver"
+        />
         <div className="flex flex-col sm:flex-row gap-2">
           {mode === 'endless' ? (
             <button
