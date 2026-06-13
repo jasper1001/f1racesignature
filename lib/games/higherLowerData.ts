@@ -189,7 +189,7 @@ export const HL_DRIVERS: HLDriver[] = [
   {
     id: 'lando-norris',
     name: 'Lando Norris',
-    wins: 4, poles: 4, podiums: 31, fastestLaps: 6, championships: 1, raceStarts: 126,
+    wins: 11, poles: 16, podiums: 45, fastestLaps: 19, championships: 1, raceStarts: 158,
     fact: 'Won the 2025 F1 World Championship with McLaren — becoming Britain\'s first champion since Lewis Hamilton in 2020.',
   },
   {

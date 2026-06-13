@@ -86,7 +86,7 @@ export const DRIVERS: DriverEntry[] = [
   {
     id: 'norris',
     name: 'Lando Norris',
-    clues: { nationality: 'British', number: '4', championships: 1, teams: 'McLaren', wins: 6, radioQuote: '"This means everything to me — everything. Thank you so much!"', debutYear: 2019, podiums: 35 },
+    clues: { nationality: 'British', number: '4', championships: 1, teams: 'McLaren', wins: 11, radioQuote: '"This means everything to me — everything. Thank you so much!"', debutYear: 2019, podiums: 45 },
     fact: 'Norris won the 2025 F1 World Championship with McLaren, becoming Britain\'s first champion since Lewis Hamilton in 2020.',
   },
   {
