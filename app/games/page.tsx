@@ -61,6 +61,15 @@ const GAMES = [
       'Famous quotes from the pit wall. A transmission plays — you pick the driver. 30 legendary radio moments across every era.',
     duration: '~3 minutes',
   },
+  {
+    id: 'predict-driver',
+    href: '/games/predict-driver',
+    tag: 'F1 Wordle',
+    title: 'Predict the Driver',
+    description:
+      'Wordle for F1. Identify the mystery driver in 6 guesses using nationality, wins, poles, debut year, and team hints. Daily + Endless modes.',
+    duration: '~2 minutes',
+  },
 ]
 
 export default function GamesPage() {
