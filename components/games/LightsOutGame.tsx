@@ -189,7 +189,7 @@ export function LightsOutGame() {
               exit={{ opacity: 0, y: -8 }}
               className="text-center"
             >
-              <p className="text-[#555555] text-sm mb-6 max-w-xs leading-relaxed">
+              <p className="text-white text-sm mb-6 max-w-xs leading-relaxed">
                 Watch all five lights illuminate. The moment they go out — tap as fast as you can. Don&apos;t jump the start.
               </p>
               <button
@@ -208,7 +208,7 @@ export function LightsOutGame() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
-              <p className="text-[#2a2a2a] text-xs font-mono uppercase tracking-widest">Get ready…</p>
+              <p className="text-[#555555] text-xs font-mono uppercase tracking-widest">Get ready…</p>
             </motion.div>
           )}
 
@@ -235,7 +235,7 @@ export function LightsOutGame() {
               className="text-center space-y-3"
             >
               <p className="text-[#e8002d] text-3xl font-bold font-mono tracking-wider">JUMP START!</p>
-              <p className="text-[#444444] text-sm">You moved before the lights went out.</p>
+              <p className="text-white text-sm">You moved before the lights went out.</p>
               <button
                 onClick={(e) => { e.stopPropagation(); startGame() }}
                 className="mt-2 px-6 py-2.5 bg-[#111111] border border-[#222222] text-[#aaaaaa] text-sm rounded-xl hover:text-white hover:border-[#333333] transition-colors cursor-pointer"
@@ -269,7 +269,7 @@ export function LightsOutGame() {
           ].map((s) => (
             <div key={s.label} className="rounded-xl border border-[#141414] bg-[#070707] px-3 py-3 text-center">
               <p className="text-white text-base font-mono font-bold">{s.value}</p>
-              <p className="text-[#333333] text-[10px] font-mono uppercase tracking-wider mt-0.5">{s.label}</p>
+              <p className="text-[#888888] text-[10px] font-mono uppercase tracking-wider mt-0.5">{s.label}</p>
             </div>
           ))}
         </motion.div>
@@ -323,7 +323,7 @@ function ResultPanel({
         <p className="text-lg font-semibold" style={{ color: rating.color }}>
           {rating.label}
         </p>
-        <p className="text-[#444444] text-sm mt-1">{rating.sub}</p>
+        <p className="text-white text-sm mt-1">{rating.sub}</p>
       </div>
 
       <button

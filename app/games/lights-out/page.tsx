@@ -27,7 +27,7 @@ export default function LightsOutPage() {
           <div className="max-w-lg mx-auto">
             <Link
               href="/games"
-              className="inline-flex items-center gap-1.5 text-[#444444] text-xs font-mono uppercase tracking-widest hover:text-white transition-colors"
+              className="inline-flex items-center gap-1.5 text-[#888888] text-xs font-mono uppercase tracking-widest hover:text-white transition-colors"
             >
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
                 <path d="M9 6H3M5 3L2 6l3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -49,7 +49,7 @@ export default function LightsOutPage() {
             >
               Lights Out
             </h1>
-            <p className="text-[#555555] text-sm max-w-sm mx-auto leading-relaxed">
+            <p className="text-white text-sm max-w-sm mx-auto leading-relaxed">
               Five lights illuminate one by one. React the instant they all go dark.
               Jump the start and you&apos;ll have to go again.
             </p>
@@ -67,7 +67,7 @@ export default function LightsOutPage() {
                 key={r.rating}
                 className="rounded-xl border border-[#111111] bg-[#060606] px-3 py-2.5"
               >
-                <p className="text-[10px] font-mono text-[#333333] uppercase tracking-wider">{r.label}</p>
+                <p className="text-[10px] font-mono text-[#888888] uppercase tracking-wider">{r.label}</p>
                 <p className="text-xs font-medium mt-0.5" style={{ color: r.color }}>{r.rating}</p>
               </div>
             ))}

@@ -43,7 +43,7 @@ export default function GamesPage() {
           >
             Test Your F1 Instincts
           </h1>
-          <p className="text-[#555555] max-w-md mx-auto text-sm leading-relaxed">
+          <p className="text-[#aaaaaa] max-w-md mx-auto text-sm leading-relaxed">
             Lightweight F1-themed challenges you can complete in under two minutes.
             Best scores saved automatically.
           </p>
@@ -78,7 +78,7 @@ export default function GamesPage() {
                   ))}
                 </div>
 
-                <p className="text-[#444444] text-xs font-mono uppercase tracking-widest mb-2">
+                <p className="text-[#888888] text-xs font-mono uppercase tracking-widest mb-2">
                   {game.tag}
                 </p>
                 <h2
@@ -87,12 +87,12 @@ export default function GamesPage() {
                 >
                   {game.title}
                 </h2>
-                <p className="text-[#555555] text-sm leading-relaxed mb-5">
+                <p className="text-white text-sm leading-relaxed mb-5">
                   {game.description}
                 </p>
 
                 <div className="flex items-center justify-between">
-                  <span className="text-[#2a2a2a] text-xs font-mono">{game.duration}</span>
+                  <span className="text-[#666666] text-xs font-mono">{game.duration}</span>
                   <span className="inline-flex items-center gap-1.5 text-[#d4a017] text-sm font-medium">
                     Play
                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
