@@ -132,10 +132,17 @@ export default function CookiesPage() {
             <p>F1RaceSignature does <strong className="text-[#aaaaaa]">not</strong> use:</p>
             <ul className="list-disc list-inside space-y-1 pl-2">
               <li>Advertising or tracking cookies from third-party ad networks.</li>
-              <li>Social media tracking pixels.</li>
+              <li>Social media tracking pixels (Facebook Pixel, Twitter/X Pixel, etc.).</li>
               <li>Cookies that identify you personally.</li>
               <li>Session cookies that persist beyond your browser session (other than those set by Google Analytics).</li>
             </ul>
+            <p>
+              <strong className="text-[#aaaaaa]">Note on share buttons:</strong> Game pages include
+              buttons to share your result on Facebook and X (Twitter). These buttons open those
+              platforms in a new window using a standard sharer URL — no tracking pixel or cookie is
+              set on our site. However, once you land on Facebook or X their own cookie and tracking
+              policies apply.
+            </p>
           </Section>
 
           <Section title="4. Managing & Opting Out">

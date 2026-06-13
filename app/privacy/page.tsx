@@ -125,6 +125,51 @@ export default function PrivacyPage() {
             </div>
 
             <div className="rounded-xl border border-[#1a1a1a] bg-[#0a0a0a] p-5 space-y-2">
+              <p className="text-white text-sm font-medium">Jolpica F1 API</p>
+              <p className="text-sm">
+                Live driver standings and season data is fetched from the{' '}
+                <a
+                  href="https://jolpi.ca"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#d4a017] hover:underline"
+                >
+                  Jolpica F1 API
+                </a>
+                , a community-maintained open data source. No personal data is sent to this service —
+                requests contain only public query parameters such as driver ID and season year.
+              </p>
+            </div>
+
+            <div className="rounded-xl border border-[#1a1a1a] bg-[#0a0a0a] p-5 space-y-2">
+              <p className="text-white text-sm font-medium">Social Sharing (Facebook & X/Twitter)</p>
+              <p className="text-sm">
+                Game result pages include share buttons for Facebook and X (Twitter). Clicking a share
+                button opens the respective platform in a new window. We do not transmit any personal
+                data to Facebook or X — the share dialog is opened entirely on their domain. Those
+                platforms may set their own cookies and collect data according to their policies. See{' '}
+                <a
+                  href="https://www.facebook.com/privacy/policy/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#d4a017] hover:underline"
+                >
+                  Facebook&apos;s Privacy Policy
+                </a>{' '}
+                and{' '}
+                <a
+                  href="https://x.com/privacy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#d4a017] hover:underline"
+                >
+                  X&apos;s Privacy Policy
+                </a>
+                .
+              </p>
+            </div>
+
+            <div className="rounded-xl border border-[#1a1a1a] bg-[#0a0a0a] p-5 space-y-2">
               <p className="text-white text-sm font-medium">Google AdSense (planned)</p>
               <p className="text-sm">
                 We may in the future display advertisements served by Google AdSense. Google AdSense

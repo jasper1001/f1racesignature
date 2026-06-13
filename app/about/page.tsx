@@ -58,6 +58,29 @@ export default function AboutPage() {
             </div>
           </section>
 
+          {/* Games */}
+          <section>
+            <h2 className="text-xs font-mono uppercase tracking-widest text-[#444444] mb-5">F1 Games</h2>
+            <div className="space-y-4 text-[#888888] leading-relaxed">
+              <p>
+                Alongside the poster studio, F1RaceSignature includes a free collection of Formula 1
+                mini-games — all playable in your browser with no account required.
+              </p>
+              <ul className="space-y-1.5 list-disc list-inside pl-2">
+                <li><strong className="text-[#aaaaaa]">Lights Out</strong> — test your reaction time against the F1 starting lights.</li>
+                <li><strong className="text-[#aaaaaa]">Guess the Driver</strong> — identify a driver from progressively revealed clues.</li>
+                <li><strong className="text-[#aaaaaa]">Track Outline Quiz</strong> — name the circuit from its silhouette alone.</li>
+                <li><strong className="text-[#aaaaaa]">Championship Decider</strong> — make pit-wall strategy calls from real race moments.</li>
+                <li><strong className="text-[#aaaaaa]">Team Radio Guess</strong> — match iconic radio transmissions to their drivers.</li>
+                <li><strong className="text-[#aaaaaa]">Predict the Driver</strong> — Wordle-style driver identification in six guesses.</li>
+                <li><strong className="text-[#aaaaaa]">Higher or Lower</strong> — compare career statistics between F1 drivers.</li>
+              </ul>
+              <p>
+                Each game includes share buttons so you can post your result to X (Twitter) or Facebook.
+              </p>
+            </div>
+          </section>
+
           {/* Data sources */}
           <section>
             <h2 className="text-xs font-mono uppercase tracking-widest text-[#444444] mb-5">Data Sources</h2>
@@ -76,16 +99,17 @@ export default function AboutPage() {
                 and position data published by the official F1 live-timing feed.
               </p>
               <p>
-                Season standings and results data is provided by the{' '}
+                Live driver standings and season results are fetched from the{' '}
                 <a
-                  href="http://ergast.com/mrd/"
+                  href="https://jolpi.ca"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[#d4a017] hover:underline"
                 >
-                  Ergast Motor Racing API
+                  Jolpica F1 API
                 </a>
-                . All data is used strictly for artistic and educational purposes.
+                , a community-maintained open data source for Formula 1 statistics. All data is used
+                strictly for artistic and educational purposes.
               </p>
               <p className="text-[#555555] text-sm">
                 F1RaceSignature is an independent fan project and is not affiliated with, endorsed by,
