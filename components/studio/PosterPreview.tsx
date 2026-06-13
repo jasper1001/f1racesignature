@@ -74,7 +74,7 @@ function wrapText(text: string, maxChars: number): string[] {
 
 function Watermark({ theme }: { theme: ThemeConfig }) {
   return (
-    <g transform={`translate(${POSTER_W / 2}, ${POSTER_H / 2}) rotate(-35)`}>
+    <g transform={`translate(${POSTER_W / 2}, 660) rotate(-20)`}>
       <text
         textAnchor="middle"
         dominantBaseline="middle"
@@ -82,7 +82,7 @@ function Watermark({ theme }: { theme: ThemeConfig }) {
         fontSize="22"
         fontFamily="Georgia, serif"
         letterSpacing="12"
-        opacity="0.04"
+        opacity="0.07"
         fontStyle="italic"
       >
         F1RACESIGNATURE.SITE
