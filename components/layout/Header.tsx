@@ -54,7 +54,7 @@ export function Header() {
                 </Link>
               )
             })}
-            {pathname !== '/studio' && (
+            {pathname !== '/studio' && !pathname.startsWith('/games') && (
               <Link href="/studio" className="ml-2 px-4 py-1.5 text-sm font-medium bg-[#d4a017] text-black rounded-lg hover:bg-[#e8b84b] transition-colors">
                 Create Poster
               </Link>
@@ -63,7 +63,7 @@ export function Header() {
 
           {/* Mobile: Create Poster + hamburger */}
           <div className="flex md:hidden items-center gap-2">
-            {pathname !== '/studio' && (
+            {pathname !== '/studio' && !pathname.startsWith('/games') && (
               <Link href="/studio" className="px-3 py-1.5 text-xs font-medium bg-[#d4a017] text-black rounded-lg hover:bg-[#e8b84b] transition-colors">
                 Create
               </Link>
