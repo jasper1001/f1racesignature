@@ -70,6 +70,15 @@ const GAMES = [
       'Wordle for F1. Identify the mystery driver in 6 guesses using nationality, wins, poles, debut year, and team hints. Daily + Endless modes.',
     duration: '~2 minutes',
   },
+  {
+    id: 'higher-lower',
+    href: '/games/higher-lower',
+    tag: 'Stat Battle',
+    title: 'Higher or Lower',
+    description:
+      'Does Driver B have more career wins than Driver A? Compare stats across wins, poles, podiums, fastest laps, championships and race starts. Build your streak.',
+    duration: 'Endless',
+  },
 ]
 
 export default function GamesPage() {

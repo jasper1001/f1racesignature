@@ -70,4 +70,20 @@ export const Analytics = {
     section?: string
     page: string
   }) => trackEvent('ui_click', params),
+
+  // ── Higher or Lower game ──────────────────────────────────────────────────
+  hlGameStarted: () =>
+    trackEvent('hl_game_started'),
+
+  hlGuessSubmitted: (stat: string, correct: boolean, streak: number) =>
+    trackEvent('hl_guess_submitted', { stat, correct, streak }),
+
+  hlGameOver: (finalStreak: number, bestStreak: number) =>
+    trackEvent('hl_game_over', { final_streak: finalStreak, best_streak: bestStreak }),
+
+  hlShareClicked: (streak: number) =>
+    trackEvent('hl_share_clicked', { streak }),
+
+  hlPlayAgain: () =>
+    trackEvent('hl_play_again'),
 }
