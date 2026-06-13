@@ -82,6 +82,7 @@ function Watermark({ theme }: { theme: ThemeConfig }) {
         fill={theme.primaryLine}
         fontSize="7"
         fontFamily="monospace"
+        fontWeight="700"
         letterSpacing="2.5"
         opacity="0.55"
       >
