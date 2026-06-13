@@ -63,7 +63,7 @@ export default function HomePage() {
 
         {/* Live 2026 Standings teaser */}
         <section className="py-20 border-t border-[#0f0f0f]">
-          <div className="max-w-4xl mx-auto px-6">
+          <div className="max-w-7xl mx-auto px-6">
             <a
               href="/results"
               className="group block rounded-2xl border border-[#1a1a1a] bg-[#0a0a0a] p-6 md:p-8 hover:border-[#d4a017]/40 transition-colors relative overflow-hidden"

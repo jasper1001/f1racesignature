@@ -34,7 +34,7 @@ export function Hero() {
       />
       <div className="absolute bottom-0 left-0 right-0 h-40" style={{ background: 'linear-gradient(to bottom, transparent, #030303)' }} />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}>
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#d4a017]/20 bg-[#d4a017]/5 text-[#d4a017] text-xs font-medium tracking-wide mb-8">
             <span className="w-1.5 h-1.5 rounded-full bg-[#d4a017] animate-pulse" />
