@@ -85,7 +85,7 @@ function Watermark({ theme }: { theme: ThemeConfig }) {
         opacity="0.04"
         fontStyle="italic"
       >
-        F1RACESIGNATURE FREE
+        F1RACESIGNATURE.SITE
       </text>
     </g>
   )
