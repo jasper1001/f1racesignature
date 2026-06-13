@@ -45,6 +45,7 @@ export function Footer() {
             </div>
             <div className="flex flex-col gap-2">
               <span className="text-[#333333] font-medium uppercase tracking-widest text-xs">Legal</span>
+              <Link href="/privacy" className="text-[#666666] hover:text-white transition-colors">Privacy Policy</Link>
               <Link href="/terms" className="text-[#666666] hover:text-white transition-colors">Terms &amp; Conditions</Link>
               <Link href="/cookies" className="text-[#666666] hover:text-white transition-colors">Cookie Policy</Link>
               <Link href="/about" className="text-[#666666] hover:text-white transition-colors">About</Link>
