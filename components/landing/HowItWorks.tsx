@@ -72,7 +72,7 @@ export function HowItWorks() {
           >
             Four Steps to Museum Quality
           </h2>
-          <p className="text-[#555555] max-w-xl mx-auto">
+          <p className="text-[#888888] max-w-xl mx-auto">
             From lap data to collectible art in seconds. No design skills required.
           </p>
         </motion.div>
@@ -87,12 +87,12 @@ export function HowItWorks() {
               transition={{ duration: 0.5, delay: i * 0.1 }}
               className="relative"
             >
-              <div className="text-5xl font-bold text-[#111111] font-mono mb-4">
+              <div className="text-5xl font-bold text-[#333333] font-mono mb-4">
                 {step.number}
               </div>
               <div className="text-[#d4a017] mb-3">{step.icon}</div>
               <h3 className="text-white font-semibold text-sm mb-2">{step.title}</h3>
-              <p className="text-[#555555] text-xs leading-relaxed">{step.description}</p>
+              <p className="text-[#888888] text-xs leading-relaxed">{step.description}</p>
 
               {i < STEPS.length - 1 && (
                 <div className="hidden md:block absolute top-8 right-0 w-px h-8 bg-[#1a1a1a]" />
