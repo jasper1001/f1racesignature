@@ -207,7 +207,7 @@ export function TrackOutlineGame() {
           >
             {/* Streak */}
             <div className="flex items-center justify-between px-1">
-              <p className="text-[#333333] text-xs font-mono uppercase tracking-widest">
+              <p className="text-white text-xs font-mono uppercase tracking-widest">
                 Which circuit is this?
               </p>
               {streak > 0 && (
