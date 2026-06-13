@@ -98,7 +98,10 @@ export const metadata: Metadata = {
     shortcut: '/favicon.svg',
   },
   verification: {
-    google: '3f3qJMCfNOHhuenfPZcNEthUo7efQmOrIPp4Y-5SmNQ',
+    google: [
+      '3f3qJMCfNOHhuenfPZcNEthUo7efQmOrIPp4Y-5SmNQ',
+      '3YLBw-7OT0A8qI0f_LeVIcRWTIbvz13_tIUV2BCZuaQ',
+    ],
   },
 }
 
