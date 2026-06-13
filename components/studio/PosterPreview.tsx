@@ -74,19 +74,34 @@ function wrapText(text: string, maxChars: number): string[] {
 
 function Watermark({ theme }: { theme: ThemeConfig }) {
   return (
-    <g transform={`translate(${POSTER_W / 2}, 660) rotate(-20)`}>
+    <g>
+      {/* Top-left corner tag */}
       <text
-        textAnchor="middle"
-        dominantBaseline="middle"
-        fill={theme.textColor}
-        fontSize="22"
-        fontFamily="Georgia, serif"
-        letterSpacing="12"
-        opacity="0.07"
-        fontStyle="italic"
+        x={CIRCUIT_AREA.x + 8}
+        y={CIRCUIT_AREA.y + 16}
+        fill={theme.primaryLine}
+        fontSize="7"
+        fontFamily="monospace"
+        letterSpacing="2.5"
+        opacity="0.55"
       >
         F1RACESIGNATURE.SITE
       </text>
+      {/* Diagonal ghost across stats section */}
+      <g transform={`translate(${POSTER_W / 2}, 660) rotate(-20)`}>
+        <text
+          textAnchor="middle"
+          dominantBaseline="middle"
+          fill={theme.primaryLine}
+          fontSize="22"
+          fontFamily="Georgia, serif"
+          letterSpacing="12"
+          opacity="0.08"
+          fontStyle="italic"
+        >
+          F1RACESIGNATURE.SITE
+        </text>
+      </g>
     </g>
   )
 }
