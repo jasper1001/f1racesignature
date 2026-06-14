@@ -145,8 +145,8 @@ export default function GamesPage() {
         </div>
 
         {/* Games grid */}
-        <div className="max-w-4xl mx-auto px-6 py-16">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div className="max-w-7xl mx-auto px-6 py-16">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {GAMES.map((game) => (
               <Link
                 key={game.id}
