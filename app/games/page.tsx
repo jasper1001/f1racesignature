@@ -93,6 +93,17 @@ const GAMES = [
     accent: '#f97316',
     icon: '⚡',
   },
+  {
+    id: 'pit-stop-timer',
+    href: '/games/pit-stop-timer',
+    tag: 'Pit Wall',
+    title: 'Pit Stop Timer',
+    description:
+      'A target stop time is shown. Start the timer and release the car as close to it as possible. Too early is an unsafe release. Too late loses positions.',
+    duration: '~1 minute',
+    accent: '#06b6d4',
+    icon: '⏱️',
+  },
 ]
 
 export default function GamesPage() {
