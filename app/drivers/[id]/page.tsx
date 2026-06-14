@@ -19,7 +19,20 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     title,
     description,
     alternates: { canonical: `/drivers/${driver.id}` },
-    openGraph: { title, description, url: `/drivers/${driver.id}`, type: 'profile' },
+    openGraph: {
+      title,
+      description,
+      url: `/drivers/${driver.id}`,
+      type: 'profile',
+      siteName: 'F1RaceSignature',
+      images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: title }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: ['/opengraph-image'],
+    },
   }
 }
 
@@ -30,13 +43,28 @@ export default async function DriverPage({ params }: { params: Promise<{ id: str
 
   const races = getRacesForDriver(id)
 
+  const SITE_URL = 'https://f1racesignature.site'
+
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'Person',
-    name: driver.name,
-    jobTitle: 'Formula 1 Driver',
-    nationality: driver.nationality,
-    description: driver.bio,
+    '@graph': [
+      {
+        '@type': 'Person',
+        name: driver.name,
+        jobTitle: 'Formula 1 Driver',
+        nationality: driver.nationality,
+        description: driver.bio,
+        url: `${SITE_URL}/drivers/${driver.id}`,
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+          { '@type': 'ListItem', position: 2, name: 'Drivers', item: `${SITE_URL}/drivers` },
+          { '@type': 'ListItem', position: 3, name: driver.name, item: `${SITE_URL}/drivers/${driver.id}` },
+        ],
+      },
+    ],
   }
 
   return (

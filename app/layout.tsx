@@ -141,6 +141,12 @@ export default function RootLayout({
                 url: SITE_URL,
                 slogan: 'Where speed becomes art',
                 email: 'wayfarerwondersblog@gmail.com',
+                logo: {
+                  '@type': 'ImageObject',
+                  url: `${SITE_URL}/opengraph-image`,
+                  width: 1200,
+                  height: 630,
+                },
                 contactPoint: {
                   '@type': 'ContactPoint',
                   email: 'wayfarerwondersblog@gmail.com',

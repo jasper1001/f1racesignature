@@ -22,7 +22,20 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     title,
     description,
     alternates: { canonical: `/race/${race.id}` },
-    openGraph: { title, description, url: `/race/${race.id}`, type: 'article' },
+    openGraph: {
+      title,
+      description,
+      url: `/race/${race.id}`,
+      type: 'article',
+      siteName: 'F1RaceSignature',
+      images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: title }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: ['/opengraph-image'],
+    },
   }
 }
 
@@ -39,13 +52,30 @@ export default async function RacePage({ params }: { params: Promise<{ id: strin
 
   const studioUrl = `/studio?driver=${driver.id}&race=${race.id}`
 
+  const SITE_URL = 'https://f1racesignature.site'
+
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'CreativeWork',
-    name: `${driver.name} — ${race.name}`,
-    about: `${driver.name}'s lap at the ${race.name}`,
-    description: race.description,
-    creator: { '@type': 'Organization', name: 'F1RaceSignature' },
+    '@graph': [
+      {
+        '@type': 'CreativeWork',
+        name: `${driver.name} — ${race.name}`,
+        about: `${driver.name}'s lap at the ${race.name}`,
+        description: race.description,
+        creator: { '@type': 'Organization', name: 'F1RaceSignature' },
+        url: `${SITE_URL}/race/${race.id}`,
+        inLanguage: 'en',
+        keywords: `${driver.name}, ${race.name}, F1 poster art, Formula 1 telemetry`,
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+          { '@type': 'ListItem', position: 2, name: driver.name, item: `${SITE_URL}/drivers/${driver.id}` },
+          { '@type': 'ListItem', position: 3, name: race.name, item: `${SITE_URL}/race/${race.id}` },
+        ],
+      },
+    ],
   }
 
   return (

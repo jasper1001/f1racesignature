@@ -121,9 +121,37 @@ const GAMES = [
   },
 ]
 
+const gamesJsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://f1racesignature.site' },
+        { '@type': 'ListItem', position: 2, name: 'Mini Games', item: 'https://f1racesignature.site/games' },
+      ],
+    },
+    {
+      '@type': 'ItemList',
+      name: 'F1 Mini Games',
+      description: 'Free Formula 1 mini games — reaction tests, trivia, driver puzzles and more.',
+      url: 'https://f1racesignature.site/games',
+      numberOfItems: 8,
+      itemListElement: GAMES.map((g, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: g.title,
+        description: g.description,
+        url: `https://f1racesignature.site${g.href}`,
+      })),
+    },
+  ],
+}
+
 export default function GamesPage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(gamesJsonLd) }} />
       <Header />
       <main className="pt-14 min-h-screen" style={{ background: '#030303' }}>
 
