@@ -165,117 +165,113 @@ export function ChampionshipDeciderGame() {
               />
             </div>
 
-            {/* Scenario card */}
-            <div className="rounded-2xl border border-[#1a1a1a] bg-[#080808] overflow-hidden">
-              <div className="border-b border-[#111111] px-5 py-4">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-[#d4a017] text-[10px] font-mono uppercase tracking-widest mb-1.5">
-                      {current.grandPrix} · {current.year}
+            {/* 2-col on desktop */}
+            <div className="md:grid md:grid-cols-2 md:gap-6 space-y-4 md:space-y-0">
+              {/* Left: Scenario card */}
+              <div className="rounded-2xl border border-[#1a1a1a] bg-[#080808] overflow-hidden">
+                <div className="border-b border-[#111111] px-5 py-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-[#d4a017] text-[10px] font-mono uppercase tracking-widest mb-1.5">
+                        {current.grandPrix} · {current.year}
+                      </p>
+                      <h3 className="text-white text-lg font-semibold" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+                        {current.title}
+                      </h3>
+                      <p className="text-white text-xs mt-1 opacity-50">{current.subtitle}</p>
+                    </div>
+                    <p className="text-white text-[10px] font-mono shrink-0 text-right leading-relaxed opacity-30">
+                      {current.lap}
                     </p>
-                    <h3 className="text-white text-lg font-semibold" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
-                      {current.title}
-                    </h3>
-                    <p className="text-[#888888] text-xs mt-1">{current.subtitle}</p>
                   </div>
-                  <p className="text-[#444444] text-[10px] font-mono shrink-0 text-right leading-relaxed">
-                    {current.lap}
-                  </p>
+                </div>
+
+                <div className="px-5 py-4 space-y-3">
+                  <p className="text-[#d4a017] text-[10px] font-mono uppercase tracking-widest">{current.role}</p>
+                  <ul className="space-y-2">
+                    {current.context.map((line, i) => (
+                      <li key={i} className="flex items-start gap-2.5 text-white text-sm leading-relaxed">
+                        <span className="text-white mt-0.5 shrink-0 text-base leading-none opacity-20">›</span>
+                        {line}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="border-t border-[#111111] px-5 py-3">
+                  <p className="text-white text-sm font-medium">{current.question}</p>
                 </div>
               </div>
 
-              <div className="px-5 py-4 space-y-3">
-                <p className="text-[#d4a017] text-[10px] font-mono uppercase tracking-widest">{current.role}</p>
-                <ul className="space-y-2">
-                  {current.context.map((line, i) => (
-                    <li key={i} className="flex items-start gap-2.5 text-white text-sm leading-relaxed">
-                      <span className="text-[#333333] mt-0.5 shrink-0 text-base leading-none">›</span>
-                      {line}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="border-t border-[#111111] px-5 py-3">
-                <p className="text-white text-sm font-medium">{current.question}</p>
-              </div>
-            </div>
-
-            {/* Answer options */}
-            <div className="space-y-2">
-              {current.options.map(opt => {
-                const isSelected = selected?.id === opt.id
-                const rs = RESULT_STYLES[opt.resultType]
-                return (
-                  <motion.button
-                    key={opt.id}
-                    onClick={() => handleSelect(opt)}
-                    disabled={phase === 'answered'}
-                    whileTap={phase === 'question' ? { scale: 0.98 } : {}}
-                    className={[
-                      'w-full px-4 py-3 rounded-xl text-sm text-left border transition-all duration-200 cursor-pointer disabled:cursor-default',
-                      phase === 'answered' && isSelected
-                        ? ''
-                        : phase === 'answered'
-                        ? 'bg-[#050505] border-[#0d0d0d] text-[#333333]'
-                        : 'bg-[#0f0f0f] border-[#1a1a1a] text-white hover:border-[#d4a017]/30 hover:bg-[#0f0f08]',
-                    ].join(' ')}
-                    style={
-                      phase === 'answered' && isSelected
-                        ? { background: rs.bg, borderColor: rs.border, color: rs.color }
-                        : {}
-                    }
-                  >
-                    {opt.text}
-                  </motion.button>
-                )
-              })}
-            </div>
-
-            {/* Result reveal */}
-            <AnimatePresence>
-              {phase === 'answered' && selected && (
-                <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-3">
-                  <div className="rounded-xl border border-[#1a1a1a] bg-[#060606] px-5 py-4 space-y-3">
-                    {/* Badge + points */}
-                    <div className="flex items-center gap-2.5">
-                      <span
-                        className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-widest font-bold"
-                        style={{
-                          background: RESULT_STYLES[selected.resultType].bg,
-                          color:      RESULT_STYLES[selected.resultType].color,
-                          border:     `1px solid ${RESULT_STYLES[selected.resultType].border}`,
-                        }}
+              {/* Right: Answer options + result reveal */}
+              <div className="space-y-3">
+                <div className="space-y-2">
+                  {current.options.map(opt => {
+                    const isSelected = selected?.id === opt.id
+                    const rs = RESULT_STYLES[opt.resultType]
+                    return (
+                      <motion.button
+                        key={opt.id}
+                        onClick={() => handleSelect(opt)}
+                        disabled={phase === 'answered'}
+                        whileTap={phase === 'question' ? { scale: 0.98 } : {}}
+                        className={[
+                          'w-full px-4 py-3 rounded-xl text-sm text-left border transition-all duration-200 cursor-pointer disabled:cursor-default',
+                          phase === 'answered' && isSelected
+                            ? ''
+                            : phase === 'answered'
+                            ? 'bg-[#050505] border-[#0d0d0d] text-[#333333]'
+                            : 'bg-[#0f0f0f] border-[#1a1a1a] text-white hover:border-[#d4a017]/30 hover:bg-[#0f0f08]',
+                        ].join(' ')}
+                        style={
+                          phase === 'answered' && isSelected
+                            ? { background: rs.bg, borderColor: rs.border, color: rs.color }
+                            : {}
+                        }
                       >
-                        {selected.resultType}
-                      </span>
-                      <span className="text-[#d4a017] text-xs font-mono">+{selected.score} pts</span>
-                    </div>
+                        {opt.text}
+                      </motion.button>
+                    )
+                  })}
+                </div>
 
-                    {/* Explanation */}
-                    <p className="text-white text-sm leading-relaxed">{selected.explanation}</p>
-
-                    {/* What actually happened */}
-                    <div className="border-t border-[#111111] pt-3">
-                      <p className="text-[#d4a017] text-[10px] font-mono uppercase tracking-widest mb-1.5">What actually happened</p>
-                      <p className="text-[#aaaaaa] text-sm leading-relaxed">{current.actualOutcome}</p>
-                    </div>
-
-                    {/* Did you know */}
-                    <div className="border-t border-[#111111] pt-3">
-                      <p className="text-[#555555] text-[10px] font-mono uppercase tracking-widest mb-1.5">Did you know?</p>
-                      <p className="text-[#666666] text-xs leading-relaxed">{current.didYouKnow}</p>
-                    </div>
-                  </div>
-
-                  <button onClick={handleNext}
-                    className="w-full px-6 py-3 bg-[#d4a017] text-black font-semibold rounded-xl hover:bg-[#e8b84b] transition-all hover:scale-[1.02] active:scale-100 cursor-pointer"
-                  >
-                    {index >= scenarios.length - 1 ? 'See Final Score' : 'Next Scenario'}
-                  </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                <AnimatePresence>
+                  {phase === 'answered' && selected && (
+                    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-3">
+                      <div className="rounded-xl border border-[#1a1a1a] bg-[#060606] px-5 py-4 space-y-3">
+                        <div className="flex items-center gap-2.5">
+                          <span
+                            className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-widest font-bold"
+                            style={{
+                              background: RESULT_STYLES[selected.resultType].bg,
+                              color:      RESULT_STYLES[selected.resultType].color,
+                              border:     `1px solid ${RESULT_STYLES[selected.resultType].border}`,
+                            }}
+                          >
+                            {selected.resultType}
+                          </span>
+                          <span className="text-[#d4a017] text-xs font-mono">+{selected.score} pts</span>
+                        </div>
+                        <p className="text-white text-sm leading-relaxed">{selected.explanation}</p>
+                        <div className="border-t border-[#111111] pt-3">
+                          <p className="text-[#d4a017] text-[10px] font-mono uppercase tracking-widest mb-1.5">What actually happened</p>
+                          <p className="text-white text-sm leading-relaxed opacity-60">{current.actualOutcome}</p>
+                        </div>
+                        <div className="border-t border-[#111111] pt-3">
+                          <p className="text-white text-[10px] font-mono uppercase tracking-widest mb-1.5 opacity-30">Did you know?</p>
+                          <p className="text-white text-xs leading-relaxed opacity-40">{current.didYouKnow}</p>
+                        </div>
+                      </div>
+                      <button onClick={handleNext}
+                        className="w-full px-6 py-3 bg-[#d4a017] text-black font-semibold rounded-xl hover:bg-[#e8b84b] transition-all hover:scale-[1.02] active:scale-100 cursor-pointer"
+                      >
+                        {index >= scenarios.length - 1 ? 'See Final Score' : 'Next Scenario'}
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
           </motion.div>
         )}
 

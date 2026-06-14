@@ -447,7 +447,7 @@ function EndScreen({
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      className="w-full max-w-md mx-auto"
+      className="w-full"
     >
       {/* Score card */}
       <div className="rounded-2xl border border-[#1a1a1a] overflow-hidden mb-4 relative" style={{ background: 'linear-gradient(160deg, #0e0e0e 0%, #080808 100%)' }}>

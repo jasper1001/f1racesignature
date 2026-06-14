@@ -259,53 +259,54 @@ export function GuessTheDriverGame() {
           <motion.div key="playing" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4">
             {/* Header */}
             <div className="flex items-center justify-between px-1">
-              <p className="text-[#555555] text-xs font-mono">
+              <p className="text-white text-xs font-mono opacity-30">
                 Clue {revealedCount} of {CLUE_DEFS.length}
               </p>
               <ScoreBadge score={potential} />
             </div>
 
-            {/* Clue cards */}
-            <div className="space-y-2">
-              {revealedClues.map((def, i) => (
-                <ClueCard
-                  key={def.key}
-                  label={def.label}
-                  value={driver.clues[def.key] as string | number}
-                  index={i}
-                />
-              ))}
-            </div>
-
-            {/* Wrong guesses */}
-            {wrongGuesses.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {wrongGuesses.map(g => (
-                  <span key={g} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#1a0505] border border-[#e8002d]/20 text-[#e8002d] text-xs font-mono">
-                    {g} ✕
-                  </span>
+            {/* 2-col on desktop */}
+            <div className="md:grid md:grid-cols-2 md:gap-6 space-y-4 md:space-y-0">
+              {/* Left: Clue cards */}
+              <div className="space-y-2">
+                {revealedClues.map((def, i) => (
+                  <ClueCard
+                    key={def.key}
+                    label={def.label}
+                    value={driver.clues[def.key] as string | number}
+                    index={i}
+                  />
                 ))}
               </div>
-            )}
 
-            {/* Input */}
-            <AutocompleteInput onGuess={handleGuess} disabled={false} />
-
-            {/* Controls */}
-            <div className="flex gap-2">
-              <button
-                onClick={revealNext}
-                disabled={allRevealed}
-                className="flex-1 px-4 py-2.5 text-sm font-medium bg-[#111111] border border-[#222222] text-white rounded-xl hover:border-[#333333] transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
-              >
-                {allRevealed ? 'All Clues Revealed' : revealedCount === CLUE_DEFS.length - 1 ? 'Reveal Final Clue' : 'Reveal Next Clue'}
-              </button>
-              <button
-                onClick={giveUp}
-                className="px-4 py-2.5 text-sm font-medium bg-transparent border border-[#1a1a1a] text-[#444444] rounded-xl hover:text-white hover:border-[#333333] transition-colors cursor-pointer"
-              >
-                Give Up
-              </button>
+              {/* Right: Wrong guesses + input + controls */}
+              <div className="space-y-3">
+                {wrongGuesses.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {wrongGuesses.map(g => (
+                      <span key={g} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#1a0505] border border-[#e8002d]/20 text-[#e8002d] text-xs font-mono">
+                        {g} ✕
+                      </span>
+                    ))}
+                  </div>
+                )}
+                <AutocompleteInput onGuess={handleGuess} disabled={false} />
+                <div className="flex gap-2">
+                  <button
+                    onClick={revealNext}
+                    disabled={allRevealed}
+                    className="flex-1 px-4 py-2.5 text-sm font-medium bg-[#111111] border border-[#222222] text-white rounded-xl hover:border-[#333333] transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+                  >
+                    {allRevealed ? 'All Clues Revealed' : revealedCount === CLUE_DEFS.length - 1 ? 'Reveal Final Clue' : 'Reveal Next Clue'}
+                  </button>
+                  <button
+                    onClick={giveUp}
+                    className="px-4 py-2.5 text-sm font-medium bg-transparent border border-[#1a1a1a] text-white opacity-30 rounded-xl hover:opacity-80 hover:border-[#333333] transition-all cursor-pointer"
+                  >
+                    Give Up
+                  </button>
+                </div>
+              </div>
             </div>
           </motion.div>
         )}

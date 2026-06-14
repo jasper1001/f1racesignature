@@ -92,7 +92,7 @@ export default function ChampionshipDeciderPage() {
           </p>
         </div>
 
-        <div className="max-w-lg mx-auto px-6 py-12">
+        <div className="max-w-5xl mx-auto px-6 py-12">
           <div className="rounded-2xl bg-[#060606] overflow-hidden" style={{ border: '1px solid rgba(59,130,246,0.25)', boxShadow: '0 0 0 1px rgba(59,130,246,0.06), 0 0 40px rgba(59,130,246,0.06)' }}>
             <ChampionshipDeciderGame />
           </div>

@@ -92,27 +92,27 @@ export default function LightsOutPage() {
           </p>
         </div>
 
-        <div className="max-w-lg mx-auto px-6 py-12">
-          {/* Ratings reference */}
-          <div className="grid grid-cols-2 gap-2 mb-8">
-            {[
-              { label: 'Under 180ms', rating: 'Elite Reflexes',   color: '#d4a017' },
-              { label: '180 – 250ms', rating: 'F1 Driver Level',  color: '#c0c0c0' },
-              { label: '251 – 350ms', rating: 'Great Reaction',   color: '#cd7f32' },
-              { label: 'Above 350ms', rating: 'Keep Practicing',  color: '#888888' },
-            ].map((r) => (
-              <div
-                key={r.rating}
-                className="rounded-xl border border-[#111111] bg-[#060606] px-3 py-2.5"
-              >
-                <p className="text-[10px] font-mono text-white uppercase tracking-wider opacity-50">{r.label}</p>
-                <p className="text-xs font-medium mt-0.5" style={{ color: r.color }}>{r.rating}</p>
+        <div className="max-w-5xl mx-auto px-6 py-12">
+          <div className="md:grid md:grid-cols-[1fr_200px] md:gap-6 md:items-start">
+            <div className="rounded-2xl bg-[#060606] overflow-hidden" style={{ border: '1px solid rgba(239,68,68,0.25)', boxShadow: '0 0 0 1px rgba(239,68,68,0.06), 0 0 40px rgba(239,68,68,0.06)' }}>
+              <LightsOutGame />
+            </div>
+            <div className="mt-6 md:mt-0">
+              <p className="text-[10px] font-mono text-white uppercase tracking-widest opacity-30 mb-3">Rating Scale</p>
+              <div className="space-y-2">
+                {[
+                  { label: 'Under 180ms', rating: 'Elite Reflexes',  color: '#d4a017' },
+                  { label: '180 – 250ms', rating: 'F1 Driver Level', color: '#c0c0c0' },
+                  { label: '251 – 350ms', rating: 'Great Reaction',  color: '#cd7f32' },
+                  { label: 'Above 350ms', rating: 'Keep Practicing', color: '#888888' },
+                ].map((r) => (
+                  <div key={r.rating} className="rounded-xl border border-[#111111] bg-[#060606] px-3 py-2.5">
+                    <p className="text-[10px] font-mono text-white uppercase tracking-wider opacity-50">{r.label}</p>
+                    <p className="text-xs font-medium mt-0.5" style={{ color: r.color }}>{r.rating}</p>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-
-          <div className="rounded-2xl bg-[#060606] overflow-hidden" style={{ border: '1px solid rgba(239,68,68,0.25)', boxShadow: '0 0 0 1px rgba(239,68,68,0.06), 0 0 40px rgba(239,68,68,0.06)' }}>
-            <LightsOutGame />
+            </div>
           </div>
         </div>
       </main>

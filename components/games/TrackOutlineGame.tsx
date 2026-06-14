@@ -222,61 +222,65 @@ export function TrackOutlineGame() {
               />
             </div>
 
-            {/* Circuit silhouette */}
-            <div
-              className="rounded-2xl border bg-[#080808] transition-colors duration-300"
-              style={{ borderColor: phase === 'answered' ? (isCorrect ? 'rgba(56,176,0,0.3)' : 'rgba(232,0,45,0.3)') : '#1a1a1a' }}
-            >
-              <CircuitSilhouette circuit={answer} flash={flash} />
-            </div>
+            {/* 2-col on desktop */}
+            <div className="md:grid md:grid-cols-2 md:gap-6 space-y-4 md:space-y-0">
+              {/* Left: Circuit silhouette */}
+              <div
+                className="rounded-2xl border bg-[#080808] transition-colors duration-300 flex items-center"
+                style={{ borderColor: phase === 'answered' ? (isCorrect ? 'rgba(56,176,0,0.3)' : 'rgba(232,0,45,0.3)') : '#1a1a1a', minHeight: 280 }}
+              >
+                <CircuitSilhouette circuit={answer} flash={flash} />
+              </div>
 
-            {/* Options */}
-            <div className="grid grid-cols-2 gap-2">
-              {options.map(opt => {
-                const isSelected = selected === opt.id
-                const isAnswer   = opt.id === answer.id
-                const showCorrect = phase === 'answered' && isAnswer
-                const showWrong   = phase === 'answered' && isSelected && !isAnswer
-                return (
-                  <motion.button
-                    key={opt.id}
-                    onClick={() => handleSelect(opt.id)}
-                    disabled={phase === 'answered'}
-                    whileTap={phase === 'question' ? { scale: 0.97 } : {}}
-                    className={[
-                      'px-4 py-3 rounded-xl text-sm font-medium border transition-all duration-200 text-left cursor-pointer disabled:cursor-default',
-                      showCorrect  ? 'bg-[#0a1a08] border-[#38b000]/60 text-[#38b000]'
-                      : showWrong  ? 'bg-[#1a0808] border-[#e8002d]/60 text-[#e8002d]'
-                      : phase === 'answered' ? 'bg-[#060606] border-[#111111] text-[#333333]'
-                      : 'bg-[#0f0f0f] border-[#1a1a1a] text-white hover:border-[#d4a017]/40 hover:bg-[#0f0f08]',
-                    ].join(' ')}
-                  >
-                    {opt.name}
-                  </motion.button>
-                )
-              })}
-            </div>
+              {/* Right: Options + post-answer */}
+              <div className="space-y-3">
+                <div className="grid grid-cols-2 gap-2">
+                  {options.map(opt => {
+                    const isSelected = selected === opt.id
+                    const isAnswer   = opt.id === answer.id
+                    const showCorrect = phase === 'answered' && isAnswer
+                    const showWrong   = phase === 'answered' && isSelected && !isAnswer
+                    return (
+                      <motion.button
+                        key={opt.id}
+                        onClick={() => handleSelect(opt.id)}
+                        disabled={phase === 'answered'}
+                        whileTap={phase === 'question' ? { scale: 0.97 } : {}}
+                        className={[
+                          'px-4 py-3 rounded-xl text-sm font-medium border transition-all duration-200 text-left cursor-pointer disabled:cursor-default',
+                          showCorrect  ? 'bg-[#0a1a08] border-[#38b000]/60 text-[#38b000]'
+                          : showWrong  ? 'bg-[#1a0808] border-[#e8002d]/60 text-[#e8002d]'
+                          : phase === 'answered' ? 'bg-[#060606] border-[#111111] text-[#333333]'
+                          : 'bg-[#0f0f0f] border-[#1a1a1a] text-white hover:border-[#d4a017]/40 hover:bg-[#0f0f08]',
+                        ].join(' ')}
+                      >
+                        {opt.name}
+                      </motion.button>
+                    )
+                  })}
+                </div>
 
-            {/* Post-answer */}
-            <AnimatePresence>
-              {phase === 'answered' && (
-                <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-3">
-                  <div className="rounded-xl border border-[#1a1a1a] bg-[#060606] px-5 py-4">
-                    <p className="text-[#d4a017] text-[10px] font-mono uppercase tracking-widest mb-2">
-                      {isCorrect ? 'Correct!' : `It was ${answer.name}`}
-                    </p>
-                    <p className="text-white text-sm leading-relaxed">
-                      {CIRCUIT_FACTS[answer.id] ?? `${answer.name} — ${answer.location}.`}
-                    </p>
-                  </div>
-                  <button onClick={handleNext}
-                    className="w-full px-6 py-3 bg-[#d4a017] text-black font-semibold rounded-xl hover:bg-[#e8b84b] transition-all hover:scale-[1.02] active:scale-100 cursor-pointer"
-                  >
-                    {round >= TOTAL_ROUNDS ? 'See Results' : 'Next Track'}
-                  </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                <AnimatePresence>
+                  {phase === 'answered' && (
+                    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-3">
+                      <div className="rounded-xl border border-[#1a1a1a] bg-[#060606] px-5 py-4">
+                        <p className="text-[#d4a017] text-[10px] font-mono uppercase tracking-widest mb-2">
+                          {isCorrect ? 'Correct!' : `It was ${answer.name}`}
+                        </p>
+                        <p className="text-white text-sm leading-relaxed">
+                          {CIRCUIT_FACTS[answer.id] ?? `${answer.name} — ${answer.location}.`}
+                        </p>
+                      </div>
+                      <button onClick={handleNext}
+                        className="w-full px-6 py-3 bg-[#d4a017] text-black font-semibold rounded-xl hover:bg-[#e8b84b] transition-all hover:scale-[1.02] active:scale-100 cursor-pointer"
+                      >
+                        {round >= TOTAL_ROUNDS ? 'See Results' : 'Next Track'}
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
           </motion.div>
         )}
 

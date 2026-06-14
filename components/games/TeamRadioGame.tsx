@@ -119,7 +119,7 @@ export function TeamRadioGame() {
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
+    <div className="w-full">
       {/* Stats row */}
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-5">
@@ -157,143 +157,147 @@ export function TeamRadioGame() {
         />
       </div>
 
-      {/* Radio card */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={current}
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -14 }}
-          transition={{ duration: 0.28 }}
-          className="relative rounded-2xl border border-[#1a1a1a] bg-[#080808] overflow-hidden mb-5"
-        >
-          {/* Scanlines overlay */}
-          <div
-            className="absolute inset-0 pointer-events-none opacity-[0.025]"
-            style={{
-              backgroundImage:
-                'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,0.12) 3px, rgba(255,255,255,0.12) 4px)',
-            }}
-          />
+      {/* 2-col on desktop: radio card | answers + next */}
+      <div className="md:grid md:grid-cols-2 md:gap-6 md:items-start">
+        {/* Left: Radio card */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={current}
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -14 }}
+            transition={{ duration: 0.28 }}
+            className="relative rounded-2xl border border-[#1a1a1a] bg-[#080808] overflow-hidden mb-5 md:mb-0"
+          >
+            {/* Scanlines overlay */}
+            <div
+              className="absolute inset-0 pointer-events-none opacity-[0.025]"
+              style={{
+                backgroundImage:
+                  'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,0.12) 3px, rgba(255,255,255,0.12) 4px)',
+              }}
+            />
 
-          {/* Card header */}
-          <div className="relative flex items-center justify-between px-5 py-3.5 border-b border-[#111111]">
-            <div className="flex items-center gap-2">
-              <RadioWaveIcon />
-              <span className="text-[#d4a017] text-[10px] font-mono uppercase tracking-widest">
-                Incoming Transmission
+            {/* Card header */}
+            <div className="relative flex items-center justify-between px-5 py-3.5 border-b border-[#111111]">
+              <div className="flex items-center gap-2">
+                <RadioWaveIcon />
+                <span className="text-[#d4a017] text-[10px] font-mono uppercase tracking-widest">
+                  Incoming Transmission
+                </span>
+              </div>
+              <span className="text-[#2a2a2a] text-[10px] font-mono uppercase tracking-wider">
+                {quote.race}&nbsp;·&nbsp;{quote.year}
               </span>
             </div>
-            <span className="text-[#2a2a2a] text-[10px] font-mono uppercase tracking-wider">
-              {quote.race}&nbsp;·&nbsp;{quote.year}
-            </span>
+
+            {/* Quote body */}
+            <div className="relative px-6 py-8 md:px-8 md:py-10">
+              <p className="text-[#333333] text-[10px] font-mono uppercase tracking-widest mb-5">
+                &#x2758; radio transcript &#x2758;
+              </p>
+              <blockquote
+                className="text-white text-xl md:text-2xl leading-relaxed"
+                style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+              >
+                &ldquo;{quote.quote}&rdquo;
+              </blockquote>
+            </div>
+
+            {/* Context reveal */}
+            <AnimatePresence>
+              {gameState === 'answered' && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.25 }}
+                  className="relative border-t border-[#111111] px-6 md:px-8 py-5"
+                >
+                  <p className="text-[#333333] text-[10px] font-mono uppercase tracking-widest mb-2">
+                    Context
+                  </p>
+                  <p className="text-[#777777] text-sm leading-relaxed">{quote.context}</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Right: Answer buttons + next */}
+        <div className="space-y-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            {quote.shuffledOptions.map((option) => {
+              const isCorrectOption = option === quote.driver
+              const isSelectedOption = option === selected
+              const answered = gameState === 'answered'
+
+              let cls = 'border-[#1a1a1a] bg-[#080808] text-white hover:border-[#2a2a2a] hover:bg-[#0d0d0d]'
+              if (answered) {
+                if (isCorrectOption) {
+                  cls = 'border-[#38b000]/40 bg-[#38b000]/8 text-[#38b000]'
+                } else if (isSelectedOption) {
+                  cls = 'border-[#cc3333]/40 bg-[#cc3333]/8 text-[#cc3333]'
+                } else {
+                  cls = 'border-[#111111] bg-[#050505] text-[#2a2a2a]'
+                }
+              }
+
+              return (
+                <button
+                  key={option}
+                  onClick={() => handleAnswer(option)}
+                  disabled={answered}
+                  className={`flex items-center gap-2.5 px-5 py-4 rounded-xl border text-left font-medium transition-all duration-200 disabled:cursor-default ${cls}`}
+                  style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+                >
+                  {answered && isCorrectOption && (
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="shrink-0">
+                      <path d="M2 7l4 4 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  )}
+                  {answered && isSelectedOption && !isCorrectOption && (
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="shrink-0">
+                      <path d="M2 2l10 10M12 2L2 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                    </svg>
+                  )}
+                  {option}
+                </button>
+              )
+            })}
           </div>
 
-          {/* Quote body */}
-          <div className="relative px-6 py-8 md:px-8 md:py-10">
-            <p className="text-[#333333] text-[10px] font-mono uppercase tracking-widest mb-5">
-              &#x2758; radio transcript &#x2758;
-            </p>
-            <blockquote
-              className="text-white text-xl md:text-2xl leading-relaxed"
-              style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
-            >
-              &ldquo;{quote.quote}&rdquo;
-            </blockquote>
-          </div>
-
-          {/* Context reveal */}
           <AnimatePresence>
             {gameState === 'answered' && (
               <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.25 }}
-                className="relative border-t border-[#111111] px-6 md:px-8 py-5"
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="flex items-center justify-between"
               >
-                <p className="text-[#333333] text-[10px] font-mono uppercase tracking-widest mb-2">
-                  Context
-                </p>
-                <p className="text-[#777777] text-sm leading-relaxed">{quote.context}</p>
+                <span
+                  className="text-sm font-medium"
+                  style={{ color: selected === quote.driver ? '#38b000' : '#cc3333' }}
+                >
+                  {selected === quote.driver
+                    ? `+${POINTS_PER_CORRECT} points`
+                    : `No points — it was ${quote.driver}`}
+                </span>
+                <button
+                  onClick={handleNext}
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-[#d4a017] text-black font-semibold rounded-xl hover:bg-[#e8b84b] transition-all active:scale-95"
+                >
+                  {isLastRound ? 'See Results' : 'Next Quote'}
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
               </motion.div>
             )}
           </AnimatePresence>
-        </motion.div>
-      </AnimatePresence>
-
-      {/* Answer buttons */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-5">
-        {quote.shuffledOptions.map((option) => {
-          const isCorrectOption = option === quote.driver
-          const isSelectedOption = option === selected
-          const answered = gameState === 'answered'
-
-          let cls = 'border-[#1a1a1a] bg-[#080808] text-white hover:border-[#2a2a2a] hover:bg-[#0d0d0d]'
-          if (answered) {
-            if (isCorrectOption) {
-              cls = 'border-[#38b000]/40 bg-[#38b000]/8 text-[#38b000]'
-            } else if (isSelectedOption) {
-              cls = 'border-[#cc3333]/40 bg-[#cc3333]/8 text-[#cc3333]'
-            } else {
-              cls = 'border-[#111111] bg-[#050505] text-[#2a2a2a]'
-            }
-          }
-
-          return (
-            <button
-              key={option}
-              onClick={() => handleAnswer(option)}
-              disabled={answered}
-              className={`flex items-center gap-2.5 px-5 py-4 rounded-xl border text-left font-medium transition-all duration-200 disabled:cursor-default ${cls}`}
-              style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
-            >
-              {answered && isCorrectOption && (
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="shrink-0">
-                  <path d="M2 7l4 4 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              )}
-              {answered && isSelectedOption && !isCorrectOption && (
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="shrink-0">
-                  <path d="M2 2l10 10M12 2L2 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                </svg>
-              )}
-              {option}
-            </button>
-          )
-        })}
+        </div>
       </div>
-
-      {/* Next row */}
-      <AnimatePresence>
-        {gameState === 'answered' && (
-          <motion.div
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="flex items-center justify-between"
-          >
-            <span
-              className="text-sm font-medium"
-              style={{ color: selected === quote.driver ? '#38b000' : '#cc3333' }}
-            >
-              {selected === quote.driver
-                ? `+${POINTS_PER_CORRECT} points`
-                : `No points — it was ${quote.driver}`}
-            </span>
-            <button
-              onClick={handleNext}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-[#d4a017] text-black font-semibold rounded-xl hover:bg-[#e8b84b] transition-all active:scale-95"
-            >
-              {isLastRound ? 'See Results' : 'Next Quote'}
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   )
 }
@@ -329,7 +333,7 @@ function ResultScreen({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="w-full max-w-2xl mx-auto"
+      className="w-full"
     >
       {/* Result card */}
       <div className="relative rounded-2xl border border-[#1a1a1a] bg-[#080808] overflow-hidden mb-5">
