@@ -5,16 +5,25 @@ import { Footer } from '@/components/layout/Footer'
 import { LightsOutGame } from '@/components/games/LightsOutGame'
 
 export const metadata: Metadata = {
-  title: 'Lights Out — Reaction Test',
+  title: 'Lights Out — F1 Reaction Game',
   description:
-    'Test your F1 reflexes. Watch the starting lights illuminate one by one — then react the instant they go out. How fast are you?',
+    'Test your F1 reflexes. Five starting lights illuminate one by one — react the instant they go dark. Can you match an F1 driver\'s 200ms reaction time?',
+  keywords: ['F1 reaction test', 'Formula 1 reflexes', 'lights out F1 game', 'F1 reaction time', 'F1 mini game', 'Formula 1 reaction game'],
   alternates: { canonical: '/games/lights-out' },
   openGraph: {
-    title: 'Lights Out — Reaction Test | F1RaceSignature',
-    description: 'Test your F1 reflexes. React the moment the lights go out.',
+    title: 'Lights Out — Test Your F1 Reflexes',
+    description: 'Five starting lights, one chance. React the instant they go dark — can you match an F1 driver\'s reaction time?',
     url: '/games/lights-out',
     type: 'website',
-    images: [{ url: '/opengraph-image', width: 1200, height: 630 }],
+    siteName: 'F1RaceSignature',
+    locale: 'en_US',
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'Lights Out — F1 Reaction Game on F1RaceSignature' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Lights Out — Test Your F1 Reflexes',
+    description: 'Five starting lights, one chance. React the instant they go dark — can you match an F1 driver\'s reaction time?',
+    images: ['/opengraph-image'],
   },
 }
 
@@ -23,6 +32,22 @@ const ACCENT = '#ef4444'
 export default function LightsOutPage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: 'Lights Out — F1 Reaction Game',
+        description: "Test your F1 reflexes. Five starting lights illuminate one by one — react the instant they go dark.",
+        url: 'https://f1racesignature.site/games/lights-out',
+        isPartOf: { '@id': 'https://f1racesignature.site/#website' },
+        breadcrumb: {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://f1racesignature.site' },
+            { '@type': 'ListItem', position: 2, name: 'Mini Games', item: 'https://f1racesignature.site/games' },
+            { '@type': 'ListItem', position: 3, name: 'Lights Out' },
+          ],
+        },
+      }) }} />
       <Header />
       <main className="pt-14 min-h-screen" style={{ background: '#030303' }}>
 

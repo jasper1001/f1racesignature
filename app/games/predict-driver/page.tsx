@@ -5,15 +5,25 @@ import { Footer } from '@/components/layout/Footer'
 import { PredictDriverGame } from '@/components/games/PredictDriverGame'
 
 export const metadata: Metadata = {
-  title: 'Predict the Driver',
-  description: 'Wordle-style F1 driver guessing game. Identify the mystery driver in 6 attempts using nationality, wins, poles, debut year, and team hints.',
+  title: 'Predict the Driver — F1 Wordle Game',
+  description:
+    'Wordle meets Formula 1. Identify the mystery F1 driver in 6 guesses using nationality, wins, poles, debut year, and team hints. Daily and Endless modes.',
+  keywords: ['F1 Wordle', 'predict the driver', 'F1 driver puzzle', 'Formula 1 daily game', 'F1 guessing game', 'F1 mini game'],
   alternates: { canonical: '/games/predict-driver' },
   openGraph: {
-    title: 'Predict the Driver | F1RaceSignature',
-    description: 'Can you identify the mystery F1 driver in 6 guesses?',
+    title: 'Predict the Driver — F1 Wordle Game',
+    description: 'Wordle meets F1. Identify the mystery driver in 6 guesses using nationality, wins, poles, debut year and team hints.',
     url: '/games/predict-driver',
     type: 'website',
-    images: [{ url: '/opengraph-image', width: 1200, height: 630 }],
+    siteName: 'F1RaceSignature',
+    locale: 'en_US',
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'Predict the Driver — F1 Wordle Game on F1RaceSignature' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Predict the Driver — F1 Wordle Game',
+    description: 'Wordle meets F1. Identify the mystery driver in 6 guesses using nationality, wins, poles, debut year and team hints.',
+    images: ['/opengraph-image'],
   },
 }
 
@@ -22,6 +32,22 @@ const ACCENT = '#6366f1'
 export default function PredictDriverPage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: 'Predict the Driver — F1 Wordle Game',
+        description: 'Wordle meets Formula 1. Identify the mystery F1 driver in 6 guesses using nationality, wins, poles, debut year, and team hints.',
+        url: 'https://f1racesignature.site/games/predict-driver',
+        isPartOf: { '@id': 'https://f1racesignature.site/#website' },
+        breadcrumb: {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://f1racesignature.site' },
+            { '@type': 'ListItem', position: 2, name: 'Mini Games', item: 'https://f1racesignature.site/games' },
+            { '@type': 'ListItem', position: 3, name: 'Predict the Driver' },
+          ],
+        },
+      }) }} />
       <Header />
       <main className="pt-14 min-h-screen" style={{ background: '#030303' }}>
 

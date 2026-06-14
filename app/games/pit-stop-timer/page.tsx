@@ -4,21 +4,47 @@ import { Footer } from '@/components/layout/Footer'
 import { PitStopTimerGame } from '@/components/games/PitStopTimerGame'
 
 export const metadata: Metadata = {
-  title: 'Pit Stop Timer',
-  description: 'Can you release the F1 car at the perfect moment? Time your release against the target stop time in this precision pit wall game.',
+  title: 'F1 Pit Stop Timer — Pit Wall Game',
+  description:
+    'A target stop time is shown — can you release the car at the perfect moment? Too early is an unsafe release. Too late loses positions. Rookie, Pro, and Elite modes.',
+  keywords: ['F1 pit stop game', 'pit wall timer', 'Formula 1 pit stop', 'F1 precision game', 'F1 mini game', 'pit stop timer game'],
   alternates: { canonical: '/games/pit-stop-timer' },
   openGraph: {
-    title: 'Pit Stop Timer | F1RaceSignature',
-    description: 'Release the car at the perfect moment. Too early is unsafe. Too late loses positions.',
+    title: 'F1 Pit Stop Timer — Pit Wall Game',
+    description: 'Can you release the car at the perfect moment? Too early is unsafe. Too late loses positions. Three difficulty modes.',
     url: '/games/pit-stop-timer',
     type: 'website',
-    images: [{ url: '/opengraph-image', width: 1200, height: 630 }],
+    siteName: 'F1RaceSignature',
+    locale: 'en_US',
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'F1 Pit Stop Timer — Pit Wall Precision Game on F1RaceSignature' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'F1 Pit Stop Timer — Pit Wall Game',
+    description: 'Can you release the car at the perfect moment? Too early is unsafe. Too late loses positions. Three difficulty modes.',
+    images: ['/opengraph-image'],
   },
 }
 
 export default function PitStopTimerPage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: 'F1 Pit Stop Timer — Pit Wall Game',
+        description: 'A target stop time is shown — can you release the car at the perfect moment? Too early is unsafe. Too late loses positions.',
+        url: 'https://f1racesignature.site/games/pit-stop-timer',
+        isPartOf: { '@id': 'https://f1racesignature.site/#website' },
+        breadcrumb: {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://f1racesignature.site' },
+            { '@type': 'ListItem', position: 2, name: 'Mini Games', item: 'https://f1racesignature.site/games' },
+            { '@type': 'ListItem', position: 3, name: 'Pit Stop Timer' },
+          ],
+        },
+      }) }} />
       <Header />
       <main className="pt-14 min-h-screen" style={{ background: '#030303' }}>
 

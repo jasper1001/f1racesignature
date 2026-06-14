@@ -5,15 +5,25 @@ import { Footer } from '@/components/layout/Footer'
 import { GuessTheDriverGame } from '@/components/games/GuessTheDriverGame'
 
 export const metadata: Metadata = {
-  title: 'Guess the Driver',
-  description: 'Can you identify the F1 driver before all the clues are revealed? Test your Formula 1 knowledge across 53 drivers from every era.',
+  title: 'Guess the F1 Driver — Trivia Game',
+  description:
+    'Clues about an F1 driver are revealed one at a time. Guess early for a higher score. 53 drivers across every era of Formula 1 — can you name them all?',
+  keywords: ['guess the F1 driver', 'F1 driver quiz', 'Formula 1 trivia', 'F1 knowledge game', 'F1 mini game', 'Formula 1 guessing game'],
   alternates: { canonical: '/games/guess-the-driver' },
   openGraph: {
-    title: 'Guess the Driver | F1RaceSignature',
-    description: 'Identify the F1 driver from clues. Fewer clues = higher score.',
+    title: 'Guess the F1 Driver — Trivia Game',
+    description: 'Clues revealed one at a time. Fewer clues used = higher score. 53 Formula 1 drivers from every era.',
     url: '/games/guess-the-driver',
     type: 'website',
-    images: [{ url: '/opengraph-image', width: 1200, height: 630 }],
+    siteName: 'F1RaceSignature',
+    locale: 'en_US',
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'Guess the F1 Driver — Formula 1 Trivia Game on F1RaceSignature' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Guess the F1 Driver — Trivia Game',
+    description: 'Clues revealed one at a time. Fewer clues used = higher score. 53 Formula 1 drivers from every era.',
+    images: ['/opengraph-image'],
   },
 }
 
@@ -22,6 +32,22 @@ const ACCENT = '#f59e0b'
 export default function GuessTheDriverPage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: 'Guess the F1 Driver — Trivia Game',
+        description: 'Clues about an F1 driver are revealed one at a time. Guess early for a higher score.',
+        url: 'https://f1racesignature.site/games/guess-the-driver',
+        isPartOf: { '@id': 'https://f1racesignature.site/#website' },
+        breadcrumb: {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://f1racesignature.site' },
+            { '@type': 'ListItem', position: 2, name: 'Mini Games', item: 'https://f1racesignature.site/games' },
+            { '@type': 'ListItem', position: 3, name: 'Guess the F1 Driver' },
+          ],
+        },
+      }) }} />
       <Header />
       <main className="pt-14 min-h-screen" style={{ background: '#030303' }}>
 

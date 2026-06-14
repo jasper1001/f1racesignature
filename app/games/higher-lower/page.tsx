@@ -5,15 +5,25 @@ import { Footer } from '@/components/layout/Footer'
 import { HigherLowerGame } from '@/components/games/HigherLowerGame'
 
 export const metadata: Metadata = {
-  title: 'Higher or Lower: F1 Edition',
-  description: 'Guess whether one F1 driver has more or fewer career stats than another. Wins, poles, podiums and more. How long can your streak last?',
+  title: 'F1 Higher or Lower — Driver Stat Battle',
+  description:
+    'Does Driver B have more career wins than Driver A? Compare F1 stats across wins, poles, podiums, fastest laps, and championships. One wrong answer ends your streak.',
+  keywords: ['F1 higher or lower', 'F1 stats game', 'Formula 1 driver comparison', 'F1 stat battle', 'F1 mini game', 'Formula 1 statistics game'],
   alternates: { canonical: '/games/higher-lower' },
   openGraph: {
-    title: 'Higher or Lower: F1 Edition | F1RaceSignature',
-    description: 'Does Hamilton have more wins than Schumacher? Test your F1 stat knowledge.',
+    title: 'F1 Higher or Lower — Driver Stat Battle',
+    description: 'Does Driver B have more wins than Driver A? Compare F1 stats and build your streak. One wrong answer and it\'s over.',
     url: '/games/higher-lower',
     type: 'website',
-    images: [{ url: '/opengraph-image', width: 1200, height: 630 }],
+    siteName: 'F1RaceSignature',
+    locale: 'en_US',
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'F1 Higher or Lower — Driver Stat Battle on F1RaceSignature' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'F1 Higher or Lower — Driver Stat Battle',
+    description: 'Does Driver B have more wins than Driver A? Compare F1 stats and build your streak. One wrong answer and it\'s over.',
+    images: ['/opengraph-image'],
   },
 }
 
@@ -22,6 +32,22 @@ const ACCENT = '#f97316'
 export default function HigherLowerPage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: 'F1 Higher or Lower — Driver Stat Battle',
+        description: 'Does Driver B have more career wins than Driver A? Compare F1 stats across wins, poles, podiums, fastest laps, and championships.',
+        url: 'https://f1racesignature.site/games/higher-lower',
+        isPartOf: { '@id': 'https://f1racesignature.site/#website' },
+        breadcrumb: {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://f1racesignature.site' },
+            { '@type': 'ListItem', position: 2, name: 'Mini Games', item: 'https://f1racesignature.site/games' },
+            { '@type': 'ListItem', position: 3, name: 'Higher or Lower' },
+          ],
+        },
+      }) }} />
       <Header />
       <main className="pt-14 min-h-screen" style={{ background: '#030303' }}>
 

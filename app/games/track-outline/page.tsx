@@ -5,15 +5,25 @@ import { Footer } from '@/components/layout/Footer'
 import { TrackOutlineGame } from '@/components/games/TrackOutlineGame'
 
 export const metadata: Metadata = {
-  title: 'Track Outline Quiz',
-  description: 'Can you identify the F1 circuit from its silhouette alone? Test your knowledge across 12 iconic Formula 1 tracks.',
+  title: 'F1 Track Outline Quiz — Name the Circuit',
+  description:
+    'Can you identify an F1 circuit from its silhouette alone? No name, no location — just the shape. 10 rounds across 12 iconic Formula 1 tracks.',
+  keywords: ['F1 track quiz', 'Formula 1 circuit quiz', 'track outline game', 'F1 circuit identification', 'F1 mini game', 'Formula 1 tracks game'],
   alternates: { canonical: '/games/track-outline' },
   openGraph: {
-    title: 'Track Outline Quiz | F1RaceSignature',
-    description: 'Identify F1 circuits from their silhouettes. No labels, no clues.',
+    title: 'F1 Track Outline Quiz — Name the Circuit',
+    description: 'Identify F1 circuits from their silhouette alone. No labels, no clues — just the shape. 12 iconic Formula 1 tracks.',
     url: '/games/track-outline',
     type: 'website',
-    images: [{ url: '/opengraph-image', width: 1200, height: 630 }],
+    siteName: 'F1RaceSignature',
+    locale: 'en_US',
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'F1 Track Outline Quiz — Identify Formula 1 Circuits on F1RaceSignature' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'F1 Track Outline Quiz — Name the Circuit',
+    description: 'Identify F1 circuits from their silhouette alone. No labels, no clues — just the shape.',
+    images: ['/opengraph-image'],
   },
 }
 
@@ -22,6 +32,22 @@ const ACCENT = '#a855f7'
 export default function TrackOutlinePage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: 'F1 Track Outline Quiz — Name the Circuit',
+        description: 'Can you identify an F1 circuit from its silhouette alone? No name, no location — just the shape.',
+        url: 'https://f1racesignature.site/games/track-outline',
+        isPartOf: { '@id': 'https://f1racesignature.site/#website' },
+        breadcrumb: {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://f1racesignature.site' },
+            { '@type': 'ListItem', position: 2, name: 'Mini Games', item: 'https://f1racesignature.site/games' },
+            { '@type': 'ListItem', position: 3, name: 'Track Outline Quiz' },
+          ],
+        },
+      }) }} />
       <Header />
       <main className="pt-14 min-h-screen" style={{ background: '#030303' }}>
 

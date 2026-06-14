@@ -5,15 +5,25 @@ import { Footer } from '@/components/layout/Footer'
 import { TeamRadioGame } from '@/components/games/TeamRadioGame'
 
 export const metadata: Metadata = {
-  title: 'Team Radio Guess',
-  description: 'Identify F1 drivers from their most famous team radio transmissions. 30 legendary quotes.',
+  title: 'F1 Team Radio Quiz — Who Said It?',
+  description:
+    'Famous transmissions from the pit wall — can you name the driver from their team radio? 30 iconic F1 radio moments spanning every era of Formula 1.',
+  keywords: ['F1 team radio quiz', 'guess the driver radio', 'Formula 1 radio quotes', 'F1 radio game', 'F1 mini game', 'Formula 1 team radio'],
   alternates: { canonical: '/games/team-radio' },
   openGraph: {
-    title: 'Team Radio Guess | F1RaceSignature',
-    description: 'Who said it on the radio? Guess the driver behind 30 iconic F1 transmissions.',
+    title: 'F1 Team Radio Quiz — Who Said It?',
+    description: 'Famous pit wall transmissions — can you name the driver? 30 iconic F1 radio moments from every era.',
     url: '/games/team-radio',
     type: 'website',
-    images: [{ url: '/opengraph-image', width: 1200, height: 630 }],
+    siteName: 'F1RaceSignature',
+    locale: 'en_US',
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'F1 Team Radio Quiz — Guess the Driver on F1RaceSignature' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'F1 Team Radio Quiz — Who Said It?',
+    description: 'Famous pit wall transmissions — can you name the driver? 30 iconic F1 radio moments from every era.',
+    images: ['/opengraph-image'],
   },
 }
 
@@ -22,6 +32,22 @@ const ACCENT = '#10b981'
 export default function TeamRadioPage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: 'F1 Team Radio Quiz — Who Said It?',
+        description: 'Famous transmissions from the pit wall — can you name the driver from their team radio? 30 iconic F1 radio moments.',
+        url: 'https://f1racesignature.site/games/team-radio',
+        isPartOf: { '@id': 'https://f1racesignature.site/#website' },
+        breadcrumb: {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://f1racesignature.site' },
+            { '@type': 'ListItem', position: 2, name: 'Mini Games', item: 'https://f1racesignature.site/games' },
+            { '@type': 'ListItem', position: 3, name: 'Team Radio Guess' },
+          ],
+        },
+      }) }} />
       <Header />
       <main className="pt-14 min-h-screen" style={{ background: '#030303' }}>
 

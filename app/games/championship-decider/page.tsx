@@ -5,15 +5,25 @@ import { Footer } from '@/components/layout/Footer'
 import { ChampionshipDeciderGame } from '@/components/games/ChampionshipDeciderGame'
 
 export const metadata: Metadata = {
-  title: 'Championship Decider Quiz',
-  description: 'Relive real F1 strategy moments and make the calls from the pit wall. Would you have made the right decision at Abu Dhabi 2021, Monaco 2016, or Turkey 2020?',
+  title: 'F1 Championship Decider — Strategy Quiz',
+  description:
+    'Relive real F1 strategy moments from the pit wall. Abu Dhabi 2021, Monaco 2016, Turkey 2020. Would you have made the right call? Prove you belong on the pit wall.',
+  keywords: ['F1 strategy game', 'championship decider', 'pit wall strategy quiz', 'F1 decision game', 'Formula 1 strategy', 'F1 mini game'],
   alternates: { canonical: '/games/championship-decider' },
   openGraph: {
-    title: 'Championship Decider Quiz | F1RaceSignature',
-    description: 'Real F1 strategy scenarios. You decide from the pit wall.',
+    title: 'F1 Championship Decider — Pit Wall Strategy Quiz',
+    description: 'Real F1 strategy scenarios — Abu Dhabi 2021, Monaco 2016, Turkey 2020. You decide from the pit wall.',
     url: '/games/championship-decider',
     type: 'website',
-    images: [{ url: '/opengraph-image', width: 1200, height: 630 }],
+    siteName: 'F1RaceSignature',
+    locale: 'en_US',
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'F1 Championship Decider — Strategy Quiz on F1RaceSignature' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'F1 Championship Decider — Pit Wall Strategy Quiz',
+    description: 'Real F1 strategy scenarios — Abu Dhabi 2021, Monaco 2016, Turkey 2020. You decide from the pit wall.',
+    images: ['/opengraph-image'],
   },
 }
 
@@ -22,6 +32,22 @@ const ACCENT = '#3b82f6'
 export default function ChampionshipDeciderPage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: 'F1 Championship Decider — Strategy Quiz',
+        description: 'Relive real F1 strategy moments from the pit wall. Abu Dhabi 2021, Monaco 2016, Turkey 2020. Would you have made the right call?',
+        url: 'https://f1racesignature.site/games/championship-decider',
+        isPartOf: { '@id': 'https://f1racesignature.site/#website' },
+        breadcrumb: {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://f1racesignature.site' },
+            { '@type': 'ListItem', position: 2, name: 'Mini Games', item: 'https://f1racesignature.site/games' },
+            { '@type': 'ListItem', position: 3, name: 'Championship Decider' },
+          ],
+        },
+      }) }} />
       <Header />
       <main className="pt-14 min-h-screen" style={{ background: '#030303' }}>
 
