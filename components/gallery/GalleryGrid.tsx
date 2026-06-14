@@ -79,10 +79,10 @@ export function GalleryGrid() {
     f.type === filter.type && (f.type === 'all' || ('value' in f && 'value' in filter && f.value === filter.value))
 
   const chipClass = (active: boolean) =>
-    `px-4 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${
+    `px-3.5 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${
       active
-        ? 'bg-[#d4a017] text-black'
-        : 'bg-[#0f0f0f] text-[#555555] border border-[#1a1a1a] hover:text-white hover:border-[#333333]'
+        ? 'bg-[#d4a017] text-black shadow-sm'
+        : 'bg-[#0d0d0d] text-white/50 border border-[#1d1d1d] hover:text-white hover:border-[#303030] hover:bg-[#111]'
     }`
 
   return (
@@ -100,10 +100,10 @@ export function GalleryGrid() {
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="text-[#d4a017] flex-shrink-0">
                 <path d="M12 2a7 7 0 0 0-4 12.7V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.3A7 7 0 0 0 12 2zM9 21h6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-              <p className="text-[#aaaaaa] text-xs flex-1">
+              <p className="text-white/65 text-xs flex-1">
                 <span className="text-white font-medium">Tip:</span> tap any poster to open it in the Studio — then change the driver, theme, or visualization and make it your own.
               </p>
-              <button onClick={dismissTip} className="text-[#666666] hover:text-white transition-colors flex-shrink-0 cursor-pointer" aria-label="Dismiss">
+              <button onClick={dismissTip} className="text-white/30 hover:text-white transition-colors flex-shrink-0 cursor-pointer" aria-label="Dismiss">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
               </button>
             </div>
@@ -111,36 +111,63 @@ export function GalleryGrid() {
         )}
       </AnimatePresence>
 
-      {/* All + count */}
-      <div className="flex items-center justify-between mb-4">
-        <button onClick={() => setFilter({ type: 'all' })} className={chipClass(filter.type === 'all')}>
-          All Posters
-        </button>
-        <span className="text-[#444444] text-xs">{filtered.length} {filtered.length === 1 ? 'poster' : 'posters'}</span>
-      </div>
-
-      {/* Driver filters */}
-      <div className="mb-3">
-        <span className="block text-[10px] font-medium text-[#444444] uppercase tracking-widest mb-2">Driver</span>
-        <div className="flex flex-wrap gap-2">
-          {drivers.map((d) => (
-            <button key={d} onClick={() => setFilter({ type: 'driver', value: d })} className={chipClass(isActive({ type: 'driver', value: d }))}>
-              {DRIVER_LABELS[d] ?? d}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Track filters */}
+      {/* Filter section */}
       <div className="mb-8 md:mb-10">
-        <span className="block text-[10px] font-medium text-[#444444] uppercase tracking-widest mb-2">Track</span>
-        <div className="flex flex-wrap gap-2">
-          {tracks.map((t) => (
-            <button key={t} onClick={() => setFilter({ type: 'track', value: t })} className={chipClass(isActive({ type: 'track', value: t }))}>
-              {circuits[t]?.name?.replace('Circuit', '').trim() ?? TRACK_LABELS[t] ?? t}
-            </button>
-          ))}
+
+        {/* Top row: All + clear + count */}
+        <div className="flex items-center gap-3 mb-5">
+          <button onClick={() => setFilter({ type: 'all' })} className={chipClass(filter.type === 'all')}>
+            All
+          </button>
+          <AnimatePresence>
+            {filter.type !== 'all' && (
+              <motion.button
+                initial={{ opacity: 0, x: -4 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -4 }}
+                transition={{ duration: 0.15 }}
+                onClick={() => setFilter({ type: 'all' })}
+                className="text-white/35 text-xs hover:text-white/60 transition-colors"
+              >
+                × Clear
+              </motion.button>
+            )}
+          </AnimatePresence>
+          <span className="ml-auto text-white/35 text-xs tabular-nums font-mono">
+            {filtered.length} {filtered.length === 1 ? 'poster' : 'posters'}
+          </span>
         </div>
+
+        {/* Driver filters */}
+        <div className="mb-4">
+          <div className="flex items-center gap-3 mb-2.5">
+            <span className="text-white/30 text-[9px] font-mono uppercase tracking-[0.15em] shrink-0">Driver</span>
+            <span className="flex-1 h-px bg-[#141414]" />
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {drivers.map((d) => (
+              <button key={d} onClick={() => setFilter({ type: 'driver', value: d })} className={chipClass(isActive({ type: 'driver', value: d }))}>
+                {DRIVER_LABELS[d] ?? d}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Track filters */}
+        <div>
+          <div className="flex items-center gap-3 mb-2.5">
+            <span className="text-white/30 text-[9px] font-mono uppercase tracking-[0.15em] shrink-0">Track</span>
+            <span className="flex-1 h-px bg-[#141414]" />
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {tracks.map((t) => (
+              <button key={t} onClick={() => setFilter({ type: 'track', value: t })} className={chipClass(isActive({ type: 'track', value: t }))}>
+                {circuits[t]?.name?.replace('Circuit', '').trim() ?? TRACK_LABELS[t] ?? t}
+              </button>
+            ))}
+          </div>
+        </div>
+
       </div>
 
       <motion.div
@@ -156,7 +183,7 @@ export function GalleryGrid() {
       </motion.div>
 
       {filtered.length === 0 && (
-        <div className="text-center py-20 text-[#333333] text-sm">No posters found for this filter.</div>
+        <div className="text-center py-20 text-white/40 text-sm">No posters found for this filter.</div>
       )}
     </div>
   )
