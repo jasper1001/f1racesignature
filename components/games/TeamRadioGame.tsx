@@ -124,7 +124,7 @@ export function TeamRadioGame() {
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-5">
           <div>
-            <p className="text-[#444444] text-[10px] font-mono uppercase tracking-widest mb-0.5">Score</p>
+            <p className="text-white/40 text-[10px] font-mono uppercase tracking-widest mb-0.5">Score</p>
             <p className="text-[#d4a017] text-xl font-mono tabular-nums">{score}</p>
           </div>
           <AnimatePresence>
@@ -134,16 +134,16 @@ export function TeamRadioGame() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
               >
-                <p className="text-[#444444] text-[10px] font-mono uppercase tracking-widest mb-0.5">Streak</p>
+                <p className="text-white/40 text-[10px] font-mono uppercase tracking-widest mb-0.5">Streak</p>
                 <p className="text-[#38b000] text-xl font-mono">{streak}×</p>
               </motion.div>
             )}
           </AnimatePresence>
         </div>
         <div className="text-right">
-          <p className="text-[#444444] text-[10px] font-mono uppercase tracking-widest mb-0.5">Round</p>
+          <p className="text-white/40 text-[10px] font-mono uppercase tracking-widest mb-0.5">Round</p>
           <p className="text-white text-xl font-mono tabular-nums">
-            {current + 1}<span className="text-[#2a2a2a]"> / {ROUNDS}</span>
+            {current + 1}<span className="text-white/20"> / {ROUNDS}</span>
           </p>
         </div>
       </div>
@@ -186,14 +186,14 @@ export function TeamRadioGame() {
                   Incoming Transmission
                 </span>
               </div>
-              <span className="text-[#2a2a2a] text-[10px] font-mono uppercase tracking-wider">
+              <span className="text-white/20 text-[10px] font-mono uppercase tracking-wider">
                 {quote.race}&nbsp;·&nbsp;{quote.year}
               </span>
             </div>
 
             {/* Quote body */}
             <div className="relative px-6 py-8 md:px-8 md:py-10">
-              <p className="text-[#333333] text-[10px] font-mono uppercase tracking-widest mb-5">
+              <p className="text-white/25 text-[10px] font-mono uppercase tracking-widest mb-5">
                 &#x2758; radio transcript &#x2758;
               </p>
               <blockquote
@@ -214,10 +214,10 @@ export function TeamRadioGame() {
                   transition={{ duration: 0.25 }}
                   className="relative border-t border-[#111111] px-6 md:px-8 py-5"
                 >
-                  <p className="text-[#333333] text-[10px] font-mono uppercase tracking-widest mb-2">
+                  <p className="text-white/25 text-[10px] font-mono uppercase tracking-widest mb-2">
                     Context
                   </p>
-                  <p className="text-[#777777] text-sm leading-relaxed">{quote.context}</p>
+                  <p className="text-white/60 text-sm leading-relaxed">{quote.context}</p>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -239,7 +239,7 @@ export function TeamRadioGame() {
                 } else if (isSelectedOption) {
                   cls = 'border-[#cc3333]/40 bg-[#cc3333]/8 text-[#cc3333]'
                 } else {
-                  cls = 'border-[#111111] bg-[#050505] text-[#2a2a2a]'
+                  cls = 'border-[#111111] bg-[#050505] text-white/20'
                 }
               }
 
@@ -359,26 +359,26 @@ function ResultScreen({
           >
             {result.title}
           </h2>
-          <p className="text-[#555555] text-sm mb-10">{result.subtitle}</p>
+          <p className="text-white/50 text-sm mb-10">{result.subtitle}</p>
 
           {/* Score display */}
           <div className="flex items-center justify-center gap-2 mb-2">
             <span className="text-6xl font-mono text-white tabular-nums">{score}</span>
-            <span className="text-[#333333] text-2xl font-mono self-end mb-1">/ {maxScore}</span>
+            <span className="text-white/25 text-2xl font-mono self-end mb-1">/ {maxScore}</span>
           </div>
-          <p className="text-[#444444] text-sm font-mono mb-10">
+          <p className="text-white/40 text-sm font-mono mb-10">
             {correct} correct out of {ROUNDS} rounds
           </p>
 
           {/* Stats row */}
           <div className="flex items-center justify-center gap-8 border-t border-[#111111] pt-8">
             <div>
-              <p className="text-[#333333] text-[10px] font-mono uppercase tracking-widest mb-1">Best Score</p>
+              <p className="text-white/25 text-[10px] font-mono uppercase tracking-widest mb-1">Best Score</p>
               <p className="text-white text-xl font-mono tabular-nums">{bestScore}</p>
             </div>
             <div className="w-px h-8 bg-[#111111]" />
             <div>
-              <p className="text-[#333333] text-[10px] font-mono uppercase tracking-widest mb-1">Best Streak</p>
+              <p className="text-white/25 text-[10px] font-mono uppercase tracking-widest mb-1">Best Streak</p>
               <p className="text-white text-xl font-mono">{bestStreak}×</p>
             </div>
           </div>

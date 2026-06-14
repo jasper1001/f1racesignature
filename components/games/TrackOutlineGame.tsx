@@ -168,7 +168,7 @@ export function TrackOutlineGame() {
   if (circuits.length === 0) {
     return (
       <div className="rounded-2xl border border-[#1a1a1a] bg-[#080808] p-8 text-center">
-        <p className="text-[#555555] text-sm font-mono">Loading circuits…</p>
+        <p className="text-white/40 text-sm font-mono">Loading circuits…</p>
       </div>
     )
   }
@@ -209,7 +209,7 @@ export function TrackOutlineGame() {
             {/* Round header */}
             <div className="flex items-center justify-between px-1">
               <p className="text-white text-xs font-mono uppercase tracking-widest">Which circuit is this?</p>
-              <span className="text-[#555555] text-xs font-mono">{round} / {TOTAL_ROUNDS}</span>
+              <span className="text-white/40 text-xs font-mono">{round} / {TOTAL_ROUNDS}</span>
             </div>
 
             {/* Progress bar */}
@@ -250,7 +250,7 @@ export function TrackOutlineGame() {
                           'px-4 py-3 rounded-xl text-sm font-medium border transition-all duration-200 text-left cursor-pointer disabled:cursor-default',
                           showCorrect  ? 'bg-[#0a1a08] border-[#38b000]/60 text-[#38b000]'
                           : showWrong  ? 'bg-[#1a0808] border-[#e8002d]/60 text-[#e8002d]'
-                          : phase === 'answered' ? 'bg-[#060606] border-[#111111] text-[#333333]'
+                          : phase === 'answered' ? 'bg-[#060606] border-[#111111] text-white/20'
                           : 'bg-[#0f0f0f] border-[#1a1a1a] text-white hover:border-[#d4a017]/40 hover:bg-[#0f0f08]',
                         ].join(' ')}
                       >
@@ -302,14 +302,14 @@ export function TrackOutlineGame() {
               )}
 
               <div>
-                <p className="text-[#555555] text-xs font-mono uppercase tracking-widest mb-3">Final Score</p>
+                <p className="text-white/40 text-xs font-mono uppercase tracking-widest mb-3">Final Score</p>
                 <motion.div
                   initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
                   transition={{ type: 'spring', stiffness: 220, damping: 14, delay: 0.08 }}
                   className="flex items-baseline justify-center gap-1"
                 >
                   <span className="text-6xl font-bold font-mono" style={{ color: rating.color }}>{finalScore}</span>
-                  <span className="text-2xl text-[#333333] font-mono">/ 10</span>
+                  <span className="text-2xl text-white/20 font-mono">/ 10</span>
                 </motion.div>
               </div>
 

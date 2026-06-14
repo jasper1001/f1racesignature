@@ -215,7 +215,7 @@ export function LightsOutGame() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
-              <p className="text-[#555555] text-xs font-mono uppercase tracking-widest">Get ready…</p>
+              <p className="text-white/40 text-xs font-mono uppercase tracking-widest">Get ready…</p>
             </motion.div>
           )}
 
