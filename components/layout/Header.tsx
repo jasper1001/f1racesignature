@@ -14,7 +14,6 @@ const NAV_LINKS = [
   { href: '/garage', label: 'My Garage' },
   { href: '/results', label: '2026 Season' },
   { href: '/schedule', label: 'Schedule' },
-  { href: '/live', label: 'Live' },
   { href: '/games', label: 'Mini Games' },
 ]
 
@@ -53,9 +52,6 @@ export function Header() {
                     />
                   )}
                   <span className="relative flex items-center gap-1.5">
-                    {link.href === '/live' && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#e8002d]" />
-                    )}
                     {link.label}
                   </span>
                 </Link>
@@ -111,9 +107,6 @@ export function Header() {
                   }`}
                 >
                   <span className="flex items-center gap-2">
-                    {link.href === '/live' && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#e8002d]" />
-                    )}
                     {link.label}
                   </span>
                 </Link>
