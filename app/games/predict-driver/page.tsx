@@ -92,7 +92,7 @@ export default function PredictDriverPage() {
         </div>
 
         <div className="max-w-6xl mx-auto px-4 py-12">
-          <div className="rounded-2xl bg-[#060606] overflow-hidden" style={{ border: '1px solid rgba(99,102,241,0.25)', boxShadow: '0 0 0 1px rgba(99,102,241,0.06), 0 0 40px rgba(99,102,241,0.06)' }}>
+          <div className="rounded-2xl bg-[#060606] overflow-hidden p-5 md:p-8" style={{ border: '1px solid rgba(99,102,241,0.25)', boxShadow: '0 0 0 1px rgba(99,102,241,0.06), 0 0 40px rgba(99,102,241,0.06)' }}>
             <PredictDriverGame />
           </div>
         </div>

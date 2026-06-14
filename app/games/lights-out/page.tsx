@@ -94,7 +94,7 @@ export default function LightsOutPage() {
 
         <div className="max-w-5xl mx-auto px-6 py-12">
           <div className="md:grid md:grid-cols-[1fr_200px] md:gap-6 md:items-start">
-            <div className="rounded-2xl bg-[#060606] overflow-hidden" style={{ border: '1px solid rgba(239,68,68,0.25)', boxShadow: '0 0 0 1px rgba(239,68,68,0.06), 0 0 40px rgba(239,68,68,0.06)' }}>
+            <div className="rounded-2xl bg-[#060606] overflow-hidden p-5 md:p-8" style={{ border: '1px solid rgba(239,68,68,0.25)', boxShadow: '0 0 0 1px rgba(239,68,68,0.06), 0 0 40px rgba(239,68,68,0.06)' }}>
               <LightsOutGame />
             </div>
             <div className="mt-6 md:mt-0">

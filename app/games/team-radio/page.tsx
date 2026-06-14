@@ -92,7 +92,7 @@ export default function TeamRadioPage() {
         </div>
 
         <div className="max-w-5xl mx-auto px-6 py-16">
-          <div className="rounded-2xl bg-[#060606] overflow-hidden" style={{ border: '1px solid rgba(16,185,129,0.25)', boxShadow: '0 0 0 1px rgba(16,185,129,0.06), 0 0 40px rgba(16,185,129,0.06)' }}>
+          <div className="rounded-2xl bg-[#060606] overflow-hidden p-5 md:p-8" style={{ border: '1px solid rgba(16,185,129,0.25)', boxShadow: '0 0 0 1px rgba(16,185,129,0.06), 0 0 40px rgba(16,185,129,0.06)' }}>
             <TeamRadioGame />
           </div>
         </div>

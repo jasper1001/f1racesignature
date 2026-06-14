@@ -92,7 +92,7 @@ export default function HigherLowerPage() {
         </div>
 
         <div className="max-w-4xl mx-auto px-4 py-12">
-          <div className="rounded-2xl bg-[#060606] overflow-hidden" style={{ border: '1px solid rgba(249,115,22,0.25)', boxShadow: '0 0 0 1px rgba(249,115,22,0.06), 0 0 40px rgba(249,115,22,0.06)' }}>
+          <div className="rounded-2xl bg-[#060606] overflow-hidden p-5 md:p-8" style={{ border: '1px solid rgba(249,115,22,0.25)', boxShadow: '0 0 0 1px rgba(249,115,22,0.06), 0 0 40px rgba(249,115,22,0.06)' }}>
             <HigherLowerGame />
           </div>
         </div>
