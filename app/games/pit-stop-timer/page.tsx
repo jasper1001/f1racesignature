@@ -52,8 +52,10 @@ export default function PitStopTimerPage() {
         </div>
 
         {/* Game */}
-        <div className="max-w-lg mx-auto">
-          <PitStopTimerGame />
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
+          <div className="rounded-2xl border border-[#1a1a1a] bg-[#060606] overflow-hidden">
+            <PitStopTimerGame />
+          </div>
         </div>
 
       </main>
