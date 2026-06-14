@@ -46,7 +46,7 @@ export default function PitStopTimerPage() {
           >
             Pit Stop Timer
           </h1>
-          <p className="relative text-[#555555] text-sm max-w-sm mx-auto">
+          <p className="relative text-white text-sm max-w-sm mx-auto opacity-50">
             Can you release the car at the perfect moment?
           </p>
         </div>
