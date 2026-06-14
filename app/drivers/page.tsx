@@ -5,15 +5,29 @@ import { Footer } from '@/components/layout/Footer'
 import { getAllDrivers, getRacesForDriver } from '@/lib/serverData'
 
 export const metadata: Metadata = {
-  title: 'F1 Drivers — Create Poster Art From Legendary Laps',
+  title: 'F1 Driver Collection — Senna, Hamilton, Verstappen & More',
   description:
-    'Browse every driver in the F1RaceSignature collection — Senna, Hamilton, Schumacher, Verstappen, Leclerc, Norris and more. Turn their legendary laps into collectible poster art.',
+    'Browse every driver in the F1RaceSignature collection — Ayrton Senna, Lewis Hamilton, Michael Schumacher, Max Verstappen, Charles Leclerc, Lando Norris and more. Turn their legendary laps into collectible poster art.',
+  keywords: [
+    'F1 drivers poster', 'Ayrton Senna poster', 'Lewis Hamilton poster art', 'Max Verstappen poster',
+    'Michael Schumacher art', 'F1 driver collection', 'Formula 1 legends', 'F1 race art',
+    'F1 driver prints', 'Lando Norris poster', 'Charles Leclerc art', 'F1 championship winners art',
+  ],
   alternates: { canonical: '/drivers' },
   openGraph: {
-    title: 'F1 Drivers — Create Poster Art From Legendary Laps',
-    description: 'Every driver in the F1RaceSignature collection, from Senna to Leclerc.',
+    title: 'F1 Driver Collection — Senna, Hamilton, Verstappen & More',
+    description: 'Turn legendary F1 drives by Senna, Hamilton, Schumacher, Verstappen, Leclerc, Norris and more into poster art.',
     url: '/drivers',
     type: 'website',
+    siteName: 'F1RaceSignature',
+    locale: 'en_US',
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'F1 Driver Collection — F1RaceSignature' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'F1 Driver Collection — Senna, Hamilton, Verstappen & More',
+    description: 'Legendary F1 drives from Senna to Verstappen — turn any lap into poster art.',
+    images: ['/opengraph-image'],
   },
 }
 
@@ -29,7 +43,7 @@ export default function DriversIndexPage() {
           <h1 className="text-4xl md:text-5xl text-white mb-4" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
             Legends of Formula 1
           </h1>
-          <p className="text-[#555555] max-w-xl mx-auto">
+          <p className="text-white/60 max-w-xl mx-auto">
             Twelve drivers, decades of greatness. Pick a name to explore their iconic laps and turn them into art.
           </p>
         </div>
@@ -53,14 +67,14 @@ export default function DriversIndexPage() {
                   </div>
                   <div>
                     <div className="text-white font-medium group-hover:text-[#d4a017] transition-colors">{d.name}</div>
-                    <div className="text-[#555555] text-xs">{d.team}</div>
+                    <div className="text-white/50 text-xs">{d.team}</div>
                   </div>
                 </div>
                 <div className="flex items-center justify-between mt-4 text-xs">
-                  <span className="text-[#666666]">
+                  <span className="text-white/55">
                     {d.championships > 0 ? `${d.championships}× Champion` : 'Grand Prix winner'}
                   </span>
-                  <span className="text-[#444444] font-mono">{count} {count === 1 ? 'drive' : 'drives'}</span>
+                  <span className="text-white/45 font-mono">{count} {count === 1 ? 'drive' : 'drives'}</span>
                 </div>
               </Link>
             )

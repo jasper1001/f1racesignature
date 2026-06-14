@@ -41,19 +41,19 @@ export default function HomePage() {
             >
               Formula 1 telemetry, reimagined as art
             </h2>
-            <p className="text-[#777777] leading-relaxed mb-4">
+            <p className="text-white/60 leading-relaxed mb-4">
               F1RaceSignature transforms real Formula 1 lap data into collectible poster art. Every
               print is built from genuine GPS car-position telemetry — the exact racing line a driver
               carved through Eau Rouge, the Casino chicane, or Copse — mapped onto an accurate circuit
               outline and rendered in a cinematic, gallery-ready style.
             </p>
-            <p className="text-[#777777] leading-relaxed">
+            <p className="text-white/60 leading-relaxed">
               Choose from legendary drives by Ayrton Senna, Lewis Hamilton, Michael Schumacher, Max
               Verstappen, Charles Leclerc, Lando Norris and more. Visualize the lap as a racing line, a
               blue-to-red speed heatmap, a three-sector split, or an overtake map — then apply one of
               eight artistic themes and export a high-resolution poster, free.
             </p>
-            <p className="text-[#555555] text-sm leading-relaxed mt-6">
+            <p className="text-white/55 text-sm leading-relaxed mt-6">
               Browse the full <a href="/drivers" className="text-[#d4a017] hover:underline">driver collection</a>,
               explore the <a href="/gallery" className="text-[#d4a017] hover:underline">poster gallery</a>, or
               follow the <a href="/results" className="text-[#d4a017] hover:underline">live 2026 F1 season standings</a>.
@@ -88,7 +88,7 @@ export default function HomePage() {
                   >
                     Follow the 2026 F1 Season
                   </h2>
-                  <p className="text-[#666666] text-sm mt-2 max-w-md">
+                  <p className="text-white/55 text-sm mt-2 max-w-md">
                     Live driver and constructor standings, latest race results, and the full calendar —
                     real F1 data, updated automatically.
                   </p>
@@ -130,7 +130,7 @@ export default function HomePage() {
                   >
                     Test Your F1 Instincts
                   </h2>
-                  <p className="text-[#666666] text-sm mt-2 max-w-md">
+                  <p className="text-white/55 text-sm mt-2 max-w-md">
                     Reaction tests, driver quizzes, circuit challenges, and pit-wall strategy — four
                     free games you can finish in under two minutes.
                   </p>
@@ -138,7 +138,7 @@ export default function HomePage() {
                     {['Reaction Test', 'F1 Knowledge', 'Circuit Quiz', 'F1 Strategy'].map((tag) => (
                       <span
                         key={tag}
-                        className="text-[#555555] text-xs font-mono uppercase tracking-wider border border-[#1a1a1a] rounded px-2 py-0.5"
+                        className="text-white/50 text-xs font-mono uppercase tracking-wider border border-[#1a1a1a] rounded px-2 py-0.5"
                       >
                         {tag}
                       </span>
@@ -169,7 +169,7 @@ export default function HomePage() {
               <br />
               <span className="text-[#d4a017]">your poster?</span>
             </p>
-            <p className="text-[#555555] mb-8">
+            <p className="text-white/55 mb-8">
               Free to start. No account required. Just pick a driver and create.
             </p>
             <a

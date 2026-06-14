@@ -22,14 +22,14 @@ export default function AboutPage() {
       <main className="pt-14 min-h-screen" style={{ background: '#030303' }}>
         {/* Hero */}
         <div className="border-b border-[#0f0f0f] py-16 px-6 text-center">
-          <p className="text-[#555555] text-xs font-mono uppercase tracking-widest mb-4">About</p>
+          <p className="text-white/50 text-xs font-mono uppercase tracking-widest mb-4">About</p>
           <h1
             className="text-4xl md:text-5xl text-white mb-4"
             style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
           >
             Where speed becomes art
           </h1>
-          <p className="text-[#555555] text-sm max-w-xl mx-auto">
+          <p className="text-white/65 text-sm max-w-xl mx-auto">
             F1RaceSignature turns real Formula 1 lap telemetry into gallery-quality posters — free, in your browser, in seconds.
           </p>
         </div>
@@ -38,8 +38,8 @@ export default function AboutPage() {
 
           {/* What is it */}
           <section>
-            <h2 className="text-xs font-mono uppercase tracking-widest text-[#444444] mb-5">The Project</h2>
-            <div className="space-y-4 text-[#888888] leading-relaxed">
+            <h2 className="text-xs font-mono uppercase tracking-widest text-white/45 mb-5">The Project</h2>
+            <div className="space-y-4 text-white/65 leading-relaxed">
               <p>
                 F1RaceSignature is a browser-based creative tool that takes genuine GPS car-position
                 telemetry from iconic Formula 1 races and renders it as cinematic, museum-quality
@@ -60,20 +60,20 @@ export default function AboutPage() {
 
           {/* Games */}
           <section>
-            <h2 className="text-xs font-mono uppercase tracking-widest text-[#444444] mb-5">F1 Games</h2>
-            <div className="space-y-4 text-[#888888] leading-relaxed">
+            <h2 className="text-xs font-mono uppercase tracking-widest text-white/45 mb-5">F1 Games</h2>
+            <div className="space-y-4 text-white/65 leading-relaxed">
               <p>
                 Alongside the poster studio, F1RaceSignature includes a free collection of Formula 1
                 mini-games — all playable in your browser with no account required.
               </p>
               <ul className="space-y-1.5 list-disc list-inside pl-2">
-                <li><strong className="text-[#aaaaaa]">Lights Out</strong> — test your reaction time against the F1 starting lights.</li>
-                <li><strong className="text-[#aaaaaa]">Guess the Driver</strong> — identify a driver from progressively revealed clues.</li>
-                <li><strong className="text-[#aaaaaa]">Track Outline Quiz</strong> — name the circuit from its silhouette alone.</li>
-                <li><strong className="text-[#aaaaaa]">Championship Decider</strong> — make pit-wall strategy calls from real race moments.</li>
-                <li><strong className="text-[#aaaaaa]">Team Radio Guess</strong> — match iconic radio transmissions to their drivers.</li>
-                <li><strong className="text-[#aaaaaa]">Predict the Driver</strong> — Wordle-style driver identification in six guesses.</li>
-                <li><strong className="text-[#aaaaaa]">Higher or Lower</strong> — compare career statistics between F1 drivers.</li>
+                <li><strong className="text-white">Lights Out</strong> — test your reaction time against the F1 starting lights.</li>
+                <li><strong className="text-white">Guess the Driver</strong> — identify a driver from progressively revealed clues.</li>
+                <li><strong className="text-white">Track Outline Quiz</strong> — name the circuit from its silhouette alone.</li>
+                <li><strong className="text-white">Championship Decider</strong> — make pit-wall strategy calls from real race moments.</li>
+                <li><strong className="text-white">Team Radio Guess</strong> — match iconic radio transmissions to their drivers.</li>
+                <li><strong className="text-white">Predict the Driver</strong> — Wordle-style driver identification in six guesses.</li>
+                <li><strong className="text-white">Higher or Lower</strong> — compare career statistics between F1 drivers.</li>
               </ul>
               <p>
                 Each game includes share buttons so you can post your result to X (Twitter) or Facebook.
@@ -83,8 +83,8 @@ export default function AboutPage() {
 
           {/* Data sources */}
           <section>
-            <h2 className="text-xs font-mono uppercase tracking-widest text-[#444444] mb-5">Data Sources</h2>
-            <div className="space-y-4 text-[#888888] leading-relaxed">
+            <h2 className="text-xs font-mono uppercase tracking-widest text-white/45 mb-5">Data Sources</h2>
+            <div className="space-y-4 text-white/65 leading-relaxed">
               <p>
                 Telemetry data is sourced via{' '}
                 <a
@@ -111,7 +111,7 @@ export default function AboutPage() {
                 , a community-maintained open data source for Formula 1 statistics. All data is used
                 strictly for artistic and educational purposes.
               </p>
-              <p className="text-[#555555] text-sm">
+              <p className="text-white/50 text-sm">
                 F1RaceSignature is an independent fan project and is not affiliated with, endorsed by,
                 or connected to Formula 1, Formula One Management, the FIA, or any F1 team.
               </p>
@@ -120,8 +120,8 @@ export default function AboutPage() {
 
           {/* Creator */}
           <section>
-            <h2 className="text-xs font-mono uppercase tracking-widest text-[#444444] mb-5">The Creator</h2>
-            <div className="space-y-4 text-[#888888] leading-relaxed">
+            <h2 className="text-xs font-mono uppercase tracking-widest text-white/45 mb-5">The Creator</h2>
+            <div className="space-y-4 text-white/65 leading-relaxed">
               <p>
                 F1RaceSignature was designed and built by{' '}
                 <a
@@ -153,9 +153,9 @@ export default function AboutPage() {
 
           {/* Contact */}
           <section id="contact">
-            <h2 className="text-xs font-mono uppercase tracking-widest text-[#444444] mb-5">Contact</h2>
+            <h2 className="text-xs font-mono uppercase tracking-widest text-white/45 mb-5">Contact</h2>
             <div className="rounded-2xl border border-[#1a1a1a] bg-[#0a0a0a] p-8 space-y-4">
-              <p className="text-[#888888] leading-relaxed">
+              <p className="text-white/65 leading-relaxed">
                 Have a question, a bug report, a feature idea, or a licensing enquiry? Send us an email
                 and we'll get back to you as soon as possible.
               </p>
@@ -169,7 +169,7 @@ export default function AboutPage() {
                 </svg>
                 wayfarerwondersblog@gmail.com
               </a>
-              <p className="text-[#444444] text-xs">
+              <p className="text-white/45 text-xs">
                 We aim to respond within 2–3 business days.
               </p>
             </div>

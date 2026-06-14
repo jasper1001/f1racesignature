@@ -87,7 +87,7 @@ export function HowItWorks() {
               transition={{ duration: 0.5, delay: i * 0.1 }}
               className="relative"
             >
-              <div className="text-5xl font-bold text-[#333333] font-mono mb-4">
+              <div className="text-5xl font-bold text-white/20 font-mono mb-4">
                 {step.number}
               </div>
               <div className="text-[#d4a017] mb-3">{step.icon}</div>

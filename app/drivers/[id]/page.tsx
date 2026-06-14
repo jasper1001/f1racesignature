@@ -45,12 +45,12 @@ export default async function DriverPage({ params }: { params: Promise<{ id: str
       <Header />
       <main className="pt-14 min-h-screen">
         {/* Breadcrumb */}
-        <div className="max-w-5xl mx-auto px-6 pt-8 text-xs text-[#555555]">
+        <div className="max-w-5xl mx-auto px-6 pt-8 text-xs text-white/50">
           <Link href="/" className="hover:text-white">Home</Link>
-          <span className="mx-2 text-[#2a2a2a]">/</span>
+          <span className="mx-2 text-white/25">/</span>
           <Link href="/drivers" className="hover:text-white">Drivers</Link>
-          <span className="mx-2 text-[#2a2a2a]">/</span>
-          <span className="text-[#888888]">{driver.name}</span>
+          <span className="mx-2 text-white/25">/</span>
+          <span className="text-white/65">{driver.name}</span>
         </div>
 
         {/* Hero */}
@@ -66,13 +66,13 @@ export default async function DriverPage({ params }: { params: Promise<{ id: str
               <h1 className="text-4xl md:text-5xl text-white" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
                 {driver.name}
               </h1>
-              <p className="text-[#666666] mt-2">
+              <p className="text-white/55 mt-2">
                 {driver.team} · {driver.nationality}
                 {driver.championships > 0 && ` · ${driver.championships}× World Champion`}
               </p>
             </div>
           </div>
-          <p className="text-[#888888] leading-relaxed mt-6 max-w-2xl">{driver.bio}</p>
+          <p className="text-white/65 leading-relaxed mt-6 max-w-2xl">{driver.bio}</p>
 
           <Link
             href={`/studio?driver=${driver.id}`}
@@ -101,8 +101,8 @@ export default async function DriverPage({ params }: { params: Promise<{ id: str
                   </span>
                   <span className="text-[#d4a017] font-mono text-sm">{race.lapTime}</span>
                 </div>
-                <p className="text-[#555555] text-xs mt-1">{race.circuitName} · {race.location}</p>
-                <p className="text-[#666666] text-xs mt-2 line-clamp-2">{race.description}</p>
+                <p className="text-white/50 text-xs mt-1">{race.circuitName} · {race.location}</p>
+                <p className="text-white/55 text-xs mt-2 line-clamp-2">{race.description}</p>
               </Link>
             ))}
           </div>

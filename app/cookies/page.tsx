@@ -17,8 +17,8 @@ export const metadata: Metadata = {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section>
-      <h2 className="text-xs font-mono uppercase tracking-widest text-[#444444] mb-4">{title}</h2>
-      <div className="space-y-3 text-[#888888] leading-relaxed">{children}</div>
+      <h2 className="text-xs font-mono uppercase tracking-widest text-white/45 mb-4">{title}</h2>
+      <div className="space-y-3 text-white/65 leading-relaxed">{children}</div>
     </section>
   )
 }
@@ -30,14 +30,14 @@ export default function CookiesPage() {
       <main className="pt-14 min-h-screen" style={{ background: '#030303' }}>
         {/* Hero */}
         <div className="border-b border-[#0f0f0f] py-16 px-6 text-center">
-          <p className="text-[#555555] text-xs font-mono uppercase tracking-widest mb-4">Legal</p>
+          <p className="text-white/50 text-xs font-mono uppercase tracking-widest mb-4">Legal</p>
           <h1
             className="text-4xl md:text-5xl text-white mb-4"
             style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
           >
             Cookie Policy
           </h1>
-          <p className="text-[#555555] text-sm">Last updated: June 2026</p>
+          <p className="text-white/50 text-sm">Last updated: June 2026</p>
         </div>
 
         <div className="max-w-3xl mx-auto px-6 py-16 space-y-12">
@@ -62,9 +62,9 @@ export default function CookiesPage() {
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-white text-sm font-medium">Google Analytics (GA4)</p>
-                  <p className="text-[#555555] text-xs font-mono mt-0.5">Measurement ID: G-HVKDBEVYBD</p>
+                  <p className="text-white/50 text-xs font-mono mt-0.5">Measurement ID: G-HVKDBEVYBD</p>
                 </div>
-                <span className="flex-shrink-0 text-[9px] font-mono uppercase tracking-wider border border-[#2a2a2a] rounded px-2 py-1 text-[#555555]">
+                <span className="flex-shrink-0 text-[9px] font-mono uppercase tracking-wider border border-[#2a2a2a] rounded px-2 py-1 text-white/50">
                   Analytics
                 </span>
               </div>
@@ -97,9 +97,9 @@ export default function CookiesPage() {
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-white text-sm font-medium">My Garage (local storage)</p>
-                  <p className="text-[#555555] text-xs font-mono mt-0.5">Key: f1rs_garage</p>
+                  <p className="text-white/50 text-xs font-mono mt-0.5">Key: f1rs_garage</p>
                 </div>
-                <span className="flex-shrink-0 text-[9px] font-mono uppercase tracking-wider border border-[#2a2a2a] rounded px-2 py-1 text-[#555555]">
+                <span className="flex-shrink-0 text-[9px] font-mono uppercase tracking-wider border border-[#2a2a2a] rounded px-2 py-1 text-white/50">
                   Functional
                 </span>
               </div>
@@ -115,9 +115,9 @@ export default function CookiesPage() {
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-white text-sm font-medium">Onboarding state (local storage)</p>
-                  <p className="text-[#555555] text-xs font-mono mt-0.5">Key: f1rs_seen</p>
+                  <p className="text-white/50 text-xs font-mono mt-0.5">Key: f1rs_seen</p>
                 </div>
-                <span className="flex-shrink-0 text-[9px] font-mono uppercase tracking-wider border border-[#2a2a2a] rounded px-2 py-1 text-[#555555]">
+                <span className="flex-shrink-0 text-[9px] font-mono uppercase tracking-wider border border-[#2a2a2a] rounded px-2 py-1 text-white/50">
                   Functional
                 </span>
               </div>

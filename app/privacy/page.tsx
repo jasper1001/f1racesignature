@@ -17,8 +17,8 @@ export const metadata: Metadata = {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section>
-      <h2 className="text-xs font-mono uppercase tracking-widest text-[#444444] mb-4">{title}</h2>
-      <div className="space-y-3 text-[#888888] leading-relaxed">{children}</div>
+      <h2 className="text-xs font-mono uppercase tracking-widest text-white/45 mb-4">{title}</h2>
+      <div className="space-y-3 text-white/65 leading-relaxed">{children}</div>
     </section>
   )
 }
@@ -30,14 +30,14 @@ export default function PrivacyPage() {
       <main className="pt-14 min-h-screen" style={{ background: '#030303' }}>
         {/* Hero */}
         <div className="border-b border-[#0f0f0f] py-16 px-6 text-center">
-          <p className="text-[#555555] text-xs font-mono uppercase tracking-widest mb-4">Legal</p>
+          <p className="text-white/50 text-xs font-mono uppercase tracking-widest mb-4">Legal</p>
           <h1
             className="text-4xl md:text-5xl text-white mb-4"
             style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
           >
             Privacy Policy
           </h1>
-          <p className="text-[#555555] text-sm">Last updated: June 2026</p>
+          <p className="text-white/50 text-sm">Last updated: June 2026</p>
         </div>
 
         <div className="max-w-3xl mx-auto px-6 py-16 space-y-12">

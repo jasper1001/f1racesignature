@@ -62,6 +62,11 @@ export interface RaceResult {
   Time?: { time: string }
 }
 
+export interface SessionTime {
+  date: string
+  time?: string
+}
+
 export interface Race {
   round: string
   raceName: string
@@ -73,6 +78,13 @@ export interface Race {
     Location: { locality: string; country: string }
   }
   Results?: RaceResult[]
+  // Session times (present in schedule endpoint)
+  FirstPractice?: SessionTime
+  SecondPractice?: SessionTime
+  ThirdPractice?: SessionTime
+  SprintQualifying?: SessionTime
+  Sprint?: SessionTime
+  Qualifying?: SessionTime
 }
 
 // ── Fetchers ─────────────────────────────────────────────────────────────────

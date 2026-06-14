@@ -25,8 +25,27 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title,
     description,
+    keywords: [
+      'F1 2026 standings', 'Formula 1 2026 results', 'F1 driver standings 2026',
+      'F1 constructor standings 2026', 'Formula 1 championship 2026', 'F1 race results',
+      'F1 points table 2026', 'Formula 1 season 2026', 'F1 live standings',
+    ],
     alternates: { canonical: '/results' },
-    openGraph: { title, description, url: '/results', type: 'website' },
+    openGraph: {
+      title,
+      description,
+      url: '/results',
+      type: 'website',
+      siteName: 'F1RaceSignature',
+      locale: 'en_US',
+      images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'F1 2026 Season Standings — F1RaceSignature' }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: ['/opengraph-image'],
+    },
   }
 }
 
@@ -89,7 +108,7 @@ export default async function ResultsPage() {
             >
               {season} Season
             </h1>
-            <p className="text-[#555555] text-base md:text-lg max-w-xl mx-auto">
+            <p className="text-white/60 text-base md:text-lg max-w-xl mx-auto">
               Driver and constructor standings, race results, and the full calendar —
               {round !== '0' ? ` after round ${round}.` : ' updated automatically.'}
             </p>
@@ -99,7 +118,7 @@ export default async function ResultsPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 space-y-16">
           {drivers.length === 0 ? (
             <div className="text-center py-20">
-              <p className="text-[#555555] text-sm">
+              <p className="text-white/55 text-sm">
                 Live standings are temporarily unavailable. Please check back shortly.
               </p>
             </div>
@@ -125,14 +144,14 @@ export default async function ResultsPage() {
                         >
                           <div className="flex items-center justify-between mb-2">
                             <span className="text-[#d4a017] text-xs font-mono font-semibold">{medal}</span>
-                            <span className="text-[#444444] text-[10px] font-mono uppercase">
+                            <span className="text-white/45 text-[10px] font-mono uppercase">
                               {r.Constructor.name}
                             </span>
                           </div>
                           <div className="text-white font-semibold">
                             {r.Driver.givenName} {r.Driver.familyName}
                           </div>
-                          <div className="text-[#555555] text-xs mt-1 font-mono">
+                          <div className="text-white/50 text-xs mt-1 font-mono">
                             {r.Time?.time ?? r.status} · +{r.points} pts
                           </div>
                         </div>
@@ -148,7 +167,7 @@ export default async function ResultsPage() {
                 <div className="mt-6 overflow-x-auto rounded-xl border border-[#161616]">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="text-left text-[#444444] text-[11px] uppercase tracking-wider border-b border-[#161616]">
+                      <tr className="text-left text-white/45 text-[11px] uppercase tracking-wider border-b border-[#161616]">
                         <th className="py-3 px-4 font-medium">Pos</th>
                         <th className="py-3 px-4 font-medium">Driver</th>
                         <th className="py-3 px-4 font-medium hidden sm:table-cell">Team</th>
@@ -172,7 +191,7 @@ export default async function ResultsPage() {
                                   {d.Driver.givenName} {d.Driver.familyName}
                                 </span>
                                 {d.Driver.code && (
-                                  <span className="text-[#444444] text-[10px] font-mono hidden md:inline">
+                                  <span className="text-white/40 text-[10px] font-mono hidden md:inline">
                                     {d.Driver.code}
                                   </span>
                                 )}
@@ -207,11 +226,11 @@ export default async function ResultsPage() {
                           style={{ borderLeftColor: color, borderLeftWidth: 3 }}
                         >
                           <div className="flex items-center gap-3">
-                            <span className="text-[#555555] font-mono text-sm w-5">{c.position}</span>
+                            <span className="text-white/55 font-mono text-sm w-5">{c.position}</span>
                             <span className="text-white font-medium text-sm">{c.Constructor.name}</span>
                           </div>
                           <div className="flex items-center gap-4">
-                            <span className="text-[#555555] text-xs font-mono hidden sm:inline">
+                            <span className="text-white/50 text-xs font-mono hidden sm:inline">
                               {c.wins} wins
                             </span>
                             <span className="text-white font-mono font-semibold text-sm">{c.points}</span>
@@ -240,7 +259,7 @@ export default async function ResultsPage() {
                           }`}
                         >
                           <div className="flex items-center justify-between mb-1">
-                            <span className="text-[#444444] text-[10px] font-mono uppercase tracking-wider">
+                            <span className="text-white/40 text-[10px] font-mono uppercase tracking-wider">
                               Round {race.round}
                             </span>
                             {done ? (
@@ -252,7 +271,7 @@ export default async function ResultsPage() {
                           <div className={`text-sm font-medium ${done ? 'text-white' : 'text-[#888888]'}`}>
                             {race.raceName.replace('Grand Prix', 'GP')}
                           </div>
-                          <div className="text-[#555555] text-xs mt-0.5">
+                          <div className="text-white/50 text-xs mt-0.5">
                             {race.Circuit.Location.country} · {formatRaceDate(race.date)}
                           </div>
                         </div>
@@ -262,7 +281,7 @@ export default async function ResultsPage() {
                 </section>
               )}
 
-              <p className="text-center text-[#333333] text-xs pt-4">
+              <p className="text-center text-white/35 text-xs pt-4">
                 Live data via the Jolpica F1 API (Ergast successor). Updates hourly.
               </p>
             </>
@@ -281,7 +300,7 @@ function SectionHeading({ eyebrow, title, sub }: { eyebrow: string; title: strin
       <h2 className="text-2xl md:text-3xl text-white" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
         {title}
       </h2>
-      {sub && <p className="text-[#555555] text-sm mt-1">{sub}</p>}
+      {sub && <p className="text-white/55 text-sm mt-1">{sub}</p>}
     </div>
   )
 }

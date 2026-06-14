@@ -4,16 +4,29 @@ import { Footer } from '@/components/layout/Footer'
 import { GalleryGrid } from '@/components/gallery/GalleryGrid'
 
 export const metadata: Metadata = {
-  title: 'Gallery — Legendary F1 Drives as Art',
+  title: 'F1 Hall of Fame — Legendary Drives as Poster Art',
   description:
-    'A curated museum of legendary Formula 1 drives rendered as collectible poster art — Senna at Monaco, Schumacher at Spa, Verstappen at Abu Dhabi, and more.',
+    'A curated gallery of 12 iconic Formula 1 drives turned into museum-quality poster art — Senna at Monaco 1984, Schumacher at Spa 1992, Verstappen at Abu Dhabi 2021, and more.',
+  keywords: [
+    'F1 poster art', 'Formula 1 legendary drives', 'F1 race art', 'Senna Monaco poster',
+    'Schumacher Spa poster', 'Verstappen poster art', 'F1 collectible poster', 'F1 hall of fame',
+    'Formula 1 art print', 'iconic F1 moments', 'F1 race signature poster',
+  ],
   alternates: { canonical: '/gallery' },
   openGraph: {
-    title: 'Gallery — Legendary F1 Drives as Art',
-    description:
-      'A curated museum of legendary Formula 1 drives rendered as collectible poster art.',
+    title: 'F1 Hall of Fame — Legendary Drives as Poster Art',
+    description: 'Twelve iconic Formula 1 drives turned into museum-quality poster art. Senna, Schumacher, Hamilton, Verstappen and more.',
     url: '/gallery',
     type: 'website',
+    siteName: 'F1RaceSignature',
+    locale: 'en_US',
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'F1 Hall of Fame — F1RaceSignature' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'F1 Hall of Fame — Legendary Drives as Poster Art',
+    description: 'Twelve iconic F1 drives turned into collectible poster art. Browse the gallery.',
+    images: ['/opengraph-image'],
   },
 }
 
@@ -50,7 +63,7 @@ export default function GalleryPage() {
             >
               Hall of Fame
             </h1>
-            <p className="text-[#555555] text-lg max-w-xl mx-auto">
+            <p className="text-white/60 text-lg max-w-xl mx-auto">
               Twelve legendary drives. Twelve museum-quality posters.
               Each one a chapter in F1 history.
             </p>

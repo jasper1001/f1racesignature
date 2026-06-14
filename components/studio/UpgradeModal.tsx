@@ -51,7 +51,7 @@ export function UpgradeModal() {
           >
             Unlock the Full Collection
           </h2>
-          <p className="text-[#555555] text-sm">
+          <p className="text-white/60 text-sm">
             {upgradeModalReason ?? 'Access all drivers, visualizations, themes, and export formats.'}
           </p>
         </div>
@@ -81,13 +81,13 @@ export function UpgradeModal() {
                   >
                     {tier.price}
                   </span>
-                  <span className="text-[#555555] text-xs">{tier.period}</span>
+                  <span className="text-white/55 text-xs">{tier.period}</span>
                 </div>
               </div>
               <ul className="space-y-1.5 mb-4">
                 {tier.features.map((f) => (
-                  <li key={f} className="flex items-start gap-1.5 text-xs text-[#666666]">
-                    <svg className="w-3 h-3 text-[#444444] mt-0.5 flex-shrink-0" viewBox="0 0 12 12" fill="none">
+                  <li key={f} className="flex items-start gap-1.5 text-xs text-white/55">
+                    <svg className="w-3 h-3 text-white/40 mt-0.5 flex-shrink-0" viewBox="0 0 12 12" fill="none">
                       <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                     {f}
@@ -108,7 +108,7 @@ export function UpgradeModal() {
 
         <button
           onClick={closeUpgradeModal}
-          className="w-full text-center text-[#444444] text-xs hover:text-[#666666] transition-colors py-1 cursor-pointer"
+          className="w-full text-center text-white/45 text-xs hover:text-white/70 transition-colors py-1 cursor-pointer"
         >
           Continue with free tier
         </button>

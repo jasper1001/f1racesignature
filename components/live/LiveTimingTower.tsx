@@ -149,7 +149,7 @@ export function LiveTimingTower() {
 
   // Auto-refresh
   useEffect(() => {
-    const interval = data?.isLive ? 5000 : 60000
+    const interval = data?.isLive ? 12000 : 60000
     const id = setInterval(fetchData, interval)
     return () => clearInterval(id)
   }, [data?.isLive, fetchData])
@@ -239,7 +239,7 @@ export function LiveTimingTower() {
       </div>
 
       {/* ── Main grid: timing tower + race control ─────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-5">
+      <div className="grid grid-cols-1 gap-5">
 
         {/* Timing tower */}
         <div className="rounded-2xl border border-[#1a1a1a] bg-[#080808] overflow-hidden">
@@ -256,11 +256,19 @@ export function LiveTimingTower() {
           </div>
 
           {noTiming ? (
-            <div className="py-16 text-center">
-              <p className="text-white/30 text-sm font-mono">No timing data available</p>
-              <p className="text-white/20 text-xs mt-1 font-mono">
-                {data.isLive ? 'Session may not have started yet' : 'This session has ended'}
+            <div className="py-16 text-center space-y-2">
+              <p className="text-white/30 text-sm font-mono">Waiting for timing data…</p>
+              <p className="text-white/20 text-xs font-mono">
+                {data.isLive
+                  ? 'Session is live — data arriving shortly'
+                  : `Last session: ${data.sessionName}${data.meetingName ? ` · ${data.meetingName}` : ''}`}
               </p>
+              <button
+                onClick={fetchData}
+                className="mt-3 text-[#e8002d] text-xs font-mono underline underline-offset-2"
+              >
+                Refresh now
+              </button>
             </div>
           ) : (
             <div className="divide-y divide-[#0d0d0d]">
@@ -292,7 +300,7 @@ export function LiveTimingTower() {
 
       {/* Last updated */}
       <p className="text-white/20 text-[10px] font-mono text-right">
-        {data.isLive ? `Refreshes every 5s · ` : ''}
+        {data.isLive ? `Refreshes every 12s · ` : ''}
         Updated {secondsSince < 5 ? 'just now' : `${secondsSince}s ago`}
       </p>
     </div>

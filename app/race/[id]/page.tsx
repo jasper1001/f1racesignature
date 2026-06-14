@@ -54,12 +54,12 @@ export default async function RacePage({ params }: { params: Promise<{ id: strin
       <Header />
       <main className="pt-14 min-h-screen">
         {/* Breadcrumb */}
-        <div className="max-w-5xl mx-auto px-6 pt-8 text-xs text-[#555555]">
+        <div className="max-w-5xl mx-auto px-6 pt-8 text-xs text-white/50">
           <Link href="/" className="hover:text-white">Home</Link>
-          <span className="mx-2 text-[#2a2a2a]">/</span>
+          <span className="mx-2 text-white/25">/</span>
           <Link href={`/drivers/${driver.id}`} className="hover:text-white">{driver.name}</Link>
-          <span className="mx-2 text-[#2a2a2a]">/</span>
-          <span className="text-[#888888]">{race.year}</span>
+          <span className="mx-2 text-white/25">/</span>
+          <span className="text-white/65">{race.year}</span>
         </div>
 
         <div className="max-w-5xl mx-auto px-6 py-8 grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
@@ -76,7 +76,7 @@ export default async function RacePage({ params }: { params: Promise<{ id: strin
             <h1 className="text-3xl md:text-4xl text-white mb-4" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
               {driver.name}
             </h1>
-            <p className="text-[#888888] leading-relaxed mb-6">{race.description}</p>
+            <p className="text-white/65 leading-relaxed mb-6">{race.description}</p>
 
             {telemetry && (
               <div className="grid grid-cols-2 gap-3 mb-6">
@@ -116,7 +116,7 @@ export default async function RacePage({ params }: { params: Promise<{ id: strin
 function Stat({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
   return (
     <div className="rounded-lg border border-[#161616] bg-[#0a0a0a] px-3 py-2">
-      <div className="text-[10px] text-[#555555] uppercase tracking-wider">{label}</div>
+      <div className="text-[10px] text-white/50 uppercase tracking-wider">{label}</div>
       <div className={`font-mono text-sm mt-0.5 ${highlight ? 'text-[#d4a017]' : 'text-white'}`}>{value}</div>
     </div>
   )

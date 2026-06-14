@@ -4,14 +4,29 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 
 export const metadata: Metadata = {
-  title: 'Mini Games',
-  description: 'F1-themed mini games to test your reflexes, knowledge, and racing instincts. Free to play.',
+  title: 'F1 Mini Games — Reaction Tests, Trivia & Driver Puzzles',
+  description:
+    'Six free Formula 1 mini games: beat the lights-out reaction test, nail the pit-stop timer, guess the driver Wordle-style, identify track outlines, and more. No sign-up needed.',
+  keywords: [
+    'F1 mini games', 'Formula 1 reaction test', 'F1 lights out game', 'F1 Wordle',
+    'pit stop timer game', 'F1 trivia game', 'guess the F1 driver', 'F1 track quiz',
+    'F1 championship game', 'F1 team radio game', 'Formula 1 game free',
+  ],
   alternates: { canonical: '/games' },
   openGraph: {
-    title: 'Mini Games | F1RaceSignature',
-    description: 'F1-themed mini games — test your reflexes like a real driver.',
+    title: 'F1 Mini Games — Reaction Tests, Trivia & Driver Puzzles',
+    description: 'Six free F1 mini games: lights-out reaction test, pit-stop timer, driver Wordle, track quiz and more.',
     url: '/games',
     type: 'website',
+    siteName: 'F1RaceSignature',
+    locale: 'en_US',
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'F1 Mini Games — F1RaceSignature' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'F1 Mini Games — Reaction Tests, Trivia & Driver Puzzles',
+    description: 'Six free F1 mini games to test your reflexes, knowledge, and racing instincts.',
+    images: ['/opengraph-image'],
   },
 }
 
