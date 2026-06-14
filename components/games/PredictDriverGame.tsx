@@ -278,13 +278,13 @@ function SetupScreen({ onStart }: { onStart: (m: GameMode, d: Difficulty) => voi
 // ── Game screen ───────────────────────────────────────────────────────────────
 
 const COLUMNS = [
-  { key: 'nationality',   label: 'NAT',    flex: 1.8, minWidth: 88 },
-  { key: 'championships', label: 'TITLES', flex: 1.0, minWidth: 54 },
-  { key: 'wins',          label: 'WINS',   flex: 1.0, minWidth: 54 },
-  { key: 'poles',         label: 'POLES',  flex: 1.0, minWidth: 54 },
-  { key: 'debutYear',     label: 'DEBUT',  flex: 1.0, minWidth: 54 },
-  { key: 'status',        label: 'STATUS', flex: 1.3, minWidth: 68 },
-  { key: 'teams',         label: 'TEAMS',  flex: 2.8, minWidth: 108 },
+  { key: 'nationality',   label: 'NAT',    flex: 1.8, minWidth: 62 },
+  { key: 'championships', label: 'TITLES', flex: 1.0, minWidth: 42 },
+  { key: 'wins',          label: 'WINS',   flex: 1.0, minWidth: 42 },
+  { key: 'poles',         label: 'POLES',  flex: 1.0, minWidth: 42 },
+  { key: 'debutYear',     label: 'DEBUT',  flex: 1.0, minWidth: 42 },
+  { key: 'status',        label: 'STATUS', flex: 1.3, minWidth: 50 },
+  { key: 'teams',         label: 'TEAMS',  flex: 2.8, minWidth: 80 },
 ] as const
 
 function GameScreen({
@@ -307,7 +307,7 @@ function GameScreen({
   return (
     <div className="w-full">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-4">
         <span className="text-white text-[10px] font-mono uppercase tracking-widest">
           {mode === 'daily' ? 'Daily' : 'Endless'} · {difficulty}
         </span>
@@ -326,15 +326,24 @@ function GameScreen({
         </div>
       </div>
 
+      {/* Search — above the grid so it's always visible on mobile */}
+      <div className="mb-4">
+        <DriverSearch
+          guessedIds={guessedIds}
+          onGuess={onGuess}
+          disabled={guesses.length >= MAX_GUESSES}
+        />
+      </div>
+
       {/* Grid: column headers + guess rows in one scroll container */}
-      <div className="overflow-x-auto mb-5" ref={gridRef}>
+      <div className="overflow-x-auto" ref={gridRef}>
         {/* Column headers */}
-        <div className="flex gap-1.5 mb-2">
-          <div style={{ flex: '0 0 170px' }} />
+        <div className="flex gap-1 mb-2">
+          <div style={{ flex: '0 0 100px' }} />
           {COLUMNS.map(col => (
             <div
               key={col.key}
-              className="text-white text-[11px] font-mono uppercase tracking-wider text-center"
+              className="text-white/60 text-[10px] font-mono uppercase tracking-wider text-center"
               style={{ flex: col.flex, minWidth: col.minWidth }}
             >
               {col.label}
@@ -343,20 +352,20 @@ function GameScreen({
         </div>
 
         {/* Guess rows */}
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           {guesses.map((g, i) => (
             <motion.div
               key={g.driver.id}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.25, delay: i * 0.04 }}
-              className="flex gap-1.5"
+              className="flex gap-1"
             >
               <div
-                className="flex items-center px-3 rounded-lg border border-[#1a1a1a] bg-[#080808]"
-                style={{ flex: '0 0 170px', minHeight: 52 }}
+                className="flex items-center px-2 rounded-lg border border-[#1a1a1a] bg-[#080808]"
+                style={{ flex: '0 0 100px', minHeight: 48 }}
               >
-                <span className="text-white text-sm font-medium leading-snug">{g.driver.name}</span>
+                <span className="text-white text-xs font-medium leading-snug">{g.driver.name}</span>
               </div>
               {COLUMNS.map(col => (
                 <HintCell
@@ -371,12 +380,12 @@ function GameScreen({
 
           {/* Empty remaining rows */}
           {Array.from({ length: remaining }, (_, i) => (
-            <div key={`empty-${i}`} className="flex gap-1.5 opacity-20">
-              <div className="h-13 rounded-lg border border-[#111111]" style={{ flex: '0 0 170px' }} />
+            <div key={`empty-${i}`} className="flex gap-1 opacity-20">
+              <div className="h-12 rounded-lg border border-[#111111]" style={{ flex: '0 0 100px' }} />
               {COLUMNS.map(col => (
                 <div
                   key={col.key}
-                  className="h-13 rounded-lg border border-[#111111]"
+                  className="h-12 rounded-lg border border-[#111111]"
                   style={{ flex: col.flex, minWidth: col.minWidth }}
                 />
               ))}
@@ -384,13 +393,6 @@ function GameScreen({
           ))}
         </div>
       </div>
-
-      {/* Search */}
-      <DriverSearch
-        guessedIds={guessedIds}
-        onGuess={onGuess}
-        disabled={guesses.length >= MAX_GUESSES}
-      />
     </div>
   )
 }
