@@ -126,7 +126,7 @@ function ClueCard({ label, value, index }: { label: string; value: string | numb
       transition={{ duration: 0.25, delay: index * 0.05 }}
       className="rounded-xl border border-[#1a1a1a] bg-[#080808] px-4 py-3"
     >
-      <p className="text-white/40 text-[10px] font-mono uppercase tracking-widest mb-1">{label}</p>
+      <p className="text-white/60 text-[10px] font-mono uppercase tracking-widest mb-1">{label}</p>
       <p className="text-white text-sm font-medium leading-snug">{value}</p>
     </motion.div>
   )
@@ -137,7 +137,7 @@ function ScoreBadge({ score }: { score: number }) {
   const color = score === 100 ? '#d4a017' : score === 80 ? '#c0c0c0' : score === 60 ? '#cd7f32' : '#555555'
   return (
     <div className="flex items-center gap-2">
-      <span className="text-white/25 text-xs font-mono">Worth</span>
+      <span className="text-white/60 text-xs font-mono">Worth</span>
       <span className="text-sm font-bold font-mono" style={{ color }}>{score} pts</span>
     </div>
   )
@@ -240,7 +240,7 @@ export function GuessTheDriverGame() {
                 { clue: '4th clue', pts: '40 pts', color: '#888888' },
               ].map(r => (
                 <div key={r.clue} className="flex items-center justify-between rounded-lg border border-[#111111] bg-[#060606] px-3 py-2">
-                  <span className="text-white/40 text-xs font-mono">{r.clue}</span>
+                  <span className="text-white/60 text-xs font-mono">{r.clue}</span>
                   <span className="text-xs font-bold font-mono" style={{ color: r.color }}>{r.pts}</span>
                 </div>
               ))}
@@ -347,7 +347,7 @@ export function GuessTheDriverGame() {
               <span className="text-5xl font-bold font-mono" style={{ color: finalScore === 100 ? '#d4a017' : finalScore === 80 ? '#c0c0c0' : finalScore === 60 ? '#cd7f32' : '#555555' }}>
                 +{finalScore}
               </span>
-              <span className="text-lg text-white/20 font-mono">pts</span>
+              <span className="text-lg text-white/45 font-mono">pts</span>
             </motion.div>
 
             <div className="rounded-xl border border-[#1a1a1a] bg-[#060606] px-5 py-4 text-left">
@@ -380,7 +380,7 @@ export function GuessTheDriverGame() {
             className="rounded-2xl border border-[#1a1a1a] bg-[#080808] p-8 text-center space-y-5"
           >
             <div>
-              <p className="text-white/40 text-xs font-mono uppercase tracking-widest mb-2">The answer was</p>
+              <p className="text-white/60 text-xs font-mono uppercase tracking-widest mb-2">The answer was</p>
               <p className="text-white text-3xl font-bold" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
                 {driver.name}
               </p>
@@ -416,7 +416,7 @@ export function GuessTheDriverGame() {
           ].map(s => (
             <div key={s.label} className="rounded-xl border border-[#141414] bg-[#070707] px-3 py-3 text-center">
               <p className="text-white text-base font-mono font-bold">{s.value}</p>
-              <p className="text-[#888888] text-[10px] font-mono uppercase tracking-wider mt-0.5">{s.label}</p>
+              <p className="text-white/65 text-[10px] font-mono uppercase tracking-wider mt-0.5">{s.label}</p>
             </div>
           ))}
         </motion.div>

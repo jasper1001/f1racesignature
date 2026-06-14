@@ -259,7 +259,7 @@ function SetupScreen({ onStart }: { onStart: (m: GameMode, d: Difficulty) => voi
               <p className={`text-sm font-medium ${difficulty === d.key ? 'text-[#d4a017]' : 'text-white'}`}>
                 {d.label}
               </p>
-              <p className="text-[#aaaaaa] text-xs mt-0.5">{d.desc}</p>
+              <p className="text-white/70 text-xs mt-0.5">{d.desc}</p>
             </button>
           ))}
         </div>
@@ -489,7 +489,7 @@ function DriverSearch({
                 className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-[#111111] transition-colors border-b border-[#0f0f0f] last:border-0"
               >
                 <span className="text-white text-sm">{driver.name}</span>
-                <span className="text-[#aaaaaa] text-xs font-mono">
+                <span className="text-white/70 text-xs font-mono">
                   {driver.nationality} · {driver.debutYear}
                 </span>
               </button>

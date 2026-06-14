@@ -215,7 +215,7 @@ export function LightsOutGame() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
-              <p className="text-white/40 text-xs font-mono uppercase tracking-widest">Get ready…</p>
+              <p className="text-white/65 text-xs font-mono uppercase tracking-widest">Get ready…</p>
             </motion.div>
           )}
 
@@ -245,7 +245,7 @@ export function LightsOutGame() {
               <p className="text-white text-sm">You moved before the lights went out.</p>
               <button
                 onClick={(e) => { e.stopPropagation(); startGame() }}
-                className="mt-2 px-6 py-2.5 bg-[#111111] border border-[#222222] text-[#aaaaaa] text-sm rounded-xl hover:text-white hover:border-[#333333] transition-colors cursor-pointer"
+                className="mt-2 px-6 py-2.5 bg-[#111111] border border-[#222222] text-white/70 text-sm rounded-xl hover:text-white hover:border-[#333333] transition-colors cursor-pointer"
               >
                 Try Again
               </button>
@@ -276,7 +276,7 @@ export function LightsOutGame() {
           ].map((s) => (
             <div key={s.label} className="rounded-xl border border-[#141414] bg-[#070707] px-3 py-3 text-center">
               <p className="text-white text-base font-mono font-bold">{s.value}</p>
-              <p className="text-[#888888] text-[10px] font-mono uppercase tracking-wider mt-0.5">{s.label}</p>
+              <p className="text-white/65 text-[10px] font-mono uppercase tracking-wider mt-0.5">{s.label}</p>
             </div>
           ))}
         </motion.div>
@@ -327,7 +327,7 @@ function ResultPanel({
         <span className="text-6xl font-bold font-mono" style={{ color: rating.color }}>
           {ms}
         </span>
-        <span className="text-xl text-white/30 font-mono">ms</span>
+        <span className="text-xl text-white/55 font-mono">ms</span>
       </motion.div>
 
       <div>

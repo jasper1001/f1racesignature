@@ -154,7 +154,7 @@ export function ChampionshipDeciderGame() {
           >
             {/* Progress + running score */}
             <div className="flex items-center justify-between px-1">
-              <span className="text-white/40 text-xs font-mono">Scenario {index + 1} of {total}</span>
+              <span className="text-white/60 text-xs font-mono">Scenario {index + 1} of {total}</span>
               <span className="text-[#d4a017] text-xs font-mono font-bold">{score} pts</span>
             </div>
             <div className="h-0.5 bg-[#111111] rounded-full overflow-hidden">
@@ -220,7 +220,7 @@ export function ChampionshipDeciderGame() {
                           phase === 'answered' && isSelected
                             ? ''
                             : phase === 'answered'
-                            ? 'bg-[#050505] border-[#0d0d0d] text-white/20'
+                            ? 'bg-[#050505] border-[#0d0d0d] text-white/45'
                             : 'bg-[#0f0f0f] border-[#1a1a1a] text-white hover:border-[#d4a017]/30 hover:bg-[#0f0f08]',
                         ].join(' ')}
                         style={
@@ -296,13 +296,13 @@ export function ChampionshipDeciderGame() {
               )}
 
               <div className="text-center space-y-1">
-                <p className="text-white/40 text-xs font-mono uppercase tracking-widest">Final Score</p>
+                <p className="text-white/60 text-xs font-mono uppercase tracking-widest">Final Score</p>
                 <motion.div
                   initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
                   transition={{ type: 'spring', stiffness: 220, damping: 14, delay: 0.08 }}
                 >
                   <span className="text-6xl font-bold font-mono" style={{ color: rating.color }}>{finalScore}</span>
-                  <span className="text-2xl text-white/20 font-mono"> / {maxScore}</span>
+                  <span className="text-2xl text-white/45 font-mono"> / {maxScore}</span>
                 </motion.div>
               </div>
 
@@ -314,11 +314,11 @@ export function ChampionshipDeciderGame() {
               <div className="grid grid-cols-2 gap-3">
                 <div className="rounded-xl border border-[#141414] bg-[#070707] px-3 py-3 text-center">
                   <p className="text-xl font-mono font-bold" style={{ color: RESULT_STYLES['Perfect Call'].color }}>{finalPerfect}</p>
-                  <p className="text-[#888888] text-[10px] font-mono uppercase tracking-wider mt-0.5">Perfect Calls</p>
+                  <p className="text-white/65 text-[10px] font-mono uppercase tracking-wider mt-0.5">Perfect Calls</p>
                 </div>
                 <div className="rounded-xl border border-[#141414] bg-[#070707] px-3 py-3 text-center">
                   <p className="text-xl font-mono font-bold text-white">{stats.bestScore}</p>
-                  <p className="text-[#888888] text-[10px] font-mono uppercase tracking-wider mt-0.5">Personal Best</p>
+                  <p className="text-white/65 text-[10px] font-mono uppercase tracking-wider mt-0.5">Personal Best</p>
                 </div>
               </div>
 
@@ -333,7 +333,7 @@ export function ChampionshipDeciderGame() {
                   Play Again
                 </button>
                 <a href="/games"
-                  className="block w-full px-6 py-3 border border-[#1a1a1a] text-[#888888] text-sm font-medium rounded-xl hover:border-[#333333] hover:text-white transition-all text-center"
+                  className="block w-full px-6 py-3 border border-[#1a1a1a] text-white/65 text-sm font-medium rounded-xl hover:border-[#333333] hover:text-white transition-all text-center"
                 >
                   Back to Mini Games
                 </a>
@@ -354,7 +354,7 @@ export function ChampionshipDeciderGame() {
           ].map(s => (
             <div key={s.label} className="rounded-xl border border-[#141414] bg-[#070707] px-3 py-3 text-center">
               <p className="text-white text-sm font-mono font-bold truncate">{s.value}</p>
-              <p className="text-[#888888] text-[10px] font-mono uppercase tracking-wider mt-0.5">{s.label}</p>
+              <p className="text-white/65 text-[10px] font-mono uppercase tracking-wider mt-0.5">{s.label}</p>
             </div>
           ))}
         </motion.div>
