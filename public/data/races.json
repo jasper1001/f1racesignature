@@ -362,5 +362,18 @@
     "description": "Composure beyond his years. Piastri controlled the Hungaroring to take his maiden victory, confirming McLaren had unearthed a future champion.",
     "isFree": false,
     "telemetryFile": "piastri_hungary_2024"
+  },
+  {
+    "id": "hamilton_barcelona_2026",
+    "driverId": "hamilton",
+    "name": "Barcelona Grand Prix 2026",
+    "circuit": "barcelona",
+    "circuitName": "Circuit de Barcelona-Catalunya",
+    "year": 2026,
+    "location": "Barcelona, Spain",
+    "lapTime": "1:20.122",
+    "description": "Hamilton's first victory in Ferrari red. A commanding display at the Circuit de Catalunya — controlled pace, immaculate tyre management, and the calm of a seven-time champion writing a new chapter in scarlet.",
+    "isFree": false,
+    "telemetryFile": "hamilton_barcelona_2026"
   }
 ]

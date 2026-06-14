@@ -195,6 +195,13 @@ RACES = [
         year=2024, gp="Hungarian Grand Prix", session="Q", driver="PIA",
         championshipPoints=[12,24,38,50,66,82,98,124,148,170,192,222,237,262,292,292],
     ),
+
+    # ── 2026 season ──
+    dict(
+        id="hamilton_barcelona_2026", driverId="hamilton", circuitId="barcelona",
+        year=2026, gp="Barcelona Grand Prix", session="R", driver="HAM",
+        championshipPoints=[10,20,30,40,47,65,90,108,126,144,162,180,198,216,230,255],
+    ),
 ]
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -375,9 +382,10 @@ for race in RACES:
 # ── Update circuits.json with FastF1-derived paths ────────────────────────────
 # Names/locations for circuits not already present in circuits.json
 NEW_CIRCUIT_META = {
-    "miami":      {"name": "Miami International Autodrome", "location": "Miami, USA"},
-    "marina_bay": {"name": "Marina Bay Street Circuit",    "location": "Singapore"},
-    "baku":       {"name": "Baku City Circuit",            "location": "Baku, Azerbaijan"},
+    "miami":      {"name": "Miami International Autodrome",      "location": "Miami, USA"},
+    "marina_bay": {"name": "Marina Bay Street Circuit",          "location": "Singapore"},
+    "baku":       {"name": "Baku City Circuit",                  "location": "Baku, Azerbaijan"},
+    "barcelona":  {"name": "Circuit de Barcelona-Catalunya",     "location": "Barcelona, Spain"},
 }
 
 for circuit_id, path in circuit_paths.items():
