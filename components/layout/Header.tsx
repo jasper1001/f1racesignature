@@ -13,6 +13,7 @@ const NAV_LINKS = [
   { href: '/drivers', label: 'Drivers' },
   { href: '/garage', label: 'My Garage' },
   { href: '/results', label: '2026 Season' },
+  { href: '/live', label: 'Live' },
   { href: '/games', label: 'Mini Games' },
 ]
 
@@ -50,7 +51,12 @@ export function Header() {
                       transition={{ type: 'spring', bounce: 0.2, duration: 0.4 }}
                     />
                   )}
-                  <span className="relative">{link.label}</span>
+                  <span className="relative flex items-center gap-1.5">
+                    {link.href === '/live' && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#e8002d]" />
+                    )}
+                    {link.label}
+                  </span>
                 </Link>
               )
             })}
@@ -103,7 +109,12 @@ export function Header() {
                       : 'text-[#666666] hover:text-white hover:bg-white/5'
                   }`}
                 >
-                  {link.label}
+                  <span className="flex items-center gap-2">
+                    {link.href === '/live' && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#e8002d]" />
+                    )}
+                    {link.label}
+                  </span>
                 </Link>
               ))}
             </nav>
