@@ -10,6 +10,7 @@ const BASE = 'https://api.openf1.org/v1'
 
 const _cache = new Map<string, { value: unknown; exp: number }>()
 let _lastFetch = 0
+let _blocked = false  // True when OpenF1 returns 401 (live session lock-out)
 
 async function cf<T>(path: string, ttlMs: number): Promise<T[]> {
   const now = Date.now()
@@ -26,6 +27,11 @@ async function cf<T>(path: string, ttlMs: number): Promise<T[]> {
       cache: 'no-store',
       signal: AbortSignal.timeout(8000),
     })
+    if (res.status === 401) {
+      _blocked = true                                // OpenF1 live session lock-out
+      return (hit?.value as T[]) ?? []
+    }
+    _blocked = false
     if (!res.ok) return (hit?.value as T[]) ?? []   // Rate-limited? Return stale.
     const data: T[] = await res.json()
     _cache.set(path, { value: data, exp: Date.now() + ttlMs })
@@ -73,6 +79,9 @@ function fmtLap(seconds: number | null): string {
 // ── Route ──────────────────────────────────────────────────────────────────────
 
 export async function GET() {
+  // Reset blocked flag each request so we detect when OpenF1 lifts the lock.
+  _blocked = false
+
   // Fetch sequentially so we never burst-fire more than one request at a time.
   // The 400 ms throttle in cf() keeps us well within the 3 req/s burst limit.
 
@@ -87,6 +96,10 @@ export async function GET() {
     year: number
     meeting_name: string
   }>('/sessions?session_key=latest', 120_000) // 2 min
+
+  if (_blocked) {
+    return NextResponse.json({ error: 'live_session' })
+  }
 
   if (!sessions.length) {
     return NextResponse.json({ error: 'No session data' }, { status: 503 })

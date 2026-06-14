@@ -127,14 +127,22 @@ export function LiveTimingTower() {
   const [data, setData] = useState<LiveData | null>(null)
   const [loading, setLoading] = useState(true)
   const [fetchError, setFetchError] = useState(false)
+  const [liveBlocked, setLiveBlocked] = useState(false)
   const [secondsSince, setSecondsSince] = useState(0)
 
   const fetchData = useCallback(async () => {
     try {
       const res = await fetch('/api/live-timing')
-      if (!res.ok) throw new Error()
-      const json: LiveData = await res.json()
-      setData(json)
+      const json = await res.json()
+      if (json?.error === 'live_session') {
+        setLiveBlocked(true)
+        setFetchError(false)
+        setLoading(false)
+        return
+      }
+      if (!res.ok || json?.error) throw new Error()
+      setData(json as LiveData)
+      setLiveBlocked(false)
       setFetchError(false)
       setSecondsSince(0)
     } catch {
@@ -147,12 +155,12 @@ export function LiveTimingTower() {
   // Initial fetch
   useEffect(() => { fetchData() }, [fetchData])
 
-  // Auto-refresh
+  // Auto-refresh — poll faster when blocked so we catch when OpenF1 lifts the lock
   useEffect(() => {
-    const interval = data?.isLive ? 12000 : 60000
+    const interval = liveBlocked ? 30000 : data?.isLive ? 12000 : 60000
     const id = setInterval(fetchData, interval)
     return () => clearInterval(id)
-  }, [data?.isLive, fetchData])
+  }, [liveBlocked, data?.isLive, fetchData])
 
   // "X seconds ago" counter
   useEffect(() => {
@@ -167,6 +175,31 @@ export function LiveTimingTower() {
       <div className="flex flex-col items-center justify-center py-24 gap-4">
         <div className="w-8 h-8 border-2 border-[#e8002d] border-t-transparent rounded-full animate-spin" />
         <p className="text-white/40 text-sm font-mono">Connecting to timing feed…</p>
+      </div>
+    )
+  }
+
+  if (liveBlocked) {
+    return (
+      <div className="text-center py-20 px-6 space-y-4">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#e8002d]/10 border border-[#e8002d]/30 text-[#e8002d] text-xs font-mono uppercase tracking-widest mb-2">
+          <span className="relative flex h-1.5 w-1.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#e8002d] opacity-75" />
+            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#e8002d]" />
+          </span>
+          Race in Progress
+        </div>
+        <p className="text-white text-base font-semibold">Live data temporarily restricted</p>
+        <p className="text-white/55 text-sm max-w-sm mx-auto leading-relaxed">
+          OpenF1 limits free API access during active sessions. Timing data will load automatically once the session ends.
+        </p>
+        <button
+          onClick={fetchData}
+          className="mt-2 text-[#e8002d] text-xs font-mono underline underline-offset-2"
+        >
+          Check again
+        </button>
+        <p className="text-white/25 text-[10px] font-mono pt-2">Auto-retrying every 30s</p>
       </div>
     )
   }
