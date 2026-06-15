@@ -470,6 +470,81 @@ export const ARTICLES: Article[] = [
       },
     ],
   },
+
+  {
+    slug: 'lost-f1-circuits',
+    title: 'The Lost Circuits: Iconic F1 Tracks the Sport Left Behind',
+    description: 'Imola, Adelaide, Istanbul Park, Estoril, Sepang, the old Hockenheim — the Formula 1 circuits that are no longer on the calendar and the races they gave us.',
+    date: '2026-06-15',
+    readMinutes: 10,
+    category: 'F1 Circuits',
+    intro: 'Formula 1\'s current calendar is the longest in the sport\'s history, stretching across twenty-four rounds and six continents. Yet for every circuit on the current schedule, there are circuits that once hosted the most important races in the world and now sit largely silent — their pit lanes unused, their grandstands empty, their tarmac weathering without the sound of Formula 1 engines. Some were dropped for commercial reasons, some for safety concerns, some simply lost the political battle for a spot on a calendar with more destinations than spaces. All of them left something behind that the current calendar does not fully replace.',
+    sections: [
+      {
+        heading: 'Autodromo Enzo e Dino Ferrari — Imola, Italy',
+        paragraphs: [
+          'The Autodromo Enzo e Dino Ferrari at Imola held its first Formula 1 race in 1980 and became one of the sport\'s most revered venues over the following decades. Its combination of fast, flowing corners — Tamburello, Villeneuve, Piratella — and heavy braking zones produced racing of a character that modern purpose-built circuits rarely match. The circuit demanded a car setup compromise between the fast sweeps and the slow chicanes that rewarded technical excellence from both drivers and engineers.',
+          'Imola is inseparable from Formula 1\'s darkest weekend. The 1994 San Marino Grand Prix killed Roland Ratzenberger on Saturday and Ayrton Senna on Sunday — two deaths in 24 hours that transformed the sport\'s relationship with safety and circuit design permanently. Tamburello, the flat-out left-hander where Senna\'s Williams left the track at over 300 km/h, was subsequently chicaned into a slow corner. The circuit was never quite the same, but it retained a character that drivers consistently cited as among the most enjoyable on the calendar.',
+          'Its final regular appearance on the Formula 1 calendar came in 2006, lost to the commercial and geographical reshuffling that brought new venues at the expense of established European rounds. It returned briefly in 2020 and 2021 under the Emilia Romagna Grand Prix banner during the pandemic schedule and proved immediately that the racing quality had not diminished. The 2021 race — featuring a first-lap collision between Verstappen and Hamilton, a safety car, and a late-race battle — was one of the best of the season. It deserves a permanent return that has not yet arrived.',
+        ],
+      },
+      {
+        heading: 'Adelaide Street Circuit — Adelaide, Australia',
+        paragraphs: [
+          'The Adelaide Street Circuit hosted the Australian Grand Prix from 1985 to 1995, and across those eleven seasons it provided more dramatic championship conclusions than any other single venue in Formula 1 history. The 1986 title was decided here when Nigel Mansell\'s tyre exploded on the penultimate lap while he led. The 1994 championship was decided here in the collision between Schumacher and Hill that still generates debate thirty years later. Adelaide had a gift for high-stakes drama.',
+          'The circuit itself — threading through the streets and parklands of South Australia\'s capital — was narrow, fast in sections, and unforgiving of mistakes. The section through the park area produced some of the highest speeds of any street circuit, while the urban sections through the city centre offered the claustrophobic barrier-lined character that street circuits at their best provide. The combination was genuinely thrilling to drive and to watch.',
+          'When Formula 1 moved to Melbourne in 1996, Adelaide\'s loss was not simply a calendar reshuffle — it was the end of a venue that had become embedded in the mythology of the sport\'s late turbo era. The city has never fully made peace with the departure. The circuit still exists, used for touring car racing and other events, and the grandstands that once held tens of thousands of Formula 1 fans can be seen from the streets of a city that still carries the memory of those eleven seasons.',
+        ],
+      },
+      {
+        heading: 'Istanbul Park — Istanbul, Turkey',
+        paragraphs: [
+          'Istanbul Park is the most technically accomplished circuit to have been dropped from the Formula 1 calendar, and the case for its return is stronger than almost any other lost venue. Hermann Tilke\'s 2005 design included a sequence of corners — Turn 8, a multi-apex high-speed left-hander that builds into a wall of cornering force before releasing onto the back straight — that is by near-universal agreement among drivers the single greatest corner on any Formula 1 circuit built in the twenty-first century.',
+          'The Turkish Grand Prix ran from 2005 to 2011, producing consistently excellent racing at a venue that punished aerodynamic load sensitivity and rewarded mechanical balance. The 2010 race produced one of the most bizarre and dramatic results in recent memory — the Red Bull teammates Sebastian Vettel and Mark Webber collided while both leading, gifting Lewis Hamilton the victory and generating a paddock controversy that defined that season\'s intra-team dynamics.',
+          'Istanbul returned briefly during the pandemic calendar of 2020 and produced immediately what everyone who had campaigned for its return had predicted: a race of quality and interest that shamed many of the purpose-built modern circuits that replaced it. Drivers queued up to praise Turn 8 and to note that the circuit rewarded car setup and driving skill in ways that the current calendar\'s recent additions do not. It disappeared again after 2021 when the commercial terms could not be agreed. The circuit sits largely dormant, its Turn 8 the most underused piece of Formula 1 asphalt on the planet.',
+        ],
+      },
+      {
+        heading: 'Estoril — Portugal',
+        paragraphs: [
+          'The Autodromo do Estoril, set among the hills outside Cascais on the Portuguese coast, hosted the Portuguese Grand Prix intermittently between 1984 and 1996 and produced some of the most memorable moments of that era. Its wide, sweeping layout — with a particularly fast final sector and a long back straight that rewarded power — suited the turbo-era cars of the late 1980s and produced close, tactical racing in the normally aspirated years that followed.',
+          'Nigel Mansell clinched his 1992 world championship at Estoril in a race that also featured one of Formula 1\'s most dangerous and confrontational on-track incidents — Ayrton Senna pushing Mansell toward the pit wall at 300 km/h as Mansell attempted to unlap himself. The footage, watched decades later, is as alarming as any incident in the sport\'s history. That both drivers walked away unhurt and continued racing that afternoon speaks to a different era\'s tolerance for risk.',
+          'Estoril\'s circuit has fallen into partial disrepair since its Formula 1 days, though it continues to host other racing series. The Portuguese Grand Prix returned to the calendar at the Algarve International Circuit in Portimão during 2020 and 2021 — a different venue that produced its own excellent racing — before disappearing again. Portugal remains the lost Formula 1 nation: a country with deep motorsport heritage, passionate fans, and a history of hosting brilliant races, currently without a place on the calendar.',
+        ],
+      },
+      {
+        heading: 'Sepang International Circuit — Malaysia',
+        paragraphs: [
+          'Sepang International Circuit near Kuala Lumpur hosted the Malaysian Grand Prix from 1999 to 2017 and was for much of that time one of the Formula 1 calendar\'s great reliably excellent venues. Tilke\'s design — one of his earliest and still considered his best — featured a long, fast back section of wide corners that enabled overtaking, a technical middle sector that rewarded setup precision, and a main straight with DRS opportunities that produced passing moves even before DRS was introduced.',
+          'The Malaysian Grand Prix had a particular talent for producing drama in extreme weather. Tropical storms that arrived with little warning mid-race turned the circuit from a conventional dry-weather challenge into a survival exercise of extraordinary complexity. The 2009 Malaysian Grand Prix was stopped mid-race in monsoon conditions with Jenson Button leading — the shortest Formula 1 race in decades, its result confirmed before the drivers had dried off. The weather was not a complication at Sepang; it was part of the character.',
+          'Malaysia\'s exit from Formula 1 in 2018 was driven by the economics that have claimed many of the calendar\'s more interesting venues — the hosting fee that Formula 1 demanded could not be justified by the commercial returns the race generated in the Malaysian market. The circuit itself remains in excellent condition and continues to host MotoGP and other series. Formula 1\'s departure from Southeast Asia — with Singapore now the sole remaining race in the region — removed a venue whose combination of heat, humidity, and circuit design produced some of the most physically demanding grands prix of the modern era.',
+        ],
+      },
+      {
+        heading: 'Jerez de la Frontera — Spain',
+        paragraphs: [
+          'The Circuito de Jerez in Andalusia held the Spanish Grand Prix in 1986 and 1987 and then returned to host the European Grand Prix in 1994 and 1997, but its deeper significance in Formula 1 history comes from a single moment that defines the word controversy. The 1997 European Grand Prix saw Michael Schumacher, lying second to Jacques Villeneuve in both the race and the championship, turn into Villeneuve\'s Williams as the Canadian attempted to pass him for the lead. Villeneuve drove through the contact and continued to finish third, taking the world championship. Schumacher\'s Benetton beached in the gravel. He was subsequently excluded from that year\'s championship standings — one of the most severe penalties in the sport\'s history.',
+          'Jerez is also the circuit where Michael Schumacher and Damon Hill finished the 1997 season in a rare moment of joint testing at a circuit that had become associated with high-stakes moments. Its layout — tight, technical, with a first corner that compresses the field — was well suited to the chassis technology of the late 1980s and 1990s but fell out of favour as the Spanish Grand Prix moved permanently to Barcelona, a circuit that offers different challenges but lacks the specific drama that Jerez produced when it mattered most.',
+        ],
+      },
+      {
+        heading: 'The Old Hockenheimring — Germany',
+        paragraphs: [
+          'The original Hockenheimring, before its 2002 redesign, was one of the most unusual circuits on the Formula 1 calendar — a layout defined not by sweeping corners or technical sequences but by three long, blasting straights through a pine forest, connected by tight stadium chicanes. Cars would disappear from view for almost a minute at a time as they thundered through the forest section at speeds above 350 km/h, the sound deadened by the trees, the drivers existing in a private world of flat-out acceleration with barriers close on both sides.',
+          'The forest section was both what made the old Hockenheim unique and what ended it. The death of Jim Clark at the circuit in 1968, followed by the removal of safety barriers in the forest that the circuit\'s layout required for spectator access, made the high-speed sections increasingly difficult to defend from a modern safety perspective. The 2002 redesign by Tilke shortened the circuit dramatically, removed the forest section, and created a more conventional layout in the stadium area that, while technically adequate, bears almost no resemblance in character to what existed before.',
+          'Drivers who raced the original Hockenheim consistently describe the forest section in terms that approach awe. At full speed through the trees, the circuit asked a question about commitment — not just mechanical bravery but the specific courage of driving at absolute limit in a place where any mistake was immediately terminal. The modern Hockenheimring is a perfectly respectable circuit. The old one was something that cannot be recreated, and whose disappearance Formula 1 has not fully acknowledged.',
+        ],
+      },
+      {
+        heading: 'Magny-Cours — France',
+        paragraphs: [
+          'The Circuit de Nevers Magny-Cours hosted the French Grand Prix from 1991 to 2008 and was for much of that time one of Formula 1\'s most quietly excellent venues. Located in the Burgundy region of central France — more than three hours from Paris by road, not easily accessible, surrounded by farmland rather than the infrastructure of a major city — Magny-Cours was chosen by the French government in the early 1990s as part of a regional development initiative. That political origin never stopped generating controversy.',
+          'The circuit itself was more interesting than its reputation suggested. A low-grip tarmac that evolved rapidly across a race weekend, a layout that combined fast sweeps with a tight infield section, and weather that could change unpredictably combined to produce races of more tactical complexity than the straightforward reputation of the venue implied. Michael Schumacher won five French Grands Prix at Magny-Cours, a dominance that coloured perception of the circuit — if the same driver keeps winning, observers tend to blame the venue rather than acknowledge the driver\'s excellence.',
+          'France lost its grand prix after 2008 and returned to the calendar in 2018 with the Circuit Paul Ricard at Le Castellet — a different circuit with a very different character, known for its wide runoff areas and tendency to produce processional racing. When Paul Ricard lost its race in 2022, France dropped off the calendar entirely. Magny-Cours has occasionally been mentioned as a potential return venue. Its relative remoteness makes the commercial case difficult, but those who remember the racing quality it produced through the 1990s make the argument that the circuit itself deserved better than the reputation it accumulated.',
+        ],
+      },
+    ],
+  },
 ]
 
 export function getArticle(slug: string): Article | undefined {
