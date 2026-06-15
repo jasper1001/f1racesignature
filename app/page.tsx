@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { Hero } from '@/components/landing/Hero'
@@ -6,6 +7,8 @@ import { FeaturedGallery } from '@/components/landing/FeaturedGallery'
 import { FAQ } from '@/components/landing/FAQ'
 import { ThisWeekendBanner } from '@/components/landing/ThisWeekendBanner'
 import { FAQ_ITEMS } from '@/lib/faq'
+import { ARTICLES } from '@/lib/articles'
+import { getAllDrivers } from '@/lib/serverData'
 
 const faqJsonLd = {
   '@context': 'https://schema.org',
@@ -18,14 +21,20 @@ const faqJsonLd = {
 }
 
 export default function HomePage() {
+  const recentArticles = [...ARTICLES]
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 3)
+
+  const drivers = getAllDrivers()
+
   return (
     <>
-      {/* FAQ structured data for rich results */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
       <Header />
+
       {/* Floating Ko-fi support button */}
       <a
         href="https://ko-fi.com/jascodingvibes"
@@ -35,7 +44,7 @@ export default function HomePage() {
         className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-[#0a0a0a] border border-[#d4a017]/40 text-[#d4a017] text-sm font-medium shadow-lg hover:bg-[#d4a017] hover:text-black hover:border-[#d4a017] transition-all duration-200 group"
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M23.881 8.948c-.773-4.085-4.859-4.593-4.859-4.593H.723c-.604 0-.679.798-.679.798s-.082 7.324-.022 11.822c.164 2.424 2.586 2.672 2.586 2.672s8.267-.023 11.966-.049c2.438-.426 2.683-2.566 2.658-3.734 4.352.24 7.422-2.831 6.649-6.916zm-11.062 3.511c-1.246 1.453-4.011 3.976-4.011 3.976s-.121.119-.31.023c-.076-.057-.108-.09-.108-.09-.443-.441-3.368-3.049-4.034-3.954-.709-.965-1.041-2.7-.091-3.71.951-1.01 3.005-1.086 4.363.407 0 0 1.565-1.782 3.468-.963 1.904.82 1.832 3.011.723 4.311zm6.173.478c-.928.116-1.682-.028-1.682-.028V7.284h1.77s1.971.551 1.971 2.638c0 1.913-.985 2.667-2.059 3.015z"/>
+          <path d="M23.881 8.948c-.773-4.085-4.859-4.593-4.859-4.593H.723c-.604 0-.679.798-.679.798s-.082 7.324-.022 11.822c.164 2.424 2.586 2.672 2.586 2.672s8.267-.023 11.966-.049c2.438-.426 2.683-2.566 2.658-3.734 4.352.24 7.422-2.831 6.649-6.916zm-11.062 3.511c-1.246 1.453-4.011 3.976-4.011 3.976s-.121.119-.31.023c-.076-.057-.108-.09-.108-.09-.443-.441-3.368-3.049-4.034-3.954-.709-.965-1.041-2.7-.091-3.71.951-1.01 3.005-1.086 4.363.407 0 0 1.565-1.782 3.468-.963 1.904.82 1.832 3.011.723 4.311zm6.173.478c-.928.116-1.682-.028-1.682-.028V7.284h1.7s1.971.551 1.971 2.638c0 1.913-.985 2.667-2.059 3.015z"/>
         </svg>
         Support
       </a>
@@ -45,6 +54,126 @@ export default function HomePage() {
         <Hero />
         <HowItWorks />
         <FeaturedGallery />
+
+        {/* Latest from the Blog */}
+        <section className="py-20 border-t border-[#0f0f0f]">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="flex items-center justify-between mb-10">
+              <div>
+                <p className="text-[#d4a017] text-xs font-mono uppercase tracking-widest mb-2">
+                  Analysis & History
+                </p>
+                <h2
+                  className="text-2xl md:text-3xl text-white"
+                  style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+                >
+                  Latest F1 Articles
+                </h2>
+              </div>
+              <Link
+                href="/blog"
+                className="hidden sm:flex items-center gap-1.5 text-white/40 text-sm hover:text-[#d4a017] transition-colors"
+              >
+                View all
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+              {recentArticles.map((article) => (
+                <Link
+                  key={article.slug}
+                  href={`/blog/${article.slug}`}
+                  className="group rounded-xl border border-[#1a1a1a] bg-[#0a0a0a] p-5 hover:border-[#2a2a2a] hover:bg-[#0d0d0d] transition-all"
+                >
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-[#d4a017] text-[10px] font-mono uppercase tracking-wider">
+                      {article.category}
+                    </span>
+                    <span className="text-white/20 text-[10px]">·</span>
+                    <span className="text-white/35 text-[10px] font-mono">{article.readMinutes} min</span>
+                  </div>
+                  <h3
+                    className="text-white text-base leading-snug mb-2 group-hover:text-[#d4a017] transition-colors"
+                    style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+                  >
+                    {article.title}
+                  </h3>
+                  <p className="text-white/45 text-xs leading-relaxed line-clamp-2">
+                    {article.description}
+                  </p>
+                  <div className="flex items-center gap-1 mt-4 text-[#d4a017]/70 text-[10px] font-medium group-hover:text-[#d4a017] transition-colors">
+                    Read article
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" className="group-hover:translate-x-0.5 transition-transform">
+                      <path d="M2 5h6M5.5 2.5l2.5 2.5-2.5 2.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            <div className="mt-6 sm:hidden text-center">
+              <Link href="/blog" className="text-white/40 text-sm hover:text-[#d4a017] transition-colors">
+                View all articles →
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Browse by Driver */}
+        <section className="py-20 border-t border-[#0f0f0f]">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <p className="text-[#d4a017] text-xs font-mono uppercase tracking-widest mb-2">
+                  The Legends
+                </p>
+                <h2
+                  className="text-2xl md:text-3xl text-white"
+                  style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+                >
+                  Browse by Driver
+                </h2>
+              </div>
+              <Link
+                href="/drivers"
+                className="hidden sm:flex items-center gap-1.5 text-white/40 text-sm hover:text-[#d4a017] transition-colors"
+              >
+                All drivers
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </Link>
+            </div>
+
+            <div className="flex flex-wrap gap-2.5">
+              {drivers.map((driver) => (
+                <Link
+                  key={driver.id}
+                  href={`/drivers/${driver.id}`}
+                  className="group flex items-center gap-2.5 pl-1.5 pr-4 py-1.5 rounded-full border border-[#1a1a1a] bg-[#0a0a0a] hover:border-[#2a2a2a] hover:bg-[#0d0d0d] transition-all"
+                >
+                  <span
+                    className="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold text-white shrink-0"
+                    style={{ backgroundColor: driver.color + '33', border: `1px solid ${driver.color}66` }}
+                  >
+                    {driver.shortName.slice(0, 2)}
+                  </span>
+                  <span className="text-white/70 text-xs font-medium group-hover:text-white transition-colors">
+                    {driver.name}
+                  </span>
+                  {driver.championships > 0 && (
+                    <span className="text-white/25 text-[9px] font-mono">
+                      {driver.championships}×
+                    </span>
+                  )}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
 
         {/* SEO content — crawlable description of the product */}
         <section className="py-20 border-t border-[#0f0f0f]">
@@ -61,16 +190,21 @@ export default function HomePage() {
               carved through Eau Rouge, the Casino chicane, or Copse — mapped onto an accurate circuit
               outline and rendered in a cinematic, gallery-ready style.
             </p>
-            <p className="text-white/60 leading-relaxed">
+            <p className="text-white/60 leading-relaxed mb-4">
               Choose from legendary drives by Ayrton Senna, Lewis Hamilton, Michael Schumacher, Max
-              Verstappen, Charles Leclerc, Lando Norris and more. Visualize the lap as a racing line, a
-              blue-to-red speed heatmap, a three-sector split, or an overtake map — then apply one of
-              eight artistic themes and export a high-resolution poster, free.
+              Verstappen, Charles Leclerc, Lando Norris and more. Visualize the lap as a racing line,
+              a blue-to-red speed heatmap, a three-sector split, or an overtake map — then apply one
+              of eight artistic themes and export a high-resolution poster, free.
             </p>
-            <p className="text-white/55 text-sm leading-relaxed mt-6">
-              Browse the full <a href="/drivers" className="text-[#d4a017] hover:underline">driver collection</a>,
-              explore the <a href="/gallery" className="text-[#d4a017] hover:underline">poster gallery</a>, or
-              follow the <a href="/results" className="text-[#d4a017] hover:underline">live 2026 F1 season standings</a>.
+            <p className="text-white/55 text-sm leading-relaxed">
+              Browse the full{' '}
+              <Link href="/drivers" className="text-[#d4a017] hover:underline">driver collection</Link>,
+              explore the{' '}
+              <Link href="/gallery" className="text-[#d4a017] hover:underline">poster gallery</Link>,
+              read our{' '}
+              <Link href="/blog" className="text-[#d4a017] hover:underline">F1 articles and analysis</Link>,
+              or follow the{' '}
+              <Link href="/results" className="text-[#d4a017] hover:underline">live 2026 F1 season standings</Link>.
             </p>
           </div>
         </section>
@@ -78,7 +212,7 @@ export default function HomePage() {
         {/* Live 2026 Standings teaser */}
         <section className="py-20 border-t border-[#0f0f0f]">
           <div className="max-w-7xl mx-auto px-6">
-            <a
+            <Link
               href="/results"
               className="group block rounded-2xl border border-[#1a1a1a] bg-[#0a0a0a] p-6 md:p-8 hover:border-[#d4a017]/40 transition-colors relative overflow-hidden"
             >
@@ -114,14 +248,14 @@ export default function HomePage() {
                   </svg>
                 </span>
               </div>
-            </a>
+            </Link>
           </div>
         </section>
 
         {/* Mini Games teaser */}
         <section className="py-20 border-t border-[#0f0f0f]">
           <div className="max-w-7xl mx-auto px-6">
-            <a
+            <Link
               href="/games"
               className="group block rounded-2xl border border-[#1a1a1a] bg-[#0a0a0a] p-6 md:p-8 hover:border-[#d4a017]/40 transition-colors relative overflow-hidden"
             >
@@ -166,7 +300,7 @@ export default function HomePage() {
                   </svg>
                 </span>
               </div>
-            </a>
+            </Link>
           </div>
         </section>
 
