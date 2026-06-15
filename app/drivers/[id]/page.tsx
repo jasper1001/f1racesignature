@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { getAllDrivers, getDriver, getRacesForDriver } from '@/lib/serverData'
+import { getDriverCareer } from '@/lib/driverCareer'
 
 export function generateStaticParams() {
   return getAllDrivers().map((d) => ({ id: d.id }))
@@ -42,6 +43,7 @@ export default async function DriverPage({ params }: { params: Promise<{ id: str
   if (!driver) notFound()
 
   const races = getRacesForDriver(id)
+  const career = getDriverCareer(id)
 
   const SITE_URL = 'https://f1racesignature.site'
 
@@ -109,6 +111,20 @@ export default async function DriverPage({ params }: { params: Promise<{ id: str
             Create a {driver.name.split(' ')[0]} poster
           </Link>
         </div>
+
+        {/* Career biography */}
+        {career.length > 0 && (
+          <div className="max-w-5xl mx-auto px-6 py-8 border-t border-[#0f0f0f]">
+            <h2 className="text-2xl text-white mb-6" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+              Career
+            </h2>
+            <div className="max-w-3xl space-y-4">
+              {career.map((paragraph, i) => (
+                <p key={i} className="text-white/65 leading-relaxed">{paragraph}</p>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Races */}
         <div className="max-w-5xl mx-auto px-6 py-8 border-t border-[#0f0f0f]">

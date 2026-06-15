@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { getAllDrivers, getAllRaces } from '@/lib/serverData'
+import { getAllArticleSlugs } from '@/lib/articles'
 
 const SITE_URL = 'https://f1racesignature.site'
 
@@ -42,5 +43,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }))
 
-  return [...core, ...driverPages, ...racePages]
+  const blogIndex: MetadataRoute.Sitemap = [
+    { url: `${SITE_URL}/blog`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
+  ]
+
+  const blogPages: MetadataRoute.Sitemap = getAllArticleSlugs().map((slug) => ({
+    url: `${SITE_URL}/blog/${slug}`,
+    lastModified: now,
+    changeFrequency: 'monthly',
+    priority: 0.75,
+  }))
+
+  return [...core, ...blogIndex, ...blogPages, ...driverPages, ...racePages]
 }

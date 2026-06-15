@@ -5,6 +5,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { StaticPoster } from '@/components/StaticPoster'
 import { getAllRaces, getRace, getDriver, getAllCircuits, getTelemetry } from '@/lib/serverData'
+import { getRaceStory } from '@/lib/raceStories'
 
 export function generateStaticParams() {
   return getAllRaces().map((r) => ({ id: r.id }))
@@ -49,6 +50,7 @@ export default async function RacePage({ params }: { params: Promise<{ id: strin
 
   const circuit = getAllCircuits()[race.circuit] ?? null
   const telemetry = getTelemetry(race.telemetryFile)
+  const story = getRaceStory(race.id)
 
   const studioUrl = `/studio?driver=${driver.id}&race=${race.id}`
 
@@ -137,6 +139,19 @@ export default async function RacePage({ params }: { params: Promise<{ id: strin
             </div>
           </div>
         </div>
+        {/* Full race story */}
+        {story.length > 0 && (
+          <div className="max-w-5xl mx-auto px-6 py-10 border-t border-[#0f0f0f]">
+            <h2 className="text-2xl text-white mb-6" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+              The Race
+            </h2>
+            <div className="max-w-3xl space-y-4">
+              {story.map((paragraph, i) => (
+                <p key={i} className="text-white/65 leading-relaxed">{paragraph}</p>
+              ))}
+            </div>
+          </div>
+        )}
       </main>
       <Footer />
     </>
