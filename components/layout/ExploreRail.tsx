@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 
 interface Feature {
@@ -69,6 +69,29 @@ const FEATURES: Feature[] = [
 export function ExploreRail() {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
+  // Devices with a real pointer get hover-to-open; touch devices use tap-to-toggle.
+  const [canHover, setCanHover] = useState(false)
+  // Once the user interacts with the handle, stop the auto-open/close from overriding them.
+  const interacted = useRef(false)
+
+  useEffect(() => {
+    setCanHover(window.matchMedia('(hover: hover) and (pointer: fine)').matches)
+  }, [])
+
+  // On first load (desktop only): slide open to draw attention, then auto-close.
+  // On mobile the chevron stays accessible but the panel never auto-opens.
+  useEffect(() => {
+    if (pathname.startsWith('/studio')) return
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return
+    const openTimer = setTimeout(() => { if (!interacted.current) setOpen(true) }, 600)
+    const closeTimer = setTimeout(() => { if (!interacted.current) setOpen(false) }, 5000)
+    return () => { clearTimeout(openTimer); clearTimeout(closeTimer) }
+  }, [pathname])
+
+  const toggle = () => {
+    interacted.current = true
+    setOpen((o) => !o)
+  }
 
   // Never show on the Studio page
   if (pathname.startsWith('/studio')) return null
@@ -78,50 +101,67 @@ export function ExploreRail() {
   if (items.length === 0) return null
 
   return (
-    <div className="fixed right-0 top-1/2 -translate-y-1/2 z-30 hidden sm:flex items-stretch">
+    <>
+      {/* Mobile dismiss backdrop — tap anywhere to close */}
+      {open && (
+        <div
+          onClick={() => setOpen(false)}
+          className="fixed inset-0 z-20 bg-black/50 sm:hidden"
+          aria-hidden="true"
+        />
+      )}
+
+      <div
+        onMouseEnter={canHover ? () => { interacted.current = true; setOpen(true) } : undefined}
+        onMouseLeave={canHover ? () => setOpen(false) : undefined}
+        className="fixed right-0 top-1/2 -translate-y-1/2 z-30 flex items-stretch"
+      >
       {/* Sliding panel */}
       <div
         className={`overflow-hidden transition-all duration-300 ease-out ${
           open ? 'max-w-[220px] opacity-100' : 'max-w-0 opacity-0'
         }`}
       >
-        <div className="w-[200px] rounded-l-2xl border border-r-0 border-white/[0.08] bg-[#0a0a0a]/95 backdrop-blur-md shadow-[0_8px_40px_rgba(0,0,0,0.5)] p-2.5">
+        <div className="w-[196px] rounded-l-2xl border border-r-0 border-[#d4a017]/40 bg-[#0a0a0a]/95 backdrop-blur-md shadow-[0_8px_40px_rgba(0,0,0,0.5)] p-2.5">
           <p
-            className="px-2 pt-1 pb-2.5 text-sm text-white"
+            className="px-2.5 pt-1.5 pb-3 text-base text-white"
             style={{ fontFamily: 'var(--font-playfair), Georgia, serif', fontStyle: 'italic' }}
           >
             Explore
           </p>
-          <nav className="flex flex-col gap-0.5">
+          <nav className="flex flex-col gap-1.5">
             {items.map((f) => (
               <a
                 key={f.href}
                 href={f.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center gap-3 rounded-xl px-2.5 py-2 text-white/70 hover:text-white hover:bg-white/[0.05] transition-colors"
+                className="group flex items-center gap-3 rounded-xl px-3 py-3 text-white/70 hover:text-white hover:bg-white/[0.05] transition-colors"
               >
                 <span className="text-white/45 group-hover:text-[#d4a017] transition-colors shrink-0">
                   {f.icon}
                 </span>
                 <span className="min-w-0">
-                  <span className="block text-xs font-medium leading-tight">{f.label}</span>
-                  <span className="block text-[10px] text-white/35 font-mono leading-tight mt-0.5 truncate">
+                  <span className="block text-sm font-medium leading-tight">{f.label}</span>
+                  <span className="block text-[10px] text-white/35 font-mono leading-tight mt-1 truncate">
                     {f.desc}
                   </span>
                 </span>
               </a>
             ))}
           </nav>
+          <p className="px-2.5 pt-3 mt-1 border-t border-white/[0.06] text-[9px] font-mono uppercase tracking-[0.15em] text-white/25">
+            f1racesignature.site
+          </p>
         </div>
       </div>
 
       {/* Handle / toggle tab */}
       <button
-        onClick={() => setOpen((o) => !o)}
+        onClick={toggle}
         aria-expanded={open}
         aria-label={open ? 'Close explore menu' : 'Open explore menu'}
-        className="flex flex-col items-center justify-center gap-2 px-2 py-4 rounded-l-xl border border-r-0 border-white/[0.08] bg-[#0a0a0a]/95 backdrop-blur-md text-white/70 hover:text-white hover:border-[#d4a017]/30 transition-colors cursor-pointer self-center shadow-[0_8px_40px_rgba(0,0,0,0.5)]"
+        className="flex flex-col items-center justify-center gap-2 px-2 py-4 rounded-l-xl border border-r-0 border-[#d4a017]/40 bg-[#0a0a0a]/95 backdrop-blur-md text-white/70 hover:text-white hover:border-[#d4a017]/60 transition-colors cursor-pointer self-center shadow-[0_8px_40px_rgba(0,0,0,0.5)]"
       >
         {/* Chevron points left to open, right to close */}
         <svg
@@ -138,6 +178,7 @@ export function ExploreRail() {
           Explore
         </span>
       </button>
-    </div>
+      </div>
+    </>
   )
 }

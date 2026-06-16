@@ -113,6 +113,30 @@ export async function getSchedule(): Promise<Race[]> {
   return data?.MRData?.RaceTable?.Races ?? []
 }
 
+// ── Past-season final standings (completed years) ──────────────────────────────
+
+export interface PastSeason {
+  year: string
+  drivers: DriverStanding[]
+  constructors: ConstructorStanding[]
+}
+
+export async function getPastSeason(year: string): Promise<PastSeason> {
+  const [driverData, constructorData] = await Promise.all([
+    getJson<{ MRData: { StandingsTable: { StandingsLists: { DriverStandings: DriverStanding[] }[] } } }>(
+      `${year}/driverStandings.json`,
+    ),
+    getJson<{ MRData: { StandingsTable: { StandingsLists: { ConstructorStandings: ConstructorStanding[] }[] } } }>(
+      `${year}/constructorStandings.json`,
+    ),
+  ])
+  return {
+    year,
+    drivers: driverData?.MRData?.StandingsTable?.StandingsLists?.[0]?.DriverStandings ?? [],
+    constructors: constructorData?.MRData?.StandingsTable?.StandingsLists?.[0]?.ConstructorStandings ?? [],
+  }
+}
+
 export async function getLastRaceResults(): Promise<Race | null> {
   const data = await getJson<{ MRData: { RaceTable: { Races: Race[] } } }>(
     `${SEASON}/last/results.json`,

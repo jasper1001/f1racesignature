@@ -7,10 +7,12 @@ import {
   getConstructorStandings,
   getSchedule,
   getLastRaceResults,
+  getPastSeason,
   teamColor,
   formatRaceDate,
   isPast,
 } from '@/lib/f1api'
+import type { DriverStanding, ConstructorStanding } from '@/lib/f1api'
 
 export const revalidate = 3600
 
@@ -50,12 +52,15 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ResultsPage() {
-  const [season, driverData, constructors, schedule, lastRace] = await Promise.all([
-    getSeason(),
+  const season = await getSeason()
+  const pastYears = [String(Number(season) - 1), String(Number(season) - 2)]
+
+  const [driverData, constructors, schedule, lastRace, ...pastSeasons] = await Promise.all([
     getDriverStandings(),
     getConstructorStandings(),
     getSchedule(),
     getLastRaceResults(),
+    ...pastYears.map((y) => getPastSeason(y)),
   ])
 
   const { round, standings: drivers } = driverData
@@ -164,51 +169,8 @@ export default async function ResultsPage() {
               {/* Driver standings */}
               <section>
                 <SectionHeading eyebrow="Championship" title="Driver Standings" />
-                <div className="mt-6 overflow-x-auto rounded-xl border border-[#161616]">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="text-left text-white/45 text-[11px] uppercase tracking-wider border-b border-[#161616]">
-                        <th className="py-3 px-4 font-medium">Pos</th>
-                        <th className="py-3 px-4 font-medium">Driver</th>
-                        <th className="py-3 px-4 font-medium hidden sm:table-cell">Team</th>
-                        <th className="py-3 px-4 font-medium text-center">Wins</th>
-                        <th className="py-3 px-4 font-medium text-right">Points</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {drivers.map((d) => {
-                        const color = teamColor(d.Constructors[0]?.constructorId ?? '')
-                        return (
-                          <tr
-                            key={d.Driver.driverId}
-                            className="border-b border-[#0f0f0f] last:border-0 hover:bg-white/[0.02] transition-colors"
-                          >
-                            <td className="py-3 px-4 text-[#666666] font-mono">{d.position}</td>
-                            <td className="py-3 px-4">
-                              <div className="flex items-center gap-2.5">
-                                <span className="w-1 h-5 rounded-full" style={{ backgroundColor: color }} />
-                                <span className="text-white font-medium">
-                                  {d.Driver.givenName} {d.Driver.familyName}
-                                </span>
-                                {d.Driver.code && (
-                                  <span className="text-white/40 text-[10px] font-mono hidden md:inline">
-                                    {d.Driver.code}
-                                  </span>
-                                )}
-                              </div>
-                            </td>
-                            <td className="py-3 px-4 text-[#777777] hidden sm:table-cell">
-                              {d.Constructors[0]?.name ?? '—'}
-                            </td>
-                            <td className="py-3 px-4 text-center text-[#777777] font-mono">{d.wins}</td>
-                            <td className="py-3 px-4 text-right text-white font-mono font-semibold">
-                              {d.points}
-                            </td>
-                          </tr>
-                        )
-                      })}
-                    </tbody>
-                  </table>
+                <div className="mt-6">
+                  <DriverStandingsTable drivers={drivers} />
                 </div>
               </section>
 
@@ -216,28 +178,8 @@ export default async function ResultsPage() {
               {constructors.length > 0 && (
                 <section>
                   <SectionHeading eyebrow="Championship" title="Constructor Standings" />
-                  <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {constructors.map((c) => {
-                      const color = teamColor(c.Constructor.constructorId)
-                      return (
-                        <div
-                          key={c.Constructor.constructorId}
-                          className="flex items-center justify-between rounded-xl border border-[#161616] bg-[#0a0a0a] px-4 py-3"
-                          style={{ borderLeftColor: color, borderLeftWidth: 3 }}
-                        >
-                          <div className="flex items-center gap-3">
-                            <span className="text-white/55 font-mono text-sm w-5">{c.position}</span>
-                            <span className="text-white font-medium text-sm">{c.Constructor.name}</span>
-                          </div>
-                          <div className="flex items-center gap-4">
-                            <span className="text-white/50 text-xs font-mono hidden sm:inline">
-                              {c.wins} wins
-                            </span>
-                            <span className="text-white font-mono font-semibold text-sm">{c.points}</span>
-                          </div>
-                        </div>
-                      )
-                    })}
+                  <div className="mt-6">
+                    <ConstructorStandingsGrid constructors={constructors} />
                   </div>
                 </section>
               )}
@@ -281,6 +223,20 @@ export default async function ResultsPage() {
                 </section>
               )}
 
+              {/* Past seasons */}
+              {pastSeasons.some((s) => s.drivers.length > 0) && (
+                <section>
+                  <SectionHeading eyebrow="The Archive" title="Past Seasons" sub="Final standings from previous championships." />
+                  <div className="mt-6 space-y-3">
+                    {pastSeasons.map((s) =>
+                      s.drivers.length === 0 ? null : (
+                        <PastSeasonPanel key={s.year} season={s} />
+                      ),
+                    )}
+                  </div>
+                </section>
+              )}
+
               <p className="text-center text-white/35 text-xs pt-4">
                 Live data via the Jolpica F1 API (Ergast successor). Updates hourly.
               </p>
@@ -302,5 +258,137 @@ function SectionHeading({ eyebrow, title, sub }: { eyebrow: string; title: strin
       </h2>
       {sub && <p className="text-white/55 text-sm mt-1">{sub}</p>}
     </div>
+  )
+}
+
+function DriverStandingsTable({ drivers }: { drivers: DriverStanding[] }) {
+  return (
+    <div className="overflow-x-auto rounded-xl border border-[#161616]">
+      <table className="w-full text-sm">
+        <thead>
+          <tr className="text-left text-white/45 text-[11px] uppercase tracking-wider border-b border-[#161616]">
+            <th className="py-3 px-4 font-medium">Pos</th>
+            <th className="py-3 px-4 font-medium">Driver</th>
+            <th className="py-3 px-4 font-medium hidden sm:table-cell">Team</th>
+            <th className="py-3 px-4 font-medium text-center">Wins</th>
+            <th className="py-3 px-4 font-medium text-right">Points</th>
+          </tr>
+        </thead>
+        <tbody>
+          {drivers.map((d) => {
+            const color = teamColor(d.Constructors[0]?.constructorId ?? '')
+            return (
+              <tr
+                key={d.Driver.driverId}
+                className="border-b border-[#0f0f0f] last:border-0 hover:bg-white/[0.02] transition-colors"
+              >
+                <td className="py-3 px-4 text-[#666666] font-mono">{d.position}</td>
+                <td className="py-3 px-4">
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-1 h-5 rounded-full" style={{ backgroundColor: color }} />
+                    <span className="text-white font-medium">
+                      {d.Driver.givenName} {d.Driver.familyName}
+                    </span>
+                    {d.Driver.code && (
+                      <span className="text-white/40 text-[10px] font-mono hidden md:inline">
+                        {d.Driver.code}
+                      </span>
+                    )}
+                  </div>
+                </td>
+                <td className="py-3 px-4 text-[#777777] hidden sm:table-cell">
+                  {d.Constructors[0]?.name ?? '—'}
+                </td>
+                <td className="py-3 px-4 text-center text-[#777777] font-mono">{d.wins}</td>
+                <td className="py-3 px-4 text-right text-white font-mono font-semibold">{d.points}</td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+function ConstructorStandingsGrid({ constructors }: { constructors: ConstructorStanding[] }) {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+      {constructors.map((c) => {
+        const color = teamColor(c.Constructor.constructorId)
+        return (
+          <div
+            key={c.Constructor.constructorId}
+            className="flex items-center justify-between rounded-xl border border-[#161616] bg-[#0a0a0a] px-4 py-3"
+            style={{ borderLeftColor: color, borderLeftWidth: 3 }}
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-white/55 font-mono text-sm w-5">{c.position}</span>
+              <span className="text-white font-medium text-sm">{c.Constructor.name}</span>
+            </div>
+            <div className="flex items-center gap-4">
+              <span className="text-white/50 text-xs font-mono hidden sm:inline">{c.wins} wins</span>
+              <span className="text-white font-mono font-semibold text-sm">{c.points}</span>
+            </div>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+function PastSeasonPanel({ season }: { season: { year: string; drivers: DriverStanding[]; constructors: ConstructorStanding[] } }) {
+  const champ = season.drivers[0]
+  const champColor = teamColor(champ?.Constructors[0]?.constructorId ?? '')
+  const teamChamp = season.constructors[0]
+
+  return (
+    <details className="group rounded-xl border border-[#161616] bg-[#0a0a0a] overflow-hidden">
+      <summary className="flex items-center justify-between gap-4 px-4 py-4 cursor-pointer list-none select-none hover:bg-white/[0.02] transition-colors">
+        <div className="flex items-center gap-4 min-w-0">
+          <span
+            className="text-2xl md:text-3xl text-white shrink-0"
+            style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+          >
+            {season.year}
+          </span>
+          {champ && (
+            <div className="min-w-0">
+              <div className="flex items-center gap-2">
+                <span className="w-1 h-4 rounded-full shrink-0" style={{ backgroundColor: champColor }} />
+                <span className="text-white text-sm font-medium truncate">
+                  {champ.Driver.givenName} {champ.Driver.familyName}
+                </span>
+                <span className="text-[#d4a017] text-[10px] font-mono uppercase tracking-wider shrink-0">Champion</span>
+              </div>
+              {teamChamp && (
+                <p className="text-white/45 text-xs mt-1 truncate">
+                  Constructors: {teamChamp.Constructor.name}
+                </p>
+              )}
+            </div>
+          )}
+        </div>
+        <svg
+          width="16" height="16" viewBox="0 0 16 16" fill="none"
+          className="text-white/40 shrink-0 transition-transform duration-200 group-open:rotate-180"
+          aria-hidden="true"
+        >
+          <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </summary>
+
+      <div className="px-4 pb-4 pt-1 space-y-5 border-t border-[#141414]">
+        <div className="pt-4">
+          <p className="text-white/45 text-[11px] font-mono uppercase tracking-wider mb-3">Driver Standings</p>
+          <DriverStandingsTable drivers={season.drivers} />
+        </div>
+        {season.constructors.length > 0 && (
+          <div>
+            <p className="text-white/45 text-[11px] font-mono uppercase tracking-wider mb-3">Constructor Standings</p>
+            <ConstructorStandingsGrid constructors={season.constructors} />
+          </div>
+        )}
+      </div>
+    </details>
   )
 }
