@@ -4,11 +4,11 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { getSeason, getSchedule, formatRaceDate } from '@/lib/f1api'
 import type { Race } from '@/lib/f1api'
-import { googleCalUrl } from '@/lib/calendar'
+import { googleCalUrl, buildSeasonIcs, icsDataUri } from '@/lib/calendar'
+import { FaqSection } from '@/components/seo/FaqSection'
+import { SITE_URL, raceSportsEvent, faqPageJsonLd, calendarFaqs } from '@/lib/seo'
 
 export const revalidate = 3600
-
-const SITE_URL = 'https://f1racesignature.site'
 
 const FLAGS: Record<string, string> = {
   Australia: '🇦🇺', China: '🇨🇳', Japan: '🇯🇵', Bahrain: '🇧🇭',
@@ -30,7 +30,7 @@ const WEEKDAYS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
 export async function generateMetadata(): Promise<Metadata> {
   const season = await getSeason()
   const title = `F1 ${season} Calendar — Every Grand Prix Date`
-  const description = `The complete ${season} Formula 1 calendar at a glance — every Grand Prix on a month-by-month grid, with one-click "Add to Google Calendar" and .ics downloads for the whole season or any single race.`
+  const description = `The complete ${season} Formula 1 calendar at a glance — every Grand Prix on a month-by-month grid, with one-click "Add to Google Calendar" for any race plus a full-season .ics download for Apple Calendar and Outlook.`
   return {
     title,
     description,
@@ -83,6 +83,8 @@ export default async function CalendarPage() {
 
   const months = seasonMonths(races)
   const now = Date.now()
+  const faqs = calendarFaqs(races, season)
+  const seasonIcs = races.length > 0 ? icsDataUri(buildSeasonIcs(races, season)) : null
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -92,31 +94,17 @@ export default async function CalendarPage() {
         name: `F1 ${season} Calendar`,
         description: `Month-by-month ${season} Formula 1 calendar with calendar export.`,
         url: `${SITE_URL}/calendar`,
+        isPartOf: { '@id': `${SITE_URL}/#website` },
         breadcrumb: {
           '@type': 'BreadcrumbList',
           itemListElement: [
             { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
-            { '@type': 'ListItem', position: 2, name: 'Calendar' },
+            { '@type': 'ListItem', position: 2, name: 'Calendar', item: `${SITE_URL}/calendar` },
           ],
         },
       },
-      ...races.map((race) => ({
-        '@type': 'SportsEvent',
-        name: `${race.raceName} ${season}`,
-        startDate: race.time ? `${race.date}T${race.time}` : race.date,
-        location: {
-          '@type': 'Place',
-          name: race.Circuit.circuitName,
-          address: {
-            '@type': 'PostalAddress',
-            addressLocality: race.Circuit.Location.locality,
-            addressCountry: race.Circuit.Location.country,
-          },
-        },
-        organizer: { '@type': 'Organization', name: 'Formula 1' },
-        sport: 'Auto Racing',
-        url: `${SITE_URL}/calendar`,
-      })),
+      faqPageJsonLd(faqs),
+      ...races.map((race) => raceSportsEvent(race, season, '/calendar')),
     ],
   }
 
@@ -149,12 +137,23 @@ export default async function CalendarPage() {
           {races.length > 0 && (
             <div className="relative mt-7 flex flex-col items-center gap-3">
               <p className="text-white/60 text-xs font-mono">Tap any race to add it to Google Calendar</p>
-              <Link
-                href="/schedule"
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/5 text-white text-sm font-medium rounded-xl border border-white/10 hover:bg-white/8 transition-colors"
-              >
-                Need session times? View the schedule
-              </Link>
+              <div className="flex flex-wrap items-center justify-center gap-2.5">
+                {seasonIcs && (
+                  <a
+                    href={seasonIcs}
+                    download={`f1-${season}-calendar.ics`}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#d4a017] text-black text-sm font-semibold rounded-xl hover:bg-[#e0ac1f] transition-colors"
+                  >
+                    ↓ Download full season (.ics)
+                  </a>
+                )}
+                <Link
+                  href="/schedule"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/5 text-white text-sm font-medium rounded-xl border border-white/10 hover:bg-white/8 transition-colors"
+                >
+                  Need session times? View the schedule
+                </Link>
+              </div>
             </div>
           )}
         </div>
@@ -210,6 +209,9 @@ export default async function CalendarPage() {
                   ))}
                 </div>
               </section>
+
+              {/* FAQ */}
+              <FaqSection items={faqs} title={`F1 ${season} calendar — your questions`} />
 
               <p className="text-center text-white/35 text-xs pt-2">
                 Live data via the Jolpica F1 API (Ergast successor). Updates hourly.
