@@ -99,10 +99,10 @@ export default async function SchedulePage() {
             className="relative text-4xl md:text-5xl text-white mb-3"
             style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
           >
-            Race Schedule
+            F1 2026 Race Schedule — Every Session Time in Your Local Timezone
           </h1>
-          <p className="relative text-white/60 text-sm max-w-sm mx-auto">
-            Every session, every timezone. Pick yours from the dropdown and never miss a flag.
+          <p className="relative text-white/60 text-sm max-w-2xl mx-auto">
+            The full 2026 Formula 1 calendar with Practice, Qualifying, Sprint, and Race times for every Grand Prix. Select your timezone and all session times update instantly — no more converting UTC manually.
           </p>
         </div>
 

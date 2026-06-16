@@ -4,6 +4,7 @@ import { Inter, Playfair_Display } from 'next/font/google'
 import './globals.css'
 import { Providers } from '@/components/Providers'
 import { CookieBanner } from '@/components/layout/CookieBanner'
+import { ExploreRail } from '@/components/layout/ExploreRail'
 
 const GA_MEASUREMENT_ID = 'G-HVKDBEVYBD'
 const SITE_URL = 'https://f1racesignature.site'
@@ -188,6 +189,7 @@ export default function RootLayout({
       </head>
       <body>
         <Providers>{children}</Providers>
+        <ExploreRail />
         <CookieBanner />
       </body>
     </html>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import type { Race } from '@/lib/f1api'
 
 // ── Timezone options ───────────────────────────────────────────────────────────
@@ -103,6 +103,148 @@ function getRaceStatus(race: Race): 'past' | 'next' | 'live' | 'upcoming' {
   if (now > raceEnd) return 'past'
   if (now > new Date(raceIso).getTime()) return 'live'
   return 'upcoming'
+}
+
+interface TimedSession { sessionName: string; date: string; time: string; ts: number }
+
+// The upcoming sessions of the NEXT race weekend, in order, ending at the Race.
+// We anchor on the earliest race that still has any session ahead of `now`, then
+// return that weekend's remaining sessions — this is the list the countdown cycles through.
+function nextWeekendSessions(races: Race[], now: number): { raceName: string; sessions: TimedSession[] } | null {
+  const byRace = races
+    .map(race => ({
+      raceName: race.raceName,
+      sessions: buildSessions(race)
+        .filter((s): s is { name: string; date: string; time: string } => Boolean(s.time))
+        .map(s => ({ sessionName: s.name, date: s.date, time: s.time, ts: new Date(`${s.date}T${s.time}`).getTime() }))
+        .filter(s => !Number.isNaN(s.ts) && s.ts > now)
+        .sort((a, b) => a.ts - b.ts),
+    }))
+    .filter(r => r.sessions.length > 0)
+    .sort((a, b) => a.sessions[0].ts - b.sessions[0].ts)
+
+  return byRace[0] ?? null
+}
+
+const pad = (n: number) => String(n).padStart(2, '0')
+
+function splitCountdown(ms: number) {
+  const total = Math.max(0, Math.floor(ms / 1000))
+  return {
+    d: Math.floor(total / 86400),
+    h: Math.floor((total % 86400) / 3600),
+    m: Math.floor((total % 3600) / 60),
+    s: total % 60,
+  }
+}
+
+// ── Countdown to the next session across the entire calendar ─────────────────────
+
+function CountdownUnit({ value, label }: { value: string; label: string }) {
+  return (
+    <div className="flex flex-col items-center min-w-[40px] sm:min-w-[48px]">
+      <span className="text-white text-2xl sm:text-3xl font-mono tabular-nums leading-none">{value}</span>
+      <span className="text-white/30 text-[9px] font-mono uppercase tracking-widest mt-1.5">{label}</span>
+    </div>
+  )
+}
+
+function NextSessionCountdown({ races, tz, tzAbbr, mounted }: { races: Race[]; tz: string; tzAbbr: string; mounted: boolean }) {
+  const [now, setNow] = useState(0)
+  // Which session in the upcoming weekend the user has clicked through to (0 = the next one).
+  const [sessionIdx, setSessionIdx] = useState(0)
+
+  useEffect(() => {
+    setNow(Date.now())
+    const id = setInterval(() => setNow(Date.now()), 1000)
+    return () => clearInterval(id)
+  }, [])
+
+  const weekend = useMemo(() => (now === 0 ? null : nextWeekendSessions(races, now)), [races, now])
+
+  // Render a stable placeholder until mounted to avoid hydration mismatch on time-based content.
+  if (!mounted || now === 0) {
+    return (
+      <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.02] px-5 py-5 sm:px-6 sm:py-6 mb-6 min-h-[96px]">
+        <p className="text-[10px] font-mono uppercase tracking-widest text-[#d4a017] mb-1.5">Next Session</p>
+        <p className="text-white/30 text-sm font-mono">Calculating…</p>
+      </div>
+    )
+  }
+
+  if (!weekend || weekend.sessions.length === 0) return null // season complete — nothing to count down to
+
+  const cycle = weekend.sessions
+  const idx = sessionIdx % cycle.length // modulo keeps it valid as sessions pass / on wrap-around
+  const current = cycle[idx]
+  const advance = () => setSessionIdx(i => (i + 1) % cycle.length)
+
+  const { d, h, m, s } = splitCountdown(current.ts - now)
+  const raceLabel = weekend.raceName.replace('Grand Prix', 'GP')
+  const when = new Intl.DateTimeFormat('en-GB', {
+    weekday: 'short', day: 'numeric', month: 'short',
+    hour: '2-digit', minute: '2-digit', hour12: false, timeZone: tz,
+  }).format(new Date(`${current.date}T${current.time}`))
+
+  return (
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={advance}
+      onKeyDown={e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); advance() }
+      }}
+      aria-label={`${raceLabel} ${current.sessionName} countdown. Tap to view the next session.`}
+      className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.02] backdrop-blur-sm px-5 py-5 sm:px-6 sm:py-6 mb-6 cursor-pointer select-none transition-colors hover:border-[#d4a017]/30 hover:bg-white/[0.035] focus:outline-none focus-visible:border-[#d4a017]/40"
+    >
+      {/* Tooltip — appears on hover / keyboard focus */}
+      <span
+        role="tooltip"
+        className="pointer-events-none absolute top-3 right-3 z-10 rounded-lg border border-[#d4a017]/25 bg-[#0d0d0d]/95 px-2.5 py-1.5 text-[10px] font-mono text-white/80 whitespace-nowrap shadow-lg opacity-0 translate-y-1 transition-all duration-200 group-hover:opacity-100 group-hover:translate-y-0 group-focus-visible:opacity-100 group-focus-visible:translate-y-0"
+      >
+        Click to see the next session →
+      </span>
+
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse 50% 90% at 100% 0%, rgba(212,160,23,0.07) 0%, transparent 70%)' }}
+      />
+      <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
+        <div className="min-w-0">
+          <p className="text-[10px] font-mono uppercase tracking-widest text-[#d4a017] mb-1.5">{raceLabel}</p>
+          <h2
+            className="text-white font-semibold text-lg sm:text-xl leading-snug truncate"
+            style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
+          >
+            {current.sessionName}
+          </h2>
+          <p className="text-white/40 text-xs font-mono mt-1">{when} · {tzAbbr}</p>
+
+          {/* Session progress dots + tap hint */}
+          <div className="flex items-center gap-2.5 mt-3">
+            <div className="flex items-center gap-1.5">
+              {cycle.map((sess, i) => (
+                <span
+                  key={sess.sessionName}
+                  className={`h-1.5 rounded-full transition-all ${i === idx ? 'w-4 bg-[#d4a017]' : 'w-1.5 bg-white/20'}`}
+                />
+              ))}
+            </div>
+            <span className="text-white/25 text-[9px] font-mono uppercase tracking-widest">Tap for next ›</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-2.5 sm:gap-3.5 shrink-0">
+          <CountdownUnit value={String(d)} label="Days" />
+          <span className="text-white/15 text-2xl font-mono leading-none -mt-3">:</span>
+          <CountdownUnit value={pad(h)} label="Hrs" />
+          <span className="text-white/15 text-2xl font-mono leading-none -mt-3">:</span>
+          <CountdownUnit value={pad(m)} label="Min" />
+          <span className="text-white/15 text-2xl font-mono leading-none -mt-3">:</span>
+          <CountdownUnit value={pad(s)} label="Sec" />
+        </div>
+      </div>
+    </div>
+  )
 }
 
 // ── Sub-components ─────────────────────────────────────────────────────────────
@@ -212,6 +354,7 @@ export function ScheduleView({ races }: { races: Race[] }) {
   // SSR-safe: start with 'local', hydrate after mount
   const [tzValue, setTzValue] = useState('local')
   const [mounted, setMounted] = useState(false)
+  const [filter, setFilter] = useState<'upcoming' | 'completed'>('upcoming')
 
   useEffect(() => {
     setMounted(true)
@@ -228,8 +371,22 @@ export function ScheduleView({ races }: { races: Race[] }) {
   const nextIdx = statuses.findIndex(s => s === 'upcoming')
   if (nextIdx !== -1) statuses[nextIdx] = 'next'
 
+  // Pair each race with its status, then split into upcoming/completed buckets.
+  // 'past' = the Race session has finished; everything else is upcoming (incl. next/live).
+  const pairs = races.map((race, i) => ({ race, status: statuses[i], index: i }))
+  const counts = {
+    upcoming: pairs.filter(p => p.status !== 'past').length,
+    completed: pairs.filter(p => p.status === 'past').length,
+  }
+  const filteredPairs = pairs.filter(p => (filter === 'completed' ? p.status === 'past' : p.status !== 'past'))
+  // Before mount, render the full list so SSR and first client render match (no node-count mismatch).
+  const visible = mounted ? filteredPairs : pairs
+
   return (
     <div className="w-full">
+      {/* Countdown to the next session across the whole calendar */}
+      <NextSessionCountdown races={races} tz={tz} tzAbbr={tzAbbr} mounted={mounted} />
+
       {/* Timezone selector */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-8">
         <div>
@@ -260,14 +417,41 @@ export function ScheduleView({ races }: { races: Race[] }) {
         </div>
       </div>
 
+      {/* Filter tabs */}
+      <div className="flex items-center gap-3 mb-6">
+        <div className="inline-flex items-center gap-1 rounded-xl border border-[#1a1a1a] bg-[#0a0a0a] p-1">
+          {(['upcoming', 'completed'] as const).map(f => {
+            const active = filter === f
+            return (
+              <button
+                key={f}
+                onClick={() => setFilter(f)}
+                className={`relative px-4 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
+                  active
+                    ? 'bg-white/[0.07] text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]'
+                    : 'text-white/40 hover:text-white/70'
+                }`}
+              >
+                {f === 'upcoming' ? 'Upcoming' : 'Completed'}
+                {mounted && (
+                  <span className={`ml-1.5 text-[10px] font-mono ${active ? 'text-[#d4a017]' : 'text-white/25'}`}>
+                    {counts[f]}
+                  </span>
+                )}
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
       {/* Race cards grid */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-        {races.map((race, i) => (
+        {visible.map(({ race, status, index }) => (
           <RoundCard
             key={race.round}
             race={race}
-            status={statuses[i]}
-            index={i}
+            status={status}
+            index={index}
             tz={tz}
           />
         ))}
@@ -276,6 +460,14 @@ export function ScheduleView({ races }: { races: Race[] }) {
       {races.length === 0 && (
         <div className="py-20 text-center">
           <p className="text-white/30 text-sm font-mono">Schedule not yet available</p>
+        </div>
+      )}
+
+      {races.length > 0 && mounted && visible.length === 0 && (
+        <div className="py-16 text-center">
+          <p className="text-white/30 text-sm font-mono">
+            {filter === 'completed' ? 'No races completed yet this season.' : 'No upcoming races remaining.'}
+          </p>
         </div>
       )}
     </div>
