@@ -5,14 +5,13 @@ import {
   getSeason,
   getDriverStandings,
   getConstructorStandings,
-  getSchedule,
   getLastRaceResults,
   getPastSeason,
+  getSeasonPodiums,
   teamColor,
   formatRaceDate,
-  isPast,
 } from '@/lib/f1api'
-import type { DriverStanding, ConstructorStanding } from '@/lib/f1api'
+import type { DriverStanding, ConstructorStanding, RacePodium } from '@/lib/f1api'
 
 export const revalidate = 3600
 
@@ -55,11 +54,11 @@ export default async function ResultsPage() {
   const season = await getSeason()
   const pastYears = [String(Number(season) - 1), String(Number(season) - 2)]
 
-  const [driverData, constructors, schedule, lastRace, ...pastSeasons] = await Promise.all([
+  const [driverData, constructors, lastRace, podiums, ...pastSeasons] = await Promise.all([
     getDriverStandings(),
     getConstructorStandings(),
-    getSchedule(),
     getLastRaceResults(),
+    getSeasonPodiums(season),
     ...pastYears.map((y) => getPastSeason(y)),
   ])
 
@@ -184,44 +183,54 @@ export default async function ResultsPage() {
                 </section>
               )}
 
-              {/* Calendar */}
-              {schedule.length > 0 && (
+              {/* Race results (current season) */}
+              {podiums.length > 0 && (
                 <section>
-                  <SectionHeading eyebrow="Calendar" title={`${season} Race Schedule`} />
-                  <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                    {schedule.map((race) => {
-                      const done = isPast(race.date)
-                      return (
-                        <div
-                          key={race.round}
-                          className={`rounded-xl border px-4 py-3 ${
-                            done
-                              ? 'border-[#1a1a1a] bg-[#0a0a0a]'
-                              : 'border-[#141414] bg-transparent'
-                          }`}
-                        >
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="text-white/40 text-[10px] font-mono uppercase tracking-wider">
-                              Round {race.round}
-                            </span>
-                            {done ? (
-                              <span className="text-[#38b000] text-[10px] font-mono">✓ Done</span>
-                            ) : (
-                              <span className="text-[#d4a017] text-[10px] font-mono">Upcoming</span>
-                            )}
-                          </div>
-                          <div className={`text-sm font-medium ${done ? 'text-white' : 'text-[#888888]'}`}>
-                            {race.raceName.replace('Grand Prix', 'GP')}
-                          </div>
-                          <div className="text-white/50 text-xs mt-0.5">
-                            {race.Circuit.Location.country} · {formatRaceDate(race.date)}
-                          </div>
-                        </div>
-                      )
-                    })}
+                  <SectionHeading
+                    eyebrow="Race by Race"
+                    title={`${season} Race Results`}
+                    sub={`${podiums.length} ${podiums.length === 1 ? 'round' : 'rounds'} completed — winner and podium for each.`}
+                  />
+                  <div className="mt-6">
+                    <RaceResultsList podiums={podiums} />
                   </div>
                 </section>
               )}
+
+              {/* Calendar CTA — full schedule lives on its own page */}
+              <section>
+                <a
+                  href="/schedule"
+                  className="group block rounded-2xl border border-[#1a1a1a] bg-[#0a0a0a] p-6 md:p-8 hover:border-[#d4a017]/40 transition-colors relative overflow-hidden"
+                >
+                  <div
+                    className="absolute inset-0 opacity-[0.04]"
+                    style={{
+                      backgroundImage:
+                        'linear-gradient(rgba(255,255,255,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.4) 1px, transparent 1px)',
+                      backgroundSize: '40px 40px',
+                    }}
+                  />
+                  <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+                    <div>
+                      <p className="text-[#d4a017] text-xs font-medium uppercase tracking-widest mb-2">Calendar</p>
+                      <h2 className="text-2xl md:text-3xl text-white" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+                        {season} Race Schedule
+                      </h2>
+                      <p className="text-white/55 text-sm mt-2 max-w-md">
+                        Every Grand Prix with Practice, Qualifying, Sprint and Race times — converted to your
+                        local timezone, plus a live countdown to the next session.
+                      </p>
+                    </div>
+                    <span className="inline-flex items-center gap-2 px-5 py-3 bg-white/5 text-white font-medium rounded-xl border border-white/10 group-hover:bg-[#d4a017] group-hover:text-black group-hover:border-[#d4a017] transition-all whitespace-nowrap self-start">
+                      View Full Schedule
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </span>
+                  </div>
+                </a>
+              </section>
 
               {/* Past seasons */}
               {pastSeasons.some((s) => s.drivers.length > 0) && (
@@ -336,7 +345,52 @@ function ConstructorStandingsGrid({ constructors }: { constructors: ConstructorS
   )
 }
 
-function PastSeasonPanel({ season }: { season: { year: string; drivers: DriverStanding[]; constructors: ConstructorStanding[] } }) {
+function RaceResultsList({ podiums }: { podiums: RacePodium[] }) {
+  const medalColor = ['#d4a017', '#b8b8b8', '#cd7f32'] // gold, silver, bronze
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+      {podiums.map((race) => (
+        <div key={race.round} className="rounded-xl border border-[#161616] bg-[#0a0a0a] overflow-hidden">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-[#141414]">
+            <div className="min-w-0">
+              <span className="text-white text-sm font-medium">
+                {race.raceName.replace('Grand Prix', 'GP')}
+              </span>
+              <span className="text-white/40 text-xs ml-2 font-mono">{race.country}</span>
+            </div>
+            <span className="text-white/35 text-[10px] font-mono uppercase tracking-wider shrink-0">
+              Rnd {race.round} · {formatRaceDate(race.date)}
+            </span>
+          </div>
+          <div className="divide-y divide-[#0d0d0d]">
+            {race.podium.map((r, i) => {
+              const color = teamColor(r.Constructor.constructorId)
+              return (
+                <div key={r.Driver.driverId} className="flex items-center gap-3 px-4 py-2">
+                  <span
+                    className="text-[11px] font-mono font-semibold w-4 text-center shrink-0"
+                    style={{ color: medalColor[i] ?? '#777777' }}
+                  >
+                    {r.position}
+                  </span>
+                  <span className="w-1 h-4 rounded-full shrink-0" style={{ backgroundColor: color }} />
+                  <span className="text-white text-sm font-medium truncate">
+                    {r.Driver.givenName} {r.Driver.familyName}
+                  </span>
+                  <span className="text-white/40 text-[10px] font-mono ml-auto shrink-0 hidden sm:inline">
+                    {r.Constructor.name}
+                  </span>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function PastSeasonPanel({ season }: { season: { year: string; drivers: DriverStanding[]; constructors: ConstructorStanding[]; podiums: RacePodium[] } }) {
   const champ = season.drivers[0]
   const champColor = teamColor(champ?.Constructors[0]?.constructorId ?? '')
   const teamChamp = season.constructors[0]
@@ -386,6 +440,12 @@ function PastSeasonPanel({ season }: { season: { year: string; drivers: DriverSt
           <div>
             <p className="text-white/45 text-[11px] font-mono uppercase tracking-wider mb-3">Constructor Standings</p>
             <ConstructorStandingsGrid constructors={season.constructors} />
+          </div>
+        )}
+        {season.podiums.length > 0 && (
+          <div>
+            <p className="text-white/45 text-[11px] font-mono uppercase tracking-wider mb-3">Race Results</p>
+            <RaceResultsList podiums={season.podiums} />
           </div>
         )}
       </div>

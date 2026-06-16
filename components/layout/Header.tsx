@@ -15,6 +15,7 @@ const NAV_LINKS = [
   { href: '/garage', label: 'My Garage' },
   { href: '/results', label: '2026 Season' },
   { href: '/schedule', label: 'Schedule' },
+  { href: '/calendar', label: 'Calendar' },
   { href: '/games', label: 'Mini Games' },
 ]
 

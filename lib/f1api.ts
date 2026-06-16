@@ -113,27 +113,73 @@ export async function getSchedule(): Promise<Race[]> {
   return data?.MRData?.RaceTable?.Races ?? []
 }
 
+export interface RacePodium {
+  round: string
+  raceName: string
+  date: string
+  circuitName: string
+  country: string
+  podium: RaceResult[] // finishers P1–P3, ordered by position
+}
+
+// Per-race podiums for a whole season. The Jolpica API caps `limit` at 100, so
+// rather than paginate the full results we hit the compact position endpoints
+// (/results/1, /2, /3) — each returns one row per race — and merge them by round.
+export async function getSeasonPodiums(year: string): Promise<RacePodium[]> {
+  const pages = await Promise.all(
+    [1, 2, 3].map((p) =>
+      getJson<{ MRData: { RaceTable: { Races: Race[] } } }>(`${year}/results/${p}.json`),
+    ),
+  )
+
+  const byRound = new Map<string, RacePodium>()
+  for (const page of pages) {
+    for (const r of page?.MRData?.RaceTable?.Races ?? []) {
+      let entry = byRound.get(r.round)
+      if (!entry) {
+        entry = {
+          round: r.round,
+          raceName: r.raceName,
+          date: r.date,
+          circuitName: r.Circuit.circuitName,
+          country: r.Circuit.Location.country,
+          podium: [],
+        }
+        byRound.set(r.round, entry)
+      }
+      if (r.Results?.[0]) entry.podium.push(r.Results[0])
+    }
+  }
+
+  return [...byRound.values()]
+    .map((e) => ({ ...e, podium: e.podium.sort((a, b) => Number(a.position) - Number(b.position)) }))
+    .sort((a, b) => Number(b.round) - Number(a.round)) // most recent first
+}
+
 // ── Past-season final standings (completed years) ──────────────────────────────
 
 export interface PastSeason {
   year: string
   drivers: DriverStanding[]
   constructors: ConstructorStanding[]
+  podiums: RacePodium[]
 }
 
 export async function getPastSeason(year: string): Promise<PastSeason> {
-  const [driverData, constructorData] = await Promise.all([
+  const [driverData, constructorData, podiums] = await Promise.all([
     getJson<{ MRData: { StandingsTable: { StandingsLists: { DriverStandings: DriverStanding[] }[] } } }>(
       `${year}/driverStandings.json`,
     ),
     getJson<{ MRData: { StandingsTable: { StandingsLists: { ConstructorStandings: ConstructorStanding[] }[] } } }>(
       `${year}/constructorStandings.json`,
     ),
+    getSeasonPodiums(year),
   ])
   return {
     year,
     drivers: driverData?.MRData?.StandingsTable?.StandingsLists?.[0]?.DriverStandings ?? [],
     constructors: constructorData?.MRData?.StandingsTable?.StandingsLists?.[0]?.ConstructorStandings ?? [],
+    podiums,
   }
 }
 

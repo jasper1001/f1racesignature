@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/drivers`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${SITE_URL}/results`, lastModified: now, changeFrequency: 'daily', priority: 0.8 },
     { url: `${SITE_URL}/schedule`, lastModified: now, changeFrequency: 'weekly', priority: 0.85 },
+    { url: `${SITE_URL}/calendar`, lastModified: now, changeFrequency: 'weekly', priority: 0.85 },
     { url: `${SITE_URL}/games`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${SITE_URL}/games/lights-out`,             lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${SITE_URL}/games/guess-the-driver`,       lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
