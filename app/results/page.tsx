@@ -12,8 +12,11 @@ import {
   formatRaceDate,
 } from '@/lib/f1api'
 import type { DriverStanding, ConstructorStanding, RacePodium } from '@/lib/f1api'
+import { findStudioLapsForWinners } from '@/lib/serverData'
 
 export const revalidate = 3600
+
+type StudioLink = { driverId: string; raceId: string }
 
 export async function generateMetadata(): Promise<Metadata> {
   const { round, standings } = await getDriverStandings()
@@ -63,6 +66,15 @@ export default async function ResultsPage() {
   ])
 
   const { round, standings: drivers } = driverData
+
+  // Match each current-season winner to a curated Studio lap — but only where we
+  // actually have real telemetry for that driver + circuit + year.
+  const studioLinks = findStudioLapsForWinners(
+    podiums
+      .filter((p) => p.podium[0])
+      .map((p) => ({ round: p.round, familyName: p.podium[0].Driver.familyName, circuitName: p.circuitName })),
+    Number(season),
+  )
 
   const standingsJsonLd = drivers.length
     ? {
@@ -192,7 +204,7 @@ export default async function ResultsPage() {
                     sub={`${podiums.length} ${podiums.length === 1 ? 'round' : 'rounds'} completed — winner and podium for each.`}
                   />
                   <div className="mt-6">
-                    <RaceResultsList podiums={podiums} />
+                    <RaceResultsList podiums={podiums} studioLinks={studioLinks} />
                   </div>
                 </section>
               )}
@@ -345,47 +357,67 @@ function ConstructorStandingsGrid({ constructors }: { constructors: ConstructorS
   )
 }
 
-function RaceResultsList({ podiums }: { podiums: RacePodium[] }) {
+function RaceResultsList({
+  podiums,
+  studioLinks,
+}: {
+  podiums: RacePodium[]
+  studioLinks?: Record<string, StudioLink>
+}) {
   const medalColor = ['#d4a017', '#b8b8b8', '#cd7f32'] // gold, silver, bronze
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-      {podiums.map((race) => (
-        <div key={race.round} className="rounded-xl border border-[#161616] bg-[#0a0a0a] overflow-hidden">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-[#141414]">
-            <div className="min-w-0">
-              <span className="text-white text-sm font-medium">
-                {race.raceName.replace('Grand Prix', 'GP')}
+      {podiums.map((race) => {
+        const studio = studioLinks?.[race.round]
+        return (
+          <div key={race.round} className="rounded-xl border border-[#161616] bg-[#0a0a0a] overflow-hidden">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-[#141414]">
+              <div className="min-w-0">
+                <span className="text-white text-sm font-medium">
+                  {race.raceName.replace('Grand Prix', 'GP')}
+                </span>
+                <span className="text-white/40 text-xs ml-2 font-mono">{race.country}</span>
+              </div>
+              <span className="text-white/35 text-[10px] font-mono uppercase tracking-wider shrink-0">
+                Rnd {race.round} · {formatRaceDate(race.date)}
               </span>
-              <span className="text-white/40 text-xs ml-2 font-mono">{race.country}</span>
             </div>
-            <span className="text-white/35 text-[10px] font-mono uppercase tracking-wider shrink-0">
-              Rnd {race.round} · {formatRaceDate(race.date)}
-            </span>
+            <div className="divide-y divide-[#0d0d0d]">
+              {race.podium.map((r, i) => {
+                const color = teamColor(r.Constructor.constructorId)
+                return (
+                  <div key={r.Driver.driverId} className="flex items-center gap-3 px-4 py-2">
+                    <span
+                      className="text-[11px] font-mono font-semibold w-4 text-center shrink-0"
+                      style={{ color: medalColor[i] ?? '#777777' }}
+                    >
+                      {r.position}
+                    </span>
+                    <span className="w-1 h-4 rounded-full shrink-0" style={{ backgroundColor: color }} />
+                    <span className="text-white text-sm font-medium truncate">
+                      {r.Driver.givenName} {r.Driver.familyName}
+                    </span>
+                    <span className="text-white/40 text-[10px] font-mono ml-auto shrink-0 hidden sm:inline">
+                      {r.Constructor.name}
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+            {studio && (
+              <a
+                href={`/studio?driver=${studio.driverId}&race=${studio.raceId}`}
+                className="group flex items-center justify-center gap-1.5 px-4 py-2.5 border-t border-[#141414] text-[#d4a017] text-[10px] font-mono uppercase tracking-wider hover:bg-[#d4a017]/10 transition-colors"
+              >
+                View winner&apos;s lap in Studio
+                <svg width="12" height="12" viewBox="0 0 14 14" fill="none" className="transition-transform group-hover:translate-x-0.5">
+                  <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </a>
+            )}
           </div>
-          <div className="divide-y divide-[#0d0d0d]">
-            {race.podium.map((r, i) => {
-              const color = teamColor(r.Constructor.constructorId)
-              return (
-                <div key={r.Driver.driverId} className="flex items-center gap-3 px-4 py-2">
-                  <span
-                    className="text-[11px] font-mono font-semibold w-4 text-center shrink-0"
-                    style={{ color: medalColor[i] ?? '#777777' }}
-                  >
-                    {r.position}
-                  </span>
-                  <span className="w-1 h-4 rounded-full shrink-0" style={{ backgroundColor: color }} />
-                  <span className="text-white text-sm font-medium truncate">
-                    {r.Driver.givenName} {r.Driver.familyName}
-                  </span>
-                  <span className="text-white/40 text-[10px] font-mono ml-auto shrink-0 hidden sm:inline">
-                    {r.Constructor.name}
-                  </span>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      ))}
+        )
+      })}
     </div>
   )
 }
