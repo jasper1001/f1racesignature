@@ -202,6 +202,11 @@ RACES = [
         year=2026, gp="Barcelona Grand Prix", session="R", driver="HAM",
         championshipPoints=[10,20,30,40,47,65,90,108,126,144,162,180,198,216,230,255],
     ),
+    dict(
+        id="antonelli_monaco_2026", driverId="antonelli", circuitId="monaco",
+        year=2026, gp="Monaco Grand Prix", session="Q", driver="ANT",
+        championshipPoints=[18,47,72,100,131,156,156],   # real cumulative points (Jolpica)
+    ),
 ]
 
 # ── Helpers ───────────────────────────────────────────────────────────────────

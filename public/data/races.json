@@ -375,5 +375,18 @@
     "description": "Hamilton's first victory in Ferrari red. A commanding display at the Circuit de Catalunya — controlled pace, immaculate tyre management, and the calm of a seven-time champion writing a new chapter in scarlet.",
     "isFree": false,
     "telemetryFile": "hamilton_barcelona_2026"
+  },
+  {
+    "id": "antonelli_monaco_2026",
+    "driverId": "antonelli",
+    "name": "Monaco Grand Prix 2026",
+    "circuit": "monaco",
+    "circuitName": "Circuit de Monaco",
+    "year": 2026,
+    "location": "Monte Carlo, Monaco",
+    "lapTime": "1:12.051",
+    "description": "A statement carved into the streets of Monte Carlo. Antonelli put his Mercedes on pole and never looked back — a pole-to-flag victory that announced Formula 1's next great talent in the sport's most unforgiving arena.",
+    "isFree": false,
+    "telemetryFile": "antonelli_monaco_2026"
   }
 ]

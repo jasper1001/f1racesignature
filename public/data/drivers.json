@@ -185,5 +185,16 @@
     "isFree": false,
     "championships": 0,
     "bio": "Ice-cold from the moment he arrived. A junior-category steamroller whose maturity and racecraft made him a Grand Prix winner faster than almost anyone expected."
+  },
+  {
+    "id": "antonelli",
+    "name": "Andrea Kimi Antonelli",
+    "shortName": "ANT",
+    "team": "Mercedes",
+    "nationality": "Italian",
+    "color": "#00d2be",
+    "isFree": false,
+    "championships": 0,
+    "bio": "The teenage prodigy who turned hype into history. Promoted straight to Mercedes, Antonelli answered every doubt with a pole-to-flag win at Monaco — composure and raw speed far beyond his years."
   }
 ]
