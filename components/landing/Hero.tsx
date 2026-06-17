@@ -103,7 +103,7 @@ export function Hero() {
               <span className="text-[#d4a017]">Becomes Art</span>
             </h1>
 
-            <p className="text-[#666666] text-base md:text-lg leading-relaxed mb-10 max-w-lg">
+            <p className="text-white/70 text-base md:text-lg leading-relaxed mb-10 max-w-lg">
               Transform legendary F1 lap data into collectible poster art.
               Racing lines, speed traces, and sector data rendered as cinematic prints
               you&apos;d hang in a museum.
@@ -165,7 +165,7 @@ export function Hero() {
                       )}
                     </div>
 
-                    <p className="text-[#444444] text-[10px] font-mono uppercase tracking-widest mb-1">
+                    <p className="text-white/50 text-[10px] font-mono uppercase tracking-widest mb-1">
                       {feature.tag}
                     </p>
                     <h3
@@ -174,7 +174,7 @@ export function Hero() {
                     >
                       {feature.title}
                     </h3>
-                    <p className="text-[#4a4a4a] text-xs leading-relaxed flex-1">
+                    <p className="text-white/60 text-xs leading-relaxed flex-1">
                       {feature.description}
                     </p>
 

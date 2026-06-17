@@ -545,6 +545,141 @@ export const ARTICLES: Article[] = [
       },
     ],
   },
+
+  {
+    slug: 'f1-2026-regulations-explained',
+    title: 'F1 2026 Regulations Explained: New Engines, Active Aero and Lighter Cars',
+    description: 'The 2026 Formula 1 rules are the biggest reset in a generation — a new power unit with far more electric power, 100% sustainable fuel, active aerodynamics replacing DRS, and smaller, lighter cars. Here is what is changing and why.',
+    date: '2026-06-17',
+    readMinutes: 8,
+    category: 'F1 2026',
+    intro: 'The 2026 season marks the most significant rules reset Formula 1 has attempted in more than a decade. New power unit regulations, a new chassis philosophy, active aerodynamics, fully sustainable fuel and an expanded grid arrive together — a deliberate effort by the FIA and Formula 1 to reshape the sport around road-relevant hybrid technology while keeping the racing close. This guide breaks down what actually changes for 2026 and what it means once the cars hit the track.',
+    sections: [
+      {
+        heading: 'Why 2026 Is a Clean-Sheet Reset',
+        paragraphs: [
+          'Major Formula 1 rule changes tend to come in two flavours: incremental refinements to an existing formula, and complete resets that touch the engine, the chassis and the aerodynamics all at once. 2026 is firmly the second kind. Rather than evolving the hybrid power units introduced in 2014, the FIA chose a new engine architecture, and rather than carrying the 2022-era ground-effect cars forward, the bodywork rules were rewritten around the new power.',
+          'The reason is partly competitive and partly strategic. A clean reset gives every team — and every engine manufacturer — a fresh starting point, which the sport hopes will reshuffle the order and prevent any single team from locking in a multi-year advantage. Just as importantly, the new rules were written to attract manufacturers: the promise of a simpler, cheaper, more sustainable and more electrified power unit is a large part of why the 2026 grid looks the way it does.',
+        ],
+      },
+      {
+        heading: 'The New Power Unit: Electric Power Takes Centre Stage',
+        paragraphs: [
+          'The headline change for 2026 is the power unit. Formula 1 retains a 1.6-litre turbocharged V6 hybrid, but rebalances it dramatically toward electrical power. Where the previous generation drew the large majority of its output from the internal combustion engine, the 2026 unit moves toward a roughly even split between combustion and electrical energy — a far greater share of the car\'s power now comes from the battery and motor.',
+          'To make this work, the FIA removed the MGU-H — the complex motor-generator attached to the turbocharger that recovered energy from exhaust gases. It was effective but expensive and difficult to develop, and it was widely seen as a barrier to new manufacturers entering the sport. In its place, the regulations significantly increase the output and importance of the MGU-K, the motor that recovers energy under braking and deploys it for acceleration.',
+          'The other defining change is fuel. From 2026, Formula 1 runs on 100% sustainable fuel — produced from non-fossil sources such as biomass or synthetic processes — rather than the partially fossil-based fuel used previously. The aim is for the power unit technology and the fuel to be directly relevant to road cars and to demonstrate that high-performance combustion can be decarbonised.',
+        ],
+      },
+      {
+        heading: 'Active Aerodynamics and the End of DRS',
+        paragraphs: [
+          'With so much more energy coming from the battery, managing electrical deployment over a lap becomes central to performance — and that drove one of the most visible chassis changes for 2026: active aerodynamics. Cars feature movable front and rear wings that can switch between a high-downforce configuration for corners and a low-drag configuration for straights, helping the car reach high speed efficiently and helping recover and deploy energy more effectively.',
+          'This active aero also changes how overtaking works. The Drag Reduction System (DRS) that defined overtaking for over a decade is replaced by a new "override" concept — a manual electrical power boost a chasing driver can deploy to help close on and pass the car ahead. The intention is to keep wheel-to-wheel battles alive without simply handing the following car a guaranteed pass, and to tie overtaking to the new electrified character of the cars.',
+        ],
+      },
+      {
+        heading: 'Smaller, Lighter, More Agile Cars',
+        paragraphs: [
+          'The 2026 cars are designed to be smaller and lighter than their immediate predecessors. The previous generation of ground-effect cars had grown long, wide and heavy, which made them less nimble and harder to race closely on tighter circuits. For 2026 the regulations trim the dimensions — reducing width and wheelbase — and lower the minimum weight, with the goal of producing a more agile car that is easier to throw into a corner and to follow through traffic.',
+          'These changes are not just about lap time. A lighter, smaller car is more responsive, brakes over a shorter distance, and places less energy through its tyres, all of which the sport hopes will improve the spectacle. Combined with the active aerodynamics, the target is a car that is quick on the straights, planted in the corners, and able to race closely without overheating its tyres in another car\'s wake.',
+        ],
+      },
+      {
+        heading: 'A Grid Built Around the New Rules',
+        paragraphs: [
+          'The 2026 power unit rules were written, in part, to attract manufacturers — and they worked. The grid features an expanded line-up of engine programmes, including established names continuing in the sport and new or returning manufacturers drawn by the simpler, more electrified formula and the removal of the MGU-H. The arrival of an eleventh team further widens the field.',
+          'The driver market reshuffled around the reset as well. Lewis Hamilton\'s move to Ferrari, completed ahead of these regulations, gave one of the sport\'s greatest drivers a fresh challenge just as the technical landscape was redrawn, while a new generation including Kimi Antonelli stepped up into front-running machinery. A clean-sheet rules year tends to amplify these storylines, because nobody knows for certain which team or power unit will emerge on top until the cars start racing.',
+        ],
+      },
+      {
+        heading: 'What It Means for the Racing',
+        paragraphs: [
+          'Big resets are always a gamble. Get them right and the field tightens, the racing improves, and a new competitive order emerges. Get them wrong and one manufacturer can nail the new formula and dominate while everyone else catches up. The early stages of any new rules cycle are usually the least predictable, which is precisely what makes them compelling to follow.',
+          'The best way to see how the 2026 reset is actually playing out is to follow the season as it unfolds — who has mastered the new power unit, which cars look fastest with active aero, and how the new override system changes the balance of attack and defence. You can track the live driver and constructor standings, the latest race results and the full calendar on our season pages, and explore the careers and machinery of the drivers shaping the new era across the site.',
+        ],
+      },
+    ],
+  },
+
+  {
+    slug: 'madrid-f1-grand-prix-2026',
+    title: 'Madrid F1: The New Grand Prix Joining the 2026 Calendar',
+    description: 'Madrid arrives on the Formula 1 calendar for 2026 with a brand-new circuit around the IFEMA exhibition grounds — a hybrid of street and purpose-built sections. Here is what to know about the Madrid Grand Prix and what it means for racing in Spain.',
+    date: '2026-06-16',
+    readMinutes: 6,
+    category: 'F1 2026',
+    intro: 'Formula 1\'s 2026 calendar welcomes a major new addition: a Grand Prix in Madrid, built around the IFEMA exhibition complex on the edge of the Spanish capital. It is one of the most significant new venues to join the schedule in years — a modern circuit in a major European city, designed from the outset for the kind of close racing the sport is chasing. Here is what makes the Madrid round notable and how it fits into Formula 1\'s long history in Spain.',
+    sections: [
+      {
+        heading: 'Madrid Joins the Formula 1 Calendar',
+        paragraphs: [
+          'Madrid\'s arrival is the headline new venue of the 2026 Formula 1 calendar. Centred on the IFEMA exhibition and conference grounds near Madrid-Barajas Airport, the project pairs a major capital city with the infrastructure — transport links, hospitality and existing event facilities — that Formula 1 increasingly favours when adding races.',
+          'Bringing a Grand Prix to a capital city is a deliberate strategy. Formula 1 has leaned toward destination events in major urban centres, where the race can become a citywide occasion rather than a weekend at an out-of-town circuit. Madrid fits that template: a large, accessible, motorsport-enthusiastic audience with the venue and transport capacity to host a modern Formula 1 weekend.',
+        ],
+      },
+      {
+        heading: 'A New Circuit: Street and Permanent Combined',
+        paragraphs: [
+          'The Madrid layout is a hybrid design — part street circuit, part purpose-built track — winding through and around the IFEMA grounds. This combination aims to capture the best of both worlds: the urban backdrop and atmosphere of a street race, with sections built specifically to encourage overtaking and high-speed running rather than the processional racing that some tight street circuits produce.',
+          'Designing for racing quality is central to modern circuit projects, and it dovetails neatly with the 2026 car regulations. The new generation of smaller, lighter cars with active aerodynamics is intended to follow and race more closely, so a fresh circuit built with overtaking in mind gives those cars a stage suited to their strengths. As with any brand-new venue, the true character of the track only becomes clear once cars run on it in anger.',
+        ],
+      },
+      {
+        heading: 'Madrid and Formula 1 in Spain',
+        paragraphs: [
+          'Spain has a deep Formula 1 heritage. The Circuit de Barcelona-Catalunya has hosted the Spanish Grand Prix for decades and is one of the most familiar venues in the sport — used so often for pre-season testing that teams and drivers know every metre of it. The country also produced one of the modern era\'s greats in Fernando Alonso, whose two world championships made Formula 1 a mainstream sport in Spain.',
+          'The addition of Madrid is part of the broader churn of the Formula 1 calendar, where established European rounds and ambitious new city projects continually compete for places on an increasingly crowded schedule. However the balance between Spain\'s venues settles over time, Madrid\'s entry signals the sport\'s continued appetite for big-city races in markets with a strong, established fanbase.',
+        ],
+      },
+      {
+        heading: 'What to Expect',
+        paragraphs: [
+          'For a debut Grand Prix, the most interesting questions are always the unknowns: how the new surface evolves across the weekend, where the genuine overtaking opportunities turn out to be, and how the 2026 cars handle a layout none of them have raced before. New circuits often deliver surprises in their first running, as teams arrive with setup assumptions that the real track quickly rewrites.',
+          'To see exactly where the Madrid round sits on the schedule, the session times in your local timezone and how the weekend fits around the rest of the 2026 season, check our calendar and schedule pages — and follow the race results and standings to see how the new venue shapes the championship.',
+        ],
+      },
+    ],
+  },
+
+  {
+    slug: 'cadillac-f1-2026-entry',
+    title: 'Cadillac F1: General Motors Joins the Grid as the 11th Team in 2026',
+    description: 'Cadillac enters Formula 1 in 2026 as the grid\'s eleventh team, backed by General Motors. Here is what the new American outfit brings to the sport, its experienced driver line-up, and the long road of building a competitive F1 team from scratch.',
+    date: '2026-06-16',
+    readMinutes: 6,
+    category: 'F1 2026',
+    intro: 'For the first time in years, Formula 1 expands beyond ten teams. Cadillac — backed by American automotive giant General Motors — joins the grid as the eleventh team in 2026, becoming the most prominent new constructor to enter the sport in a generation. A new team arriving alongside the biggest rules reset in over a decade is a rare and fascinating combination, and it gives Formula 1 a fresh American presence at a time when the sport\'s popularity in the United States has never been higher.',
+    sections: [
+      {
+        heading: 'Formula 1\'s Eleventh Team',
+        paragraphs: [
+          'Expanding the grid is not something Formula 1 does lightly. New teams must clear significant commercial, technical and sporting hurdles before being admitted, and the sport had held steady at ten teams for years. Cadillac\'s entry breaks that, taking the grid to eleven teams and twenty-two cars — a meaningful change to the competitive landscape and to the look of every starting grid.',
+          'The timing is striking. Arriving in the same season as the 2026 regulations reset means the new team starts from the same clean sheet as everyone else on the new rules, even if it lacks the institutional experience of established constructors. That is both an opportunity and a challenge: there is no entrenched advantage to overcome, but there is also no accumulated know-how to lean on.',
+        ],
+      },
+      {
+        heading: 'General Motors Enters Formula 1',
+        paragraphs: [
+          'The project carries serious industrial weight. General Motors — one of the largest car manufacturers in the world — stands behind the Cadillac entry, signalling a long-term commitment rather than a short-term marketing exercise. For a sport actively courting major manufacturers with its new, more sustainable and more electrified power unit rules, landing a company of GM\'s scale is a significant statement.',
+          'Building a competitive Formula 1 operation is an enormous undertaking that spans engine and chassis development, aerodynamics, manufacturing, logistics and race operations. A new entrant typically begins by leaning on established suppliers and partners while it builds its own capability over time — a pragmatic path that lets the team go racing while longer-term programmes mature behind the scenes.',
+        ],
+      },
+      {
+        heading: 'An Experienced Driver Line-Up',
+        paragraphs: [
+          'New teams face a choice between unproven young talent and seasoned campaigners, and Cadillac leaned toward experience for its debut. Sergio Pérez — a multiple Grand Prix winner with years at the front of the grid — anchors the line-up, bringing exactly the kind of race-hardened feedback and tyre-management craft that a young team needs while it learns to extract the most from its package.',
+          'Pairing established, race-winning experience with a brand-new operation is a sensible strategy. Veteran drivers can isolate car problems from driver limitations, deliver consistent reference data for the engineers, and bank points whenever the car gives them a chance — all of which accelerates a new team\'s development far more reliably than raw speed alone. You can explore Pérez\'s career and the teams he has driven for across our driver pages.',
+        ],
+      },
+      {
+        heading: 'The Long Road to the Front',
+        paragraphs: [
+          'History suggests patience is essential for any new Formula 1 team. Even well-funded entrants rarely fight at the front in their first seasons; the gap between arriving on the grid and genuinely competing for podiums is usually measured in years, not months. The realistic early goals are reliability, steady operational improvement, and occasional points when circumstances allow — the foundations on which a serious challenge is later built.',
+          'What makes Cadillac\'s arrival compelling is the scale of the ambition behind it and the unusual context of debuting into a clean-sheet rules era. The fairest way to judge the project is not by where it qualifies in its opening races, but by its trajectory across the season and beyond. Follow the 2026 results and standings to watch how Formula 1\'s newest team finds its feet on the grid.',
+        ],
+      },
+    ],
+  },
 ]
 
 export function getArticle(slug: string): Article | undefined {

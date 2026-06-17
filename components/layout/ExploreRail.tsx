@@ -64,6 +64,17 @@ const FEATURES: Feature[] = [
       </svg>
     ),
   },
+  {
+    label: 'Support on Ko-fi',
+    href: 'https://ko-fi.com/jascodingvibes',
+    desc: 'Help fund the project',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M4 5h13a3 3 0 0 1 0 6h-1M4 5v8a4 4 0 0 0 4 4h5a4 4 0 0 0 4-4v-2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M7 2v1.5M10 2v1.5M13 2v1.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    ),
+  },
 ]
 
 export function ExploreRail() {

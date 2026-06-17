@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   if (!race) return {}
   const driver = getDriver(race.driverId)
   const driverName = driver?.name ?? ''
-  const title = `${driverName} — ${race.name} Poster`
+  const title = `${driverName} — ${race.name} ${race.year} Poster`
   const description = `${race.description} Lap time ${race.lapTime}. Turn this drive into collectible F1 poster art with real telemetry.`
   return {
     title,

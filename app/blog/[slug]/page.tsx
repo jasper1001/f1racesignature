@@ -8,6 +8,19 @@ import { getArticle, getAllArticleSlugs, ARTICLES } from '@/lib/articles'
 const SITE_URL = 'https://f1racesignature.site'
 
 const ARTICLE_KEYWORDS: Record<string, string[]> = {
+  'f1-2026-regulations-explained': [
+    'F1 2026 regulations', 'F1 2026 rules', 'F1 2026 engine', 'F1 2026 power unit',
+    '2026 F1 active aerodynamics', 'F1 2026 sustainable fuel', 'F1 DRS replacement override',
+    'F1 2026 car changes', 'Formula 1 2026 regulations explained',
+  ],
+  'madrid-f1-grand-prix-2026': [
+    'Madrid F1', 'Madrid Grand Prix 2026', 'Madrid F1 circuit', 'IFEMA F1 circuit',
+    'Madring', 'F1 2026 calendar Madrid', 'Spanish Grand Prix Madrid', 'new F1 circuit 2026',
+  ],
+  'cadillac-f1-2026-entry': [
+    'Cadillac F1', 'Cadillac Formula 1 2026', 'General Motors F1', 'GM F1 team',
+    'F1 11th team', 'Cadillac F1 drivers', 'Sergio Perez Cadillac', 'new F1 team 2026',
+  ],
   '10-greatest-f1-laps': [
     'greatest F1 laps of all time', 'best Formula 1 laps', 'Senna Monaco 1984 qualifying',
     'Hamilton greatest lap', 'Schumacher fastest lap', 'Verstappen Abu Dhabi 2021',

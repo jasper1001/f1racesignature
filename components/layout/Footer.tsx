@@ -38,11 +38,18 @@ export function Footer() {
           <div className="flex flex-col sm:flex-row gap-8 text-sm">
             <div className="flex flex-col gap-2">
               <span className="text-white/40 font-medium uppercase tracking-widest text-xs">Navigate</span>
-              <Link href="/" className="text-white/55 hover:text-white transition-colors">Home</Link>
-              <Link href="/studio" className="text-white/55 hover:text-white transition-colors">Studio</Link>
-              <Link href="/gallery" className="text-white/55 hover:text-white transition-colors">Gallery</Link>
-              <Link href="/results" className="text-white/55 hover:text-white transition-colors">2026 Season</Link>
-              <Link href="/games" className="text-white/55 hover:text-white transition-colors">Mini Games</Link>
+              <div className="grid grid-cols-2 gap-x-8 gap-y-2">
+                <Link href="/" className="text-white/55 hover:text-white transition-colors">Home</Link>
+                <Link href="/results" className="text-white/55 hover:text-white transition-colors">2026 Season</Link>
+                <Link href="/studio" className="text-white/55 hover:text-white transition-colors">Studio</Link>
+                <Link href="/schedule" className="text-white/55 hover:text-white transition-colors">Schedule</Link>
+                <Link href="/gallery" className="text-white/55 hover:text-white transition-colors">Gallery</Link>
+                <Link href="/calendar" className="text-white/55 hover:text-white transition-colors">Calendar</Link>
+                <Link href="/drivers" className="text-white/55 hover:text-white transition-colors">Drivers</Link>
+                <Link href="/games" className="text-white/55 hover:text-white transition-colors">Mini Games</Link>
+                <Link href="/blog" className="text-white/55 hover:text-white transition-colors">Blog</Link>
+                <Link href="/garage" className="text-white/55 hover:text-white transition-colors">My Garage</Link>
+              </div>
             </div>
             <div className="flex flex-col gap-2">
               <span className="text-white/40 font-medium uppercase tracking-widest text-xs">Legal</span>
