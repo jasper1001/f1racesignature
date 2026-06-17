@@ -14,11 +14,18 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const { id } = await params
   const driver = getDriver(id)
   if (!driver) return {}
+  const firstName = driver.name.split(' ')[0]
+  const champLabel =
+    driver.championships > 0 ? `${driver.championships}× F1 World Champion` : 'F1 Grand Prix winner'
   const title = `${driver.name} — F1 Telemetry Poster Art`
-  const description = `Create collectible poster art from ${driver.name}'s legendary laps. Real F1 racing lines, speed traces, and sector data rendered as cinematic prints. ${driver.bio}`
+  const description = `${driver.name}, ${champLabel} (${driver.team}). Turn ${firstName}'s legendary laps into collectible poster art — real F1 racing lines, speed traces and sector data rendered as cinematic prints.`
   return {
     title,
     description,
+    keywords: [
+      `${driver.name} poster`, `${driver.name} art`, `${driver.name} print`, `${driver.name} F1`,
+      `${driver.team} poster`, `${firstName} telemetry art`, 'F1 driver poster', 'Formula 1 wall art',
+    ],
     alternates: { canonical: `/drivers/${driver.id}` },
     openGraph: {
       title,
@@ -47,25 +54,50 @@ export default async function DriverPage({ params }: { params: Promise<{ id: str
 
   const SITE_URL = 'https://f1racesignature.site'
 
+  const pageUrl = `${SITE_URL}/drivers/${driver.id}`
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
       {
-        '@type': 'Person',
-        name: driver.name,
-        jobTitle: 'Formula 1 Driver',
-        nationality: driver.nationality,
-        description: driver.bio,
-        url: `${SITE_URL}/drivers/${driver.id}`,
+        '@type': 'ProfilePage',
+        url: pageUrl,
+        mainEntity: {
+          '@type': 'Person',
+          name: driver.name,
+          jobTitle: 'Formula 1 Driver',
+          nationality: driver.nationality,
+          description: driver.bio,
+          url: pageUrl,
+          worksFor: { '@type': 'SportsTeam', name: driver.team },
+          ...(driver.championships > 0
+            ? { award: `${driver.championships}× FIA Formula One World Champion` }
+            : {}),
+        },
       },
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
           { '@type': 'ListItem', position: 2, name: 'Drivers', item: `${SITE_URL}/drivers` },
-          { '@type': 'ListItem', position: 3, name: driver.name, item: `${SITE_URL}/drivers/${driver.id}` },
+          { '@type': 'ListItem', position: 3, name: driver.name, item: pageUrl },
         ],
       },
+      ...(races.length > 0
+        ? [
+            {
+              '@type': 'ItemList',
+              name: `${driver.name} — featured laps`,
+              numberOfItems: races.length,
+              itemListElement: races.map((r, i) => ({
+                '@type': 'ListItem',
+                position: i + 1,
+                name: `${r.name} — ${r.circuitName}`,
+                url: `${SITE_URL}/race/${r.id}`,
+              })),
+            },
+          ]
+        : []),
     ],
   }
 

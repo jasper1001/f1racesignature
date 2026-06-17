@@ -4,47 +4,94 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { getAllDrivers, getRacesForDriver } from '@/lib/serverData'
 
-export const metadata: Metadata = {
-  title: 'F1 Driver Collection — Senna, Hamilton, Verstappen & More',
-  description:
-    'Browse every driver in the F1RaceSignature collection — Ayrton Senna, Lewis Hamilton, Michael Schumacher, Max Verstappen, Charles Leclerc, Lando Norris and more. Turn their legendary laps into collectible poster art.',
-  keywords: [
-    'F1 drivers poster', 'Ayrton Senna poster', 'Lewis Hamilton poster art', 'Max Verstappen poster',
-    'Michael Schumacher art', 'F1 driver collection', 'Formula 1 legends', 'F1 race art',
-    'F1 driver prints', 'Lando Norris poster', 'Charles Leclerc art', 'F1 championship winners art',
-  ],
-  alternates: { canonical: '/drivers' },
-  openGraph: {
-    title: 'F1 Driver Collection — Senna, Hamilton, Verstappen & More',
-    description: 'Turn legendary F1 drives by Senna, Hamilton, Schumacher, Verstappen, Leclerc, Norris and more into poster art.',
-    url: '/drivers',
-    type: 'website',
-    siteName: 'F1RaceSignature',
-    locale: 'en_US',
-    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'F1 Driver Collection — F1RaceSignature' }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'F1 Driver Collection — Senna, Hamilton, Verstappen & More',
-    description: 'Legendary F1 drives from Senna to Verstappen — turn any lap into poster art.',
-    images: ['/opengraph-image'],
-  },
+const SITE_URL = 'https://f1racesignature.site'
+
+export function generateMetadata(): Metadata {
+  const drivers = getAllDrivers()
+  const champions = drivers.filter((d) => d.championships > 0).length
+  const title = 'F1 Driver Collection — Senna, Hamilton, Verstappen & More'
+  const description = `Browse all ${drivers.length} drivers in the F1RaceSignature collection — ${champions} world champions plus modern Grand Prix winners, from Ayrton Senna and Michael Schumacher to Lewis Hamilton, Max Verstappen, Charles Leclerc and Lando Norris. Turn their legendary laps into collectible poster art.`
+  return {
+    title,
+    description,
+    keywords: [
+      'F1 drivers poster', 'Ayrton Senna poster', 'Lewis Hamilton poster art', 'Max Verstappen poster',
+      'Michael Schumacher art', 'F1 driver collection', 'Formula 1 legends', 'F1 race art',
+      'F1 driver prints', 'Lando Norris poster', 'Charles Leclerc art', 'F1 championship winners art',
+    ],
+    alternates: { canonical: '/drivers' },
+    openGraph: {
+      title,
+      description: 'Turn legendary F1 drives by Senna, Hamilton, Schumacher, Verstappen, Leclerc, Norris and more into poster art.',
+      url: '/drivers',
+      type: 'website',
+      siteName: 'F1RaceSignature',
+      locale: 'en_US',
+      images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'F1 Driver Collection — F1RaceSignature' }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description: 'Legendary F1 drives from Senna to Verstappen — turn any lap into poster art.',
+      images: ['/opengraph-image'],
+    },
+  }
 }
 
 export default function DriversIndexPage() {
   const drivers = getAllDrivers()
+  const champions = drivers.filter((d) => d.championships > 0).length
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'CollectionPage',
+        name: 'F1 Driver Collection',
+        description: `Every Formula 1 driver in the F1RaceSignature collection — ${drivers.length} legends whose laps can be turned into telemetry poster art.`,
+        url: `${SITE_URL}/drivers`,
+        isPartOf: { '@id': `${SITE_URL}/#website` },
+        breadcrumb: {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+            { '@type': 'ListItem', position: 2, name: 'Drivers', item: `${SITE_URL}/drivers` },
+          ],
+        },
+        mainEntity: {
+          '@type': 'ItemList',
+          numberOfItems: drivers.length,
+          itemListElement: drivers.map((d, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            name: d.name,
+            url: `${SITE_URL}/drivers/${d.id}`,
+          })),
+        },
+      },
+    ],
+  }
 
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Header />
       <main className="pt-14 min-h-screen">
-        <div className="max-w-5xl mx-auto px-6 py-16 text-center">
+        {/* Breadcrumb */}
+        <nav aria-label="Breadcrumb" className="max-w-5xl mx-auto px-6 pt-8 text-xs text-white/50">
+          <Link href="/" className="hover:text-white">Home</Link>
+          <span className="mx-2 text-white/25">/</span>
+          <span className="text-white/65">Drivers</span>
+        </nav>
+
+        <div className="max-w-5xl mx-auto px-6 pt-10 pb-12 text-center">
           <p className="text-[#d4a017] text-xs font-medium uppercase tracking-widest mb-4">The Drivers</p>
           <h1 className="text-4xl md:text-5xl text-white mb-4" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
             Legends of Formula 1
           </h1>
           <p className="text-white/60 max-w-xl mx-auto">
-            Twelve drivers, decades of greatness. Pick a name to explore their iconic laps and turn them into art.
+            {drivers.length} drivers, decades of greatness — {champions} world champions and a new generation of
+            Grand Prix winners. Pick a name to explore their iconic laps and turn them into art.
           </p>
         </div>
 
