@@ -5,6 +5,8 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { getAllDrivers, getDriver, getRacesForDriver } from '@/lib/serverData'
 import { getDriverCareer } from '@/lib/driverCareer'
+import { getTeamTransfers } from '@/lib/driverTeams'
+import { TeamTransferDiagram } from '@/components/drivers/TeamTransferDiagram'
 
 export function generateStaticParams() {
   return getAllDrivers().map((d) => ({ id: d.id }))
@@ -17,13 +19,14 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const firstName = driver.name.split(' ')[0]
   const champLabel =
     driver.championships > 0 ? `${driver.championships}× F1 World Champion` : 'F1 Grand Prix winner'
-  const title = `${driver.name} — F1 Telemetry Poster Art`
-  const description = `${driver.name}, ${champLabel} (${driver.team}). Turn ${firstName}'s legendary laps into collectible poster art — real F1 racing lines, speed traces and sector data rendered as cinematic prints.`
+  const title = `${driver.name} ${driver.team} — F1 Poster Art & Telemetry`
+  const description = `${driver.name} ${driver.team} poster art — ${champLabel}. Turn ${firstName}'s legendary laps into collectible F1 prints built from real racing lines, speed traces and sector telemetry.`
   return {
     title,
     description,
     keywords: [
-      `${driver.name} poster`, `${driver.name} art`, `${driver.name} print`, `${driver.name} F1`,
+      `${driver.name} ${driver.team}`, `${driver.name} poster`, `${driver.name} art`,
+      `${driver.name} print`, `${driver.name} F1`, `${driver.team} F1`,
       `${driver.team} poster`, `${firstName} telemetry art`, 'F1 driver poster', 'Formula 1 wall art',
     ],
     alternates: { canonical: `/drivers/${driver.id}` },
@@ -51,6 +54,10 @@ export default async function DriverPage({ params }: { params: Promise<{ id: str
 
   const races = getRacesForDriver(id)
   const career = getDriverCareer(id)
+  const teamStints = getTeamTransfers(id)
+
+  // A driver is on the current grid if their latest team stint is still open.
+  const isActive = teamStints.length > 0 && teamStints[teamStints.length - 1].endYear === null
 
   const SITE_URL = 'https://f1racesignature.site'
 
@@ -142,7 +149,27 @@ export default async function DriverPage({ params }: { params: Promise<{ id: str
           >
             Create a {driver.name.split(' ')[0]} poster
           </Link>
+
+          {isActive && (
+            <p className="text-white/55 text-sm mt-5">
+              Following the {driver.team} driver this year?{' '}
+              <Link href="/results" className="text-[#d4a017] hover:underline">
+                See where {driver.name.split(' ')[0]} stands in the 2026 F1 championship
+              </Link>
+              .
+            </p>
+          )}
         </div>
+
+        {/* Team transfer timeline */}
+        {teamStints.length > 0 && (
+          <div className="max-w-5xl mx-auto px-6 py-8 border-t border-[#0f0f0f]">
+            <h2 className="text-2xl text-white mb-6" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+              Career path
+            </h2>
+            <TeamTransferDiagram stints={teamStints} />
+          </div>
+        )}
 
         {/* Career biography */}
         {career.length > 0 && (
