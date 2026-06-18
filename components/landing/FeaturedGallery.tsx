@@ -41,7 +41,7 @@ export function FeaturedGallery() {
   })
 
   return (
-    <section className="py-24 border-t border-[#0f0f0f]">
+    <section className="py-12 md:py-14 border-t border-[#0f0f0f]">
       <div className="max-w-7xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

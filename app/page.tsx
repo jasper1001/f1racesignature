@@ -56,7 +56,7 @@ export default function HomePage() {
         <FeaturedGallery />
 
         {/* Latest from the Blog */}
-        <section className="py-20 border-t border-[#0f0f0f]">
+        <section className="py-12 md:py-14 border-t border-[#0f0f0f]">
           <div className="max-w-7xl mx-auto px-6">
             <div className="flex items-center justify-between mb-10">
               <div>
@@ -123,7 +123,7 @@ export default function HomePage() {
         </section>
 
         {/* Browse by Driver */}
-        <section className="py-20 border-t border-[#0f0f0f]">
+        <section className="py-12 md:py-14 border-t border-[#0f0f0f]">
           <div className="max-w-7xl mx-auto px-6">
             <div className="flex items-center justify-between mb-8">
               <div>
@@ -176,7 +176,7 @@ export default function HomePage() {
         </section>
 
         {/* SEO content — crawlable description of the product */}
-        <section className="py-20 border-t border-[#0f0f0f]">
+        <section className="py-12 md:py-14 border-t border-[#0f0f0f]">
           <div className="max-w-3xl mx-auto px-6 text-center">
             <h2
               className="text-3xl md:text-4xl text-white mb-6"
@@ -210,7 +210,7 @@ export default function HomePage() {
         </section>
 
         {/* Live 2026 Standings teaser */}
-        <section className="py-20 border-t border-[#0f0f0f]">
+        <section className="py-12 md:py-14 border-t border-[#0f0f0f]">
           <div className="max-w-7xl mx-auto px-6">
             <Link
               href="/results"
@@ -253,7 +253,7 @@ export default function HomePage() {
         </section>
 
         {/* Mini Games teaser */}
-        <section className="py-20 border-t border-[#0f0f0f]">
+        <section className="py-12 md:py-14 border-t border-[#0f0f0f]">
           <div className="max-w-7xl mx-auto px-6">
             <Link
               href="/games"
@@ -307,7 +307,7 @@ export default function HomePage() {
         <FAQ />
 
         {/* CTA section */}
-        <section className="py-24 border-t border-[#0f0f0f] text-center">
+        <section className="py-16 md:py-20 border-t border-[#0f0f0f] text-center">
           <div className="max-w-2xl mx-auto px-6">
             <p
               className="text-4xl md:text-5xl text-white mb-4"

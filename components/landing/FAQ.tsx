@@ -8,7 +8,7 @@ export function FAQ() {
   const [open, setOpen] = useState<number | null>(0)
 
   return (
-    <section className="py-24 border-t border-[#0f0f0f]" aria-labelledby="faq-heading">
+    <section className="py-12 md:py-14 border-t border-[#0f0f0f]" aria-labelledby="faq-heading">
       <div className="max-w-3xl mx-auto px-6">
         <div className="text-center mb-12">
           <p className="text-[#d4a017] text-xs font-medium uppercase tracking-widest mb-3">
