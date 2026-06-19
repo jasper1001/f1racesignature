@@ -42,13 +42,13 @@ const FLAGS: Record<string, string> = {
 // ── Session color coding ───────────────────────────────────────────────────────
 
 const SESSION_ACCENT: Record<string, string> = {
-  Race: '#e8002d',
+  'Grand Prix': '#e8002d',
   Qualifying: '#ffd700',
   Sprint: '#43b02a',
   'Sprint Qualifying': '#43b02a',
-  'Practice 1': '#444444',
-  'Practice 2': '#444444',
-  'Practice 3': '#444444',
+  'Free Practice 1': '#444444',
+  'Free Practice 2': '#444444',
+  'Free Practice 3': '#444444',
 }
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
@@ -91,13 +91,13 @@ function dateRange(sessions: { date: string }[], tz: string): string {
 
 function buildSessions(race: Race) {
   const list: { name: string; date: string; time?: string }[] = []
-  if (race.FirstPractice) list.push({ name: 'Practice 1', ...race.FirstPractice })
-  if (race.SecondPractice) list.push({ name: 'Practice 2', ...race.SecondPractice })
+  if (race.FirstPractice) list.push({ name: 'Free Practice 1', ...race.FirstPractice })
+  if (race.SecondPractice) list.push({ name: 'Free Practice 2', ...race.SecondPractice })
   if (race.SprintQualifying) list.push({ name: 'Sprint Qualifying', ...race.SprintQualifying })
-  if (race.ThirdPractice) list.push({ name: 'Practice 3', ...race.ThirdPractice })
+  if (race.ThirdPractice) list.push({ name: 'Free Practice 3', ...race.ThirdPractice })
   if (race.Sprint) list.push({ name: 'Sprint', ...race.Sprint })
   if (race.Qualifying) list.push({ name: 'Qualifying', ...race.Qualifying })
-  list.push({ name: 'Race', date: race.date, time: race.time })
+  list.push({ name: 'Grand Prix', date: race.date, time: race.time })
   return list
 }
 
@@ -322,7 +322,7 @@ function RoundCard({ race, status, tz }: { race: Race; status: 'past' | 'next' |
         {sessions.map(s => {
           const { day, clock } = formatTime(s.date, s.time, tz)
           const accent = SESSION_ACCENT[s.name] ?? '#444444'
-          const isRace = s.name === 'Race'
+          const isRace = s.name === 'Grand Prix'
           return (
             <div
               key={s.name}
