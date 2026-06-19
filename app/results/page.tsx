@@ -55,7 +55,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ResultsPage() {
   const season = await getSeason()
-  const pastYears = [String(Number(season) - 1), String(Number(season) - 2)]
+  const pastYears = Array.from({ length: 8 }, (_, i) => String(Number(season) - 1 - i))
 
   const [driverData, constructors, lastRace, podiums, ...pastSeasons] = await Promise.all([
     getDriverStandings(),
