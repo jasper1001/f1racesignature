@@ -398,6 +398,9 @@ export function ScheduleView({ races }: { races: Race[] }) {
             All times in{' '}
             <span className="text-white font-semibold">{tzAbbr}</span>
           </p>
+          <p className="text-white/35 text-[11px] mt-1">
+            Includes IST, CET, EST and more — choose your timezone →
+          </p>
         </div>
         <div className="relative">
           <select

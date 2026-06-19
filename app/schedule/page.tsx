@@ -11,7 +11,7 @@ export const revalidate = 3600
 export async function generateMetadata(): Promise<Metadata> {
   const season = await getSeason()
   const title = `F1 ${season} Race Schedule — All Session Times by Timezone`
-  const description = `Full ${season} Formula 1 race calendar with every session time — Practice, Qualifying, Sprint and Race — displayed in your local timezone. Never miss a session.`
+  const description = `F1 ${season} race schedule with session times — view every Grand Prix, qualifying and sprint timetable in your local timezone. Updated for every race weekend.`
   return {
     title,
     description,
@@ -95,7 +95,7 @@ export default async function SchedulePage() {
             F1 {season} Race Schedule — Every Session Time in Your Local Timezone
           </h1>
           <p className="relative text-white/60 text-sm max-w-2xl mx-auto">
-            The full {season} Formula 1 calendar with Practice, Qualifying, Sprint, and Race times for every Grand Prix. Select your timezone and all session times update instantly — no more converting UTC manually.
+            The complete {season} Formula 1 race calendar — every Grand Prix timetable with Practice, Qualifying, Sprint and Race times. Select your timezone and the full fixtures convert instantly to your local time, so you never have to work out UTC by hand.
           </p>
         </div>
 
