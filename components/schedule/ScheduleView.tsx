@@ -8,21 +8,22 @@ import type { Race } from '@/lib/f1api'
 const TIMEZONES = [
   { label: 'My Local Time', value: 'local' },
   { label: 'UTC (GMT)', value: 'UTC' },
+  { label: 'New York (ET)', value: 'America/New_York' },
+  { label: 'Los Angeles (PT)', value: 'America/Los_Angeles' },
   { label: 'London (GMT / BST)', value: 'Europe/London' },
   { label: 'Paris / Berlin (CET)', value: 'Europe/Paris' },
   { label: 'Cairo (EET)', value: 'Africa/Cairo' },
   { label: 'Riyadh / Bahrain (AST)', value: 'Asia/Riyadh' },
   { label: 'Dubai (GST)', value: 'Asia/Dubai' },
   { label: 'Mumbai / New Delhi (IST)', value: 'Asia/Kolkata' },
+  { label: 'Kuala Lumpur (MYT)', value: 'Asia/Kuala_Lumpur' },
   { label: 'Singapore (SGT)', value: 'Asia/Singapore' },
   { label: 'Shanghai / Beijing (CST)', value: 'Asia/Shanghai' },
   { label: 'Tokyo (JST)', value: 'Asia/Tokyo' },
   { label: 'Sydney (AEST)', value: 'Australia/Sydney' },
   { label: 'São Paulo (BRT)', value: 'America/Sao_Paulo' },
-  { label: 'New York (ET)', value: 'America/New_York' },
   { label: 'Mexico City (CST)', value: 'America/Mexico_City' },
   { label: 'Chicago (CT)', value: 'America/Chicago' },
-  { label: 'Los Angeles (PT)', value: 'America/Los_Angeles' },
 ]
 
 // ── Country flags ──────────────────────────────────────────────────────────────
@@ -399,7 +400,7 @@ export function ScheduleView({ races }: { races: Race[] }) {
             <span className="text-white font-semibold">{tzAbbr}</span>
           </p>
           <p className="text-white/35 text-[11px] mt-1">
-            Includes IST, CET, EST and more — choose your timezone →
+            View times in ET, PT, IST, CET and more — choose your timezone →
           </p>
         </div>
         <div className="relative">
