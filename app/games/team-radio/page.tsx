@@ -3,16 +3,17 @@ import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { TeamRadioGame } from '@/components/games/TeamRadioGame'
+import { RADIO_QUOTES } from '@/lib/games/teamRadioData'
 
 export const metadata: Metadata = {
   title: 'F1 Team Radio Quiz — Who Said It?',
   description:
-    'Famous transmissions from the pit wall — can you name the driver from their team radio? 30 iconic F1 radio moments spanning every era of Formula 1.',
+    `Famous transmissions from the pit wall — can you name the driver from their team radio? ${RADIO_QUOTES.length} iconic F1 radio moments spanning every era of Formula 1.`,
   keywords: ['F1 team radio quiz', 'guess the driver radio', 'Formula 1 radio quotes', 'F1 radio game', 'F1 mini game', 'Formula 1 team radio'],
   alternates: { canonical: '/games/team-radio' },
   openGraph: {
     title: 'F1 Team Radio Quiz — Who Said It?',
-    description: 'Famous pit wall transmissions — can you name the driver? 30 iconic F1 radio moments from every era.',
+    description: `Famous pit wall transmissions — can you name the driver? ${RADIO_QUOTES.length} iconic F1 radio moments from every era.`,
     url: '/games/team-radio',
     type: 'website',
     siteName: 'F1RaceSignature',
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'F1 Team Radio Quiz — Who Said It?',
-    description: 'Famous pit wall transmissions — can you name the driver? 30 iconic F1 radio moments from every era.',
+    description: `Famous pit wall transmissions — can you name the driver? ${RADIO_QUOTES.length} iconic F1 radio moments from every era.`,
     images: ['/opengraph-image'],
   },
 }
@@ -36,7 +37,7 @@ export default function TeamRadioPage() {
         '@context': 'https://schema.org',
         '@type': 'WebPage',
         name: 'F1 Team Radio Quiz — Who Said It?',
-        description: 'Famous transmissions from the pit wall — can you name the driver from their team radio? 30 iconic F1 radio moments.',
+        description: `Famous transmissions from the pit wall — can you name the driver from their team radio? ${RADIO_QUOTES.length} iconic F1 radio moments.`,
         url: 'https://f1racesignature.site/games/team-radio',
         isPartOf: { '@id': 'https://f1racesignature.site/#website' },
         breadcrumb: {

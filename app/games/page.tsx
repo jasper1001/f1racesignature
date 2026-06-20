@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { RADIO_QUOTES } from '@/lib/games/teamRadioData'
 
 export const metadata: Metadata = {
   title: 'F1 Mini Games — Reaction Tests, Trivia & Driver Puzzles',
@@ -81,7 +82,7 @@ const GAMES = [
     tag: 'F1 Knowledge',
     title: 'Team Radio Guess',
     description:
-      'Famous quotes from the pit wall. A transmission plays — you pick the driver. 30 legendary radio moments across every era.',
+      `Famous quotes from the pit wall. A transmission plays — you pick the driver. ${RADIO_QUOTES.length} legendary radio moments across every era.`,
     duration: '~3 minutes',
     accent: '#10b981',
     icon: '📻',
