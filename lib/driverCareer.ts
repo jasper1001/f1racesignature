@@ -157,6 +157,15 @@ export const DRIVER_CAREERS: DriverCareer[] = [
       'At an age when most Formula 1 drivers are still working out how to extract everything from the car, Piastri is already shaping the car around his needs. The combination of his natural pace, his emotional control, and his technical intelligence places him among the highest-ceiling drivers in a generation of exceptional Formula 1 talent. He is, in the assessment of most people who have watched his career closely, a future world champion — and probably more than once.',
     ],
   },
+  {
+    driverId: 'antonelli',
+    career: [
+      'Andrea Kimi Antonelli was identified as a generational talent before he was old enough to hold a road licence. Born in Bologna in 2006, he was brought into the Mercedes junior programme as a child and moved through the karting ranks with the kind of results that make a manufacturer reorganise its plans around a single driver. Toto Wolff spoke about him for years in terms usually reserved for drivers already in Formula 1 — a level of public confidence from a team principal that placed an extraordinary weight of expectation on a teenager who had not yet raced a single-seater.',
+      'He justified all of it. In 2022 he won both the Italian and German Formula 4 championships in the same season, and in 2023 he took the Formula Regional European and Middle East titles back to back — dominating each category in the way that only the rarest junior drivers do. Mercedes then made the unusually aggressive decision to skip Formula 3 entirely and place him straight into Formula 2 for 2024, a step up so steep that it is almost never attempted, and he won on his feature-race debut at Melbourne to show the gamble was sound.',
+      'The decision that defined his early career came for 2025, when Mercedes promoted him directly into their Formula 1 race seat to replace Lewis Hamilton — handing an 18-year-old the cockpit that had carried seven world championships. It was one of the boldest driver calls the modern paddock has seen. His rookie season answered the doubt with composure rather than recklessness: a maiden podium and repeated flashes of genuine front-running pace, delivered with a maturity that made his age easy to forget.',
+      'In 2026 the prodigy turned promise into a defining result with a pole-to-flag victory at Monaco — the most demanding circuit on the calendar to lead from the front, where a single lapse over seventy-eight laps ends the race against the barriers. To control it from pole as a teenager, against the most experienced grid in the sport, was the performance that moved Antonelli from "future of Mercedes" to a driver the rest of the grid now has to account for. The ceiling, on the evidence so far, is as high as anyone\'s in the field.',
+    ],
+  },
 ]
 
 export function getDriverCareer(driverId: string): string[] {
