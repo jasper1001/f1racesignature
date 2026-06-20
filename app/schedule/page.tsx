@@ -94,7 +94,7 @@ export default async function SchedulePage() {
           >
             F1 {season} Race Schedule — Every Session Time in Your Local Timezone
           </h1>
-          <p className="relative text-white/60 text-sm max-w-2xl mx-auto">
+          <p className="relative text-white/65 text-sm max-w-2xl mx-auto">
             The complete {season} Formula 1 race calendar — every Grand Prix timetable with Practice, Qualifying, Sprint and Race times. Select your timezone and the full fixtures convert instantly to your local time, so you never have to work out UTC by hand.
           </p>
         </div>

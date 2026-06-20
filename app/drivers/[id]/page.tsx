@@ -114,7 +114,7 @@ export default async function DriverPage({ params }: { params: Promise<{ id: str
       <Header />
       <main className="pt-14 min-h-screen">
         {/* Breadcrumb */}
-        <div className="max-w-5xl mx-auto px-6 pt-8 text-xs text-white/50">
+        <div className="max-w-5xl mx-auto px-6 pt-8 text-xs text-white/65">
           <Link href="/" className="hover:text-white">Home</Link>
           <span className="mx-2 text-white/25">/</span>
           <Link href="/drivers" className="hover:text-white">Drivers</Link>
@@ -135,7 +135,7 @@ export default async function DriverPage({ params }: { params: Promise<{ id: str
               <h1 className="text-4xl md:text-5xl text-white" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
                 {driver.name}
               </h1>
-              <p className="text-white/55 mt-2">
+              <p className="text-white/65 mt-2">
                 {driver.team} · {driver.nationality}
                 {driver.championships > 0 && ` · ${driver.championships}× World Champion`}
               </p>
@@ -151,7 +151,7 @@ export default async function DriverPage({ params }: { params: Promise<{ id: str
           </Link>
 
           {isActive && (
-            <p className="text-white/55 text-sm mt-5">
+            <p className="text-white/65 text-sm mt-5">
               Following the {driver.team} driver this year?{' '}
               <Link href="/results" className="text-[#d4a017] hover:underline">
                 See where {driver.name.split(' ')[0]} stands in the 2026 F1 championship
@@ -204,8 +204,8 @@ export default async function DriverPage({ params }: { params: Promise<{ id: str
                   </span>
                   <span className="text-[#d4a017] font-mono text-sm">{race.lapTime}</span>
                 </div>
-                <p className="text-white/50 text-xs mt-1">{race.circuitName} · {race.location}</p>
-                <p className="text-white/55 text-xs mt-2 line-clamp-2">{race.description}</p>
+                <p className="text-white/65 text-xs mt-1">{race.circuitName} · {race.location}</p>
+                <p className="text-white/65 text-xs mt-2 line-clamp-2">{race.description}</p>
               </Link>
             ))}
           </div>

@@ -63,7 +63,7 @@ export default function GalleryPage() {
             >
               Hall of Fame
             </h1>
-            <p className="text-white/60 text-lg max-w-xl mx-auto">
+            <p className="text-white/65 text-lg max-w-xl mx-auto">
               Twelve legendary drives. Twelve museum-quality posters.
               Each one a chapter in F1 history.
             </p>

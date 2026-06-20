@@ -82,7 +82,7 @@ export function GalleryGrid() {
     `px-3.5 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer whitespace-nowrap ${
       active
         ? 'bg-[#d4a017] text-black shadow-sm'
-        : 'bg-[#0d0d0d] text-white/50 border border-[#1d1d1d] hover:text-white hover:border-[#303030] hover:bg-[#111]'
+        : 'bg-[#0d0d0d] text-white/65 border border-[#1d1d1d] hover:text-white hover:border-[#303030] hover:bg-[#111]'
     }`
 
   return (
@@ -103,7 +103,7 @@ export function GalleryGrid() {
               <p className="text-white/65 text-xs flex-1">
                 <span className="text-white font-medium">Tip:</span> tap any poster to open it in the Studio — then change the driver, theme, or visualization and make it your own.
               </p>
-              <button onClick={dismissTip} className="text-white/30 hover:text-white transition-colors flex-shrink-0 cursor-pointer" aria-label="Dismiss">
+              <button onClick={dismissTip} className="text-white/65 hover:text-white transition-colors flex-shrink-0 cursor-pointer" aria-label="Dismiss">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
               </button>
             </div>
@@ -127,13 +127,13 @@ export function GalleryGrid() {
                 exit={{ opacity: 0, x: -4 }}
                 transition={{ duration: 0.15 }}
                 onClick={() => setFilter({ type: 'all' })}
-                className="text-white/35 text-xs hover:text-white/60 transition-colors"
+                className="text-white/65 text-xs hover:text-white/65 transition-colors"
               >
                 × Clear
               </motion.button>
             )}
           </AnimatePresence>
-          <span className="ml-auto text-white/35 text-xs tabular-nums font-mono">
+          <span className="ml-auto text-white/65 text-xs tabular-nums font-mono">
             {filtered.length} {filtered.length === 1 ? 'poster' : 'posters'}
           </span>
         </div>
@@ -141,7 +141,7 @@ export function GalleryGrid() {
         {/* Driver filters */}
         <div className="mb-4">
           <div className="flex items-center gap-3 mb-2.5">
-            <span className="text-white/30 text-[9px] font-mono uppercase tracking-[0.15em] shrink-0">Driver</span>
+            <span className="text-white/65 text-[9px] font-mono uppercase tracking-[0.15em] shrink-0">Driver</span>
             <span className="flex-1 h-px bg-[#141414]" />
           </div>
           <div className="flex flex-wrap gap-2">
@@ -156,7 +156,7 @@ export function GalleryGrid() {
         {/* Track filters */}
         <div>
           <div className="flex items-center gap-3 mb-2.5">
-            <span className="text-white/30 text-[9px] font-mono uppercase tracking-[0.15em] shrink-0">Track</span>
+            <span className="text-white/65 text-[9px] font-mono uppercase tracking-[0.15em] shrink-0">Track</span>
             <span className="flex-1 h-px bg-[#141414]" />
           </div>
           <div className="flex flex-wrap gap-2">
@@ -183,7 +183,7 @@ export function GalleryGrid() {
       </motion.div>
 
       {filtered.length === 0 && (
-        <div className="text-center py-20 text-white/40 text-sm">No posters found for this filter.</div>
+        <div className="text-center py-20 text-white/65 text-sm">No posters found for this filter.</div>
       )}
     </div>
   )

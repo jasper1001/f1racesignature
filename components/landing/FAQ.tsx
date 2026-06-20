@@ -55,7 +55,7 @@ export function FAQ() {
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                     >
-                      <p className="px-5 pb-4 text-[#888888] text-sm leading-relaxed">
+                      <p className="px-5 pb-4 text-[#aaaaaa] text-sm leading-relaxed">
                         {item.a}
                       </p>
                     </motion.div>

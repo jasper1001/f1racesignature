@@ -63,7 +63,7 @@ export function FeaturedGallery() {
           </div>
           <Link
             href="/gallery"
-            className="text-[#555555] text-sm hover:text-white transition-colors flex items-center gap-1.5"
+            className="text-[#aaaaaa] text-sm hover:text-white transition-colors flex items-center gap-1.5"
           >
             View all 12 posters
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">

@@ -205,7 +205,7 @@ export function GalleryCard({ item, index, circuit, telemetry }: GalleryCardProp
         {/* Below-card label */}
         <div className="mt-3 px-1">
           <p className="text-white text-sm font-medium truncate">{item.title}</p>
-          <p className="text-[#555555] text-xs mt-0.5">{item.subtitle}</p>
+          <p className="text-[#aaaaaa] text-xs mt-0.5">{item.subtitle}</p>
           <div className="flex items-center gap-2 mt-1.5">
             <span
               className="text-[10px] font-mono px-1.5 py-0.5 rounded"
@@ -214,7 +214,7 @@ export function GalleryCard({ item, index, circuit, telemetry }: GalleryCardProp
               {theme.name.toUpperCase()}
             </span>
             {isLocked && (
-              <span className="text-[10px] text-[#444444] font-mono">PREMIUM</span>
+              <span className="text-[10px] text-[#aaaaaa] font-mono">PREMIUM</span>
             )}
           </div>
         </div>

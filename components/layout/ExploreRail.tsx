@@ -149,12 +149,12 @@ export function ExploreRail() {
                 rel="noopener noreferrer"
                 className="group flex items-center gap-3 rounded-xl px-3 py-3 text-white/70 hover:text-white hover:bg-white/[0.05] transition-colors"
               >
-                <span className="text-white/45 group-hover:text-[#d4a017] transition-colors shrink-0">
+                <span className="text-white/65 group-hover:text-[#d4a017] transition-colors shrink-0">
                   {f.icon}
                 </span>
                 <span className="min-w-0">
                   <span className="block text-sm font-medium leading-tight">{f.label}</span>
-                  <span className="block text-[10px] text-white/35 font-mono leading-tight mt-1 truncate">
+                  <span className="block text-[10px] text-white/65 font-mono leading-tight mt-1 truncate">
                     {f.desc}
                   </span>
                 </span>

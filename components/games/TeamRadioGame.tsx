@@ -143,7 +143,7 @@ export function TeamRadioGame() {
         <div className="text-right">
           <p className="text-white/75 text-[10px] font-mono uppercase tracking-widest mb-0.5">Round</p>
           <p className="text-white text-xl font-mono tabular-nums">
-            {current + 1}<span className="text-white/45"> / {ROUNDS}</span>
+            {current + 1}<span className="text-white/65"> / {ROUNDS}</span>
           </p>
         </div>
       </div>
@@ -186,7 +186,7 @@ export function TeamRadioGame() {
                   Incoming Transmission
                 </span>
               </div>
-              <span className="text-white/45 text-[10px] font-mono uppercase tracking-wider">
+              <span className="text-white/65 text-[10px] font-mono uppercase tracking-wider">
                 {quote.race}&nbsp;·&nbsp;{quote.year}
               </span>
             </div>
@@ -239,7 +239,7 @@ export function TeamRadioGame() {
                 } else if (isSelectedOption) {
                   cls = 'border-[#cc3333]/40 bg-[#cc3333]/8 text-[#cc3333]'
                 } else {
-                  cls = 'border-[#111111] bg-[#050505] text-white/45'
+                  cls = 'border-[#111111] bg-[#050505] text-white/65'
                 }
               }
 

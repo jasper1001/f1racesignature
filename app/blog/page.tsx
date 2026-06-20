@@ -62,7 +62,7 @@ export default function BlogPage() {
             >
               F1 Articles
             </h1>
-            <p className="text-white/60 text-lg max-w-xl mx-auto">
+            <p className="text-white/65 text-lg max-w-xl mx-auto">
               Deep dives into Formula 1 history, technology, and the drivers who define the sport.
             </p>
           </div>
@@ -85,9 +85,9 @@ export default function BlogPage() {
                     className="group rounded-xl border border-[#1a1a1a] bg-[#0a0a0a] p-5 hover:border-[#2a2a2a] hover:bg-[#0d0d0d] transition-all"
                   >
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="text-[10px] text-white/35 font-mono uppercase tracking-wider">{article.category}</span>
+                      <span className="text-[10px] text-white/65 font-mono uppercase tracking-wider">{article.category}</span>
                       <span className="text-white/20 text-[10px]">·</span>
-                      <span className="text-[10px] text-white/35 font-mono">{article.readMinutes} min read</span>
+                      <span className="text-[10px] text-white/65 font-mono">{article.readMinutes} min read</span>
                     </div>
                     <h2
                       className="text-white text-lg leading-snug mb-2 group-hover:text-[#d4a017] transition-colors"
@@ -95,7 +95,7 @@ export default function BlogPage() {
                     >
                       {article.title}
                     </h2>
-                    <p className="text-white/50 text-sm leading-relaxed line-clamp-3">{article.description}</p>
+                    <p className="text-white/65 text-sm leading-relaxed line-clamp-3">{article.description}</p>
                     <div className="flex items-center gap-1.5 mt-4 text-[#d4a017] text-xs font-medium">
                       Read article
                       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="group-hover:translate-x-0.5 transition-transform">

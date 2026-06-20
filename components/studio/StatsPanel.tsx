@@ -22,7 +22,7 @@ export function StatsPanel({ driver, race, telemetry, mobile = false, compareDri
   if (!driver) {
     return (
       <div className={`flex items-center justify-center bg-[#0a0a0a] ${mobile ? 'w-full min-h-[60vh]' : 'w-56 flex-shrink-0 border-l border-[#111111]'}`}>
-        <p className="text-[#333333] text-sm text-center px-6">
+        <p className="text-[#aaaaaa] text-sm text-center px-6">
           Select a driver and race to see lap statistics
         </p>
       </div>
@@ -46,14 +46,14 @@ export function StatsPanel({ driver, race, telemetry, mobile = false, compareDri
             </div>
             <div>
               <h3 className="text-white font-semibold text-sm">{driver.name}</h3>
-              <p className="text-[#555555] text-xs mt-0.5">{driver.team}</p>
+              <p className="text-[#aaaaaa] text-xs mt-0.5">{driver.team}</p>
               <div className="flex items-center gap-1 mt-1.5">
                 <span className="text-[#d4a017] text-xs">{'★'.repeat(Math.min(driver.championships, 5))}</span>
-                <span className="text-[#444444] text-xs">{driver.championships}× Champion</span>
+                <span className="text-[#aaaaaa] text-xs">{driver.championships}× Champion</span>
               </div>
             </div>
           </div>
-          <p className="text-[#555555] text-xs mt-3 leading-relaxed line-clamp-3">
+          <p className="text-[#aaaaaa] text-xs mt-3 leading-relaxed line-clamp-3">
             {driver.bio}
           </p>
         </div>
@@ -111,9 +111,9 @@ export function StatsPanel({ driver, race, telemetry, mobile = false, compareDri
                   const aWins = a < b
                   return (
                     <div key={label} className="flex items-center justify-between text-xs py-1 border-t border-[#111111]">
-                      <span className={`font-mono ${aWins ? 'text-[#00e676]' : 'text-[#666666]'}`}>{a.toFixed(3)}</span>
-                      <span className="text-[#444444] text-[10px] font-medium px-2">{label}</span>
-                      <span className={`font-mono ${!aWins ? 'text-[#00e676]' : 'text-[#666666]'}`}>{b.toFixed(3)}</span>
+                      <span className={`font-mono ${aWins ? 'text-[#00e676]' : 'text-[#aaaaaa]'}`}>{a.toFixed(3)}</span>
+                      <span className="text-[#aaaaaa] text-[10px] font-medium px-2">{label}</span>
+                      <span className={`font-mono ${!aWins ? 'text-[#00e676]' : 'text-[#aaaaaa]'}`}>{b.toFixed(3)}</span>
                     </div>
                   )
                 })}
@@ -147,7 +147,7 @@ export function StatsPanel({ driver, race, telemetry, mobile = false, compareDri
                   <div>
                     <StatRow label="Benchmark" value={telemetry.benchmarkLapTime} />
                     <div className="flex items-center justify-between mt-1">
-                      <span className="text-[#444444] text-xs">Delta</span>
+                      <span className="text-[#aaaaaa] text-xs">Delta</span>
                       <span className="text-sm font-mono" style={{ color }}>
                         {delta < 0 ? '' : '+'}{delta.toFixed(3)}s
                       </span>
@@ -161,7 +161,7 @@ export function StatsPanel({ driver, race, telemetry, mobile = false, compareDri
 
         {race && (
           <div className="rounded-lg border border-[#111111] p-3">
-            <p className="text-[#444444] text-xs leading-relaxed italic">
+            <p className="text-[#aaaaaa] text-xs leading-relaxed italic">
               "{race.description}"
             </p>
           </div>
@@ -174,7 +174,7 @@ export function StatsPanel({ driver, race, telemetry, mobile = false, compareDri
 function StatGroup({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div>
-      <h4 className="text-[10px] font-medium text-[#333333] uppercase tracking-widest mb-2">
+      <h4 className="text-[10px] font-medium text-[#aaaaaa] uppercase tracking-widest mb-2">
         {title}
       </h4>
       <div className="space-y-1.5">{children}</div>
@@ -185,8 +185,8 @@ function StatGroup({ title, children }: { title: string; children: React.ReactNo
 function StatRow({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
   return (
     <div className="flex items-center justify-between">
-      <span className="text-[#444444] text-xs">{label}</span>
-      <span className={`text-xs font-mono ${highlight ? 'text-white' : 'text-[#888888]'}`}>
+      <span className="text-[#aaaaaa] text-xs">{label}</span>
+      <span className={`text-xs font-mono ${highlight ? 'text-white' : 'text-[#aaaaaa]'}`}>
         {value}
       </span>
     </div>

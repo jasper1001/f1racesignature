@@ -55,7 +55,7 @@ export function OnboardingModal({ isOpen, onClose }: Props) {
           <h2 className="text-2xl text-white mb-1" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
             Welcome to the Studio
           </h2>
-          <p className="text-[#666666] text-sm">Five things you can do to turn a lap into art.</p>
+          <p className="text-[#aaaaaa] text-sm">Five things you can do to turn a lap into art.</p>
         </div>
 
         <div className="space-y-3 mb-6">
@@ -66,7 +66,7 @@ export function OnboardingModal({ isOpen, onClose }: Props) {
               </div>
               <div>
                 <div className="text-white text-sm font-medium">{tip.title}</div>
-                <div className="text-[#666666] text-xs mt-0.5 leading-relaxed">{tip.body}</div>
+                <div className="text-[#aaaaaa] text-xs mt-0.5 leading-relaxed">{tip.body}</div>
               </div>
             </div>
           ))}

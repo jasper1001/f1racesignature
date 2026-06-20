@@ -165,7 +165,7 @@ export function Hero() {
                       )}
                     </div>
 
-                    <p className="text-white/50 text-[10px] font-mono uppercase tracking-widest mb-1">
+                    <p className="text-white/65 text-[10px] font-mono uppercase tracking-widest mb-1">
                       {feature.tag}
                     </p>
                     <h3
@@ -174,7 +174,7 @@ export function Hero() {
                     >
                       {feature.title}
                     </h3>
-                    <p className="text-white/60 text-xs leading-relaxed flex-1">
+                    <p className="text-white/65 text-xs leading-relaxed flex-1">
                       {feature.description}
                     </p>
 

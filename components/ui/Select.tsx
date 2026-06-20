@@ -18,7 +18,7 @@ export function Select({ options, value, onChange, label, className = '' }: Sele
   return (
     <div className={`flex flex-col gap-1.5 ${className}`}>
       {label && (
-        <label className="text-xs font-medium text-[#666666] uppercase tracking-widest">
+        <label className="text-xs font-medium text-[#aaaaaa] uppercase tracking-widest">
           {label}
         </label>
       )}
@@ -34,7 +34,7 @@ export function Select({ options, value, onChange, label, className = '' }: Sele
             </option>
           ))}
         </select>
-        <div className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#555555]">
+        <div className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#aaaaaa]">
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
             <path d="M3 4.5l3 3 3-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>

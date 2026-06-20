@@ -28,10 +28,10 @@ export function TeamTransferDiagram({ stints }: { stints: TeamStint[] }) {
                   <span className="text-[#d4a017] text-[9px] font-mono uppercase tracking-wider">Current</span>
                 )}
               </div>
-              <div className="text-white/55 text-xs font-mono mt-1.5">
+              <div className="text-white/65 text-xs font-mono mt-1.5">
                 {s.startYear}–{ongoing ? 'present' : s.endYear}
               </div>
-              <div className="text-white/35 text-[10px] mt-0.5">
+              <div className="text-white/65 text-[10px] mt-0.5">
                 {seasons} season{seasons === 1 ? '' : 's'}
               </div>
             </div>

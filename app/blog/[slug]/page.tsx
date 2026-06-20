@@ -176,7 +176,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       <Header />
       <main className="pt-14 min-h-screen">
         {/* Breadcrumb */}
-        <div className="max-w-3xl mx-auto px-6 pt-8 text-xs text-white/50">
+        <div className="max-w-3xl mx-auto px-6 pt-8 text-xs text-white/65">
           <Link href="/" className="hover:text-white transition-colors">Home</Link>
           <span className="mx-2 text-white/25">/</span>
           <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>
@@ -193,15 +193,15 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           <div className="flex items-center gap-3 mb-4 flex-wrap">
             <span className="text-[#d4a017] text-[10px] font-mono uppercase tracking-widest">{article.category}</span>
             <span className="text-white/20">·</span>
-            <span className="text-white/40 text-[10px] font-mono">{article.readMinutes} min read</span>
+            <span className="text-white/65 text-[10px] font-mono">{article.readMinutes} min read</span>
             <span className="text-white/20">·</span>
-            <time dateTime={article.date} className="text-white/40 text-[10px] font-mono">
+            <time dateTime={article.date} className="text-white/65 text-[10px] font-mono">
               {formatDate(article.date)}
             </time>
             {wordCount > 0 && (
               <>
                 <span className="text-white/20">·</span>
-                <span className="text-white/40 text-[10px] font-mono">~{wordCount.toLocaleString()} words</span>
+                <span className="text-white/65 text-[10px] font-mono">~{wordCount.toLocaleString()} words</span>
               </>
             )}
           </div>
@@ -242,7 +242,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
               {ARTICLE_KEYWORDS[slug].slice(0, 6).map((kw) => (
                 <span
                   key={kw}
-                  className="text-white/35 text-[10px] font-mono border border-[#1a1a1a] rounded px-2.5 py-1"
+                  className="text-white/65 text-[10px] font-mono border border-[#1a1a1a] rounded px-2.5 py-1"
                 >
                   {kw}
                 </span>
@@ -254,7 +254,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         {/* Related articles */}
         {others.length > 0 && (
           <div className="max-w-3xl mx-auto px-6 pb-10 border-t border-[#0f0f0f] pt-10">
-            <h3 className="text-white/40 text-[10px] font-mono uppercase tracking-widest mb-6">
+            <h3 className="text-white/65 text-[10px] font-mono uppercase tracking-widest mb-6">
               More in {article.category}
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -264,7 +264,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                   href={`/blog/${a.slug}`}
                   className="group rounded-xl border border-[#1a1a1a] bg-[#0a0a0a] p-4 hover:border-[#2a2a2a] transition-all"
                 >
-                  <p className="text-white/35 text-[10px] font-mono mb-2">{a.readMinutes} min read</p>
+                  <p className="text-white/65 text-[10px] font-mono mb-2">{a.readMinutes} min read</p>
                   <h4
                     className="text-white text-sm leading-snug group-hover:text-[#d4a017] transition-colors"
                     style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
@@ -281,7 +281,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         <div className="max-w-3xl mx-auto px-6 pb-16">
           <div className="rounded-xl border border-[#d4a017]/20 bg-[#d4a017]/5 p-6 text-center">
             <p className="text-white text-sm font-medium mb-1">Turn a legendary F1 lap into poster art</p>
-            <p className="text-white/55 text-sm mb-4">Real GPS telemetry. Real racing lines. Free to create.</p>
+            <p className="text-white/65 text-sm mb-4">Real GPS telemetry. Real racing lines. Free to create.</p>
             <Link
               href="/studio"
               className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#d4a017] text-black font-semibold rounded-xl hover:bg-[#e8b84b] transition-colors text-sm"

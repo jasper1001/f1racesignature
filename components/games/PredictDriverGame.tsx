@@ -343,7 +343,7 @@ function GameScreen({
           {COLUMNS.map(col => (
             <div
               key={col.key}
-              className="text-white/60 text-[10px] font-mono uppercase tracking-wider text-center"
+              className="text-white/65 text-[10px] font-mono uppercase tracking-wider text-center"
               style={{ flex: col.flex, minWidth: col.minWidth }}
             >
               {col.label}

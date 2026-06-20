@@ -124,7 +124,7 @@ export default async function ResultsPage() {
             >
               {season} Season
             </h1>
-            <p className="text-white/60 text-base md:text-lg max-w-xl mx-auto">
+            <p className="text-white/65 text-base md:text-lg max-w-xl mx-auto">
               Driver and constructor standings, race results, and the full calendar —
               {round !== '0' ? ` after round ${round}.` : ' updated automatically.'}
             </p>
@@ -134,7 +134,7 @@ export default async function ResultsPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 space-y-16">
           {drivers.length === 0 ? (
             <div className="text-center py-20">
-              <p className="text-white/55 text-sm">
+              <p className="text-white/65 text-sm">
                 Live standings are temporarily unavailable. Please check back shortly.
               </p>
             </div>
@@ -160,14 +160,14 @@ export default async function ResultsPage() {
                         >
                           <div className="flex items-center justify-between mb-2">
                             <span className="text-[#d4a017] text-xs font-mono font-semibold">{medal}</span>
-                            <span className="text-white/45 text-[10px] font-mono uppercase">
+                            <span className="text-white/65 text-[10px] font-mono uppercase">
                               {r.Constructor.name}
                             </span>
                           </div>
                           <div className="text-white font-semibold">
                             {r.Driver.givenName} {r.Driver.familyName}
                           </div>
-                          <div className="text-white/50 text-xs mt-1 font-mono">
+                          <div className="text-white/65 text-xs mt-1 font-mono">
                             {r.Time?.time ?? r.status} · +{r.points} pts
                           </div>
                         </div>
@@ -229,7 +229,7 @@ export default async function ResultsPage() {
                       <h2 className="text-2xl md:text-3xl text-white" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
                         {season} Race Schedule
                       </h2>
-                      <p className="text-white/55 text-sm mt-2 max-w-md">
+                      <p className="text-white/65 text-sm mt-2 max-w-md">
                         Every Grand Prix with Practice, Qualifying, Sprint and Race times — converted to your
                         local timezone, plus a live countdown to the next session.
                       </p>
@@ -258,7 +258,7 @@ export default async function ResultsPage() {
                 </section>
               )}
 
-              <p className="text-center text-white/35 text-xs pt-4">
+              <p className="text-center text-white/65 text-xs pt-4">
                 Live data via the Jolpica F1 API (Ergast successor). Updates hourly.
               </p>
             </>
@@ -277,7 +277,7 @@ function SectionHeading({ eyebrow, title, sub }: { eyebrow: string; title: strin
       <h2 className="text-2xl md:text-3xl text-white" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
         {title}
       </h2>
-      {sub && <p className="text-white/55 text-sm mt-1">{sub}</p>}
+      {sub && <p className="text-white/65 text-sm mt-1">{sub}</p>}
     </div>
   )
 }
@@ -287,7 +287,7 @@ function DriverStandingsTable({ drivers }: { drivers: DriverStanding[] }) {
     <div className="overflow-x-auto rounded-xl border border-[#161616]">
       <table className="w-full text-sm">
         <thead>
-          <tr className="text-left text-white/45 text-[11px] uppercase tracking-wider border-b border-[#161616]">
+          <tr className="text-left text-white/65 text-[11px] uppercase tracking-wider border-b border-[#161616]">
             <th className="py-3 px-4 font-medium">Pos</th>
             <th className="py-3 px-4 font-medium">Driver</th>
             <th className="py-3 px-4 font-medium hidden sm:table-cell">Team</th>
@@ -303,7 +303,7 @@ function DriverStandingsTable({ drivers }: { drivers: DriverStanding[] }) {
                 key={d.Driver.driverId}
                 className="border-b border-[#0f0f0f] last:border-0 hover:bg-white/[0.02] transition-colors"
               >
-                <td className="py-3 px-4 text-[#666666] font-mono">{d.position}</td>
+                <td className="py-3 px-4 text-[#aaaaaa] font-mono">{d.position}</td>
                 <td className="py-3 px-4">
                   <div className="flex items-center gap-2.5">
                     <span className="w-1 h-5 rounded-full" style={{ backgroundColor: color }} />
@@ -311,16 +311,16 @@ function DriverStandingsTable({ drivers }: { drivers: DriverStanding[] }) {
                       {d.Driver.givenName} {d.Driver.familyName}
                     </span>
                     {d.Driver.code && (
-                      <span className="text-white/40 text-[10px] font-mono hidden md:inline">
+                      <span className="text-white/65 text-[10px] font-mono hidden md:inline">
                         {d.Driver.code}
                       </span>
                     )}
                   </div>
                 </td>
-                <td className="py-3 px-4 text-[#777777] hidden sm:table-cell">
+                <td className="py-3 px-4 text-[#aaaaaa] hidden sm:table-cell">
                   {d.Constructors[0]?.name ?? '—'}
                 </td>
-                <td className="py-3 px-4 text-center text-[#777777] font-mono">{d.wins}</td>
+                <td className="py-3 px-4 text-center text-[#aaaaaa] font-mono">{d.wins}</td>
                 <td className="py-3 px-4 text-right text-white font-mono font-semibold">{d.points}</td>
               </tr>
             )
@@ -343,11 +343,11 @@ function ConstructorStandingsGrid({ constructors }: { constructors: ConstructorS
             style={{ borderLeftColor: color, borderLeftWidth: 3 }}
           >
             <div className="flex items-center gap-3">
-              <span className="text-white/55 font-mono text-sm w-5">{c.position}</span>
+              <span className="text-white/65 font-mono text-sm w-5">{c.position}</span>
               <span className="text-white font-medium text-sm">{c.Constructor.name}</span>
             </div>
             <div className="flex items-center gap-4">
-              <span className="text-white/50 text-xs font-mono hidden sm:inline">{c.wins} wins</span>
+              <span className="text-white/65 text-xs font-mono hidden sm:inline">{c.wins} wins</span>
               <span className="text-white font-mono font-semibold text-sm">{c.points}</span>
             </div>
           </div>
@@ -376,9 +376,9 @@ function RaceResultsList({
                 <span className="text-white text-sm font-medium">
                   {race.raceName.replace('Grand Prix', 'GP')}
                 </span>
-                <span className="text-white/40 text-xs ml-2 font-mono">{race.country}</span>
+                <span className="text-white/65 text-xs ml-2 font-mono">{race.country}</span>
               </div>
-              <span className="text-white/35 text-[10px] font-mono uppercase tracking-wider shrink-0">
+              <span className="text-white/65 text-[10px] font-mono uppercase tracking-wider shrink-0">
                 Rnd {race.round} · {formatRaceDate(race.date)}
               </span>
             </div>
@@ -397,7 +397,7 @@ function RaceResultsList({
                     <span className="text-white text-sm font-medium truncate">
                       {r.Driver.givenName} {r.Driver.familyName}
                     </span>
-                    <span className="text-white/40 text-[10px] font-mono ml-auto shrink-0 hidden sm:inline">
+                    <span className="text-white/65 text-[10px] font-mono ml-auto shrink-0 hidden sm:inline">
                       {r.Constructor.name}
                     </span>
                   </div>
@@ -447,7 +447,7 @@ function PastSeasonPanel({ season }: { season: { year: string; drivers: DriverSt
                 <span className="text-[#d4a017] text-[10px] font-mono uppercase tracking-wider shrink-0">Champion</span>
               </div>
               {teamChamp && (
-                <p className="text-white/45 text-xs mt-1 truncate">
+                <p className="text-white/65 text-xs mt-1 truncate">
                   Constructors: {teamChamp.Constructor.name}
                 </p>
               )}
@@ -456,7 +456,7 @@ function PastSeasonPanel({ season }: { season: { year: string; drivers: DriverSt
         </div>
         <svg
           width="16" height="16" viewBox="0 0 16 16" fill="none"
-          className="text-white/40 shrink-0 transition-transform duration-200 group-open:rotate-180"
+          className="text-white/65 shrink-0 transition-transform duration-200 group-open:rotate-180"
           aria-hidden="true"
         >
           <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -465,18 +465,18 @@ function PastSeasonPanel({ season }: { season: { year: string; drivers: DriverSt
 
       <div className="px-4 pb-4 pt-1 space-y-5 border-t border-[#141414]">
         <div className="pt-4">
-          <p className="text-white/45 text-[11px] font-mono uppercase tracking-wider mb-3">Driver Standings</p>
+          <p className="text-white/65 text-[11px] font-mono uppercase tracking-wider mb-3">Driver Standings</p>
           <DriverStandingsTable drivers={season.drivers} />
         </div>
         {season.constructors.length > 0 && (
           <div>
-            <p className="text-white/45 text-[11px] font-mono uppercase tracking-wider mb-3">Constructor Standings</p>
+            <p className="text-white/65 text-[11px] font-mono uppercase tracking-wider mb-3">Constructor Standings</p>
             <ConstructorStandingsGrid constructors={season.constructors} />
           </div>
         )}
         {season.podiums.length > 0 && (
           <div>
-            <p className="text-white/45 text-[11px] font-mono uppercase tracking-wider mb-3">Race Results</p>
+            <p className="text-white/65 text-[11px] font-mono uppercase tracking-wider mb-3">Race Results</p>
             <RaceResultsList podiums={season.podiums} />
           </div>
         )}

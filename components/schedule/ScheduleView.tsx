@@ -149,7 +149,7 @@ function CountdownUnit({ value, label }: { value: string; label: string }) {
   return (
     <div className="flex flex-col items-center min-w-[40px] sm:min-w-[48px]">
       <span className="text-white text-2xl sm:text-3xl font-mono tabular-nums leading-none">{value}</span>
-      <span className="text-white/30 text-[9px] font-mono uppercase tracking-widest mt-1.5">{label}</span>
+      <span className="text-white/65 text-[9px] font-mono uppercase tracking-widest mt-1.5">{label}</span>
     </div>
   )
 }
@@ -172,7 +172,7 @@ function NextSessionCountdown({ races, tz, tzAbbr, mounted }: { races: Race[]; t
     return (
       <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.02] px-5 py-5 sm:px-6 sm:py-6 mb-6 min-h-[96px]">
         <p className="text-[10px] font-mono uppercase tracking-widest text-[#d4a017] mb-1.5">Next Session</p>
-        <p className="text-white/30 text-sm font-mono">Calculating…</p>
+        <p className="text-white/65 text-sm font-mono">Calculating…</p>
       </div>
     )
   }
@@ -223,7 +223,7 @@ function NextSessionCountdown({ races, tz, tzAbbr, mounted }: { races: Race[]; t
           >
             {current.sessionName}
           </h2>
-          <p className="text-white/40 text-xs font-mono mt-1">{when} · {tzAbbr}</p>
+          <p className="text-white/65 text-xs font-mono mt-1">{when} · {tzAbbr}</p>
 
           {/* Session progress dots + tap hint */}
           <div className="flex items-center gap-2.5 mt-3">
@@ -308,13 +308,13 @@ function RoundCard({ race, status, tz }: { race: Race; status: 'past' | 'next' |
               <h2 className="text-white font-semibold text-base leading-snug">{race.raceName}</h2>
               <StatusBadge status={status} />
             </div>
-            <p className="text-white/40 text-xs mt-1 font-mono">
+            <p className="text-white/65 text-xs mt-1 font-mono">
               {race.Circuit.circuitName} · {race.Circuit.Location.locality}, {country}
             </p>
           </div>
         </div>
         {/* Date range */}
-        <span className="text-white/50 text-xs font-mono shrink-0 sm:mt-0.5">{range}</span>
+        <span className="text-white/65 text-xs font-mono shrink-0 sm:mt-0.5">{range}</span>
       </div>
 
       {/* Session list */}
@@ -334,13 +334,13 @@ function RoundCard({ race, status, tz }: { race: Race; status: 'past' | 'next' |
                   style={{ background: accent }}
                 />
                 <span
-                  className={`text-xs font-medium ${isRace && !isPast ? 'text-white' : 'text-white/60'}`}
+                  className={`text-xs font-medium ${isRace && !isPast ? 'text-white' : 'text-white/65'}`}
                 >
                   {s.name}
                 </span>
               </div>
               <div className="text-right font-mono">
-                <span className="text-white/40 text-[10px]">{day}</span>
+                <span className="text-white/65 text-[10px]">{day}</span>
                 <span className={`ml-3 text-xs ${isRace && !isPast ? 'text-white font-semibold' : 'text-white/65'}`}>
                   {clock}
                 </span>
@@ -395,11 +395,11 @@ export function ScheduleView({ races }: { races: Race[] }) {
       {/* Timezone selector */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-8">
         <div>
-          <p className="text-white/60 text-sm">
+          <p className="text-white/65 text-sm">
             All times in{' '}
             <span className="text-white font-semibold">{tzAbbr}</span>
           </p>
-          <p className="text-white/35 text-[11px] mt-1">
+          <p className="text-white/65 text-[11px] mt-1">
             View times in ET, PT, IST, CET and more — choose your timezone →
           </p>
         </div>
@@ -417,7 +417,7 @@ export function ScheduleView({ races }: { races: Race[] }) {
             ))}
           </select>
           <svg
-            className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-white/40"
+            className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-white/65"
             width="12" height="12" viewBox="0 0 12 12" fill="none"
           >
             <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -437,7 +437,7 @@ export function ScheduleView({ races }: { races: Race[] }) {
                 className={`relative px-4 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
                   active
                     ? 'bg-white/[0.07] text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]'
-                    : 'text-white/40 hover:text-white/70'
+                    : 'text-white/65 hover:text-white/70'
                 }`}
               >
                 {f === 'upcoming' ? 'Upcoming' : 'Completed'}
@@ -467,13 +467,13 @@ export function ScheduleView({ races }: { races: Race[] }) {
 
       {races.length === 0 && (
         <div className="py-20 text-center">
-          <p className="text-white/30 text-sm font-mono">Schedule not yet available</p>
+          <p className="text-white/65 text-sm font-mono">Schedule not yet available</p>
         </div>
       )}
 
       {races.length > 0 && mounted && visible.length === 0 && (
         <div className="py-16 text-center">
-          <p className="text-white/30 text-sm font-mono">
+          <p className="text-white/65 text-sm font-mono">
             {filter === 'completed' ? 'No races completed yet this season.' : 'No upcoming races remaining.'}
           </p>
         </div>

@@ -30,7 +30,7 @@ export default function GaragePage() {
           <h1 className="text-4xl md:text-5xl text-white mb-3" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
             My Garage
           </h1>
-          <p className="text-white/60 max-w-md mx-auto">
+          <p className="text-white/65 max-w-md mx-auto">
             Posters you&apos;ve saved, stored on this device. Open one to keep editing or export it.
           </p>
         </div>
@@ -38,7 +38,7 @@ export default function GaragePage() {
         <div className="max-w-5xl mx-auto px-6 pb-20">
           {ready && items.length === 0 ? (
             <div className="text-center py-16 rounded-2xl border border-[#161616] bg-[#0a0a0a]">
-              <p className="text-white/55 text-sm mb-4">Your garage is empty.</p>
+              <p className="text-white/65 text-sm mb-4">Your garage is empty.</p>
               <Link href="/studio" className="inline-flex px-6 py-3 bg-[#d4a017] text-black font-semibold rounded-xl hover:bg-[#e8b84b] transition-colors">
                 Create your first poster
               </Link>
@@ -50,18 +50,18 @@ export default function GaragePage() {
                   <div className="flex items-start justify-between gap-2">
                     <Link href={studioUrl(p)} className="flex-1 min-w-0">
                       <div className="text-white font-medium text-sm group-hover:text-[#d4a017] transition-colors truncate">{p.driverName}</div>
-                      <div className="text-white/50 text-xs mt-0.5 truncate">{p.raceName}</div>
+                      <div className="text-white/65 text-xs mt-0.5 truncate">{p.raceName}</div>
                       <div className="flex items-center gap-2 mt-2">
                         <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#d4a017]/12 text-[#d4a017]">
                           {p.theme.replace(/_/g, ' ').toUpperCase()}
                         </span>
-                        <span className="text-[10px] font-mono text-white/45">{p.vizMode.replace(/_/g, ' ')}</span>
+                        <span className="text-[10px] font-mono text-white/65">{p.vizMode.replace(/_/g, ' ')}</span>
                       </div>
                     </Link>
                     <button
                       onClick={() => removeFromGarage(p.id)}
                       title="Remove"
-                      className="text-[#444444] hover:text-[#e8002d] transition-colors flex-shrink-0 cursor-pointer"
+                      className="text-[#aaaaaa] hover:text-[#e8002d] transition-colors flex-shrink-0 cursor-pointer"
                     >
                       <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
                         <path d="M3 4h10M6 4V2.5h4V4M5 4l.5 9h5L11 4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />

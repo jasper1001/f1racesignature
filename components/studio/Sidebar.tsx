@@ -109,7 +109,7 @@ export function Sidebar({ drivers, races, mobile = false }: SidebarProps) {
                   className={`relative flex items-center gap-2 px-3 py-2 rounded-lg text-left transition-all text-xs cursor-pointer ${
                     active
                       ? 'bg-white/8 border border-[#333333] text-white'
-                      : 'bg-transparent border border-[#1a1a1a] text-[#666666] hover:text-white hover:border-[#2a2a2a]'
+                      : 'bg-transparent border border-[#1a1a1a] text-[#aaaaaa] hover:text-white hover:border-[#2a2a2a]'
                   }`}
                 >
                   <span
@@ -118,7 +118,7 @@ export function Sidebar({ drivers, races, mobile = false }: SidebarProps) {
                   />
                   <span className="truncate font-medium">{d.shortName}</span>
                   {!free && (
-                    <LockBadge className="ml-auto text-[#555555]" />
+                    <LockBadge className="ml-auto text-[#aaaaaa]" />
                   )}
                 </button>
               )
@@ -130,7 +130,7 @@ export function Sidebar({ drivers, races, mobile = false }: SidebarProps) {
         <Section title="Race">
           <div className="space-y-1">
             {driverRaces.length === 0 && (
-              <p className="text-[#444444] text-xs px-1 py-2">Select a driver first</p>
+              <p className="text-[#aaaaaa] text-xs px-1 py-2">Select a driver first</p>
             )}
             {driverRaces.map((r) => {
               const free = isRaceFree(r.id)
@@ -147,9 +147,9 @@ export function Sidebar({ drivers, races, mobile = false }: SidebarProps) {
                 >
                   <div className="flex-1 min-w-0">
                     <div className="text-xs font-medium text-white truncate">{r.circuit.toUpperCase()} {r.year}</div>
-                    <div className="text-[10px] text-[#555555] mt-0.5">{r.lapTime}</div>
+                    <div className="text-[10px] text-[#aaaaaa] mt-0.5">{r.lapTime}</div>
                   </div>
-                  {!free && <LockBadge className="text-[#444444] ml-2" />}
+                  {!free && <LockBadge className="text-[#aaaaaa] ml-2" />}
                 </button>
               )
             })}
@@ -173,9 +173,9 @@ export function Sidebar({ drivers, races, mobile = false }: SidebarProps) {
                 >
                   <div>
                     <div className="text-xs font-medium text-white">{vm.name}</div>
-                    <div className="text-[10px] text-[#444444] mt-0.5">{vm.description}</div>
+                    <div className="text-[10px] text-[#aaaaaa] mt-0.5">{vm.description}</div>
                   </div>
-                  {!isVizModeFree(vm.id as VizMode) && <LockBadge className="text-[#444444] ml-2" />}
+                  {!isVizModeFree(vm.id as VizMode) && <LockBadge className="text-[#aaaaaa] ml-2" />}
                 </button>
               )
             })}
@@ -206,7 +206,7 @@ export function Sidebar({ drivers, races, mobile = false }: SidebarProps) {
           {compareEnabled && (
             <div className="mt-2 space-y-1">
               {compareCandidates.length === 0 ? (
-                <p className="text-[10px] text-[#555555] px-1 py-2">
+                <p className="text-[10px] text-[#aaaaaa] px-1 py-2">
                   No other laps on this circuit yet. Pick a race at Monaco, Monza, Spa, Interlagos or Suzuka to compare.
                 </p>
               ) : (
@@ -224,7 +224,7 @@ export function Sidebar({ drivers, races, mobile = false }: SidebarProps) {
                       <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: cd?.color ?? '#888' }} />
                       <div className="flex-1 min-w-0">
                         <div className="text-xs font-medium text-white truncate">{cd?.shortName} · {r.year}</div>
-                        <div className="text-[10px] text-[#555555]">{r.lapTime}</div>
+                        <div className="text-[10px] text-[#aaaaaa]">{r.lapTime}</div>
                       </div>
                     </button>
                   )
@@ -255,7 +255,7 @@ export function Sidebar({ drivers, races, mobile = false }: SidebarProps) {
                       className="w-5 h-1.5 rounded-full"
                       style={{ backgroundColor: t.primaryLine }}
                     />
-                    {!isThemeFree(t.id as ArtTheme) && <LockBadge className="text-[#555555]" />}
+                    {!isThemeFree(t.id as ArtTheme) && <LockBadge className="text-[#aaaaaa]" />}
                   </div>
                   <span className="text-[10px] font-medium" style={{ color: t.textColor }}>
                     {t.name}
@@ -288,13 +288,13 @@ export function Sidebar({ drivers, races, mobile = false }: SidebarProps) {
                   }`}
                 >
                   <div>
-                    <div className={`text-xs font-medium ${isAvailable ? 'text-white' : 'text-[#555555]'}`}>
+                    <div className={`text-xs font-medium ${isAvailable ? 'text-white' : 'text-[#aaaaaa]'}`}>
                       {f.name}
                     </div>
-                    <div className="text-[10px] text-[#444444]">{f.width}×{f.height}</div>
+                    <div className="text-[10px] text-[#aaaaaa]">{f.width}×{f.height}</div>
                   </div>
                   {!isAvailable && (
-                    <span className="text-[9px] font-mono text-[#555555] border border-[#2a2a2a] rounded px-1.5 py-0.5 ml-2 whitespace-nowrap">
+                    <span className="text-[9px] font-mono text-[#aaaaaa] border border-[#2a2a2a] rounded px-1.5 py-0.5 ml-2 whitespace-nowrap">
                       SOON
                     </span>
                   )}
@@ -311,7 +311,7 @@ export function Sidebar({ drivers, races, mobile = false }: SidebarProps) {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div>
-      <h3 className="text-[10px] font-medium text-[#444444] uppercase tracking-widest mb-2.5">
+      <h3 className="text-[10px] font-medium text-[#aaaaaa] uppercase tracking-widest mb-2.5">
         {title}
       </h3>
       {children}

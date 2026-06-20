@@ -50,7 +50,7 @@ export function Modal({ isOpen, onClose, children, title }: ModalProps) {
                 <h2 className="text-base font-semibold text-white">{title}</h2>
                 <button
                   onClick={onClose}
-                  className="text-[#666666] hover:text-white transition-colors"
+                  className="text-[#aaaaaa] hover:text-white transition-colors"
                   aria-label="Close"
                 >
                   <svg width="18" height="18" viewBox="0 0 18 18" fill="none">

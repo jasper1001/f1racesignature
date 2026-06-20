@@ -78,7 +78,7 @@ export default function DriversIndexPage() {
       <Header />
       <main className="pt-14 min-h-screen">
         {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb" className="max-w-5xl mx-auto px-6 pt-8 text-xs text-white/50">
+        <nav aria-label="Breadcrumb" className="max-w-5xl mx-auto px-6 pt-8 text-xs text-white/65">
           <Link href="/" className="hover:text-white">Home</Link>
           <span className="mx-2 text-white/25">/</span>
           <span className="text-white/65">Drivers</span>
@@ -89,7 +89,7 @@ export default function DriversIndexPage() {
           <h1 className="text-4xl md:text-5xl text-white mb-4" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
             Legends of Formula 1
           </h1>
-          <p className="text-white/60 max-w-xl mx-auto">
+          <p className="text-white/65 max-w-xl mx-auto">
             {drivers.length} drivers, decades of greatness — {champions} world champions and a new generation of
             Grand Prix winners. Pick a name to explore their iconic laps and turn them into art.
           </p>
@@ -114,14 +114,14 @@ export default function DriversIndexPage() {
                   </div>
                   <div>
                     <div className="text-white font-medium group-hover:text-[#d4a017] transition-colors">{d.name}</div>
-                    <div className="text-white/50 text-xs">{d.team}</div>
+                    <div className="text-white/65 text-xs">{d.team}</div>
                   </div>
                 </div>
                 <div className="flex items-center justify-between mt-4 text-xs">
-                  <span className="text-white/55">
+                  <span className="text-white/65">
                     {d.championships > 0 ? `${d.championships}× Champion` : 'Grand Prix winner'}
                   </span>
-                  <span className="text-white/45 font-mono">{count} {count === 1 ? 'drive' : 'drives'}</span>
+                  <span className="text-white/65 font-mono">{count} {count === 1 ? 'drive' : 'drives'}</span>
                 </div>
               </Link>
             )

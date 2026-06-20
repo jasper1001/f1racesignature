@@ -22,7 +22,7 @@ export default function AboutPage() {
       <main className="pt-14 min-h-screen" style={{ background: '#030303' }}>
         {/* Hero */}
         <div className="border-b border-[#0f0f0f] py-16 px-6 text-center">
-          <p className="text-white/50 text-xs font-mono uppercase tracking-widest mb-4">About</p>
+          <p className="text-white/65 text-xs font-mono uppercase tracking-widest mb-4">About</p>
           <h1
             className="text-4xl md:text-5xl text-white mb-4"
             style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
@@ -38,7 +38,7 @@ export default function AboutPage() {
 
           {/* What is it */}
           <section>
-            <h2 className="text-xs font-mono uppercase tracking-widest text-white/45 mb-5">The Project</h2>
+            <h2 className="text-xs font-mono uppercase tracking-widest text-white/65 mb-5">The Project</h2>
             <div className="space-y-4 text-white/65 leading-relaxed">
               <p>
                 F1RaceSignature is a browser-based creative tool that takes genuine GPS car-position
@@ -60,7 +60,7 @@ export default function AboutPage() {
 
           {/* Games */}
           <section>
-            <h2 className="text-xs font-mono uppercase tracking-widest text-white/45 mb-5">F1 Games</h2>
+            <h2 className="text-xs font-mono uppercase tracking-widest text-white/65 mb-5">F1 Games</h2>
             <div className="space-y-4 text-white/65 leading-relaxed">
               <p>
                 Alongside the poster studio, F1RaceSignature includes a free collection of Formula 1
@@ -83,7 +83,7 @@ export default function AboutPage() {
 
           {/* Data sources */}
           <section>
-            <h2 className="text-xs font-mono uppercase tracking-widest text-white/45 mb-5">Data Sources</h2>
+            <h2 className="text-xs font-mono uppercase tracking-widest text-white/65 mb-5">Data Sources</h2>
             <div className="space-y-4 text-white/65 leading-relaxed">
               <p>
                 Telemetry data is sourced via{' '}
@@ -111,7 +111,7 @@ export default function AboutPage() {
                 , a community-maintained open data source for Formula 1 statistics. All data is used
                 strictly for artistic and educational purposes.
               </p>
-              <p className="text-white/50 text-sm">
+              <p className="text-white/65 text-sm">
                 F1RaceSignature is an independent fan project and is not affiliated with, endorsed by,
                 or connected to Formula 1, Formula One Management, the FIA, or any F1 team.
               </p>
@@ -120,7 +120,7 @@ export default function AboutPage() {
 
           {/* Creator */}
           <section>
-            <h2 className="text-xs font-mono uppercase tracking-widest text-white/45 mb-5">The Creator</h2>
+            <h2 className="text-xs font-mono uppercase tracking-widest text-white/65 mb-5">The Creator</h2>
             <div className="space-y-4 text-white/65 leading-relaxed">
               <p>
                 F1RaceSignature was designed and built by{' '}
@@ -153,7 +153,7 @@ export default function AboutPage() {
 
           {/* Contact */}
           <section id="contact">
-            <h2 className="text-xs font-mono uppercase tracking-widest text-white/45 mb-5">Contact</h2>
+            <h2 className="text-xs font-mono uppercase tracking-widest text-white/65 mb-5">Contact</h2>
             <div className="rounded-2xl border border-[#1a1a1a] bg-[#0a0a0a] p-8 space-y-4">
               <p className="text-white/65 leading-relaxed">
                 Have a question, a bug report, a feature idea, or a licensing enquiry? Send us an email
@@ -169,7 +169,7 @@ export default function AboutPage() {
                 </svg>
                 wayfarerwondersblog@gmail.com
               </a>
-              <p className="text-white/45 text-xs">
+              <p className="text-white/65 text-xs">
                 We aim to respond within 2–3 business days.
               </p>
             </div>

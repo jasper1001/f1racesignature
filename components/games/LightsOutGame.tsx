@@ -327,7 +327,7 @@ function ResultPanel({
         <span className="text-6xl font-bold font-mono" style={{ color: rating.color }}>
           {ms}
         </span>
-        <span className="text-xl text-white/55 font-mono">ms</span>
+        <span className="text-xl text-white/65 font-mono">ms</span>
       </motion.div>
 
       <div>

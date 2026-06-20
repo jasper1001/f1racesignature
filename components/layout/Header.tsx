@@ -43,7 +43,7 @@ export function Header() {
                   key={link.href}
                   href={link.href}
                   className={`relative px-4 py-1.5 text-sm font-medium transition-colors rounded-lg ${
-                    active ? 'text-white' : 'text-[#666666] hover:text-[#aaaaaa]'
+                    active ? 'text-white' : 'text-[#aaaaaa] hover:text-[#aaaaaa]'
                   }`}
                 >
                   {active && (
@@ -75,7 +75,7 @@ export function Header() {
             )}
             <button
               onClick={() => setMenuOpen((o) => !o)}
-              className="w-9 h-9 flex flex-col items-center justify-center gap-1.5 text-[#888888] hover:text-white transition-colors"
+              className="w-9 h-9 flex flex-col items-center justify-center gap-1.5 text-[#aaaaaa] hover:text-white transition-colors"
               aria-label="Menu"
             >
               <span className={`block w-5 h-0.5 bg-current transition-all duration-200 ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
@@ -105,7 +105,7 @@ export function Header() {
                   className={`px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
                     pathname === link.href
                       ? 'bg-white/8 text-white border border-[#222222]'
-                      : 'text-[#666666] hover:text-white hover:bg-white/5'
+                      : 'text-[#aaaaaa] hover:text-white hover:bg-white/5'
                   }`}
                 >
                   <span className="flex items-center gap-2">

@@ -129,14 +129,14 @@ export default async function CalendarPage() {
           <h1 className="relative text-4xl md:text-5xl text-white mb-3" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
             F1 {season} Calendar
           </h1>
-          <p className="relative text-white/60 text-sm max-w-2xl mx-auto">
+          <p className="relative text-white/65 text-sm max-w-2xl mx-auto">
             Every {season} Grand Prix at a glance, month by month. Add the whole season — or any single race —
             straight to Google Calendar, Apple Calendar, or Outlook.
           </p>
 
           {races.length > 0 && (
             <div className="relative mt-7 flex flex-col items-center gap-3">
-              <p className="text-white/60 text-xs font-mono">Tap any race to add it to Google Calendar</p>
+              <p className="text-white/65 text-xs font-mono">Tap any race to add it to Google Calendar</p>
               <div className="flex flex-wrap items-center justify-center gap-2.5">
                 {seasonIcs && (
                   <a
@@ -160,7 +160,7 @@ export default async function CalendarPage() {
 
         <div className="max-w-screen-lg mx-auto px-4 sm:px-6 py-10 space-y-10">
           {races.length === 0 ? (
-            <p className="text-center text-white/40 text-sm font-mono py-20">Calendar not yet available.</p>
+            <p className="text-center text-white/65 text-sm font-mono py-20">Calendar not yet available.</p>
           ) : (
             <>
               {/* Month grids */}
@@ -200,7 +200,7 @@ export default async function CalendarPage() {
                         <div className="text-white text-sm font-medium truncate">
                           {race.raceName.replace('Grand Prix', 'GP')}
                         </div>
-                        <div className="text-white/60 text-[10px] font-mono">{formatRaceDate(race.date)}</div>
+                        <div className="text-white/65 text-[10px] font-mono">{formatRaceDate(race.date)}</div>
                       </div>
                       <span className="shrink-0 inline-flex items-center gap-1 text-[10px] font-mono px-2.5 py-1 rounded-lg border border-[#2a2a2a] text-white/75 group-hover:text-black group-hover:bg-[#d4a017] group-hover:border-[#d4a017] transition-colors">
                         + Google
@@ -213,7 +213,7 @@ export default async function CalendarPage() {
               {/* FAQ */}
               <FaqSection items={faqs} title={`F1 ${season} calendar — your questions`} />
 
-              <p className="text-center text-white/35 text-xs pt-2">
+              <p className="text-center text-white/65 text-xs pt-2">
                 Live data via the Jolpica F1 API (Ergast successor). Updates hourly.
               </p>
             </>
@@ -239,11 +239,11 @@ function MonthGrid({
   return (
     <div className="rounded-2xl border border-[#161616] bg-[#070707] p-4">
       <p className="text-white font-semibold mb-3" style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}>
-        {MONTH_NAMES[month]} <span className="text-white/55 font-mono text-sm font-normal">{year}</span>
+        {MONTH_NAMES[month]} <span className="text-white/65 font-mono text-sm font-normal">{year}</span>
       </p>
       <div className="grid grid-cols-7 gap-1 text-center">
         {WEEKDAYS.map((w) => (
-          <span key={w} className="text-white/55 text-[9px] font-mono uppercase tracking-wider pb-1">{w}</span>
+          <span key={w} className="text-white/65 text-[9px] font-mono uppercase tracking-wider pb-1">{w}</span>
         ))}
         {cells.map((day, i) => {
           if (day === null) return <span key={`b${i}`} />
@@ -252,7 +252,7 @@ function MonthGrid({
 
           if (!race) {
             return (
-              <span key={dateStr} className="aspect-square flex items-center justify-center text-white/50 text-xs font-mono">
+              <span key={dateStr} className="aspect-square flex items-center justify-center text-white/65 text-xs font-mono">
                 {day}
               </span>
             )

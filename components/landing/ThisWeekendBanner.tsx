@@ -50,7 +50,7 @@ export async function ThisWeekendBanner() {
           <span className="text-[#38b000] uppercase tracking-widest">{when}</span>
         </span>
         <span className="text-white text-sm font-medium">{race.raceName}</span>
-        <span className="text-white/50 text-xs hidden sm:inline">· {race.Circuit.Location.country}</span>
+        <span className="text-white/65 text-xs hidden sm:inline">· {race.Circuit.Location.country}</span>
         <span className="flex items-center gap-3 sm:ml-2">
           <Link href="/results" className="text-[#d4a017] text-xs font-medium hover:underline">
             Live standings →

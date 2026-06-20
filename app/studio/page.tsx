@@ -176,26 +176,26 @@ export default function StudioPage() {
                 onClick={() => setShowOnboarding(true)}
                 title="How it works"
                 data-track="studio_help"
-                className="w-5 h-5 flex items-center justify-center rounded-full border border-[#2a2a2a] text-[#666666] hover:text-[#d4a017] hover:border-[#d4a017]/50 transition-colors cursor-pointer text-[11px] font-bold"
+                className="w-5 h-5 flex items-center justify-center rounded-full border border-[#2a2a2a] text-[#aaaaaa] hover:text-[#d4a017] hover:border-[#d4a017]/50 transition-colors cursor-pointer text-[11px] font-bold"
               >
                 ?
               </button>
-              <span className="text-[#333333] font-mono uppercase tracking-widest">Studio</span>
-              {selectedDriver && <><span className="text-[#1a1a1a]">/</span><span className="text-[#555555]">{selectedDriver.name}</span></>}
-              {selectedRace   && <><span className="text-[#1a1a1a]">/</span><span className="text-[#555555]">{selectedRace.circuit} {selectedRace.year}</span></>}
+              <span className="text-[#aaaaaa] font-mono uppercase tracking-widest">Studio</span>
+              {selectedDriver && <><span className="text-[#1a1a1a]">/</span><span className="text-[#aaaaaa]">{selectedDriver.name}</span></>}
+              {selectedRace   && <><span className="text-[#1a1a1a]">/</span><span className="text-[#aaaaaa]">{selectedRace.circuit} {selectedRace.year}</span></>}
             </div>
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1.5 text-[#333333] text-xs font-mono">
+              <div className="flex items-center gap-1.5 text-[#aaaaaa] text-xs font-mono">
                 <span className="w-2 h-2 rounded-full" style={{ backgroundColor: activeTheme.primaryLine, opacity: 0.7 }} />
                 {activeTheme.name}
               </div>
               {/* Zoom */}
               <div className="flex items-center gap-1 bg-[#0f0f0f] border border-[#1a1a1a] rounded-lg px-1 py-1">
-                <button onClick={zoomOut} disabled={zoom <= ZOOM_MIN} className="w-6 h-6 flex items-center justify-center text-[#555555] hover:text-white disabled:opacity-30 transition-colors cursor-pointer">
+                <button onClick={zoomOut} disabled={zoom <= ZOOM_MIN} className="w-6 h-6 flex items-center justify-center text-[#aaaaaa] hover:text-white disabled:opacity-30 transition-colors cursor-pointer">
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
                 </button>
-                <button onClick={zoomReset} className="min-w-[38px] text-center text-[#555555] hover:text-white text-xs font-mono transition-colors cursor-pointer px-1">{Math.round(zoom * 100)}%</button>
-                <button onClick={zoomIn}  disabled={zoom >= ZOOM_MAX} className="w-6 h-6 flex items-center justify-center text-[#555555] hover:text-white disabled:opacity-30 transition-colors cursor-pointer">
+                <button onClick={zoomReset} className="min-w-[38px] text-center text-[#aaaaaa] hover:text-white text-xs font-mono transition-colors cursor-pointer px-1">{Math.round(zoom * 100)}%</button>
+                <button onClick={zoomIn}  disabled={zoom >= ZOOM_MAX} className="w-6 h-6 flex items-center justify-center text-[#aaaaaa] hover:text-white disabled:opacity-30 transition-colors cursor-pointer">
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 2v8M2 6h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
                 </button>
               </div>
@@ -239,11 +239,11 @@ export default function StudioPage() {
               <motion.div key="preview" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="absolute inset-0 flex flex-col">
                 {/* Mini toolbar */}
                 <div className="flex-shrink-0 flex items-center gap-2 px-4 py-2 border-b border-[#0f0f0f] bg-[#030303]/80">
-                  <div className="flex items-center gap-2 text-[#333333] text-xs font-mono min-w-0 flex-1">
+                  <div className="flex items-center gap-2 text-[#aaaaaa] text-xs font-mono min-w-0 flex-1">
                     <button
                       onClick={() => setShowOnboarding(true)}
                       title="How it works"
-                      className="w-5 h-5 flex-shrink-0 flex items-center justify-center rounded-full border border-[#2a2a2a] text-[#666666] text-[11px] font-bold"
+                      className="w-5 h-5 flex-shrink-0 flex items-center justify-center rounded-full border border-[#2a2a2a] text-[#aaaaaa] text-[11px] font-bold"
                     >
                       ?
                     </button>
@@ -262,7 +262,7 @@ export default function StudioPage() {
                 <div className="flex-1 flex items-center justify-center overflow-auto p-4">
                   {!selectedDriver ? (
                     <div className="text-center">
-                      <p className="text-[#444444] text-sm mb-1">Select a driver to begin</p>
+                      <p className="text-[#aaaaaa] text-sm mb-1">Select a driver to begin</p>
                       <p className="text-[#2a2a2a] text-xs">Tap Controls tab below</p>
                     </div>
                   ) : (
@@ -298,10 +298,10 @@ export default function StudioPage() {
               key={tab.id}
               onClick={() => setMobileTab(tab.id)}
               className={`flex-1 flex flex-col items-center gap-1 py-3 text-[10px] font-medium transition-colors cursor-pointer ${
-                mobileTab === tab.id ? 'text-[#d4a017]' : 'text-[#444444] hover:text-[#888888]'
+                mobileTab === tab.id ? 'text-[#d4a017]' : 'text-[#aaaaaa] hover:text-[#aaaaaa]'
               }`}
             >
-              <span className={mobileTab === tab.id ? 'text-[#d4a017]' : 'text-[#444444]'}>{tab.icon}</span>
+              <span className={mobileTab === tab.id ? 'text-[#d4a017]' : 'text-[#aaaaaa]'}>{tab.icon}</span>
               {tab.label}
             </button>
           ))}
@@ -318,13 +318,13 @@ function EmptyState() {
   return (
     <div className="text-center">
       <div className="w-16 h-16 rounded-full bg-[#0a0a0a] border border-[#1a1a1a] flex items-center justify-center mx-auto mb-4">
-        <svg className="w-8 h-8 text-[#333333]" viewBox="0 0 32 32" fill="none">
+        <svg className="w-8 h-8 text-[#aaaaaa]" viewBox="0 0 32 32" fill="none">
           <circle cx="16" cy="16" r="13" stroke="currentColor" strokeWidth="2" />
           <circle cx="16" cy="16" r="4" stroke="currentColor" strokeWidth="1.8" />
           <path d="M16 3 L16 12M16 20 L16 29M3 16 L12 16M20 16 L29 16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
         </svg>
       </div>
-      <p className="text-[#444444] text-sm mb-1">Select a driver to begin</p>
+      <p className="text-[#aaaaaa] text-sm mb-1">Select a driver to begin</p>
       <p className="text-[#2a2a2a] text-xs">Choose from the sidebar on the left</p>
     </div>
   )
