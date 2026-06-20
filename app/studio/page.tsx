@@ -214,7 +214,7 @@ export default function StudioPage() {
                 <EmptyState />
               ) : (
                 <div className="poster-wrapper" style={{ zoom: zoom }}>
-                  <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compareDriver={compareEnabled ? compareDriver : null} compareTelemetry={compareEnabled ? compareTelemetry : null} playbackProgress={isPlaying ? progress : null} />
+                  <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compareDriver={compareEnabled ? compareDriver : null} compareTelemetry={compareEnabled ? compareTelemetry : null} compareRace={compareEnabled ? compareRace : null} playbackProgress={isPlaying ? progress : null} />
                 </div>
               )}
             </div>
@@ -274,7 +274,7 @@ export default function StudioPage() {
                         marginBottom: '-310px',
                       }}
                     >
-                      <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compareDriver={compareEnabled ? compareDriver : null} compareTelemetry={compareEnabled ? compareTelemetry : null} playbackProgress={isPlaying ? progress : null} />
+                      <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compareDriver={compareEnabled ? compareDriver : null} compareTelemetry={compareEnabled ? compareTelemetry : null} compareRace={compareEnabled ? compareRace : null} playbackProgress={isPlaying ? progress : null} />
                     </div>
                   )}
                 </div>
