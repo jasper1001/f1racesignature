@@ -13,7 +13,61 @@ import { teamAtYear } from '@/lib/driverTeams'
 
 const POSTER_W = 600
 const POSTER_H = 800
-const CIRCUIT_AREA = { x: 40, y: 88, w: 520, h: 452 }
+// Track container — the box the circuit outline + racing line are fitted into.
+const CIRCUIT_AREA = { x: 40, y: 86, w: 520, h: 464 }
+// Coordinate space the circuit paths are authored in (scripts/generate-circuits.mjs).
+const PATH_VB = { w: 500, h: 420 }
+// Glow-safe padding kept inside CIRCUIT_AREA when fitting (neon blur is ~10px).
+const FIT_PAD = 0.055
+
+interface CircuitFit { scale: number; tx: number; ty: number }
+
+// Exact bounds of an M/L/Z circuit path — no curves, so every coord pair is on-path.
+function pathBounds(path: string): { x0: number; y0: number; x1: number; y1: number } {
+  const nums = path.match(/-?\d+\.?\d*/g)?.map(Number) ?? []
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity
+  for (let i = 0; i + 1 < nums.length; i += 2) {
+    const x = nums[i], y = nums[i + 1]
+    if (x < x0) x0 = x
+    if (x > x1) x1 = x
+    if (y < y0) y0 = y
+    if (y > y1) y1 = y
+  }
+  return { x0, y0, x1, y1 }
+}
+
+/**
+ * THE single fit transform shared by both the circuit outline and the racing
+ * line. Maps the track's path bounds into CIRCUIT_AREA (inset by FIT_PAD) with a
+ * uniform scale (aspect preserved, no distortion), centred. Both render paths
+ * MUST consume the object this returns — never reimplement the maths — so the
+ * racing line can never drift off the track.
+ *
+ * Result maps a PATH-SPACE point (0..PATH_VB) to screen px:
+ *   screenX = px * scale + tx ;  screenY = py * scale + ty
+ */
+function computeCircuitFit(bounds: { x0: number; y0: number; x1: number; y1: number }): CircuitFit {
+  const bw = bounds.x1 - bounds.x0
+  const bh = bounds.y1 - bounds.y0
+  const innerW = CIRCUIT_AREA.w * (1 - 2 * FIT_PAD)
+  const innerH = CIRCUIT_AREA.h * (1 - 2 * FIT_PAD)
+  const scale = Math.min(innerW / bw, innerH / bh)
+  const tx = CIRCUIT_AREA.x + (CIRCUIT_AREA.w - bw * scale) / 2 - bounds.x0 * scale
+  const ty = CIRCUIT_AREA.y + (CIRCUIT_AREA.h - bh * scale) / 2 - bounds.y0 * scale
+  return { scale, tx, ty }
+}
+
+// Bounds source for the fit: the circuit outline when present (so the outline is
+// never clipped), else the telemetry lap converted into path space.
+function fitBounds(circuit: Circuit | null, telemetry: Telemetry | null) {
+  if (circuit) return pathBounds(circuit.path)
+  if (telemetry && telemetry.points.length > 1) {
+    const xs = telemetry.points.map((p) => p.x * PATH_VB.w)
+    const ys = telemetry.points.map((p) => p.y * PATH_VB.h)
+    return { x0: Math.min(...xs), y0: Math.min(...ys), x1: Math.max(...xs), y1: Math.max(...ys) }
+  }
+  return { x0: 0, y0: 0, x1: PATH_VB.w, y1: PATH_VB.h }
+}
 
 interface PosterPreviewProps {
   driver: Driver | null
@@ -35,13 +89,10 @@ function parseLapSeconds(s: string): number {
   return parseInt(m) * 60 + parseFloat(sec)
 }
 
-function CircuitBackground({ circuit, theme }: { circuit: Circuit; theme: ThemeConfig }) {
-  const scaleX = CIRCUIT_AREA.w / 500
-  const scaleY = CIRCUIT_AREA.h / 420
-
+function CircuitBackground({ circuit, fit }: { circuit: Circuit; fit: CircuitFit }) {
   return (
     <g>
-      <g transform={`translate(${CIRCUIT_AREA.x}, ${CIRCUIT_AREA.y}) scale(${scaleX}, ${scaleY})`}>
+      <g transform={`translate(${fit.tx}, ${fit.ty}) scale(${fit.scale})`}>
         {/* Outer kerb / run-off glow */}
         <path d={circuit.path} fill="none" stroke="#ffffff" strokeWidth="42" strokeLinecap="round" strokeLinejoin="round" opacity="0.05" />
         {/* White curb border */}
@@ -76,16 +127,17 @@ function wrapText(text: string, maxChars: number): string[] {
 function Watermark({ theme }: { theme: ThemeConfig }) {
   return (
     <g>
-      {/* Top-left corner tag */}
+      {/* Bottom-left corner tag — sits inside the circuit area, clear of the
+          centred driver name in the header row */}
       <text
         x={CIRCUIT_AREA.x + 8}
-        y={50}
+        y={CIRCUIT_AREA.y + CIRCUIT_AREA.h - 6}
         fill={theme.primaryLine}
-        fontSize="7"
+        fontSize="9"
         fontFamily="monospace"
         fontWeight="700"
         letterSpacing="2.5"
-        opacity="0.55"
+        opacity="0.7"
       >
         F1RACESIGNATURE.SITE
       </text>
@@ -95,10 +147,10 @@ function Watermark({ theme }: { theme: ThemeConfig }) {
           textAnchor="middle"
           dominantBaseline="middle"
           fill={theme.primaryLine}
-          fontSize="22"
+          fontSize="26"
           fontFamily="Georgia, serif"
           letterSpacing="12"
-          opacity="0.08"
+          opacity="0.1"
           fontStyle="italic"
         >
           F1RACESIGNATURE.SITE
@@ -125,11 +177,16 @@ export function PosterPreview({
   const isComparing = Boolean(compareTelemetry && compareTelemetry.points.length > 1)
   const isPlaying = playbackProgress !== null
 
+  // The one fit shared by the outline (via CircuitBackground) and the racing
+  // line below — computed once so the two paths can never diverge.
+  const fit = computeCircuitFit(fitBounds(circuit, telemetry))
+
   const toPosterSpace = (tel: Telemetry | null) =>
     tel?.points.map((pt) => ({
       ...pt,
-      x: (pt.x * CIRCUIT_AREA.w + CIRCUIT_AREA.x) / POSTER_W,
-      y: (pt.y * CIRCUIT_AREA.h + CIRCUIT_AREA.y) / POSTER_H,
+      // Path space (0..PATH_VB) → screen via the shared fit → poster 0-1.
+      x: (pt.x * PATH_VB.w * fit.scale + fit.tx) / POSTER_W,
+      y: (pt.y * PATH_VB.h * fit.scale + fit.ty) / POSTER_H,
     })) ?? []
 
   // Map raw 0-1 telemetry coords into poster-space 0-1
@@ -249,7 +306,7 @@ export function PosterPreview({
     )
   }
 
-  const statsY = CIRCUIT_AREA.y + CIRCUIT_AREA.h + 20
+  const statsY = CIRCUIT_AREA.y + CIRCUIT_AREA.h + 10
 
   return (
     <motion.div
@@ -293,7 +350,7 @@ export function PosterPreview({
         {/* Header */}
         <text
           x={POSTER_W / 2}
-          y="30"
+          y="26"
           textAnchor="middle"
           fill={theme.textColor}
           opacity="0.85"
@@ -306,10 +363,10 @@ export function PosterPreview({
         </text>
         <text
           x={POSTER_W / 2}
-          y="50"
+          y="54"
           textAnchor="middle"
           fill={theme.textColor}
-          fontSize="22"
+          fontSize="28"
           fontFamily="Georgia, serif"
           fontStyle="italic"
           letterSpacing="1"
@@ -324,13 +381,13 @@ export function PosterPreview({
           const label = isComparing
             ? 'HEAD TO HEAD'
             : (VIZ_MODES.find((v) => v.id === vizMode)?.name ?? vizMode).toUpperCase()
-          const badgeW = label.length * 6.2 + 24
+          const badgeW = label.length * 7.4 + 30
           return (
-            <g transform={`translate(${POSTER_W / 2 - badgeW / 2}, 56)`}>
-              <rect width={badgeW} height="14" rx="3" fill={theme.primaryLine} opacity="0.16" />
-              <rect width={badgeW} height="14" rx="3" fill="none" stroke={theme.primaryLine} strokeWidth="0.5" opacity="0.3" />
-              <text x={badgeW / 2} y="10" textAnchor="middle" fill={theme.primaryLine}
-                fontSize="8" fontFamily="monospace" letterSpacing="2" opacity="1">
+            <g transform={`translate(${POSTER_W / 2 - badgeW / 2}, 66)`}>
+              <rect width={badgeW} height="18" rx="4" fill={theme.primaryLine} opacity="0.16" />
+              <rect width={badgeW} height="18" rx="4" fill="none" stroke={theme.primaryLine} strokeWidth="0.5" opacity="0.3" />
+              <text x={badgeW / 2} y="12.5" textAnchor="middle" fill={theme.primaryLine}
+                fontSize="11" fontFamily="monospace" letterSpacing="2" opacity="1">
                 {label}
               </text>
             </g>
@@ -338,7 +395,7 @@ export function PosterPreview({
         })()}
 
         {/* Circuit area */}
-        {circuit && <CircuitBackground circuit={circuit} theme={theme} />}
+        {circuit && <CircuitBackground circuit={circuit} fit={fit} />}
 
         {/* Visualization overlay — or animated playback when playing */}
         {isPlaying ? renderPlayback() : renderViz()}
@@ -464,8 +521,8 @@ export function PosterPreview({
 
               {/* Bottom branding */}
               <line x1={L} y1={POSTER_H - 28} x2={R} y2={POSTER_H - 28} stroke={theme.borderColor} strokeWidth="1" opacity="0.35" />
-              <text x={L} y={POSTER_H - 12} fill={theme.textDim} fontSize="9" fontFamily="monospace" letterSpacing="4" opacity="0.55">WHERE SPEED BECOMES ART</text>
-              <text x={R} y={POSTER_H - 12} textAnchor="end" fill={theme.primaryLine} fontSize="8" fontFamily="monospace" letterSpacing="2" opacity="0.7">F1RACESIGNATURE.SITE</text>
+              <text x={L} y={POSTER_H - 12} fill={theme.textDim} fontSize="10" fontFamily="monospace" letterSpacing="4" opacity="0.6">WHERE SPEED BECOMES ART</text>
+              <text x={R} y={POSTER_H - 12} textAnchor="end" fill={theme.primaryLine} fontSize="10" fontFamily="monospace" letterSpacing="2" opacity="0.9">F1RACESIGNATURE.SITE</text>
             </>
           )
         })()}
