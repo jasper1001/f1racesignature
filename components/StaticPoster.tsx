@@ -74,7 +74,7 @@ export function StaticPoster({ driver, race, telemetry, circuit, themeId = 'carb
 
       {/* Stats */}
       <line x1={AREA.x} y1={H - 130} x2={W - AREA.x} y2={H - 130} stroke={theme.borderColor} strokeWidth="1" opacity="0.5" />
-      <text x={AREA.x} y={H - 108} fill={theme.textDim} fontSize="8" fontFamily="monospace" letterSpacing="3">LAP TIME</text>
+      <text x={AREA.x} y={H - 108} fill={theme.textDim} fontSize="8" fontFamily="monospace" letterSpacing="3">FLYING LAP</text>
       <text x={AREA.x} y={H - 84} fill={theme.primaryLine} fontSize="30" fontFamily="monospace" fontWeight="700">
         {telemetry?.lapTime ?? race.lapTime}
       </text>

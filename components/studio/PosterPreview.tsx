@@ -496,16 +496,16 @@ export function PosterPreview({
           const faster = delta === 0 ? null : delta < 0 ? compareDriver.shortName : driver.shortName
           return (
             <g fontFamily="monospace">
-              <rect x={lx - 8} y={ly - 12} width="168" height="56" rx="6" fill={theme.bg} opacity="0.92" />
-              <rect x={lx - 8} y={ly - 12} width="168" height="56" rx="6" fill="none" stroke={theme.borderColor} strokeWidth="1" opacity="0.6" />
+              <rect x={lx - 8} y={ly - 12} width="130" height="56" rx="6" fill={theme.bg} opacity="0.92" />
+              <rect x={lx - 8} y={ly - 12} width="130" height="56" rx="6" fill="none" stroke={theme.borderColor} strokeWidth="1" opacity="0.6" />
               <circle cx={lx + 4} cy={ly + 2} r="4" fill={driverColor} />
               <text x={lx + 14} y={ly + 5} fill={theme.textColor} fontSize="10">{driver.shortName}{race ? ` ’${String(race.year).slice(2)}` : ''}</text>
-              <text x={lx + 150} y={ly + 5} textAnchor="end" fill={driverColor} fontSize="10" fontWeight="600">{telemetry.lapTime}</text>
+              <text x={lx + 112} y={ly + 5} textAnchor="end" fill={driverColor} fontSize="10" fontWeight="600">{telemetry.lapTime}</text>
               <circle cx={lx + 4} cy={ly + 20} r="4" fill={compareColor} />
               <text x={lx + 14} y={ly + 23} fill={theme.textColor} fontSize="10">{compareDriver.shortName}{compareRace ? ` ’${String(compareRace.year).slice(2)}` : ''}</text>
-              <text x={lx + 150} y={ly + 23} textAnchor="end" fill={compareColor} fontSize="10" fontWeight="600">{compareTelemetry.lapTime}</text>
+              <text x={lx + 112} y={ly + 23} textAnchor="end" fill={compareColor} fontSize="10" fontWeight="600">{compareTelemetry.lapTime}</text>
               {faster && (
-                <text x={lx + 150} y={ly + 38} textAnchor="end" fill={theme.fastColor} fontSize="8">
+                <text x={lx + 112} y={ly + 38} textAnchor="end" fill={theme.fastColor} fontSize="8">
                   {faster} faster by {Math.abs(delta).toFixed(3)}s
                 </text>
               )}
@@ -526,7 +526,7 @@ export function PosterPreview({
               <line x1={L} y1={y0 - 10} x2={R} y2={y0 - 10} stroke={theme.borderColor} strokeWidth="1" opacity="0.5" />
 
               {/* — Row 1: Lap time + nationality/team — */}
-              <text x={L} y={y0 + 2} fill={theme.textColor} opacity="0.8" fontSize="9" fontFamily="monospace" letterSpacing="3">LAP TIME</text>
+              <text x={L} y={y0 + 2} fill={theme.textColor} opacity="0.8" fontSize="9" fontFamily="monospace" letterSpacing="3">FLYING LAP</text>
               {driver && (
                 <text x={R} y={y0 + 2} textAnchor="end" fill={theme.textColor} opacity="0.6" fontSize="9" fontFamily="monospace" letterSpacing="2">
                   {(histTeam?.team ?? driver.team).toUpperCase()}
