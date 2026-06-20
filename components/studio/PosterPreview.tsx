@@ -9,6 +9,7 @@ import { SectorSplit } from '@/components/visualizations/SectorSplit'
 import { OvertakeMap } from '@/components/visualizations/OvertakeMap'
 import { VIZ_MODES } from '@/lib/themes'
 import { interpolateColor } from '@/lib/data'
+import { teamAtYear } from '@/lib/driverTeams'
 
 const POSTER_W = 600
 const POSTER_H = 800
@@ -136,7 +137,10 @@ export function PosterPreview({
   const vizPoints = toPosterSpace(telemetry)
   const comparePoints = toPosterSpace(compareTelemetry)
 
-  const driverColor = driver?.color ?? theme.primaryLine
+  // Historical livery: when the shown driver matches the race's driver, use the
+  // team they actually raced for that year (e.g. Hamilton/Silverstone 2020 = Mercedes).
+  const histTeam = driver && race && race.driverId === driver.id ? teamAtYear(driver.id, race.year) : null
+  const driverColor = histTeam?.color ?? driver?.color ?? theme.primaryLine
   const compareColor = compareDriver?.color ?? theme.fastColor
 
   const renderViz = () => {
@@ -291,11 +295,12 @@ export function PosterPreview({
           x={POSTER_W / 2}
           y="30"
           textAnchor="middle"
-          fill={theme.textDim}
-          fontSize="9"
+          fill={theme.textColor}
+          opacity="0.85"
+          fontSize="11"
           fontFamily="var(--font-inter), system-ui, sans-serif"
           letterSpacing="4"
-          fontWeight="500"
+          fontWeight="600"
         >
           F1RACESIGNATURE
         </text>
@@ -322,10 +327,10 @@ export function PosterPreview({
           const badgeW = label.length * 6.2 + 24
           return (
             <g transform={`translate(${POSTER_W / 2 - badgeW / 2}, 56)`}>
-              <rect width={badgeW} height="14" rx="3" fill={theme.primaryLine} opacity="0.12" />
+              <rect width={badgeW} height="14" rx="3" fill={theme.primaryLine} opacity="0.16" />
               <rect width={badgeW} height="14" rx="3" fill="none" stroke={theme.primaryLine} strokeWidth="0.5" opacity="0.3" />
               <text x={badgeW / 2} y="10" textAnchor="middle" fill={theme.primaryLine}
-                fontSize="7" fontFamily="monospace" letterSpacing="2" opacity="0.9">
+                fontSize="8" fontFamily="monospace" letterSpacing="2" opacity="1">
                 {label}
               </text>
             </g>
@@ -375,17 +380,17 @@ export function PosterPreview({
               <line x1={L} y1={y0 - 10} x2={R} y2={y0 - 10} stroke={theme.borderColor} strokeWidth="1" opacity="0.5" />
 
               {/* — Row 1: Lap time + nationality/team — */}
-              <text x={L} y={y0 + 8} fill={theme.textDim} fontSize="8" fontFamily="monospace" letterSpacing="3">LAP TIME</text>
+              <text x={L} y={y0 + 2} fill={theme.textColor} opacity="0.8" fontSize="9" fontFamily="monospace" letterSpacing="3">LAP TIME</text>
               {driver && (
-                <text x={R} y={y0 + 8} textAnchor="end" fill={theme.textDim} fontSize="8" fontFamily="monospace" letterSpacing="2">
-                  {driver.team.toUpperCase()}
+                <text x={R} y={y0 + 2} textAnchor="end" fill={theme.textColor} opacity="0.6" fontSize="9" fontFamily="monospace" letterSpacing="2">
+                  {(histTeam?.team ?? driver.team).toUpperCase()}
                 </text>
               )}
-              <text x={L} y={y0 + 34} fill={theme.primaryLine} fontSize="34" fontFamily="monospace" fontWeight="700" letterSpacing="2">
+              <text x={L} y={y0 + 34} fill={theme.primaryLine} fontSize="42" fontFamily="monospace" fontWeight="700" letterSpacing="2">
                 {telemetry?.lapTime ?? '—:——.———'}
               </text>
               {driver && (
-                <text x={R} y={y0 + 34} textAnchor="end" fill={theme.textColor} fontSize="20" fontFamily="Georgia, serif" fontStyle="italic">
+                <text x={R} y={y0 + 34} textAnchor="end" fill="#ffffff" fontSize="20" fontFamily="Georgia, serif" fontStyle="italic">
                   {driver.shortName}
                 </text>
               )}
@@ -404,8 +409,8 @@ export function PosterPreview({
                 return sectors.map((s, i) => (
                   <g key={i}>
                     <rect x={L + i * colW} y={y0 + 50} width={colW - 4} height="38" rx="3" fill={s.color} opacity="0.06" />
-                    <text x={L + i * colW + 8} y={y0 + 63} fill={theme.textDim} fontSize="7" fontFamily="monospace" letterSpacing="2">{s.label}</text>
-                    <text x={L + i * colW + 8} y={y0 + 81} fill={s.color} fontSize="16" fontFamily="monospace" fontWeight="600">{s.val}</text>
+                    <text x={L + i * colW + 8} y={y0 + 63} fill={theme.textColor} opacity="0.65" fontSize="9" fontFamily="monospace" letterSpacing="2">{s.label}</text>
+                    <text x={L + i * colW + 8} y={y0 + 81} fill={s.color} fontSize="18" fontFamily="monospace" fontWeight="700">{s.val}</text>
                   </g>
                 ))
               })()}
@@ -424,8 +429,8 @@ export function PosterPreview({
                 const colW = W / 4
                 return stats.map((s, i) => (
                   <g key={i}>
-                    <text x={L + i * colW + colW / 2} y={y0 + 110} textAnchor="middle" fill={theme.textDim} fontSize="7" fontFamily="monospace" letterSpacing="1">{s.label}</text>
-                    <text x={L + i * colW + colW / 2} y={y0 + 124} textAnchor="middle" fill={theme.textColor} fontSize="11" fontFamily="monospace">{s.val}</text>
+                    <text x={L + i * colW + colW / 2} y={y0 + 110} textAnchor="middle" fill={theme.textColor} opacity="0.6" fontSize="9" fontFamily="monospace" letterSpacing="1.2">{s.label}</text>
+                    <text x={L + i * colW + colW / 2} y={y0 + 127} textAnchor="middle" fill="#ffffff" fontSize="16" fontFamily="monospace" fontWeight="600">{s.val}</text>
                   </g>
                 ))
               })()}
@@ -434,14 +439,14 @@ export function PosterPreview({
               <line x1={L} y1={y0 + 136} x2={R} y2={y0 + 136} stroke={theme.borderColor} strokeWidth="1" opacity="0.4" />
 
               {/* — Row 4: Circuit name + description — */}
-              <text x={L} y={y0 + 152} fill={theme.primaryLine} fontSize="11" fontFamily="monospace" letterSpacing="2">
+              <text x={L} y={y0 + 152} fill={theme.primaryLine} fontSize="14" fontFamily="monospace" letterSpacing="2">
                 {race ? race.circuitName.toUpperCase() : 'SELECT A RACE'}
               </text>
-              <text x={R} y={y0 + 152} textAnchor="end" fill={theme.textDim} fontSize="11" fontFamily="monospace" letterSpacing="1">
+              <text x={R} y={y0 + 152} textAnchor="end" fill={theme.textColor} opacity="0.7" fontSize="12" fontFamily="monospace" letterSpacing="1">
                 {race?.year ?? ''}
               </text>
               {race && (
-                <text x={L} y={y0 + 167} fill={theme.textDim} fontSize="8.5" fontFamily="Georgia, serif" fontStyle="italic">
+                <text x={L} y={y0 + 167} fill={theme.textColor} opacity="0.7" fontSize="12" fontFamily="Georgia, serif" fontStyle="italic">
                   {race.location}
                 </text>
               )}
@@ -450,16 +455,16 @@ export function PosterPreview({
               {driver && (
                 <>
                   <line x1={L} y1={y0 + 178} x2={R} y2={y0 + 178} stroke={theme.borderColor} strokeWidth="1" opacity="0.3" />
-                  {wrapText(driver.bio, 72).slice(0, 3).map((line, i) => (
-                    <text key={i} x={L} y={y0 + 193 + i * 13} fill={theme.textDim} fontSize="8.5"
-                      fontFamily="Georgia, serif" fontStyle="italic" opacity="0.7">{line}</text>
+                  {wrapText(driver.bio, 56).slice(0, 2).map((line, i) => (
+                    <text key={i} x={L} y={y0 + 193 + i * 15} fill={theme.textColor} fontSize="11"
+                      fontFamily="Georgia, serif" fontStyle="italic" opacity="0.65">{line}</text>
                   ))}
                 </>
               )}
 
               {/* Bottom branding */}
               <line x1={L} y1={POSTER_H - 28} x2={R} y2={POSTER_H - 28} stroke={theme.borderColor} strokeWidth="1" opacity="0.35" />
-              <text x={L} y={POSTER_H - 12} fill={theme.textDim} fontSize="8" fontFamily="monospace" letterSpacing="3" opacity="0.5">WHERE SPEED BECOMES ART</text>
+              <text x={L} y={POSTER_H - 12} fill={theme.textDim} fontSize="9" fontFamily="monospace" letterSpacing="4" opacity="0.55">WHERE SPEED BECOMES ART</text>
               <text x={R} y={POSTER_H - 12} textAnchor="end" fill={theme.primaryLine} fontSize="8" fontFamily="monospace" letterSpacing="2" opacity="0.7">F1RACESIGNATURE.SITE</text>
             </>
           )
