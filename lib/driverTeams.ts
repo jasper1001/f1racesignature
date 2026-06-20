@@ -124,3 +124,19 @@ const TEAM_TRANSFERS: Record<string, TeamStint[]> = {
 export function getTeamTransfers(driverId: string): TeamStint[] {
   return TEAM_TRANSFERS[driverId] ?? []
 }
+
+/**
+ * The team (and its colour) a driver raced for in a given year — so historical
+ * posters show the right livery instead of the driver's current team. Returns
+ * null when we have no career data for that driver/year.
+ */
+export function teamAtYear(driverId: string, year: number): { team: string; color: string } | null {
+  const stints = TEAM_TRANSFERS[driverId]
+  if (!stints) return null
+  let best: TeamStint | null = null
+  for (const s of stints) {
+    const end = s.endYear ?? Infinity
+    if (year >= s.startYear && year <= end && (!best || s.startYear > best.startYear)) best = s
+  }
+  return best ? { team: best.team, color: best.color } : null
+}

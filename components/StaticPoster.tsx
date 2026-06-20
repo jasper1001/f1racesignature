@@ -1,5 +1,6 @@
 import type { Driver, Race, Telemetry, Circuit } from '@/lib/types'
 import { themeById } from '@/lib/themes'
+import { teamAtYear } from '@/lib/driverTeams'
 
 const W = 480
 const H = 600
@@ -19,7 +20,9 @@ interface Props {
  */
 export function StaticPoster({ driver, race, telemetry, circuit, themeId = 'carbon_fiber' }: Props) {
   const theme = themeById(themeId)
-  const color = driver.color || theme.primaryLine
+  // Use the livery colour for the team the driver actually raced for that year,
+  // not their current team (e.g. Hamilton at Silverstone 2020 = Mercedes, not Ferrari).
+  const color = teamAtYear(driver.id, race.year)?.color ?? driver.color ?? theme.primaryLine
 
   const scaleX = AREA.w / 500
   const scaleY = AREA.h / 420
