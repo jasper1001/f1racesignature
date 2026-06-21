@@ -36,7 +36,9 @@ export function SurpriseButton() {
       className="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium bg-[#111111] text-[#aaaaaa] border border-[#222222] rounded-lg hover:text-white hover:border-[#333333] transition-colors cursor-pointer"
     >
       <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-        <path d="M11 2h3v3M14 2l-4 4M5 14H2v-3M2 14l4-4M14 11v3h-3M14 14l-4-4M2 5V2h3M2 2l4 4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+        {/* Sparkles — "surprise me" */}
+        <path d="M6.5 1.5C6.8 4.4 8.1 5.7 11 6C8.1 6.3 6.8 7.6 6.5 10.5C6.2 7.6 4.9 6.3 2 6C4.9 5.7 6.2 4.4 6.5 1.5Z" fill="currentColor" />
+        <path d="M12 8.5C12.15 9.85 12.65 10.35 14 10.5C12.65 10.65 12.15 11.15 12 12.5C11.85 11.15 11.35 10.65 10 10.5C11.35 10.35 11.85 9.85 12 8.5Z" fill="currentColor" />
       </svg>
       <span className="hidden sm:inline">Surprise</span>
     </button>
