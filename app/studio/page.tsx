@@ -140,7 +140,6 @@ export default function StudioPage() {
   if (compareEnabled && cmpRace1) {
     compares.push({ driver: drivers.find((d) => d.id === cmpRace1.driverId) ?? null, telemetry: cmpTel1, race: cmpRace1 })
   }
-  const firstCompare = compares[0] ?? null
 
   const activeTheme = themeById(theme)
 
@@ -236,7 +235,7 @@ export default function StudioPage() {
           </div>
         </main>
 
-        <StatsPanel driver={selectedDriver} race={selectedRace} telemetry={telemetry} compareDriver={firstCompare?.driver ?? null} compareTelemetry={firstCompare?.telemetry ?? null} />
+        <StatsPanel driver={selectedDriver} race={selectedRace} telemetry={telemetry} compares={compares} />
       </div>
 
       {/* ── Mobile layout ── */}
@@ -299,7 +298,7 @@ export default function StudioPage() {
             {mobileTab === 'stats' && (
               <motion.div key="stats" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} transition={{ duration: 0.2 }} className="absolute inset-0 overflow-y-auto">
                 <div className="w-full">
-                  <StatsPanel driver={selectedDriver} race={selectedRace} telemetry={telemetry} mobile compareDriver={firstCompare?.driver ?? null} compareTelemetry={firstCompare?.telemetry ?? null} />
+                  <StatsPanel driver={selectedDriver} race={selectedRace} telemetry={telemetry} mobile compares={compares} />
                 </div>
               </motion.div>
             )}

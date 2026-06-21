@@ -581,18 +581,27 @@ export function PosterPreview({
               {/* — Row 2: Sector times — */}
               {telemetry && (() => {
                 const colW = W / 3
+                const secTimes = (t: Telemetry) => [t.sectors.s1Time, t.sectors.s2Time, t.sectors.s3Time]
+                // Fastest time in each sector across every racer (main + compares).
+                const fastestSec = [0, 1, 2].map((i) =>
+                  Math.min(...[telemetry, ...compareLaps.map((c) => c.telemetry)].map((t) => secTimes(t)[i])))
                 const sectors = [
                   { label: 'SECTOR 1', val: telemetry.sectors.s1Time.toFixed(3) + 's', color: theme.s1Color },
                   { label: 'SECTOR 2', val: telemetry.sectors.s2Time.toFixed(3) + 's', color: theme.s2Color },
                   { label: 'SECTOR 3', val: telemetry.sectors.s3Time.toFixed(3) + 's', color: theme.s3Color },
                 ]
-                return sectors.map((s, i) => (
-                  <g key={i}>
-                    <rect x={L + i * colW} y={y0 + 50} width={colW - 4} height="38" rx="3" fill={s.color} opacity="0.06" />
-                    <text x={L + i * colW + 8} y={y0 + 63} fill={theme.textColor} opacity="0.65" fontSize="9" fontFamily="monospace" letterSpacing="2">{s.label}</text>
-                    <text x={L + i * colW + 8} y={y0 + 81} fill={s.color} fontSize="18" fontFamily="monospace" fontWeight="700">{s.val}</text>
-                  </g>
-                ))
+                return sectors.map((s, i) => {
+                  // In compare mode, mark the sectors the main driver won.
+                  const won = isComparing && Math.abs(secTimes(telemetry)[i] - fastestSec[i]) < 1e-6
+                  return (
+                    <g key={i}>
+                      <rect x={L + i * colW} y={y0 + 50} width={colW - 4} height="38" rx="3" fill={won ? '#00e676' : s.color} opacity={won ? 0.1 : 0.06} />
+                      <text x={L + i * colW + 8} y={y0 + 63} fill={theme.textColor} opacity="0.65" fontSize="9" fontFamily="monospace" letterSpacing="2">{s.label}</text>
+                      <text x={L + i * colW + 8} y={y0 + 81} fill={s.color} fontSize="18" fontFamily="monospace" fontWeight="700">{s.val}</text>
+                      {won && <circle cx={L + i * colW + colW - 14} cy={y0 + 60} r="3" fill="#00e676" />}
+                    </g>
+                  )
+                })
               })()}
 
               {/* Divider 3 */}
@@ -600,17 +609,28 @@ export function PosterPreview({
 
               {/* — Row 3: Speed stats grid — */}
               {telemetry && (() => {
+                // In compare mode the BENCHMARK slot becomes the gap to the fastest rival.
+                const fastestRival = isComparing && compareLaps.length > 0
+                  ? Math.min(...compareLaps.map((c) => parseLapSeconds(c.telemetry.lapTime)))
+                  : null
+                const gap = fastestRival !== null ? parseLapSeconds(telemetry.lapTime) - fastestRival : null
                 const stats = [
-                  { label: 'TOP SPEED',  val: `${telemetry.topSpeed} km/h` },
-                  { label: 'AVG SPEED',  val: `${telemetry.averageSpeed} km/h` },
-                  { label: 'SAMPLES',    val: `${telemetry.points.length} pts` },
-                  { label: 'BENCHMARK', val: telemetry.benchmarkLapTime },
+                  { label: 'TOP SPEED',  val: `${telemetry.topSpeed} km/h`, color: '#ffffff' },
+                  { label: 'AVG SPEED',  val: `${telemetry.averageSpeed} km/h`, color: '#ffffff' },
+                  { label: 'SAMPLES',    val: `${telemetry.points.length} pts`, color: '#ffffff' },
+                  gap !== null
+                    ? {
+                        label: 'GAP',
+                        val: `${gap > 0.0005 ? '+' : gap < -0.0005 ? '−' : ''}${Math.abs(gap).toFixed(3)}s`,
+                        color: gap > 0.0005 ? '#ff4444' : gap < -0.0005 ? '#00e676' : '#ffffff',
+                      }
+                    : { label: 'BENCHMARK', val: telemetry.benchmarkLapTime, color: '#ffffff' },
                 ]
                 const colW = W / 4
                 return stats.map((s, i) => (
                   <g key={i}>
                     <text x={L + i * colW + colW / 2} y={y0 + 110} textAnchor="middle" fill={theme.textColor} opacity="0.6" fontSize="9" fontFamily="monospace" letterSpacing="1.2">{s.label}</text>
-                    <text x={L + i * colW + colW / 2} y={y0 + 127} textAnchor="middle" fill="#ffffff" fontSize="16" fontFamily="monospace" fontWeight="600">{s.val}</text>
+                    <text x={L + i * colW + colW / 2} y={y0 + 127} textAnchor="middle" fill={s.color} fontSize="16" fontFamily="monospace" fontWeight="600">{s.val}</text>
                   </g>
                 ))
               })()}

@@ -2,14 +2,15 @@
 
 import { motion } from 'framer-motion'
 import type { Driver, Race, Telemetry } from '@/lib/types'
+import type { ComparisonLap } from './PosterPreview'
+import { teamAtYear } from '@/lib/driverTeams'
 
 interface StatsPanelProps {
   driver: Driver | null
   race: Race | null
   telemetry: Telemetry | null
   mobile?: boolean
-  compareDriver?: Driver | null
-  compareTelemetry?: Telemetry | null
+  compares?: ComparisonLap[]
 }
 
 function lapSecs(s: string): number {
@@ -17,8 +18,14 @@ function lapSecs(s: string): number {
   return parseInt(m) * 60 + parseFloat(sec)
 }
 
-export function StatsPanel({ driver, race, telemetry, mobile = false, compareDriver = null, compareTelemetry = null }: StatsPanelProps) {
-  const comparing = Boolean(compareDriver && compareTelemetry && telemetry)
+// Livery colour the driver actually raced for that year (matches the poster).
+function colorFor(d: Driver, r: Race | null): string {
+  return (r && r.driverId === d.id ? teamAtYear(d.id, r.year)?.color : null) ?? d.color
+}
+
+export function StatsPanel({ driver, race, telemetry, mobile = false, compares = [] }: StatsPanelProps) {
+  const validCompares = compares.filter((c) => c.driver && c.telemetry)
+  const comparing = Boolean(telemetry && validCompares.length > 0)
   if (!driver) {
     return (
       <div className={`flex items-center justify-center bg-[#0a0a0a] ${mobile ? 'w-full min-h-[60vh]' : 'w-56 flex-shrink-0 border-l border-[#111111]'}`}>
@@ -86,48 +93,56 @@ export function StatsPanel({ driver, race, telemetry, mobile = false, compareDri
               </div>
             </StatGroup>
 
-            {/* Head-to-head sector delta */}
-            {comparing && compareDriver && compareTelemetry && (
-              <div className="rounded-xl border border-[#1a1a1a] p-3">
-                <h4 className="text-[10px] font-medium text-[#d4a017] uppercase tracking-widest mb-3">
-                  Head to Head
-                </h4>
-                <div className="flex items-center justify-between text-xs mb-2">
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: driver.color }} />
-                    <span className="text-white font-medium">{driver.shortName}</span>
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <span className="text-white font-medium">{compareDriver.shortName}</span>
-                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: compareDriver.color }} />
-                  </span>
+            {/* Head-to-head leaderboard — every racer, fastest sector + lap highlighted */}
+            {comparing && telemetry && (() => {
+              const racers = [
+                { name: driver.shortName, color: colorFor(driver, race), tel: telemetry },
+                ...validCompares.map((c) => ({ name: c.driver!.shortName, color: colorFor(c.driver!, c.race), tel: c.telemetry! })),
+              ]
+              const sectorOf = (t: Telemetry, i: number) => [t.sectors.s1Time, t.sectors.s2Time, t.sectors.s3Time][i]
+              const fastestSector = [0, 1, 2].map((i) => Math.min(...racers.map((r) => sectorOf(r.tel, i))))
+              const minLap = Math.min(...racers.map((r) => lapSecs(r.tel.lapTime)))
+              const sorted = [...racers].sort((a, b) => lapSecs(a.tel.lapTime) - lapSecs(b.tel.lapTime))
+              const champ = sorted[0]
+              const gaps = sorted.slice(1).map((r) => `${r.name} +${(lapSecs(r.tel.lapTime) - lapSecs(champ.tel.lapTime)).toFixed(3)}`)
+              return (
+                <div className="rounded-xl border border-[#1a1a1a] p-3">
+                  <h4 className="text-[10px] font-medium text-[#d4a017] uppercase tracking-widest mb-1">
+                    Head to Head
+                  </h4>
+                  {racers.map((r, ri) => {
+                    const isFastestLap = Math.abs(lapSecs(r.tel.lapTime) - minLap) < 1e-6
+                    return (
+                      <div key={ri} className="py-1.5 border-t border-[#111111] first:border-t-0">
+                        <div className="flex items-center justify-between">
+                          <span className="flex items-center gap-1.5 min-w-0">
+                            <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: r.color }} />
+                            <span className="text-white text-xs font-medium truncate">{r.name}</span>
+                          </span>
+                          <span className={`font-mono text-xs ${isFastestLap ? 'text-[#00e676] font-semibold' : 'text-[#aaaaaa]'}`}>
+                            {r.tel.lapTime}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 mt-1 pl-3.5 text-[10px] font-mono">
+                          {[0, 1, 2].map((i) => {
+                            const v = sectorOf(r.tel, i)
+                            const isFS = Math.abs(v - fastestSector[i]) < 1e-6
+                            return (
+                              <span key={i} className={isFS ? 'text-[#00e676]' : 'text-[#aaaaaa]'}>
+                                S{i + 1} {v.toFixed(2)}
+                              </span>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    )
+                  })}
+                  <p className="text-center text-[10px] text-[#d4a017] mt-2 font-mono">
+                    {champ.name} fastest{gaps.length ? ' · ' + gaps.join(' · ') : ''}
+                  </p>
                 </div>
-                {([
-                  ['S1', telemetry.sectors.s1Time, compareTelemetry.sectors.s1Time],
-                  ['S2', telemetry.sectors.s2Time, compareTelemetry.sectors.s2Time],
-                  ['S3', telemetry.sectors.s3Time, compareTelemetry.sectors.s3Time],
-                  ['LAP', lapSecs(telemetry.lapTime), lapSecs(compareTelemetry.lapTime)],
-                ] as [string, number, number][]).map(([label, a, b]) => {
-                  const aWins = a < b
-                  return (
-                    <div key={label} className="flex items-center justify-between text-xs py-1 border-t border-[#111111]">
-                      <span className={`font-mono ${aWins ? 'text-[#00e676]' : 'text-[#aaaaaa]'}`}>{a.toFixed(3)}</span>
-                      <span className="text-[#aaaaaa] text-[10px] font-medium px-2">{label}</span>
-                      <span className={`font-mono ${!aWins ? 'text-[#00e676]' : 'text-[#aaaaaa]'}`}>{b.toFixed(3)}</span>
-                    </div>
-                  )
-                })}
-                {(() => {
-                  const d = lapSecs(compareTelemetry.lapTime) - lapSecs(telemetry.lapTime)
-                  const faster = d < 0 ? compareDriver.shortName : driver.shortName
-                  return (
-                    <p className="text-center text-[10px] text-[#d4a017] mt-2 font-mono">
-                      {faster} faster by {Math.abs(d).toFixed(3)}s
-                    </p>
-                  )
-                })()}
-              </div>
-            )}
+              )
+            })()}
 
             <StatGroup title="Telemetry">
               <StatRow label="Top Speed" value={`${telemetry.topSpeed} km/h`} highlight />
