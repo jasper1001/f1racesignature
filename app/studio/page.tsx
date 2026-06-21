@@ -269,9 +269,9 @@ export default function StudioPage() {
                     <div
                       className="poster-wrapper origin-top"
                       style={{
-                        transform: 'scale(0.52)',
+                        transform: 'scale(0.62)',
                         transformOrigin: 'top center',
-                        marginBottom: '-310px',
+                        marginBottom: '-244px',
                       }}
                     >
                       <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compareDriver={compareEnabled ? compareDriver : null} compareTelemetry={compareEnabled ? compareTelemetry : null} compareRace={compareEnabled ? compareRace : null} playbackProgress={isPlaying ? progress : null} />
