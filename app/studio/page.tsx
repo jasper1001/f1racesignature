@@ -26,6 +26,11 @@ const ZOOM_STEP = 0.15
 const ZOOM_MIN  = 0.4
 const ZOOM_MAX  = 2.0
 
+// Poster intrinsic size (matches PosterPreview) — used to fit it to the screen
+// in fullscreen mode.
+const POSTER_W = 600
+const POSTER_H = 800
+
 type MobileTab = 'controls' | 'preview' | 'stats'
 
 export default function StudioPage() {
@@ -33,6 +38,26 @@ export default function StudioPage() {
   const applyConfig = useStudioStore((s) => s.applyConfig)
   const [zoom, setZoom] = useState(0.85)
   const [mobileTab, setMobileTab] = useState<MobileTab>('preview')
+
+  // Fullscreen canvas — overlay the poster scaled to fit the viewport
+  const [isFullscreen, setIsFullscreen] = useState(false)
+  const [fsScale, setFsScale] = useState(1)
+  useEffect(() => {
+    if (!isFullscreen) return
+    const compute = () => {
+      const pad = 64
+      const s = Math.min((window.innerWidth - pad) / POSTER_W, (window.innerHeight - pad) / POSTER_H)
+      setFsScale(+s.toFixed(3))
+    }
+    compute()
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setIsFullscreen(false) }
+    window.addEventListener('resize', compute)
+    window.addEventListener('keydown', onKey)
+    return () => {
+      window.removeEventListener('resize', compute)
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [isFullscreen])
 
   // Lap playback
   const [isPlaying, setIsPlaying] = useState(false)
@@ -111,6 +136,11 @@ export default function StudioPage() {
   const selectedRace    = races.find((r) => r.id === selectedRaceId) ?? null
   const selectedDriver  = drivers.find((d) => d.id === selectedDriverId) ?? null
   const selectedCircuit = selectedRace ? (circuits[selectedRace.circuit] ?? null) : null
+
+  // Leaving the studio with no driver selected shouldn't strand the overlay
+  useEffect(() => {
+    if (!selectedDriver) setIsFullscreen(false)
+  }, [selectedDriver])
 
   const { data: telemetry = null } = useQuery({
     queryKey: ['telemetry', selectedRace?.telemetryFile],
@@ -213,6 +243,14 @@ export default function StudioPage() {
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 2v8M2 6h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
                 </button>
               </div>
+              <button
+                onClick={() => setIsFullscreen(true)}
+                disabled={!selectedDriver}
+                title="Fullscreen"
+                className="w-8 h-8 flex items-center justify-center bg-[#0f0f0f] border border-[#1a1a1a] rounded-lg text-[#aaaaaa] hover:text-white disabled:opacity-30 transition-colors cursor-pointer"
+              >
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 5V1h4M13 5V1H9M1 9v4h4M13 9v4H9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </button>
               <PlayButton isPlaying={isPlaying} onToggle={() => setIsPlaying((p) => !p)} disabled={!telemetry} />
               <SurpriseButton />
               <SaveButton />
@@ -265,6 +303,14 @@ export default function StudioPage() {
                     <span className="truncate">{activeTheme.name}</span>
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0">
+                    <button
+                      onClick={() => setIsFullscreen(true)}
+                      disabled={!selectedDriver}
+                      title="Fullscreen"
+                      className="w-7 h-7 flex items-center justify-center bg-[#0f0f0f] border border-[#1a1a1a] rounded-lg text-[#aaaaaa] disabled:opacity-30 cursor-pointer"
+                    >
+                      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M1 5V1h4M13 5V1H9M1 9v4h4M13 9v4H9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    </button>
                     <PlayButton isPlaying={isPlaying} onToggle={() => setIsPlaying((p) => !p)} disabled={!telemetry} />
                     <SurpriseButton />
                     <SaveButton />
@@ -321,6 +367,36 @@ export default function StudioPage() {
           ))}
         </div>
       </div>
+
+      {/* ── Fullscreen canvas overlay ── */}
+      <AnimatePresence>
+        {isFullscreen && selectedDriver && (
+          <motion.div
+            key="fullscreen"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[60] flex items-center justify-center"
+            style={{ background: '#000' }}
+          >
+            {/* Controls */}
+            <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
+              <PlayButton isPlaying={isPlaying} onToggle={() => setIsPlaying((p) => !p)} disabled={!telemetry} />
+              <button
+                onClick={() => setIsFullscreen(false)}
+                title="Exit fullscreen (Esc)"
+                className="w-8 h-8 flex items-center justify-center bg-[#0f0f0f] border border-[#1a1a1a] rounded-lg text-[#aaaaaa] hover:text-white transition-colors cursor-pointer"
+              >
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 1v4H1M9 1v4h4M5 13V9H1M9 13V9h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </button>
+            </div>
+            <div className="poster-wrapper" style={{ transform: `scale(${fsScale})`, transformOrigin: 'center' }}>
+              <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compares={compares} playbackProgress={isPlaying ? progress : null} />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <UpgradeModal />
       <OnboardingModal isOpen={showOnboarding} onClose={closeOnboarding} />

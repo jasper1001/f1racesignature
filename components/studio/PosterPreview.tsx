@@ -476,7 +476,7 @@ export function PosterPreview({
           letterSpacing="4"
           fontWeight="600"
         >
-          F1RACESIGNATURE
+          F1RACESIGNATURE.SITE
         </text>
         <text
           x={POSTER_W / 2}
@@ -570,11 +570,11 @@ export function PosterPreview({
                   {(histTeam?.team ?? driver.team).toUpperCase()}
                 </text>
               )}
-              <text x={L} y={y0 + 34} fill={theme.primaryLine} fontSize="42" fontFamily="monospace" fontWeight="700" letterSpacing="2">
+              <text x={L} y={y0 + 40} fill={theme.primaryLine} fontSize="42" fontFamily="monospace" fontWeight="700" letterSpacing="2">
                 {telemetry?.lapTime ?? '—:——.———'}
               </text>
               {driver && (
-                <text x={R} y={y0 + 34} textAnchor="end" fill="#ffffff" fontSize="20" fontFamily="Georgia, serif" fontStyle="italic">
+                <text x={R} y={y0 + 40} textAnchor="end" fill="#ffffff" fontSize="20" fontFamily="Georgia, serif" fontStyle="italic">
                   {driver.shortName}
                 </text>
               )}
