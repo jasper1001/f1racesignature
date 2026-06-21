@@ -214,10 +214,12 @@ export default function StudioPage() {
     setIsRecording(true)
     setRecordPct(0)
 
-    // Loop the 7s lap a few times so the clip is long enough to use as a Reel/
-    // TikTok. `t` runs 0..1 across the whole timeline; map it to per-lap progress
-    // so each loop is a clean 0→1 sweep.
-    const LOOPS = 3
+    // Loop the lap so the clip is long enough to use as a Reel/TikTok. `t` runs
+    // 0..1 across the whole timeline; map it to per-lap progress so each loop is
+    // a clean 0→1 sweep. The recorded loop runs a touch slower than the live
+    // preview (RECORD_LOOP_MS > PLAYBACK_MS) so the motion reads more cinematic.
+    const LOOPS = 2
+    const RECORD_LOOP_MS = 9000
 
     const drawFrame = (t: number, ctx: CanvasRenderingContext2D) =>
       new Promise<void>((resolve, reject) => {
@@ -244,7 +246,7 @@ export default function StudioPage() {
 
     try {
       const fps = 30
-      const frames = Math.round((PLAYBACK_MS / 1000) * fps) * LOOPS
+      const frames = Math.round((RECORD_LOOP_MS / 1000) * fps) * LOOPS
       Analytics.exportClicked('mp4_replay', selectedDriverId!, selectedRaceId!)
       const blob = await recordLapVideo({
         width, height, fps, frames,
