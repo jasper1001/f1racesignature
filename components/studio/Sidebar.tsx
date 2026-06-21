@@ -289,7 +289,7 @@ export function Sidebar({ drivers, races, mobile = false }: SidebarProps) {
         <Section title="Export Format">
           <div className="space-y-1">
             {EXPORT_FORMATS.map((f) => {
-              const isAvailable = f.id === 'poster_portrait'
+              const isAvailable = f.id === 'poster_portrait' || f.id === 'square_instagram'
               const active = exportFormat === f.id
               return (
                 <button

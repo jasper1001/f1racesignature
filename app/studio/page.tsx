@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback, useRef } from 'react'
+import { flushSync } from 'react-dom'
 import { useQuery } from '@tanstack/react-query'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Header } from '@/components/layout/Header'
@@ -18,7 +19,8 @@ import { hasSeen, markSeen } from '@/lib/onboarding'
 import Link from 'next/link'
 import { useStudioStore } from '@/lib/store'
 import { fetchDrivers, fetchRaces, fetchTelemetry, fetchCircuits } from '@/lib/data'
-import { themeById } from '@/lib/themes'
+import { themeById, EXPORT_FORMATS } from '@/lib/themes'
+import { recordLapVideo, canRecordMp4 } from '@/lib/lapVideo'
 import { Analytics } from '@/lib/analytics'
 import type { VizMode, ArtTheme } from '@/lib/types'
 
@@ -34,7 +36,7 @@ const POSTER_H = 800
 type MobileTab = 'controls' | 'preview' | 'stats'
 
 export default function StudioPage() {
-  const { selectedDriverId, selectedRaceId, vizMode, theme, compareEnabled, compareRaceIds } = useStudioStore()
+  const { selectedDriverId, selectedRaceId, vizMode, theme, exportFormat, compareEnabled, compareRaceIds } = useStudioStore()
   const applyConfig = useStudioStore((s) => s.applyConfig)
   const [zoom, setZoom] = useState(0.85)
   const [mobileTab, setMobileTab] = useState<MobileTab>('preview')
@@ -64,6 +66,16 @@ export default function StudioPage() {
   const [progress, setProgress] = useState(0)
   const rafRef = useRef<number | null>(null)
   const PLAYBACK_MS = 7000
+
+  // MP4 export of the replay lap. While recording, `captureProgress` drives the
+  // poster to an exact frame (deterministically, frame-by-frame) instead of the
+  // live rAF loop, so we can encode H.264 with WebCodecs.
+  const [captureProgress, setCaptureProgress] = useState<number | null>(null)
+  const [isRecording, setIsRecording] = useState(false)
+  const [recordPct, setRecordPct] = useState(0)
+  // The value the poster animates to: a capture frame when recording, else the
+  // live playback progress (or null when idle).
+  const livePlayback = captureProgress !== null ? captureProgress : (isPlaying ? progress : null)
 
   useEffect(() => {
     if (!isPlaying) return
@@ -173,6 +185,90 @@ export default function StudioPage() {
 
   const activeTheme = themeById(theme)
 
+  // ── Export the animated replay lap as a true H.264 MP4 (iOS-friendly) ──
+  const handleRecordMp4 = async () => {
+    if (!selectedDriver || !telemetry || isRecording) return
+    if (!canRecordMp4()) {
+      alert('Sorry — MP4 export needs a browser with WebCodecs (try the latest Chrome, Edge, or Safari).')
+      return
+    }
+
+    // Use the selected export format's aspect (e.g. Instagram square), sized for
+    // video: scale so the short edge is ~1080, capped, and even (H.264 needs
+    // even dimensions). The poster art is letterboxed onto it, matching the
+    // still-image export.
+    const fmt = EXPORT_FORMATS.find((f) => f.id === exportFormat) ?? EXPORT_FORMATS[0]
+    const targetShort = 1080
+    const s = targetShort / Math.min(fmt.width, fmt.height)
+    const width = Math.round((fmt.width * s) / 2) * 2
+    const height = Math.round((fmt.height * s) / 2) * 2
+
+    const fit = Math.min(width / POSTER_W, height / POSTER_H)
+    const drawW = Math.round(POSTER_W * fit)
+    const drawH = Math.round(POSTER_H * fit)
+    const dx = Math.round((width - drawW) / 2)
+    const dy = Math.round((height - drawH) / 2)
+    const bg = activeTheme.bg
+
+    setIsPlaying(false)
+    setIsRecording(true)
+    setRecordPct(0)
+
+    // Loop the 7s lap a few times so the clip is long enough to use as a Reel/
+    // TikTok. `t` runs 0..1 across the whole timeline; map it to per-lap progress
+    // so each loop is a clean 0→1 sweep.
+    const LOOPS = 3
+
+    const drawFrame = (t: number, ctx: CanvasRenderingContext2D) =>
+      new Promise<void>((resolve, reject) => {
+        // Drive the live poster to this exact frame, synchronously, then read it.
+        flushSync(() => setCaptureProgress((t * LOOPS) % 1))
+        const svgEl = document.getElementById('poster-svg') as SVGSVGElement | null
+        if (!svgEl) { reject(new Error('poster not found')); return }
+        const clone = svgEl.cloneNode(true) as SVGSVGElement
+        clone.setAttribute('width', String(drawW))
+        clone.setAttribute('height', String(drawH))
+        const svgString = new XMLSerializer().serializeToString(clone)
+        const url = URL.createObjectURL(new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' }))
+        const img = new Image()
+        img.onload = () => {
+          ctx.fillStyle = bg
+          ctx.fillRect(0, 0, width, height)
+          ctx.drawImage(img, dx, dy, drawW, drawH)
+          URL.revokeObjectURL(url)
+          resolve()
+        }
+        img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('frame render failed')) }
+        img.src = url
+      })
+
+    try {
+      const fps = 30
+      const frames = Math.round((PLAYBACK_MS / 1000) * fps) * LOOPS
+      Analytics.exportClicked('mp4_replay', selectedDriverId!, selectedRaceId!)
+      const blob = await recordLapVideo({
+        width, height, fps, frames,
+        bitrate: 24_000_000, // 24 Mbps — crisp at 1080, good for re-encoding on upload
+        drawFrame,
+        onProgress: (done, total) => setRecordPct(Math.round((done / total) * 100)),
+      })
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.download = `f1racesignature-${selectedDriverId}-${selectedRaceId}.mp4`
+      link.href = url
+      link.click()
+      URL.revokeObjectURL(url)
+      Analytics.exportCompleted('mp4_replay', selectedDriverId!, selectedRaceId!)
+    } catch (err) {
+      console.error('MP4 export failed', err)
+      alert('MP4 export failed. Your browser may not support H.264 encoding — try the latest Chrome or Edge.')
+    } finally {
+      setCaptureProgress(null)
+      setIsRecording(false)
+      setRecordPct(0)
+    }
+  }
+
   const MOBILE_TABS: { id: MobileTab; label: string; icon: React.ReactNode }[] = [
     {
       id: 'controls',
@@ -252,6 +348,7 @@ export default function StudioPage() {
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 5V1h4M13 5V1H9M1 9v4h4M13 9v4H9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </button>
               <PlayButton isPlaying={isPlaying} onToggle={() => setIsPlaying((p) => !p)} disabled={!telemetry} />
+              <RecordMp4Button onRecord={handleRecordMp4} disabled={!telemetry} isRecording={isRecording} pct={recordPct} />
               <SurpriseButton />
               <SaveButton />
               <ShareButton />
@@ -266,7 +363,7 @@ export default function StudioPage() {
                 <EmptyState />
               ) : (
                 <div className="poster-wrapper" style={{ zoom: zoom }}>
-                  <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compares={compares} playbackProgress={isPlaying ? progress : null} />
+                  <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compares={compares} playbackProgress={livePlayback} />
                 </div>
               )}
             </div>
@@ -312,6 +409,7 @@ export default function StudioPage() {
                       <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M1 5V1h4M13 5V1H9M1 9v4h4M13 9v4H9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                     </button>
                     <PlayButton isPlaying={isPlaying} onToggle={() => setIsPlaying((p) => !p)} disabled={!telemetry} />
+                    <RecordMp4Button onRecord={handleRecordMp4} disabled={!telemetry} isRecording={isRecording} pct={recordPct} compact />
                     <SurpriseButton />
                     <SaveButton />
                     <ShareButton />
@@ -334,7 +432,7 @@ export default function StudioPage() {
                         marginBottom: '-244px',
                       }}
                     >
-                      <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compares={compares} playbackProgress={isPlaying ? progress : null} />
+                      <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compares={compares} playbackProgress={livePlayback} />
                     </div>
                   )}
                 </div>
@@ -383,6 +481,7 @@ export default function StudioPage() {
             {/* Controls */}
             <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
               <PlayButton isPlaying={isPlaying} onToggle={() => setIsPlaying((p) => !p)} disabled={!telemetry} />
+              <RecordMp4Button onRecord={handleRecordMp4} disabled={!telemetry} isRecording={isRecording} pct={recordPct} />
               <button
                 onClick={() => setIsFullscreen(false)}
                 title="Exit fullscreen (Esc)"
@@ -392,7 +491,7 @@ export default function StudioPage() {
               </button>
             </div>
             <div className="poster-wrapper" style={{ transform: `scale(${fsScale})`, transformOrigin: 'center' }}>
-              <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compares={compares} playbackProgress={isPlaying ? progress : null} />
+              <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compares={compares} playbackProgress={livePlayback} />
             </div>
           </motion.div>
         )}
@@ -417,5 +516,40 @@ function EmptyState() {
       <p className="text-[#aaaaaa] text-sm mb-1">Select a driver to begin</p>
       <p className="text-[#2a2a2a] text-xs">Choose from the sidebar on the left</p>
     </div>
+  )
+}
+
+function RecordMp4Button({
+  onRecord,
+  disabled,
+  isRecording,
+  pct,
+  compact = false,
+}: {
+  onRecord: () => void
+  disabled?: boolean
+  isRecording: boolean
+  pct: number
+  compact?: boolean
+}) {
+  const size = compact ? 'w-7 h-7' : 'w-8 h-8'
+  return (
+    <button
+      onClick={onRecord}
+      disabled={disabled || isRecording}
+      title={isRecording ? `Recording MP4… ${pct}%` : 'Export replay as MP4'}
+      data-track="studio_export_mp4"
+      className={`${size} flex items-center justify-center bg-[#0f0f0f] border border-[#1a1a1a] rounded-lg text-[#aaaaaa] hover:text-white disabled:opacity-30 transition-colors cursor-pointer relative`}
+    >
+      {isRecording ? (
+        <span className="text-[9px] font-mono text-[#d4a017] tabular-nums">{pct}%</span>
+      ) : (
+        // Film / video-clip icon
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+          <rect x="1.5" y="3.5" width="9" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.4" />
+          <path d="M10.5 6.5l4-2v7l-4-2v-3z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+        </svg>
+      )}
+    </button>
   )
 }

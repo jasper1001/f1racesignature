@@ -176,7 +176,7 @@ export const VIZ_MODES: VizModeConfig[] = [
 
 export const EXPORT_FORMATS: ExportFormatConfig[] = [
   { id: 'poster_portrait', name: 'Poster (Portrait)', width: 600, height: 800, isFree: true },
-  { id: 'square_instagram', name: 'Square (Instagram)', width: 1080, height: 1080, isFree: false },
+  { id: 'square_instagram', name: 'Square (Instagram)', width: 1080, height: 1080, isFree: true },
   { id: 'desktop_wallpaper', name: 'Desktop Wallpaper', width: 1920, height: 1080, isFree: false },
   { id: 'mobile_wallpaper', name: 'Mobile Wallpaper', width: 1080, height: 1920, isFree: false },
   { id: 'race_card', name: 'Race Card', width: 800, height: 450, isFree: false },

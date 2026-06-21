@@ -3,12 +3,16 @@
 import { useState } from 'react'
 import { useStudioStore } from '@/lib/store'
 import { isExportFree, UPGRADE_REASONS } from '@/lib/freemium'
-import { EXPORT_FORMATS } from '@/lib/themes'
+import { EXPORT_FORMATS, themeById } from '@/lib/themes'
 import { Analytics } from '@/lib/analytics'
+
+// The poster art is authored at this portrait size (matches PosterPreview).
+const POSTER_W = 600
+const POSTER_H = 800
 
 export function ExportButton({ onBeforeExport }: { onBeforeExport?: () => void } = {}) {
   const [isExporting, setIsExporting] = useState(false)
-  const { selectedDriverId, selectedRaceId, exportFormat, openUpgradeModal } = useStudioStore()
+  const { selectedDriverId, selectedRaceId, exportFormat, theme, openUpgradeModal } = useStudioStore()
 
   const formatConfig = EXPORT_FORMATS.find((f) => f.id === exportFormat)!
 
@@ -39,13 +43,23 @@ export function ExportButton({ onBeforeExport }: { onBeforeExport?: () => void }
       const outW = Math.round(formatConfig.width * scale)
       const outH = Math.round(formatConfig.height * scale)
 
-      // Serialize the SVG at the high-res intrinsic size so browsers rasterize it
+      // Keep the poster's authored aspect and letterbox it onto the format's
+      // canvas (centred), filling the margins with the theme background. This
+      // applies the full poster design to non-portrait formats (e.g. the
+      // Instagram square) without distorting it. Portrait export is unchanged —
+      // the fit fills the canvas edge-to-edge.
+      const fit = Math.min(outW / POSTER_W, outH / POSTER_H)
+      const drawW = Math.round(POSTER_W * fit)
+      const drawH = Math.round(POSTER_H * fit)
+      const dx = Math.round((outW - drawW) / 2)
+      const dy = Math.round((outH - drawH) / 2)
+
+      // Serialize the SVG at the high-res draw size so browsers rasterize it
       // crisply (some rasterize at the SVG's own size before scaling). This avoids
       // html2canvas entirely — no iframe cloning, no transform issues.
       const clone = svgEl.cloneNode(true) as SVGSVGElement
-      clone.setAttribute('width', String(outW))
-      clone.setAttribute('height', String(outH))
-      clone.setAttribute('preserveAspectRatio', 'none') // fill exactly, matching prior stretch
+      clone.setAttribute('width', String(drawW))
+      clone.setAttribute('height', String(drawH))
       const svgString = new XMLSerializer().serializeToString(clone)
       const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' })
       const url = URL.createObjectURL(blob)
@@ -56,7 +70,10 @@ export function ExportButton({ onBeforeExport }: { onBeforeExport?: () => void }
           const canvas = document.createElement('canvas')
           canvas.width = outW
           canvas.height = outH
-          canvas.getContext('2d')!.drawImage(img, 0, 0, canvas.width, canvas.height)
+          const ctx = canvas.getContext('2d')!
+          ctx.fillStyle = themeById(theme).bg
+          ctx.fillRect(0, 0, outW, outH)
+          ctx.drawImage(img, dx, dy, drawW, drawH)
 
           const link = document.createElement('a')
           link.download = `f1racesignature-${selectedDriverId}-${selectedRaceId}.png`
