@@ -69,6 +69,13 @@ function fitBounds(circuit: Circuit | null, telemetry: Telemetry | null) {
   return { x0: 0, y0: 0, x1: PATH_VB.w, y1: PATH_VB.h }
 }
 
+// One head-to-head lap to overlay against the main lap.
+export interface ComparisonLap {
+  driver: Driver | null
+  telemetry: Telemetry | null
+  race: Race | null
+}
+
 interface PosterPreviewProps {
   driver: Driver | null
   race: Race | null
@@ -77,10 +84,8 @@ interface PosterPreviewProps {
   theme: ThemeConfig
   vizMode: VizMode
   isFreeTier?: boolean
-  // Head-to-head comparison (second lap on the same circuit)
-  compareDriver?: Driver | null
-  compareTelemetry?: Telemetry | null
-  compareRace?: Race | null
+  // Head-to-head comparison — up to two extra laps on the same circuit.
+  compares?: ComparisonLap[]
   // Lap playback: 0..1 progress, or null when not playing
   playbackProgress?: number | null
 }
@@ -205,14 +210,11 @@ export function PosterPreview({
   theme,
   vizMode,
   isFreeTier = true,
-  compareDriver = null,
-  compareTelemetry = null,
-  compareRace = null,
+  compares = [],
   playbackProgress = null,
 }: PosterPreviewProps) {
   const svgRef = useRef<SVGSVGElement>(null)
 
-  const isComparing = Boolean(compareTelemetry && compareTelemetry.points.length > 1)
   const isPlaying = playbackProgress !== null
 
   // The one fit shared by the outline (via CircuitBackground) and the racing
@@ -230,64 +232,88 @@ export function PosterPreview({
   // Map raw 0-1 telemetry coords into poster-space 0-1
   // Viz components then multiply by POSTER_W/H to get final pixels.
   const vizPoints = toPosterSpace(telemetry)
-  const comparePoints = toPosterSpace(compareTelemetry)
 
   // Historical livery: when the shown driver matches the race's driver, use the
   // team they actually raced for that year (e.g. Hamilton/Silverstone 2020 = Mercedes).
+  const lapColor = (d: Driver, r: Race | null) =>
+    (r && r.driverId === d.id ? teamAtYear(d.id, r.year)?.color : null) ?? d.color ?? theme.fastColor
   const histTeam = driver && race && race.driverId === driver.id ? teamAtYear(driver.id, race.year) : null
   const driverColor = histTeam?.color ?? driver?.color ?? theme.primaryLine
-  const compareColor = compareDriver?.color ?? theme.fastColor
+
+  // Up to two head-to-head laps, each with its racing line (poster space) + livery colour.
+  const compareLaps = compares
+    .filter((c) => c.driver && c.telemetry && c.telemetry.points.length > 1)
+    .map((c) => ({
+      driver: c.driver!,
+      race: c.race,
+      telemetry: c.telemetry!,
+      points: toPosterSpace(c.telemetry),
+      color: lapColor(c.driver!, c.race),
+    }))
+  const isComparing = compareLaps.length > 0
 
   const renderViz = () => {
     if (!telemetry || vizPoints.length === 0) return null
 
-    // In compare mode: render a speed-delta map.
-    // The circuit is coloured segment-by-segment based on who was faster at
-    // each point. One overlapping line engulfs the other, so we never do that.
-    if (isComparing && comparePoints.length > 1) {
-      const n = Math.min(vizPoints.length, comparePoints.length)
+    // ── Compare mode ──
+    if (isComparing) {
+      // Exactly one compare lap → speed-delta map (segments coloured by who's faster).
+      if (compareLaps.length === 1) {
+        const cmpPoints = compareLaps[0].points
+        const compareColor = compareLaps[0].color
+        const n = Math.min(vizPoints.length, cmpPoints.length)
+        const basePath = vizPoints.slice(0, n).map((p, i) =>
+          `${i === 0 ? 'M' : 'L'} ${(p.x * POSTER_W).toFixed(1)} ${(p.y * POSTER_H).toFixed(1)}`
+        ).join(' ')
 
-      // Full circuit base (dark road surface so segments pop)
-      const basePath = vizPoints.slice(0, n).map((p, i) =>
-        `${i === 0 ? 'M' : 'L'} ${(p.x * POSTER_W).toFixed(1)} ${(p.y * POSTER_H).toFixed(1)}`
-      ).join(' ')
-
-      // Group consecutive points by which driver is faster into coloured runs
-      type Seg = { d: string; d1: boolean }
-      const segs: Seg[] = []
-      const faster = (i: number) => vizPoints[i].speed >= comparePoints[i].speed
-      let cur: Seg = {
-        d: `M ${(vizPoints[0].x * POSTER_W).toFixed(1)} ${(vizPoints[0].y * POSTER_H).toFixed(1)}`,
-        d1: faster(0),
-      }
-      for (let i = 1; i < n; i++) {
-        const f = faster(i)
-        if (f !== cur.d1) {
-          segs.push(cur)
-          cur = {
-            d: `M ${(vizPoints[i - 1].x * POSTER_W).toFixed(1)} ${(vizPoints[i - 1].y * POSTER_H).toFixed(1)}`,
-            d1: f,
-          }
+        type Seg = { d: string; d1: boolean }
+        const segs: Seg[] = []
+        const faster = (i: number) => vizPoints[i].speed >= cmpPoints[i].speed
+        let cur: Seg = {
+          d: `M ${(vizPoints[0].x * POSTER_W).toFixed(1)} ${(vizPoints[0].y * POSTER_H).toFixed(1)}`,
+          d1: faster(0),
         }
-        cur.d += ` L ${(vizPoints[i].x * POSTER_W).toFixed(1)} ${(vizPoints[i].y * POSTER_H).toFixed(1)}`
-      }
-      segs.push(cur)
+        for (let i = 1; i < n; i++) {
+          const f = faster(i)
+          if (f !== cur.d1) {
+            segs.push(cur)
+            cur = {
+              d: `M ${(vizPoints[i - 1].x * POSTER_W).toFixed(1)} ${(vizPoints[i - 1].y * POSTER_H).toFixed(1)}`,
+              d1: f,
+            }
+          }
+          cur.d += ` L ${(vizPoints[i].x * POSTER_W).toFixed(1)} ${(vizPoints[i].y * POSTER_H).toFixed(1)}`
+        }
+        segs.push(cur)
 
+        return (
+          <g>
+            <path d={basePath} fill="none" stroke="#1e1e1e" strokeWidth="10" strokeLinecap="round" strokeLinejoin="round" />
+            {segs.map((s, i) => {
+              const color = s.d1 ? driverColor : compareColor
+              return (
+                <g key={i}>
+                  <path d={s.d} fill="none" stroke={color} strokeWidth="14" strokeLinecap="round" strokeLinejoin="round" opacity="0.18" />
+                  <path d={s.d} fill="none" stroke={color} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" opacity="0.95" />
+                </g>
+              )
+            })}
+          </g>
+        )
+      }
+
+      // Two compare laps (three total) → overlay each racing line in its team colour.
+      const linePath = (pts: { x: number; y: number }[]) =>
+        pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${(p.x * POSTER_W).toFixed(1)} ${(p.y * POSTER_H).toFixed(1)}`).join(' ')
+      const overlay = [{ points: vizPoints, color: driverColor }, ...compareLaps]
       return (
         <g>
-          {/* Base road */}
-          <path d={basePath} fill="none" stroke="#1e1e1e" strokeWidth="10" strokeLinecap="round" strokeLinejoin="round" />
-          {segs.map((s, i) => {
-            const color = s.d1 ? driverColor : compareColor
-            return (
-              <g key={i}>
-                {/* Glow halo */}
-                <path d={s.d} fill="none" stroke={color} strokeWidth="14" strokeLinecap="round" strokeLinejoin="round" opacity="0.18" />
-                {/* Crisp line */}
-                <path d={s.d} fill="none" stroke={color} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" opacity="0.95" />
-              </g>
-            )
-          })}
+          {overlay.map((o, i) => (
+            <g key={i}>
+              <path d={linePath(o.points)} fill="none" stroke={o.color} strokeWidth="14" strokeLinecap="round" strokeLinejoin="round" opacity="0.1" />
+              <path d={linePath(o.points)} fill="none" stroke={o.color} strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.95" />
+            </g>
+          ))}
         </g>
       )
     }
@@ -309,18 +335,21 @@ export function PosterPreview({
   const renderPlayback = () => {
     if (!telemetry || vizPoints.length < 2 || playbackProgress === null) return null
 
-    // ── Head-to-head ghost race ──
-    if (isComparing && comparePoints.length > 1 && compareTelemetry && compareDriver) {
-      const ptsA = vizPoints.map((p) => ({ x: p.x * POSTER_W, y: p.y * POSTER_H, speed: p.speed, distance: p.distance }))
-      const ptsB = comparePoints.map((p) => ({ x: p.x * POSTER_W, y: p.y * POSTER_H, speed: p.speed, distance: p.distance }))
-      const tauA = lapTimeProfile(ptsA)
-      const tauB = lapTimeProfile(ptsB)
-      const lapA = parseLapSeconds(telemetry.lapTime)
-      const lapB = parseLapSeconds(compareTelemetry.lapTime)
-      const tMax = Math.max(lapA, lapB) || 1
+    // ── Head-to-head ghost race: every car on a shared real-time clock ──
+    if (isComparing) {
+      const toScreen = (pts: { x: number; y: number; speed: number; distance?: number }[]) =>
+        pts.map((p) => ({ x: p.x * POSTER_W, y: p.y * POSTER_H, speed: p.speed, distance: p.distance }))
+      const racers = [
+        { color: driverColor, name: driver?.shortName ?? '', lapSec: parseLapSeconds(telemetry.lapTime), pts: toScreen(vizPoints) },
+        ...compareLaps.map((c) => ({
+          color: c.color, name: c.driver.shortName, lapSec: parseLapSeconds(c.telemetry.lapTime), pts: toScreen(c.points),
+        })),
+      ].map((r) => ({ ...r, tau: lapTimeProfile(r.pts) }))
+
+      const tMax = Math.max(...racers.map((r) => r.lapSec)) || 1
       const realT = playbackProgress * tMax
-      const A = carAtFraction(ptsA, tauA, realT / lapA)
-      const B = carAtFraction(ptsB, tauB, realT / lapB)
+      const states = racers.map((r) => ({ ...r, head: carAtFraction(r.pts, r.tau, realT / r.lapSec) }))
+      const leader = states.reduce((a, b) => (a.lapSec <= b.lapSec ? a : b))
 
       const fullLine = (pts: { x: number; y: number }[]) =>
         pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ')
@@ -328,28 +357,24 @@ export function PosterPreview({
         pts.slice(0, head.idx + 1).map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ') +
         ` L ${head.x.toFixed(1)} ${head.y.toFixed(1)}`
 
-      const aLeads = lapA <= lapB // faster lap is further along at any shared instant
-      const leaderColor = aLeads ? driverColor : compareColor
-      const leaderName = (aLeads ? driver?.shortName : compareDriver.shortName) ?? ''
-
       return (
         <g>
-          {/* faint full laps in each team colour */}
-          <path d={fullLine(ptsA)} fill="none" stroke={driverColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.12" />
-          <path d={fullLine(ptsB)} fill="none" stroke={compareColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.12" />
-          {/* compare car (B) */}
-          <path d={trailTo(ptsB, B)} fill="none" stroke={compareColor} strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.9" />
-          <circle cx={B.x} cy={B.y} r="8" fill={compareColor} opacity="0.25" />
-          <circle cx={B.x} cy={B.y} r="4.5" fill={compareColor} />
-          <circle cx={B.x} cy={B.y} r="2" fill="#ffffff" opacity="0.9" />
-          {/* primary car (A) */}
-          <path d={trailTo(ptsA, A)} fill="none" stroke={driverColor} strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.95" />
-          <circle cx={A.x} cy={A.y} r="8" fill={driverColor} opacity="0.25" />
-          <circle cx={A.x} cy={A.y} r="4.5" fill={driverColor} />
-          <circle cx={A.x} cy={A.y} r="2" fill="#ffffff" opacity="0.9" />
+          {/* faint full laps */}
+          {states.map((s, i) => (
+            <path key={`f${i}`} d={fullLine(s.pts)} fill="none" stroke={s.color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.12" />
+          ))}
+          {/* trails + cars (compares first, primary drawn last so it sits on top) */}
+          {[...states].reverse().map((s, i) => (
+            <g key={`c${i}`}>
+              <path d={trailTo(s.pts, s.head)} fill="none" stroke={s.color} strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.92" />
+              <circle cx={s.head.x} cy={s.head.y} r="8" fill={s.color} opacity="0.25" />
+              <circle cx={s.head.x} cy={s.head.y} r="4.5" fill={s.color} />
+              <circle cx={s.head.x} cy={s.head.y} r="2" fill="#ffffff" opacity="0.9" />
+            </g>
+          ))}
           {/* who's ahead */}
-          <text x={CIRCUIT_AREA.x + CIRCUIT_AREA.w - 8} y={CIRCUIT_AREA.y + 16} textAnchor="end" fill={leaderColor} fontSize="13" fontFamily="monospace" fontWeight="700">
-            {leaderName} ▲
+          <text x={CIRCUIT_AREA.x + CIRCUIT_AREA.w - 8} y={CIRCUIT_AREA.y + 16} textAnchor="end" fill={leader.color} fontSize="13" fontFamily="monospace" fontWeight="700">
+            {leader.name} ▲
           </text>
         </g>
       )
@@ -459,8 +484,8 @@ export function PosterPreview({
           fontStyle="italic"
           letterSpacing="1"
         >
-          {isComparing && compareDriver
-            ? `${driver?.shortName ?? ''} vs ${compareDriver.shortName}`
+          {isComparing && driver
+            ? [driver.shortName, ...compareLaps.map((c) => c.driver.shortName)].join(' vs ')
             : driver?.name ?? 'Select a Driver'}
         </text>
 
@@ -488,26 +513,35 @@ export function PosterPreview({
         {/* Visualization overlay — or animated playback when playing */}
         {isPlaying ? renderPlayback() : renderViz()}
 
-        {/* Compare legend — both drivers, lap times, delta */}
-        {isComparing && compareDriver && driver && telemetry && compareTelemetry && (() => {
+        {/* Compare legend — every driver, year, lap time + fastest margin */}
+        {isComparing && driver && telemetry && (() => {
           const lx = CIRCUIT_AREA.x + 8
           const ly = CIRCUIT_AREA.y + 12
-          const delta = parseLapSeconds(compareTelemetry.lapTime) - parseLapSeconds(telemetry.lapTime)
-          const faster = delta === 0 ? null : delta < 0 ? compareDriver.shortName : driver.shortName
+          const rowH = 18
+          const rows = [
+            { name: driver.shortName, year: race?.year, lapTime: telemetry.lapTime, color: driverColor, sec: parseLapSeconds(telemetry.lapTime) },
+            ...compareLaps.map((c) => ({
+              name: c.driver.shortName, year: c.race?.year, lapTime: c.telemetry.lapTime, color: c.color, sec: parseLapSeconds(c.telemetry.lapTime),
+            })),
+          ]
+          const sorted = [...rows].sort((a, b) => a.sec - b.sec)
+          const fastestSec = sorted[0].sec
+          const gap = sorted.length > 1 ? sorted[1].sec - sorted[0].sec : 0
+          const footer = sorted.length > 1 ? `${sorted[0].name} fastest by ${gap.toFixed(3)}s` : ''
+          const panelH = 22 + rows.length * rowH
           return (
             <g fontFamily="monospace">
-              <rect x={lx - 8} y={ly - 12} width="130" height="56" rx="6" fill={theme.bg} opacity="0.92" />
-              <rect x={lx - 8} y={ly - 12} width="130" height="56" rx="6" fill="none" stroke={theme.borderColor} strokeWidth="1" opacity="0.6" />
-              <circle cx={lx + 4} cy={ly + 2} r="4" fill={driverColor} />
-              <text x={lx + 14} y={ly + 5} fill={theme.textColor} fontSize="10">{driver.shortName}{race ? ` ’${String(race.year).slice(2)}` : ''}</text>
-              <text x={lx + 112} y={ly + 5} textAnchor="end" fill={driverColor} fontSize="10" fontWeight="600">{telemetry.lapTime}</text>
-              <circle cx={lx + 4} cy={ly + 20} r="4" fill={compareColor} />
-              <text x={lx + 14} y={ly + 23} fill={theme.textColor} fontSize="10">{compareDriver.shortName}{compareRace ? ` ’${String(compareRace.year).slice(2)}` : ''}</text>
-              <text x={lx + 112} y={ly + 23} textAnchor="end" fill={compareColor} fontSize="10" fontWeight="600">{compareTelemetry.lapTime}</text>
-              {faster && (
-                <text x={lx + 112} y={ly + 38} textAnchor="end" fill={theme.fastColor} fontSize="8">
-                  {faster} faster by {Math.abs(delta).toFixed(3)}s
-                </text>
+              <rect x={lx - 8} y={ly - 12} width="130" height={panelH} rx="6" fill={theme.bg} opacity="0.92" />
+              <rect x={lx - 8} y={ly - 12} width="130" height={panelH} rx="6" fill="none" stroke={theme.borderColor} strokeWidth="1" opacity="0.6" />
+              {rows.map((r, i) => (
+                <g key={i}>
+                  <circle cx={lx + 4} cy={ly + 2 + i * rowH} r="4" fill={r.color} />
+                  <text x={lx + 14} y={ly + 5 + i * rowH} fill={theme.textColor} fontSize="10">{r.name}{r.year ? ` ’${String(r.year).slice(2)}` : ''}</text>
+                  <text x={lx + 112} y={ly + 5 + i * rowH} textAnchor="end" fill={r.color} fontSize="10" fontWeight={r.sec === fastestSec ? 700 : 600}>{r.lapTime}</text>
+                </g>
+              ))}
+              {footer && (
+                <text x={lx + 112} y={ly + 2 + rows.length * rowH} textAnchor="end" fill={theme.fastColor} fontSize="8">{footer}</text>
               )}
             </g>
           )

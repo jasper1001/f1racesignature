@@ -3,11 +3,14 @@
 import { create } from 'zustand'
 import type { StudioState, VizMode, ArtTheme, ExportFormat } from './types'
 
+// Up to this many extra laps can be compared against the main lap (so 3 total).
+export const MAX_COMPARE = 2
+
 interface StudioStore extends StudioState {
   // Compare (head-to-head) state
   compareEnabled: boolean
   compareDriverId: string | null
-  compareRaceId: string | null
+  compareRaceIds: string[]
 
   setDriver: (driverId: string) => void
   setRace: (raceId: string) => void
@@ -22,7 +25,7 @@ interface StudioStore extends StudioState {
   }) => void
   toggleCompare: () => void
   setCompareDriver: (driverId: string) => void
-  setCompareRace: (raceId: string) => void
+  toggleCompareRace: (raceId: string) => void
   clearCompare: () => void
   openUpgradeModal: (reason: string) => void
   closeUpgradeModal: () => void
@@ -39,13 +42,13 @@ export const useStudioStore = create<StudioStore>((set) => ({
 
   compareEnabled: false,
   compareDriverId: null,
-  compareRaceId: null,
+  compareRaceIds: [],
 
-  // Changing the primary race invalidates the compare lap (circuit may change)
+  // Changing the primary race invalidates the compare laps (circuit may change)
   setDriver: (driverId) =>
-    set({ selectedDriverId: driverId, selectedRaceId: null, compareRaceId: null, compareDriverId: null }),
+    set({ selectedDriverId: driverId, selectedRaceId: null, compareRaceIds: [], compareDriverId: null }),
 
-  setRace: (raceId) => set({ selectedRaceId: raceId, compareRaceId: null, compareDriverId: null }),
+  setRace: (raceId) => set({ selectedRaceId: raceId, compareRaceIds: [], compareDriverId: null }),
 
   setVizMode: (vizMode) => set({ vizMode }),
 
@@ -60,22 +63,30 @@ export const useStudioStore = create<StudioStore>((set) => ({
       vizMode: vizMode ?? state.vizMode,
       theme: theme ?? state.theme,
       compareEnabled: false,
-      compareRaceId: null,
+      compareRaceIds: [],
       compareDriverId: null,
     })),
 
   toggleCompare: () =>
     set((state) => ({
       compareEnabled: !state.compareEnabled,
-      ...(state.compareEnabled ? { compareRaceId: null, compareDriverId: null } : {}),
+      ...(state.compareEnabled ? { compareRaceIds: [], compareDriverId: null } : {}),
     })),
 
-  setCompareDriver: (compareDriverId) => set({ compareDriverId, compareRaceId: null }),
+  setCompareDriver: (compareDriverId) => set({ compareDriverId, compareRaceIds: [] }),
 
-  setCompareRace: (compareRaceId) => set({ compareRaceId }),
+  // Add the lap if room (≤ MAX_COMPARE), remove it if already selected.
+  toggleCompareRace: (raceId) =>
+    set((state) => {
+      if (state.compareRaceIds.includes(raceId)) {
+        return { compareRaceIds: state.compareRaceIds.filter((id) => id !== raceId) }
+      }
+      if (state.compareRaceIds.length >= MAX_COMPARE) return {}
+      return { compareRaceIds: [...state.compareRaceIds, raceId] }
+    }),
 
   clearCompare: () =>
-    set({ compareEnabled: false, compareRaceId: null, compareDriverId: null }),
+    set({ compareEnabled: false, compareRaceIds: [], compareDriverId: null }),
 
   openUpgradeModal: (reason) =>
     set({ showUpgradeModal: true, upgradeModalReason: reason }),

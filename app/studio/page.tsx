@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Header } from '@/components/layout/Header'
 import { Sidebar } from '@/components/studio/Sidebar'
-import { PosterPreview } from '@/components/studio/PosterPreview'
+import { PosterPreview, type ComparisonLap } from '@/components/studio/PosterPreview'
 import { StatsPanel } from '@/components/studio/StatsPanel'
 import { ExportButton } from '@/components/studio/ExportButton'
 import { SurpriseButton } from '@/components/studio/SurpriseButton'
@@ -29,7 +29,7 @@ const ZOOM_MAX  = 2.0
 type MobileTab = 'controls' | 'preview' | 'stats'
 
 export default function StudioPage() {
-  const { selectedDriverId, selectedRaceId, vizMode, theme, compareEnabled, compareRaceId } = useStudioStore()
+  const { selectedDriverId, selectedRaceId, vizMode, theme, compareEnabled, compareRaceIds } = useStudioStore()
   const applyConfig = useStudioStore((s) => s.applyConfig)
   const [zoom, setZoom] = useState(0.85)
   const [mobileTab, setMobileTab] = useState<MobileTab>('preview')
@@ -58,7 +58,7 @@ export default function StudioPage() {
   // Any change to the poster config stops playback so the change is visible
   useEffect(() => {
     setIsPlaying(false)
-  }, [selectedDriverId, selectedRaceId, vizMode, theme, compareEnabled, compareRaceId])
+  }, [selectedDriverId, selectedRaceId, vizMode, theme, compareEnabled, compareRaceIds])
 
   // Apply a preset passed in via URL (e.g. clicking a gallery poster)
   useEffect(() => {
@@ -118,14 +118,29 @@ export default function StudioPage() {
     enabled: Boolean(selectedRace?.telemetryFile),
   })
 
-  // Compare (head-to-head) lap
-  const compareRace = races.find((r) => r.id === compareRaceId) ?? null
-  const compareDriver = compareRace ? (drivers.find((d) => d.id === compareRace.driverId) ?? null) : null
-  const { data: compareTelemetry = null } = useQuery({
-    queryKey: ['telemetry', compareRace?.telemetryFile],
-    queryFn: () => fetchTelemetry(compareRace!.telemetryFile),
-    enabled: Boolean(compareEnabled && compareRace?.telemetryFile),
+  // Compare (head-to-head) laps — up to two, so three cars total. Two fixed
+  // telemetry queries (the cap is two) keep us within the rules of hooks.
+  const cmpRace0 = races.find((r) => r.id === compareRaceIds[0]) ?? null
+  const cmpRace1 = races.find((r) => r.id === compareRaceIds[1]) ?? null
+  const { data: cmpTel0 = null } = useQuery({
+    queryKey: ['telemetry', cmpRace0?.telemetryFile],
+    queryFn: () => fetchTelemetry(cmpRace0!.telemetryFile),
+    enabled: Boolean(compareEnabled && cmpRace0?.telemetryFile),
   })
+  const { data: cmpTel1 = null } = useQuery({
+    queryKey: ['telemetry', cmpRace1?.telemetryFile],
+    queryFn: () => fetchTelemetry(cmpRace1!.telemetryFile),
+    enabled: Boolean(compareEnabled && cmpRace1?.telemetryFile),
+  })
+
+  const compares: ComparisonLap[] = []
+  if (compareEnabled && cmpRace0) {
+    compares.push({ driver: drivers.find((d) => d.id === cmpRace0.driverId) ?? null, telemetry: cmpTel0, race: cmpRace0 })
+  }
+  if (compareEnabled && cmpRace1) {
+    compares.push({ driver: drivers.find((d) => d.id === cmpRace1.driverId) ?? null, telemetry: cmpTel1, race: cmpRace1 })
+  }
+  const firstCompare = compares[0] ?? null
 
   const activeTheme = themeById(theme)
 
@@ -214,14 +229,14 @@ export default function StudioPage() {
                 <EmptyState />
               ) : (
                 <div className="poster-wrapper" style={{ zoom: zoom }}>
-                  <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compareDriver={compareEnabled ? compareDriver : null} compareTelemetry={compareEnabled ? compareTelemetry : null} compareRace={compareEnabled ? compareRace : null} playbackProgress={isPlaying ? progress : null} />
+                  <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compares={compares} playbackProgress={isPlaying ? progress : null} />
                 </div>
               )}
             </div>
           </div>
         </main>
 
-        <StatsPanel driver={selectedDriver} race={selectedRace} telemetry={telemetry} compareDriver={compareEnabled ? compareDriver : null} compareTelemetry={compareEnabled ? compareTelemetry : null} />
+        <StatsPanel driver={selectedDriver} race={selectedRace} telemetry={telemetry} compareDriver={firstCompare?.driver ?? null} compareTelemetry={firstCompare?.telemetry ?? null} />
       </div>
 
       {/* ── Mobile layout ── */}
@@ -274,7 +289,7 @@ export default function StudioPage() {
                         marginBottom: '-244px',
                       }}
                     >
-                      <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compareDriver={compareEnabled ? compareDriver : null} compareTelemetry={compareEnabled ? compareTelemetry : null} compareRace={compareEnabled ? compareRace : null} playbackProgress={isPlaying ? progress : null} />
+                      <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compares={compares} playbackProgress={isPlaying ? progress : null} />
                     </div>
                   )}
                 </div>
@@ -284,7 +299,7 @@ export default function StudioPage() {
             {mobileTab === 'stats' && (
               <motion.div key="stats" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} transition={{ duration: 0.2 }} className="absolute inset-0 overflow-y-auto">
                 <div className="w-full">
-                  <StatsPanel driver={selectedDriver} race={selectedRace} telemetry={telemetry} mobile compareDriver={compareEnabled ? compareDriver : null} compareTelemetry={compareEnabled ? compareTelemetry : null} />
+                  <StatsPanel driver={selectedDriver} race={selectedRace} telemetry={telemetry} mobile compareDriver={firstCompare?.driver ?? null} compareTelemetry={firstCompare?.telemetry ?? null} />
                 </div>
               </motion.div>
             )}
