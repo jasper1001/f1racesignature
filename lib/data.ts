@@ -62,6 +62,61 @@ export function interpolateColor(a: string, b: string, t: number): string {
   return rgbToHex(r1 + (r2 - r1) * t, g1 + (g2 - g1) * t, b1 + (b2 - b1) * t)
 }
 
+function rgbToHsl(r: number, g: number, b: number): [number, number, number] {
+  r /= 255; g /= 255; b /= 255
+  const max = Math.max(r, g, b), min = Math.min(r, g, b)
+  const l = (max + min) / 2
+  const d = max - min
+  let h = 0, s = 0
+  if (d !== 0) {
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
+    switch (max) {
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break
+      case g: h = (b - r) / d + 2; break
+      default:  h = (r - g) / d + 4
+    }
+    h *= 60
+  }
+  return [h, s, l]
+}
+
+function hslToRgb(h: number, s: number, l: number): [number, number, number] {
+  h /= 360
+  if (s === 0) return [l * 255, l * 255, l * 255]
+  const hue2rgb = (p: number, q: number, t: number) => {
+    if (t < 0) t += 1
+    if (t > 1) t -= 1
+    if (t < 1 / 6) return p + (q - p) * 6 * t
+    if (t < 1 / 2) return q
+    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6
+    return p
+  }
+  const q = l < 0.5 ? l * (1 + s) : l + s - l * s
+  const p = 2 * l - q
+  return [hue2rgb(p, q, h + 1 / 3) * 255, hue2rgb(p, q, h) * 255, hue2rgb(p, q, h - 1 / 3) * 255]
+}
+
+/**
+ * Keeps every colour in the list visually distinct: the first use of a colour
+ * is left untouched; repeats (e.g. two same-team drivers sharing a livery) are
+ * nudged — hue rotated and lightened a step at a time — until unique.
+ */
+export function distinctColors(colors: string[]): string[] {
+  const used = new Set<string>()
+  return colors.map((c) => {
+    let out = c
+    let step = 1
+    while (used.has(out.toLowerCase())) {
+      const [h, s, l] = rgbToHsl(...hexToRgb(c))
+      const [r, g, b] = hslToRgb((h + 40 * step) % 360, Math.max(0.5, s), Math.min(0.78, l + 0.12 * step))
+      out = rgbToHex(r, g, b)
+      step++
+    }
+    used.add(out.toLowerCase())
+    return out
+  })
+}
+
 export function formatLapTime(seconds: number): string {
   const m = Math.floor(seconds / 60)
   const s = seconds % 60

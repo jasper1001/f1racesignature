@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import type { Driver, Race, Telemetry } from '@/lib/types'
 import type { ComparisonLap } from './PosterPreview'
 import { teamAtYear } from '@/lib/driverTeams'
+import { distinctColors } from '@/lib/data'
 
 interface StatsPanelProps {
   driver: Driver | null
@@ -95,9 +96,11 @@ export function StatsPanel({ driver, race, telemetry, mobile = false, compares =
 
             {/* Head-to-head leaderboard — every racer, fastest sector + lap highlighted */}
             {comparing && telemetry && (() => {
+              // Distinct colours so two same-team drivers don't share a dot (matches the poster).
+              const palette = distinctColors([colorFor(driver, race), ...validCompares.map((c) => colorFor(c.driver!, c.race))])
               const racers = [
-                { name: driver.shortName, color: colorFor(driver, race), tel: telemetry },
-                ...validCompares.map((c) => ({ name: c.driver!.shortName, color: colorFor(c.driver!, c.race), tel: c.telemetry! })),
+                { name: driver.shortName, color: palette[0], tel: telemetry },
+                ...validCompares.map((c, i) => ({ name: c.driver!.shortName, color: palette[i + 1], tel: c.telemetry! })),
               ]
               const sectorOf = (t: Telemetry, i: number) => [t.sectors.s1Time, t.sectors.s2Time, t.sectors.s3Time][i]
               const fastestSector = [0, 1, 2].map((i) => Math.min(...racers.map((r) => sectorOf(r.tel, i))))

@@ -8,7 +8,7 @@ import { SpeedHeatmap } from '@/components/visualizations/SpeedHeatmap'
 import { SectorSplit } from '@/components/visualizations/SectorSplit'
 import { OvertakeMap } from '@/components/visualizations/OvertakeMap'
 import { VIZ_MODES } from '@/lib/themes'
-import { interpolateColor } from '@/lib/data'
+import { interpolateColor, distinctColors } from '@/lib/data'
 import { teamAtYear } from '@/lib/driverTeams'
 
 const POSTER_W = 600
@@ -238,18 +238,22 @@ export function PosterPreview({
   const lapColor = (d: Driver, r: Race | null) =>
     (r && r.driverId === d.id ? teamAtYear(d.id, r.year)?.color : null) ?? d.color ?? theme.fastColor
   const histTeam = driver && race && race.driverId === driver.id ? teamAtYear(driver.id, race.year) : null
-  const driverColor = histTeam?.color ?? driver?.color ?? theme.primaryLine
+  const driverBase = histTeam?.color ?? driver?.color ?? theme.primaryLine
 
   // Up to two head-to-head laps, each with its racing line (poster space) + livery colour.
-  const compareLaps = compares
+  const compareBase = compares
     .filter((c) => c.driver && c.telemetry && c.telemetry.points.length > 1)
     .map((c) => ({
       driver: c.driver!,
       race: c.race,
       telemetry: c.telemetry!,
       points: toPosterSpace(c.telemetry),
-      color: lapColor(c.driver!, c.race),
+      baseColor: lapColor(c.driver!, c.race),
     }))
+  // Keep every racer's colour distinct (two same-team drivers would otherwise clash).
+  const palette = distinctColors([driverBase, ...compareBase.map((c) => c.baseColor)])
+  const driverColor = palette[0]
+  const compareLaps = compareBase.map((c, i) => ({ ...c, color: palette[i + 1] }))
   const isComparing = compareLaps.length > 0
 
   const renderViz = () => {
