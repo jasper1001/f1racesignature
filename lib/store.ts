@@ -33,7 +33,9 @@ interface StudioStore extends StudioState {
 
 export const useStudioStore = create<StudioStore>((set) => ({
   selectedDriverId: 'hamilton',
-  selectedRaceId: 'hamilton_silverstone_2020',
+  // Default to a comparison-rich circuit so head-to-head works on first load:
+  // Interlagos also has Senna '91, Verstappen '16, Vettel '12 and Russell '22.
+  selectedRaceId: 'hamilton_interlagos_2008',
   vizMode: 'racing_line',
   theme: 'carbon_fiber',
   exportFormat: 'poster_portrait',
