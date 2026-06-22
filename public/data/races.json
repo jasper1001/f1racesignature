@@ -674,5 +674,70 @@
     "description": "Norris closed the season with a commanding lights-to-flag win at Yas Marina, sealing McLaren's first constructors' title in twenty-six years.",
     "isFree": true,
     "telemetryFile": "norris_abu_dhabi_2024"
+  },
+  {
+    "id": "ricciardo_baku_2017",
+    "driverId": "ricciardo",
+    "name": "Azerbaijan Grand Prix 2017",
+    "circuit": "baku",
+    "circuitName": "Baku City Circuit",
+    "year": 2017,
+    "location": "Baku, Azerbaijan",
+    "lapTime": "1:44.100",
+    "description": "From seventeenth to the top step amid red flags and chaos — Ricciardo carved through the wreckage of a frantic Baku street race for one of the great improbable wins.",
+    "isFree": true,
+    "telemetryFile": "ricciardo_baku_2017"
+  },
+  {
+    "id": "hamilton_baku_2018",
+    "driverId": "hamilton",
+    "name": "Azerbaijan Grand Prix 2018",
+    "circuit": "baku",
+    "circuitName": "Baku City Circuit",
+    "year": 2018,
+    "location": "Baku, Azerbaijan",
+    "lapTime": "1:43.200",
+    "description": "Handed the lead by a late puncture for Bottas, Hamilton pounced to win a wild Baku race he had looked set to lose — a swing of fortune that reshaped the title fight.",
+    "isFree": true,
+    "telemetryFile": "hamilton_baku_2018"
+  },
+  {
+    "id": "leclerc_baku_2022",
+    "driverId": "leclerc",
+    "name": "Azerbaijan Grand Prix 2022",
+    "circuit": "baku",
+    "circuitName": "Baku City Circuit",
+    "year": 2022,
+    "location": "Baku, Azerbaijan",
+    "lapTime": "1:41.359",
+    "description": "Pole position number four of the season at Baku — Leclerc's qualifying lap was untouchable on the streets, leading commandingly before an engine failure ended his race.",
+    "isFree": true,
+    "telemetryFile": "leclerc_baku_2022"
+  },
+  {
+    "id": "verstappen_baku_2022",
+    "driverId": "verstappen",
+    "name": "Azerbaijan Grand Prix 2022",
+    "circuit": "baku",
+    "circuitName": "Baku City Circuit",
+    "year": 2022,
+    "location": "Baku, Azerbaijan",
+    "lapTime": "1:42.800",
+    "description": "Red Bull dominance on the Baku straights — Verstappen swept past his rivals into the lead and cruised away, stretching his championship advantage with ruthless ease.",
+    "isFree": true,
+    "telemetryFile": "verstappen_baku_2022"
+  },
+  {
+    "id": "vettel_baku_2018",
+    "driverId": "vettel",
+    "name": "Azerbaijan Grand Prix 2018",
+    "circuit": "baku",
+    "circuitName": "Baku City Circuit",
+    "year": 2018,
+    "location": "Baku, Azerbaijan",
+    "lapTime": "1:42.500",
+    "description": "Vettel led from pole and looked set for victory until a late safety-car restart — a lock-up into Turn 1 cost him the race, a costly moment in a tightening title fight.",
+    "isFree": true,
+    "telemetryFile": "vettel_baku_2018"
   }
 ]

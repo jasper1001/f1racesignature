@@ -575,7 +575,7 @@ export function PosterPreview({
 
         {/* Compare legend — every driver, year, lap time + fastest margin */}
         {isComparing && driver && telemetry && (() => {
-          const rowH = 18
+          const rowH = 28
           const rows = [
             { name: driver.shortName, year: race?.year, lapTime: telemetry.lapTime, color: driverColor, sec: parseLapSeconds(telemetry.lapTime) },
             ...compareLaps.map((c) => ({
@@ -586,8 +586,8 @@ export function PosterPreview({
           const fastestSec = sorted[0].sec
           const gap = sorted.length > 1 ? sorted[1].sec - sorted[0].sec : 0
           const footer = sorted.length > 1 ? `${sorted[0].name} fastest by ${gap.toFixed(3)}s` : ''
-          const panelW = 130
-          const panelH = 22 + rows.length * rowH
+          const panelW = 194
+          const panelH = 30 + rows.length * rowH
 
           // Place the panel in a corner the track outline doesn't reach, so it never
           // overlaps the circuit (tracks are roughly oval → a corner is usually free).
@@ -619,22 +619,41 @@ export function PosterPreview({
               p.x >= c.boxLeft - PAD && p.x <= c.boxLeft + panelW + PAD &&
               p.y >= c.boxTop - PAD && p.y <= c.boxTop + panelH + PAD).length
           // Stable sort keeps the preference order on ties (e.g. several clear corners).
-          const best = candidates.map((c) => ({ c, n: hits(c) })).sort((a, b) => a.n - b.n)[0].c
+          const bestCorner = candidates.map((c) => ({ c, n: hits(c) })).sort((a, b) => a.n - b.n)[0]
+          // Most tracks leave a clear corner → use it (preserves the lower-left bias).
+          // But tracks that fill the whole fit area (portrait circuits rotated to
+          // landscape — Interlagos, etc.) occupy every corner, so the panel would
+          // sit on the ribbon. Then scan the area for the least-occupied position,
+          // tie-broken toward the preferred bottom-left, so it tucks into an
+          // infield/edge gap instead of overlapping the track.
+          let best = bestCorner.c
+          if (bestCorner.n > 0) {
+            const blAnchor = { x: areaL, y: areaB - wmReserve - panelH }
+            let chosen: { score: number; c: { boxLeft: number; boxTop: number } } | null = null
+            for (let bl = areaL; bl <= areaR - panelW; bl += 16) {
+              for (let bt = areaT; bt <= areaB - wmReserve - panelH; bt += 16) {
+                const c = { boxLeft: bl, boxTop: bt }
+                const score = hits(c) * 1e6 + Math.hypot(bl - blAnchor.x, bt - blAnchor.y)
+                if (!chosen || score < chosen.score) chosen = { score, c }
+              }
+            }
+            if (chosen) best = chosen.c
+          }
           const lx = best.boxLeft + 8
-          const ly = best.boxTop + 12
+          const ly = best.boxTop + 14
           return (
             <g fontFamily="monospace">
-              <rect x={lx - 8} y={ly - 12} width="130" height={panelH} rx="6" fill={theme.bg} opacity="0.92" />
-              <rect x={lx - 8} y={ly - 12} width="130" height={panelH} rx="6" fill="none" stroke={theme.borderColor} strokeWidth="1" opacity="0.6" />
+              <rect x={lx - 8} y={ly - 14} width={panelW} height={panelH} rx="6" fill={theme.bg} opacity="0.97" />
+              <rect x={lx - 8} y={ly - 14} width={panelW} height={panelH} rx="6" fill="none" stroke={theme.borderColor} strokeWidth="1" opacity="0.6" />
               {rows.map((r, i) => (
                 <g key={i}>
-                  <circle cx={lx + 4} cy={ly + 2 + i * rowH} r="4" fill={r.color} />
-                  <text x={lx + 14} y={ly + 5 + i * rowH} fill={theme.textColor} fontSize="10">{r.name}{r.year ? ` ’${String(r.year).slice(2)}` : ''}</text>
-                  <text x={lx + 112} y={ly + 5 + i * rowH} textAnchor="end" fill={r.color} fontSize="10" fontWeight={r.sec === fastestSec ? 700 : 600}>{r.lapTime}</text>
+                  <circle cx={lx + 6} cy={ly + 4 + i * rowH} r="6" fill={r.color} />
+                  <text x={lx + 20} y={ly + 9 + i * rowH} fill={theme.textColor} fontSize="15">{r.name}{r.year ? ` ’${String(r.year).slice(2)}` : ''}</text>
+                  <text x={lx + panelW - 18} y={ly + 9 + i * rowH} textAnchor="end" fill={r.color} fontSize="15" fontWeight={r.sec === fastestSec ? 700 : 600}>{r.lapTime}</text>
                 </g>
               ))}
               {footer && (
-                <text x={lx + 112} y={ly + 2 + rows.length * rowH} textAnchor="end" fill={theme.fastColor} fontSize="8">{footer}</text>
+                <text x={lx + panelW - 18} y={ly + 5 + rows.length * rowH} textAnchor="end" fill={theme.fastColor} fontSize="11">{footer}</text>
               )}
             </g>
           )

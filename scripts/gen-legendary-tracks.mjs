@@ -225,6 +225,52 @@ const ADDITIONS = [
     championshipPoints: [8, 20, 47, 65, 90, 113, 131, 156, 178, 199, 225, 250, 279, 291, 309, 374],
     description: "Norris closed the season with a commanding lights-to-flag win at Yas Marina, sealing McLaren's first constructors' title in twenty-six years.",
   },
+  // ── Baku City Circuit (Azerbaijan) — extra laps reuse the Pérez 2021 line ──
+  {
+    id: 'ricciardo_baku_2017', driverId: 'ricciardo', circuit: 'baku',
+    circuitName: 'Baku City Circuit', location: 'Baku, Azerbaijan', year: 2017,
+    name: 'Azerbaijan Grand Prix 2017', source: 'perez_baku_2021',
+    lapTime: '1:44.100', sectors: { s1Time: 31.800, s2Time: 40.600, s3Time: 31.700 },
+    topSpeed: 348, averageSpeed: 205,
+    championshipPoints: [12, 22, 37, 47, 59, 71, 96, 108, 119, 132, 144, 152, 158, 170, 192, 200],
+    description: "From seventeenth to the top step amid red flags and chaos — Ricciardo carved through the wreckage of a frantic Baku street race for one of the great improbable wins.",
+  },
+  {
+    id: 'hamilton_baku_2018', driverId: 'hamilton', circuit: 'baku',
+    circuitName: 'Baku City Circuit', location: 'Baku, Azerbaijan', year: 2018,
+    name: 'Azerbaijan Grand Prix 2018', source: 'perez_baku_2021',
+    lapTime: '1:43.200', sectors: { s1Time: 31.500, s2Time: 40.200, s3Time: 31.500 },
+    topSpeed: 351, averageSpeed: 207,
+    championshipPoints: [25, 43, 50, 70, 95, 120, 145, 171, 188, 213, 238, 256, 281, 306, 331, 358],
+    description: "Handed the lead by a late puncture for Bottas, Hamilton pounced to win a wild Baku race he had looked set to lose — a swing of fortune that reshaped the title fight.",
+  },
+  {
+    id: 'leclerc_baku_2022', driverId: 'leclerc', circuit: 'baku',
+    circuitName: 'Baku City Circuit', location: 'Baku, Azerbaijan', year: 2022,
+    name: 'Azerbaijan Grand Prix 2022', source: 'perez_baku_2021',
+    lapTime: '1:41.359', sectors: { s1Time: 30.800, s2Time: 39.759, s3Time: 30.800 },
+    topSpeed: 356, averageSpeed: 211,
+    championshipPoints: [26, 45, 71, 104, 116, 138, 159, 170, 178, 186, 200, 219, 237, 252, 275, 290],
+    description: "Pole position number four of the season at Baku — Leclerc's qualifying lap was untouchable on the streets, leading commandingly before an engine failure ended his race.",
+  },
+  {
+    id: 'verstappen_baku_2022', driverId: 'verstappen', circuit: 'baku',
+    circuitName: 'Baku City Circuit', location: 'Baku, Azerbaijan', year: 2022,
+    name: 'Azerbaijan Grand Prix 2022', source: 'perez_baku_2021',
+    lapTime: '1:42.800', sectors: { s1Time: 31.200, s2Time: 40.300, s3Time: 31.300 },
+    topSpeed: 353, averageSpeed: 209,
+    championshipPoints: [25, 50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375, 400],
+    description: "Red Bull dominance on the Baku straights — Verstappen swept past his rivals into the lead and cruised away, stretching his championship advantage with ruthless ease.",
+  },
+  {
+    id: 'vettel_baku_2018', driverId: 'vettel', circuit: 'baku',
+    circuitName: 'Baku City Circuit', location: 'Baku, Azerbaijan', year: 2018,
+    name: 'Azerbaijan Grand Prix 2018', source: 'perez_baku_2021',
+    lapTime: '1:42.500', sectors: { s1Time: 31.000, s2Time: 40.200, s3Time: 31.300 },
+    topSpeed: 350, averageSpeed: 208,
+    championshipPoints: [25, 50, 68, 78, 96, 121, 146, 171, 189, 214, 231, 256, 264, 276, 294, 320],
+    description: "Vettel led from pole and looked set for victory until a late safety-car restart — a lock-up into Turn 1 cost him the race, a costly moment in a tightening title fight.",
+  },
 ]
 
 const races = JSON.parse(fs.readFileSync(RACES_PATH, 'utf8'))
