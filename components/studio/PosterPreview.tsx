@@ -297,6 +297,42 @@ export function PosterPreview({
   // Viz components then multiply by POSTER_W/H to get final pixels.
   const vizPoints = toPosterSpace(telemetry)
 
+  // The track outline in screen px — used to place overlay readouts in a corner the
+  // ribbon doesn't reach (so they never sit on top of the circuit).
+  const trackScreenPts: { x: number; y: number }[] = (() => {
+    const out: { x: number; y: number }[] = []
+    if (circuit) {
+      const nums = circuit.path.match(/-?\d+\.?\d*/g)?.map(Number) ?? []
+      for (let i = 0; i + 1 < nums.length; i += 2) {
+        const p = rotatePathCoord(nums[i], nums[i + 1], rot)
+        out.push({ x: p.x * fit.scale + fit.tx, y: p.y * fit.scale + fit.ty })
+      }
+    } else {
+      for (const p of vizPoints) out.push({ x: p.x * POSTER_W, y: p.y * POSTER_H })
+    }
+    return out
+  })()
+
+  // Pick the circuit-area corner least covered by the track for a small overlay box.
+  // Preference order favours the top-right (where the readout has always lived).
+  const cornerForBox = (boxW: number, boxH: number) => {
+    const m = 6, wm = 14 // bottom-left watermark reserve
+    const L = CIRCUIT_AREA.x, R = CIRCUIT_AREA.x + CIRCUIT_AREA.w
+    const T = CIRCUIT_AREA.y, B = CIRCUIT_AREA.y + CIRCUIT_AREA.h
+    const corners = [
+      { x: R - m - boxW, y: T + m },          // top-right
+      { x: L + m, y: T + m },                 // top-left
+      { x: R - m - boxW, y: B - m - boxH },   // bottom-right
+      { x: L + m, y: B - m - wm - boxH },     // bottom-left (above watermark)
+    ]
+    const PAD = 10
+    const hits = (c: { x: number; y: number }) =>
+      trackScreenPts.filter((p) =>
+        p.x >= c.x - PAD && p.x <= c.x + boxW + PAD &&
+        p.y >= c.y - PAD && p.y <= c.y + boxH + PAD).length
+    return corners.map((c) => ({ c, n: hits(c) })).sort((a, b) => a.n - b.n)[0].c
+  }
+
   // Historical livery: when the shown driver matches the race's driver, use the
   // team they actually raced for that year (e.g. Hamilton/Silverstone 2020 = Mercedes).
   const lapColor = (d: Driver, r: Race | null) =>
@@ -521,10 +557,19 @@ export function PosterPreview({
               <circle cx={s.head.x} cy={s.head.y} r="2" fill="#ffffff" opacity="0.9" />
             </g>
           ))}
-          {/* who's ahead */}
-          <text x={CIRCUIT_AREA.x + CIRCUIT_AREA.w - 8} y={CIRCUIT_AREA.y + 16} textAnchor="end" fill={leader.color} fontSize="13" fontFamily="monospace" fontWeight="700">
-            {leader.name} ▲
-          </text>
+          {/* who's ahead — chip in a track-free corner */}
+          {(() => {
+            const bw = 86, bh = 22
+            const box = cornerForBox(bw, bh)
+            return (
+              <g>
+                <rect x={box.x} y={box.y} width={bw} height={bh} rx="5" fill={theme.bg} opacity="0.9" />
+                <text x={box.x + bw - 8} y={box.y + 15} textAnchor="end" fill={leader.color} fontSize="13" fontFamily="monospace" fontWeight="700">
+                  {leader.name} ▲
+                </text>
+              </g>
+            )
+          })()}
         </g>
       )
     }
@@ -560,6 +605,10 @@ export function PosterPreview({
     }
     segs.push({ x1: pts[headIdx].x, y1: pts[headIdx].y, x2: hx, y2: hy, color: tbColor(a.throttle, a.brake) })
 
+    // Readout chip, placed in whichever circuit-area corner is clear of the track.
+    const boxW = 118, boxH = 40
+    const box = cornerForBox(boxW, boxH)
+
     return (
       <g>
         <path d={fullPath} fill="none" stroke={driverColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.15" />
@@ -569,13 +618,16 @@ export function PosterPreview({
         <circle cx={hx} cy={hy} r="9" fill={carColor} opacity="0.25" />
         <circle cx={hx} cy={hy} r="4.5" fill={carColor} />
         <circle cx={hx} cy={hy} r="2" fill="#ffffff" opacity="0.85" />
-        {/* throttle/brake phase + speed readout */}
-        <text x={CIRCUIT_AREA.x + CIRCUIT_AREA.w - 8} y={CIRCUIT_AREA.y + 16} textAnchor="end" fill={carColor} fontSize="12" fontFamily="monospace" fontWeight="700" letterSpacing="1.5">
-          {phase}
-        </text>
-        <text x={CIRCUIT_AREA.x + CIRCUIT_AREA.w - 8} y={CIRCUIT_AREA.y + 33} textAnchor="end" fill="#ffffff" fontSize="16" fontFamily="monospace" fontWeight="700">
-          {Math.round(hSpeed)} km/h
-        </text>
+        {/* throttle/brake phase + speed readout — on a chip in a track-free corner */}
+        <g>
+          <rect x={box.x} y={box.y} width={boxW} height={boxH} rx="5" fill={theme.bg} opacity="0.9" />
+          <text x={box.x + boxW - 8} y={box.y + 16} textAnchor="end" fill={carColor} fontSize="12" fontFamily="monospace" fontWeight="700" letterSpacing="1.5">
+            {phase}
+          </text>
+          <text x={box.x + boxW - 8} y={box.y + 33} textAnchor="end" fill="#ffffff" fontSize="16" fontFamily="monospace" fontWeight="700">
+            {Math.round(hSpeed)} km/h
+          </text>
+        </g>
       </g>
     )
   }
