@@ -259,6 +259,12 @@ export function PosterPreview({
 
   const isPlaying = playbackProgress !== null
 
+  // Draw-on reveal: 0..1 while the racing line is drawing itself, null once it has
+  // settled into the static poster. Re-triggered whenever the lap, viz mode, or
+  // compare set changes (effect below). Suppressed during play/MP4 capture.
+  const [reveal, setReveal] = useState<number | null>(null)
+  const revealRaf = useRef<number | null>(null)
+
   // Auto-orient portrait tracks to landscape, in path space (outline + telemetry alike).
   // A manual override wins when present (diagonal tracks the bbox rule can't read).
   const rot = (() => {
@@ -313,6 +319,30 @@ export function PosterPreview({
   const driverColor = palette[0]
   const compareLaps = compareBase.map((c, i) => ({ ...c, color: palette[i + 1] }))
   const isComparing = compareLaps.length > 0
+
+  // Kick off the draw-on reveal when the lap / mode / compare set changes. We key
+  // on telemetry identity (a new selection fetches a fresh object), vizMode and
+  // compare count — not on theme/colour tweaks, which shouldn't re-draw the line.
+  const compareCount = compareLaps.length
+  useEffect(() => {
+    if (!telemetry || telemetry.points.length < 2 || playbackProgress !== null) {
+      setReveal(null)
+      return
+    }
+    const DUR = 1100
+    const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3)
+    let start: number | null = null
+    setReveal(0)
+    const tick = (now: number) => {
+      if (start === null) start = now
+      const p = Math.min(1, (now - start) / DUR)
+      setReveal(p < 1 ? easeOutCubic(p) : null)
+      if (p < 1) revealRaf.current = requestAnimationFrame(tick)
+    }
+    revealRaf.current = requestAnimationFrame(tick)
+    return () => { if (revealRaf.current) cancelAnimationFrame(revealRaf.current) }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [telemetry, vizMode, compareCount])
 
   const renderViz = () => {
     if (!telemetry || vizPoints.length === 0) return null
@@ -389,6 +419,65 @@ export function PosterPreview({
     }
   }
 
+  // Draw-on reveal: the racing line(s) draw themselves from the start line using a
+  // stroke-dash sweep, with a leading dot, then hand off to the static viz. Works
+  // for every viz mode (it draws the lap line, then the full visualization pops in).
+  const renderReveal = () => {
+    if (!telemetry || vizPoints.length < 2 || reveal === null) return null
+
+    const r = reveal
+    const linePath = (pts: { x: number; y: number }[]) =>
+      pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${(p.x * POSTER_W).toFixed(1)} ${(p.y * POSTER_H).toFixed(1)}`).join(' ')
+    const lineLen = (pts: { x: number; y: number }[]) => {
+      let l = 0
+      for (let i = 1; i < pts.length; i++) {
+        l += Math.hypot((pts[i].x - pts[i - 1].x) * POSTER_W, (pts[i].y - pts[i - 1].y) * POSTER_H)
+      }
+      return l
+    }
+    const headAt = (pts: { x: number; y: number }[]) => {
+      const f = r * (pts.length - 1)
+      const i = Math.min(pts.length - 2, Math.floor(f))
+      const t = f - i
+      return {
+        x: (pts[i].x + (pts[i + 1].x - pts[i].x) * t) * POSTER_W,
+        y: (pts[i].y + (pts[i + 1].y - pts[i].y) * t) * POSTER_H,
+      }
+    }
+
+    const lines = isComparing
+      ? [{ points: vizPoints, color: driverColor }, ...compareLaps.map((c) => ({ points: c.points, color: c.color }))]
+      : [{ points: vizPoints, color: driverColor }]
+
+    return (
+      <g>
+        {lines.map((o, idx) => {
+          const len = lineLen(o.points)
+          const head = headAt(o.points)
+          return (
+            <g key={idx}>
+              <path
+                d={linePath(o.points)}
+                fill="none"
+                stroke={o.color}
+                strokeWidth="3.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeDasharray={len}
+                strokeDashoffset={len * (1 - r)}
+                opacity="0.95"
+              />
+              {/* leading dot at the pen tip */}
+              <circle cx={head.x} cy={head.y} r="5" fill={o.color} opacity="0.25" />
+              <circle cx={head.x} cy={head.y} r="3" fill={o.color} />
+              <circle cx={head.x} cy={head.y} r="1.4" fill="#ffffff" opacity="0.9" />
+            </g>
+          )
+        })}
+      </g>
+    )
+  }
+
   // Animated lap playback. Single lap → one speed-coloured car. Head-to-head →
   // both cars race on a shared real-time clock, so the faster lap pulls ahead and
   // reaches the line first (each paced by its own distance/speed profile).
@@ -440,12 +529,15 @@ export function PosterPreview({
       )
     }
 
-    // ── Single car (speed-coloured) ──
-    const pts = vizPoints.map((p) => ({ x: p.x * POSTER_W, y: p.y * POSTER_H, speed: p.speed }))
+    // ── Single car: trail coloured by throttle/brake ──
+    // The car paints the lap as it drives it — green when on the throttle, amber on
+    // a lift/coast, red into the braking zones (throttle is 0..100, brake 0..1).
+    const pts = vizPoints.map((p) => ({ x: p.x * POSTER_W, y: p.y * POSTER_H, speed: p.speed, throttle: p.throttle ?? 0, brake: p.brake ?? 0 }))
     const n = pts.length
-    const speeds = pts.map((p) => p.speed)
-    const minS = Math.min(...speeds)
-    const maxS = Math.max(...speeds)
+    const tbColor = (throttle: number, brake: number) =>
+      brake > 0.05
+        ? interpolateColor('#ff8c42', '#ff2020', Math.min(1, brake))            // lift-off → hard braking
+        : interpolateColor('#ffce3a', '#27e06b', Math.min(1, throttle / 100))   // coasting → full throttle
 
     const headF = playbackProgress * (n - 1)
     const headIdx = Math.min(n - 1, Math.floor(headF))
@@ -455,24 +547,33 @@ export function PosterPreview({
     const hx = a.x + (b.x - a.x) * frac
     const hy = a.y + (b.y - a.y) * frac
     const hSpeed = a.speed + (b.speed - a.speed) * frac
-    const t = (hSpeed - minS) / (maxS - minS || 1)
-    const carColor = t < 0.5
-      ? interpolateColor(theme.slowColor, theme.midColor, t * 2)
-      : interpolateColor(theme.midColor, theme.fastColor, (t - 0.5) * 2)
+    const hThrottle = a.throttle + (b.throttle - a.throttle) * frac
+    const hBrake = a.brake + (b.brake - a.brake) * frac
+    const carColor = tbColor(hThrottle, hBrake)
+    const phase = hBrake > 0.05 ? 'BRAKING' : hThrottle > 95 ? 'FULL THROTTLE' : 'LIFT'
 
     const fullPath = pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ')
-    const trail = pts.slice(0, headIdx + 1)
-    const trailPath = trail.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ') + ` L ${hx.toFixed(1)} ${hy.toFixed(1)}`
+    // Trail as per-point segments so the colour tracks throttle/brake along the lap.
+    const segs: { x1: number; y1: number; x2: number; y2: number; color: string }[] = []
+    for (let i = 1; i <= headIdx; i++) {
+      segs.push({ x1: pts[i - 1].x, y1: pts[i - 1].y, x2: pts[i].x, y2: pts[i].y, color: tbColor(pts[i - 1].throttle, pts[i - 1].brake) })
+    }
+    segs.push({ x1: pts[headIdx].x, y1: pts[headIdx].y, x2: hx, y2: hy, color: tbColor(a.throttle, a.brake) })
 
     return (
       <g>
         <path d={fullPath} fill="none" stroke={driverColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.15" />
-        <path d={trailPath} fill="none" stroke={carColor} strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.95" />
+        {segs.map((s, i) => (
+          <line key={i} x1={s.x1} y1={s.y1} x2={s.x2} y2={s.y2} stroke={s.color} strokeWidth="3.5" strokeLinecap="round" opacity="0.95" />
+        ))}
         <circle cx={hx} cy={hy} r="9" fill={carColor} opacity="0.25" />
         <circle cx={hx} cy={hy} r="4.5" fill={carColor} />
         <circle cx={hx} cy={hy} r="2" fill="#ffffff" opacity="0.85" />
-        {/* speed readout */}
-        <text x={CIRCUIT_AREA.x + CIRCUIT_AREA.w - 8} y={CIRCUIT_AREA.y + 16} textAnchor="end" fill={carColor} fontSize="16" fontFamily="monospace" fontWeight="700">
+        {/* throttle/brake phase + speed readout */}
+        <text x={CIRCUIT_AREA.x + CIRCUIT_AREA.w - 8} y={CIRCUIT_AREA.y + 16} textAnchor="end" fill={carColor} fontSize="12" fontFamily="monospace" fontWeight="700" letterSpacing="1.5">
+          {phase}
+        </text>
+        <text x={CIRCUIT_AREA.x + CIRCUIT_AREA.w - 8} y={CIRCUIT_AREA.y + 33} textAnchor="end" fill="#ffffff" fontSize="16" fontFamily="monospace" fontWeight="700">
           {Math.round(hSpeed)} km/h
         </text>
       </g>
@@ -570,8 +671,9 @@ export function PosterPreview({
         {/* Circuit area */}
         {circuitPath && <CircuitBackground path={circuitPath} fit={fit} />}
 
-        {/* Visualization overlay — or animated playback when playing */}
-        {isPlaying ? renderPlayback() : renderViz()}
+        {/* Visualization overlay — playback when playing, draw-on reveal while the
+            line is still drawing itself, otherwise the settled static viz */}
+        {isPlaying ? renderPlayback() : reveal !== null ? renderReveal() : renderViz()}
 
         {/* Compare legend — every driver, year, lap time + fastest margin */}
         {isComparing && driver && telemetry && (() => {
