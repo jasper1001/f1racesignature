@@ -61,14 +61,6 @@ export function SectorSplit({ points, theme, width, height }: SectorSplitProps) 
               d={d}
               fill="none"
               stroke={color}
-              strokeWidth="8"
-              strokeLinecap="round"
-              opacity="0.1"
-            />
-            <path
-              d={d}
-              fill="none"
-              stroke={color}
               strokeWidth="2.5"
               strokeLinecap="round"
               opacity="0.9"

@@ -27,26 +27,8 @@ export function RacingLine({ points, theme, width, height, driverColor }: Racing
   }
   d += ` L ${xs[xs.length - 1]} ${ys[ys.length - 1]}`
 
-  const glowColor = driverColor.replace('#', '')
-
   return (
     <g>
-      <defs>
-        <filter id={`racingGlow-${driverColor.replace('#','')}`} x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="6" result="blur" />
-          <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-        <filter id={`racingHalo-${driverColor.replace('#','')}`} x="-60%" y="-60%" width="220%" height="220%">
-          <feGaussianBlur stdDeviation="10" />
-        </filter>
-      </defs>
-      {/* Wide halo glow — soft blurred diffusion */}
-      <path d={d} fill="none" stroke={driverColor} strokeWidth="16" strokeLinecap="round" strokeLinejoin="round" opacity="0.18" filter={`url(#racingHalo-${driverColor.replace('#','')})`} />
-      {/* Mid glow */}
-      <path d={d} fill="none" stroke={driverColor} strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" opacity="0.25" filter={`url(#racingGlow-${driverColor.replace('#','')})`} />
       {/* Main racing line */}
       <path d={d} fill="none" stroke={driverColor} strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" opacity="1" />
       {/* Start marker */}

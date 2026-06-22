@@ -30,7 +30,7 @@ const ZOOM_MAX  = 2.0
 
 // Poster intrinsic size (matches PosterPreview) — used to fit it to the screen
 // in fullscreen mode.
-const POSTER_W = 600
+const POSTER_W = 720
 const POSTER_H = 800
 
 type MobileTab = 'controls' | 'preview' | 'stats'

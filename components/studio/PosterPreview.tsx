@@ -11,16 +11,56 @@ import { VIZ_MODES } from '@/lib/themes'
 import { interpolateColor, distinctColors } from '@/lib/data'
 import { teamAtYear } from '@/lib/driverTeams'
 
-const POSTER_W = 600
+const POSTER_W = 720
 const POSTER_H = 800
 // Track container — the box the circuit outline + racing line are fitted into.
-const CIRCUIT_AREA = { x: 40, y: 86, w: 520, h: 464 }
+const CIRCUIT_AREA = { x: 40, y: 86, w: 640, h: 464 }
 // Coordinate space the circuit paths are authored in (scripts/generate-circuits.mjs).
 const PATH_VB = { w: 500, h: 420 }
-// Glow-safe padding kept inside CIRCUIT_AREA when fitting (neon blur is ~10px).
+// Padding kept inside CIRCUIT_AREA when fitting, so the track ribbon's half-stroke
+// (~17px on-screen) never butts against the box edge.
 const FIT_PAD = 0.055
 
 interface CircuitFit { scale: number; tx: number; ty: number }
+
+// F1's official circuit maps are landscape, and our wide track area suits that.
+// Many baked paths are authored portrait (taller than wide), so auto-rotate those
+// 90° into landscape to give the track more room. Returns degrees (clockwise).
+// Applied in PATH space to BOTH the outline and the telemetry line so they stay
+// glued together; the shared fit then re-centres + re-scales the rotated result.
+function landscapeRotation(bounds: { x0: number; y0: number; x1: number; y1: number }): number {
+  return bounds.y1 - bounds.y0 > bounds.x1 - bounds.x0 ? 90 : 0
+}
+
+// Manual orientation overrides (degrees, clockwise) that take precedence over the
+// bounding-box rule above. Needed for tracks whose layout runs diagonally, where a
+// 0/90° snap can't make them horizontal — e.g. Monaco's long axis sits at ~-50°, so
+// a 90° snap still reads vertical; ~50° lays it flat (≈2.6:1 landscape).
+const CIRCUIT_ROTATION: Record<string, number> = { monaco: 50 }
+
+// Rotate a PATH-space point about the centre of PATH_VB.
+function rotatePathCoord(x: number, y: number, deg: number): { x: number; y: number } {
+  if (!deg) return { x, y }
+  const r = (deg * Math.PI) / 180
+  const cx = PATH_VB.w / 2, cy = PATH_VB.h / 2
+  const dx = x - cx, dy = y - cy
+  return { x: cx + dx * Math.cos(r) - dy * Math.sin(r), y: cy + dx * Math.sin(r) + dy * Math.cos(r) }
+}
+
+// Rotate every coordinate pair of an M/L/Z path string (no curves → all numbers
+// are x,y pairs in order).
+function rotatePath(path: string, deg: number): string {
+  if (!deg) return path
+  const tokens = path.trim().split(/\s+/)
+  const numIdx = tokens.map((t, i) => (/^-?\d/.test(t) ? i : -1)).filter((i) => i >= 0)
+  for (let k = 0; k + 1 < numIdx.length; k += 2) {
+    const xi = numIdx[k], yi = numIdx[k + 1]
+    const p = rotatePathCoord(parseFloat(tokens[xi]), parseFloat(tokens[yi]), deg)
+    tokens[xi] = p.x.toFixed(1)
+    tokens[yi] = p.y.toFixed(1)
+  }
+  return tokens.join(' ')
+}
 
 // Exact bounds of an M/L/Z circuit path — no curves, so every coord pair is on-path.
 function pathBounds(path: string): { x0: number; y0: number; x1: number; y1: number } {
@@ -57,13 +97,14 @@ function computeCircuitFit(bounds: { x0: number; y0: number; x1: number; y1: num
   return { scale, tx, ty }
 }
 
-// Bounds source for the fit: the circuit outline when present (so the outline is
-// never clipped), else the telemetry lap converted into path space.
-function fitBounds(circuit: Circuit | null, telemetry: Telemetry | null) {
-  if (circuit) return pathBounds(circuit.path)
+// Bounds source for the fit: the (already-rotated) circuit outline when present
+// so it is never clipped, else the telemetry lap converted into rotated path space.
+function fitBounds(circuitPath: string | null, telemetry: Telemetry | null, rot: number) {
+  if (circuitPath) return pathBounds(circuitPath)
   if (telemetry && telemetry.points.length > 1) {
-    const xs = telemetry.points.map((p) => p.x * PATH_VB.w)
-    const ys = telemetry.points.map((p) => p.y * PATH_VB.h)
+    const ps = telemetry.points.map((p) => rotatePathCoord(p.x * PATH_VB.w, p.y * PATH_VB.h, rot))
+    const xs = ps.map((p) => p.x)
+    const ys = ps.map((p) => p.y)
     return { x0: Math.min(...xs), y0: Math.min(...ys), x1: Math.max(...xs), y1: Math.max(...ys) }
   }
   return { x0: 0, y0: 0, x1: PATH_VB.w, y1: PATH_VB.h }
@@ -131,20 +172,21 @@ function carAtFraction(
   }
 }
 
-function CircuitBackground({ circuit, fit }: { circuit: Circuit; fit: CircuitFit }) {
+function CircuitBackground({ path, fit }: { path: string; fit: CircuitFit }) {
+  // The paths render inside a scale(fit.scale) group, so a raw strokeWidth gets
+  // multiplied by the fit — fattening the ribbon on big/scaled-up circuits until
+  // tight corners merge. Divide by the scale so the ribbon is a CONSTANT on-screen
+  // thickness on every track, keeping clean spacing between sections.
+  const sw = (px: number) => px / fit.scale
   return (
     <g>
       <g transform={`translate(${fit.tx}, ${fit.ty}) scale(${fit.scale})`}>
-        {/* Outer kerb / run-off glow */}
-        <path d={circuit.path} fill="none" stroke="#ffffff" strokeWidth="42" strokeLinecap="round" strokeLinejoin="round" opacity="0.05" />
-        {/* White curb border */}
-        <path d={circuit.path} fill="none" stroke="#ffffff" strokeWidth="32" strokeLinecap="round" strokeLinejoin="round" opacity="0.08" />
-        {/* Asphalt track surface */}
-        <path d={circuit.path} fill="none" stroke="#3a3a3a" strokeWidth="26" strokeLinecap="round" strokeLinejoin="round" opacity="0.95" />
-        {/* Track highlight edge */}
-        <path d={circuit.path} fill="none" stroke="#606060" strokeWidth="16" strokeLinecap="round" strokeLinejoin="round" opacity="0.55" />
+        {/* Asphalt track surface — wide road ribbon */}
+        <path d={path} fill="none" stroke="#3a3a3a" strokeWidth={sw(34)} strokeLinecap="round" strokeLinejoin="round" opacity="0.95" />
+        {/* Lighter inner surface, leaving a darker edge so it reads as a road */}
+        <path d={path} fill="none" stroke="#5a5a5a" strokeWidth={sw(24)} strokeLinecap="round" strokeLinejoin="round" opacity="0.5" />
         {/* Centre dashed line */}
-        <path d={circuit.path} fill="none" stroke="#888888" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.35" strokeDasharray="8 8" />
+        <path d={path} fill="none" stroke="#888888" strokeWidth={sw(1.6)} strokeLinecap="round" strokeLinejoin="round" opacity="0.35" strokeDasharray={`${sw(9)} ${sw(9)}`} />
       </g>
     </g>
   )
@@ -217,17 +259,33 @@ export function PosterPreview({
 
   const isPlaying = playbackProgress !== null
 
+  // Auto-orient portrait tracks to landscape, in path space (outline + telemetry alike).
+  // A manual override wins when present (diagonal tracks the bbox rule can't read).
+  const rot = (() => {
+    if (circuit) return CIRCUIT_ROTATION[circuit.id] ?? landscapeRotation(pathBounds(circuit.path))
+    if (telemetry && telemetry.points.length > 1) {
+      const xs = telemetry.points.map((p) => p.x)
+      const ys = telemetry.points.map((p) => p.y)
+      return landscapeRotation({ x0: Math.min(...xs), y0: Math.min(...ys), x1: Math.max(...xs), y1: Math.max(...ys) })
+    }
+    return 0
+  })()
+  const circuitPath = circuit ? rotatePath(circuit.path, rot) : null
+
   // The one fit shared by the outline (via CircuitBackground) and the racing
   // line below — computed once so the two paths can never diverge.
-  const fit = computeCircuitFit(fitBounds(circuit, telemetry))
+  const fit = computeCircuitFit(fitBounds(circuitPath, telemetry, rot))
 
   const toPosterSpace = (tel: Telemetry | null) =>
-    tel?.points.map((pt) => ({
-      ...pt,
-      // Path space (0..PATH_VB) → screen via the shared fit → poster 0-1.
-      x: (pt.x * PATH_VB.w * fit.scale + fit.tx) / POSTER_W,
-      y: (pt.y * PATH_VB.h * fit.scale + fit.ty) / POSTER_H,
-    })) ?? []
+    tel?.points.map((pt) => {
+      // Path space (0..PATH_VB) → rotate → screen via the shared fit → poster 0-1.
+      const p = rotatePathCoord(pt.x * PATH_VB.w, pt.y * PATH_VB.h, rot)
+      return {
+        ...pt,
+        x: (p.x * fit.scale + fit.tx) / POSTER_W,
+        y: (p.y * fit.scale + fit.ty) / POSTER_H,
+      }
+    }) ?? []
 
   // Map raw 0-1 telemetry coords into poster-space 0-1
   // Viz components then multiply by POSTER_W/H to get final pixels.
@@ -297,7 +355,6 @@ export function PosterPreview({
               const color = s.d1 ? driverColor : compareColor
               return (
                 <g key={i}>
-                  <path d={s.d} fill="none" stroke={color} strokeWidth="14" strokeLinecap="round" strokeLinejoin="round" opacity="0.18" />
                   <path d={s.d} fill="none" stroke={color} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" opacity="0.95" />
                 </g>
               )
@@ -314,7 +371,6 @@ export function PosterPreview({
         <g>
           {overlay.map((o, i) => (
             <g key={i}>
-              <path d={linePath(o.points)} fill="none" stroke={o.color} strokeWidth="14" strokeLinecap="round" strokeLinejoin="round" opacity="0.1" />
               <path d={linePath(o.points)} fill="none" stroke={o.color} strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.95" />
             </g>
           ))}
@@ -512,15 +568,13 @@ export function PosterPreview({
         })()}
 
         {/* Circuit area */}
-        {circuit && <CircuitBackground circuit={circuit} fit={fit} />}
+        {circuitPath && <CircuitBackground path={circuitPath} fit={fit} />}
 
         {/* Visualization overlay — or animated playback when playing */}
         {isPlaying ? renderPlayback() : renderViz()}
 
         {/* Compare legend — every driver, year, lap time + fastest margin */}
         {isComparing && driver && telemetry && (() => {
-          const lx = CIRCUIT_AREA.x + 8
-          const ly = CIRCUIT_AREA.y + 12
           const rowH = 18
           const rows = [
             { name: driver.shortName, year: race?.year, lapTime: telemetry.lapTime, color: driverColor, sec: parseLapSeconds(telemetry.lapTime) },
@@ -532,7 +586,42 @@ export function PosterPreview({
           const fastestSec = sorted[0].sec
           const gap = sorted.length > 1 ? sorted[1].sec - sorted[0].sec : 0
           const footer = sorted.length > 1 ? `${sorted[0].name} fastest by ${gap.toFixed(3)}s` : ''
+          const panelW = 130
           const panelH = 22 + rows.length * rowH
+
+          // Place the panel in a corner the track outline doesn't reach, so it never
+          // overlaps the circuit (tracks are roughly oval → a corner is usually free).
+          // Tested against the actual track points; preference order favours the
+          // lower-left, sitting just above the bottom watermark.
+          const trackPts: { x: number; y: number }[] = []
+          if (circuit) {
+            const nums = circuit.path.match(/-?\d+\.?\d*/g)?.map(Number) ?? []
+            for (let i = 0; i + 1 < nums.length; i += 2) {
+              const p = rotatePathCoord(nums[i], nums[i + 1], rot)
+              trackPts.push({ x: p.x * fit.scale + fit.tx, y: p.y * fit.scale + fit.ty })
+            }
+          } else {
+            for (const p of vizPoints) trackPts.push({ x: p.x * POSTER_W, y: p.y * POSTER_H })
+          }
+          const areaL = CIRCUIT_AREA.x, areaR = CIRCUIT_AREA.x + CIRCUIT_AREA.w
+          const areaT = CIRCUIT_AREA.y, areaB = CIRCUIT_AREA.y + CIRCUIT_AREA.h
+          const wmReserve = 16 // keep clear of the bottom-left watermark
+          // Candidates in preference order: bottom-left, top-left, bottom-right, top-right.
+          const candidates = [
+            { boxLeft: areaL, boxTop: areaB - wmReserve - panelH },
+            { boxLeft: areaL, boxTop: areaT },
+            { boxLeft: areaR - panelW, boxTop: areaB - wmReserve - panelH },
+            { boxLeft: areaR - panelW, boxTop: areaT },
+          ]
+          const PAD = 18 // clearance for the track ribbon's half-stroke
+          const hits = (c: { boxLeft: number; boxTop: number }) =>
+            trackPts.filter((p) =>
+              p.x >= c.boxLeft - PAD && p.x <= c.boxLeft + panelW + PAD &&
+              p.y >= c.boxTop - PAD && p.y <= c.boxTop + panelH + PAD).length
+          // Stable sort keeps the preference order on ties (e.g. several clear corners).
+          const best = candidates.map((c) => ({ c, n: hits(c) })).sort((a, b) => a.n - b.n)[0].c
+          const lx = best.boxLeft + 8
+          const ly = best.boxTop + 12
           return (
             <g fontFamily="monospace">
               <rect x={lx - 8} y={ly - 12} width="130" height={panelH} rx="6" fill={theme.bg} opacity="0.92" />

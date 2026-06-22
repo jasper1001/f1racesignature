@@ -42,16 +42,6 @@ export function SpeedHeatmap({ points, theme, width, height }: SpeedHeatmapProps
 
   return (
     <g>
-      {/* Wide glow pass */}
-      {segments.map((seg, i) => (
-        <line key={`glow-${i}`} x1={seg.x1} y1={seg.y1} x2={seg.x2} y2={seg.y2}
-          stroke={seg.color} strokeWidth="16" strokeLinecap="round" opacity="0.12" />
-      ))}
-      {/* Mid glow */}
-      {segments.map((seg, i) => (
-        <line key={`mid-${i}`} x1={seg.x1} y1={seg.y1} x2={seg.x2} y2={seg.y2}
-          stroke={seg.color} strokeWidth="8" strokeLinecap="round" opacity="0.2" />
-      ))}
       {/* Main colored line */}
       {segments.map((seg, i) => (
         <line key={`seg-${i}`} x1={seg.x1} y1={seg.y1} x2={seg.x2} y2={seg.y2}
