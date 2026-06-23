@@ -59,11 +59,11 @@ export function ShareButtons({ text, url }: ShareButtonsProps) {
   }
 
   const base =
-    'inline-flex items-center justify-center gap-2 py-3 rounded-xl font-medium transition-all active:scale-95 cursor-pointer border border-[#1f1f1f] bg-[#0d0d0d] hover:border-[#333] hover:bg-[#111] text-white'
+    'inline-flex items-center justify-center gap-2 py-3 rounded-xl font-medium transition-all active:scale-95 cursor-pointer border border-[#dcd5c6] bg-[#f3eee3] hover:border-[#c4bca8] hover:bg-[#e9e2d3] text-[#1a1712]'
 
   return (
     <div className="space-y-2">
-      <p className="text-white text-[10px] font-mono uppercase tracking-widest opacity-40 text-center">Share result</p>
+      <p className="text-[#6b6358] text-[10px] font-mono uppercase tracking-widest text-center">Share result</p>
       <div className="grid grid-cols-3 gap-2">
         {/* Twitter / X */}
         <a

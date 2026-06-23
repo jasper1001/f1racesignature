@@ -32,10 +32,10 @@ function saveStats(s: Stats) {
 }
 
 function getRating(ms: number) {
-  if (ms < 180) return { label: 'Elite Reflexes', color: '#d4a017', sub: 'You have the reflexes of an F1 champion.' }
-  if (ms < 251) return { label: 'F1 Driver Level', color: '#c0c0c0', sub: 'Fast enough to race at the top level.' }
-  if (ms < 351) return { label: 'Great Reaction', color: '#cd7f32', sub: 'Quicker than most people on the planet.' }
-  return { label: 'Keep Practicing', color: '#555555', sub: 'Every champion started somewhere.' }
+  if (ms < 180) return { label: 'Elite Reflexes', color: '#b8860b', sub: 'You have the reflexes of an F1 champion.' }
+  if (ms < 251) return { label: 'F1 Driver Level', color: '#707070', sub: 'Fast enough to race at the top level.' }
+  if (ms < 351) return { label: 'Great Reaction', color: '#b06a28', sub: 'Quicker than most people on the planet.' }
+  return { label: 'Keep Practicing', color: '#6b6358', sub: 'Every champion started somewhere.' }
 }
 
 function Sparks() {
@@ -50,7 +50,7 @@ function Sparks() {
             height: i % 3 === 0 ? 6 : 4,
             left: `${8 + (i * 6.5) % 84}%`,
             top: '55%',
-            background: i % 2 === 0 ? '#d4a017' : '#ffffff',
+            background: i % 2 === 0 ? '#d4a017' : '#d98a00',
           }}
           initial={{ y: 0, opacity: 1, scale: 1 }}
           animate={{
@@ -159,8 +159,8 @@ export function LightsOutGame() {
         className={[
           'relative rounded-2xl border p-8 md:p-12 flex flex-col items-center gap-8 transition-all duration-300',
           phase === 'go'
-            ? 'border-[#d4a017]/40 bg-[#0a0800] shadow-[0_0_40px_rgba(212,160,23,0.06)]'
-            : 'border-[#1a1a1a] bg-[#080808]',
+            ? 'border-[#d4a017]/50 bg-[#f7efd6] shadow-[0_0_40px_rgba(212,160,23,0.12)]'
+            : 'border-[#dcd5c6] bg-[#fbf9f4]',
           isClickable ? 'cursor-pointer' : '',
         ].join(' ')}
       >
@@ -196,7 +196,7 @@ export function LightsOutGame() {
               exit={{ opacity: 0, y: -8 }}
               className="text-center"
             >
-              <p className="text-white text-sm mb-6 max-w-xs leading-relaxed">
+              <p className="text-[#1a1712] text-sm mb-6 max-w-xs leading-relaxed">
                 Watch all five lights illuminate. The moment they go out — tap as fast as you can. Don&apos;t jump the start.
               </p>
               <button
@@ -215,7 +215,7 @@ export function LightsOutGame() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
-              <p className="text-white/65 text-xs font-mono uppercase tracking-widest">Get ready…</p>
+              <p className="text-[#1a1712]/65 text-xs font-mono uppercase tracking-widest">Get ready…</p>
             </motion.div>
           )}
 
@@ -242,10 +242,10 @@ export function LightsOutGame() {
               className="text-center space-y-3"
             >
               <p className="text-[#e8002d] text-3xl font-bold font-mono tracking-wider">JUMP START!</p>
-              <p className="text-white text-sm">You moved before the lights went out.</p>
+              <p className="text-[#1a1712] text-sm">You moved before the lights went out.</p>
               <button
                 onClick={(e) => { e.stopPropagation(); startGame() }}
-                className="mt-2 px-6 py-2.5 bg-[#111111] border border-[#222222] text-white/70 text-sm rounded-xl hover:text-white hover:border-[#333333] transition-colors cursor-pointer"
+                className="mt-2 px-6 py-2.5 bg-[#ece6d9] border border-[#cfc7b5] text-[#1a1712]/70 text-sm rounded-xl hover:text-[#1a1712] hover:border-[#c4bca8] transition-colors cursor-pointer"
               >
                 Try Again
               </button>
@@ -274,9 +274,9 @@ export function LightsOutGame() {
             { label: 'Average', value: avgTime !== null ? `${avgTime}ms` : '—' },
             { label: 'Attempts', value: String(stats.attempts) },
           ].map((s) => (
-            <div key={s.label} className="rounded-xl border border-[#141414] bg-[#070707] px-3 py-3 text-center">
-              <p className="text-white text-base font-mono font-bold">{s.value}</p>
-              <p className="text-white/65 text-[10px] font-mono uppercase tracking-wider mt-0.5">{s.label}</p>
+            <div key={s.label} className="rounded-xl border border-[#dcd5c6] bg-[#f3eee3] px-3 py-3 text-center">
+              <p className="text-[#1a1712] text-base font-mono font-bold">{s.value}</p>
+              <p className="text-[#1a1712]/65 text-[10px] font-mono uppercase tracking-wider mt-0.5">{s.label}</p>
             </div>
           ))}
         </motion.div>
@@ -327,14 +327,14 @@ function ResultPanel({
         <span className="text-6xl font-bold font-mono" style={{ color: rating.color }}>
           {ms}
         </span>
-        <span className="text-xl text-white/65 font-mono">ms</span>
+        <span className="text-xl text-[#1a1712]/65 font-mono">ms</span>
       </motion.div>
 
       <div>
         <p className="text-lg font-semibold" style={{ color: rating.color }}>
           {displayLabel}
         </p>
-        <p className="text-white text-sm mt-1">{displaySub}</p>
+        <p className="text-[#1a1712] text-sm mt-1">{displaySub}</p>
       </div>
 
       <div className="flex flex-col gap-3 w-full">

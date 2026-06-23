@@ -49,14 +49,14 @@ export default function LightsOutPage() {
         },
       }) }} />
       <Header />
-      <main className="pt-14 min-h-screen" style={{ background: '#030303' }}>
+      <main className="pt-14 min-h-screen" style={{ background: '#f4f1ea' }}>
 
         {/* Hero */}
-        <div className="relative border-b border-[#0f0f0f] py-16 px-6 text-center overflow-hidden">
+        <div className="relative border-b border-[#dcd5c6] py-16 px-6 text-center overflow-hidden">
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
-              backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.035) 1px, transparent 1px)',
+              backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.045) 1px, transparent 1px)',
               backgroundSize: '28px 28px',
             }}
           />
@@ -69,7 +69,7 @@ export default function LightsOutPage() {
 
           <Link
             href="/games"
-            className="relative inline-flex items-center gap-1.5 text-white text-xs font-mono uppercase tracking-widest hover:text-[#ef4444] transition-colors mb-6"
+            className="relative inline-flex items-center gap-1.5 text-[#1a1712] text-xs font-mono uppercase tracking-widest hover:text-[#ef4444] transition-colors mb-6"
           >
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
               <path d="M8 2L4 6l4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -81,12 +81,12 @@ export default function LightsOutPage() {
             Reaction Test
           </p>
           <h1
-            className="relative text-4xl md:text-5xl text-white mb-4"
+            className="relative text-4xl md:text-5xl text-[#1a1712] mb-4"
             style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
           >
             Lights Out
           </h1>
-          <p className="relative text-white text-sm max-w-sm mx-auto leading-relaxed">
+          <p className="relative text-[#1a1712] text-sm max-w-sm mx-auto leading-relaxed">
             Five lights illuminate one by one. React the instant they all go dark.
             Jump the start and you&apos;ll have to go again.
           </p>
@@ -94,20 +94,20 @@ export default function LightsOutPage() {
 
         <div className="max-w-5xl mx-auto px-6 py-12">
           <div className="md:grid md:grid-cols-[1fr_200px] md:gap-6 md:items-start">
-            <div className="rounded-2xl bg-[#060606] overflow-hidden p-5 md:p-8" style={{ border: '1px solid rgba(239,68,68,0.25)', boxShadow: '0 0 0 1px rgba(239,68,68,0.06), 0 0 40px rgba(239,68,68,0.06)' }}>
+            <div className="rounded-2xl bg-[#fbf9f4] overflow-hidden p-5 md:p-8" style={{ border: '1px solid rgba(239,68,68,0.25)', boxShadow: '0 0 0 1px rgba(239,68,68,0.06), 0 0 40px rgba(239,68,68,0.06)' }}>
               <LightsOutGame />
             </div>
             <div className="mt-6 md:mt-0">
-              <p className="text-[10px] font-mono text-white uppercase tracking-widest opacity-30 mb-3">Rating Scale</p>
+              <p className="text-[10px] font-mono text-[#1a1712] uppercase tracking-widest opacity-30 mb-3">Rating Scale</p>
               <div className="space-y-2">
                 {[
-                  { label: 'Under 180ms', rating: 'Elite Reflexes',  color: '#d4a017' },
-                  { label: '180 – 250ms', rating: 'F1 Driver Level', color: '#c0c0c0' },
-                  { label: '251 – 350ms', rating: 'Great Reaction',  color: '#cd7f32' },
-                  { label: 'Above 350ms', rating: 'Keep Practicing', color: '#888888' },
+                  { label: 'Under 180ms', rating: 'Elite Reflexes',  color: '#b8860b' },
+                  { label: '180 – 250ms', rating: 'F1 Driver Level', color: '#707070' },
+                  { label: '251 – 350ms', rating: 'Great Reaction',  color: '#b06a28' },
+                  { label: 'Above 350ms', rating: 'Keep Practicing', color: '#6b6358' },
                 ].map((r) => (
-                  <div key={r.rating} className="rounded-xl border border-[#111111] bg-[#060606] px-3 py-2.5">
-                    <p className="text-[10px] font-mono text-white uppercase tracking-wider opacity-50">{r.label}</p>
+                  <div key={r.rating} className="rounded-xl border border-[#dcd5c6] bg-[#fbf9f4] px-3 py-2.5">
+                    <p className="text-[10px] font-mono text-[#1a1712] uppercase tracking-wider opacity-50">{r.label}</p>
                     <p className="text-xs font-medium mt-0.5" style={{ color: r.color }}>{r.rating}</p>
                   </div>
                 ))}

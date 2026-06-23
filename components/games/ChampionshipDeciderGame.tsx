@@ -36,10 +36,10 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 const RESULT_STYLES: Record<ResultType, { bg: string; border: string; color: string }> = {
-  'Perfect Call':           { bg: '#0a1a08', border: 'rgba(56,176,0,0.4)',   color: '#38b000' },
-  'Smart but Risky':        { bg: '#0f1008', border: 'rgba(212,160,23,0.4)', color: '#d4a017' },
-  'Understandable Mistake': { bg: '#120a08', border: 'rgba(255,140,0,0.4)',  color: '#ff8c00' },
-  'Strategy Disaster':      { bg: '#1a0808', border: 'rgba(232,0,45,0.4)',   color: '#e8002d' },
+  'Perfect Call':           { bg: '#e6f0e0', border: 'rgba(56,176,0,0.45)',   color: '#2e7d00' },
+  'Smart but Risky':        { bg: '#f5edd2', border: 'rgba(212,160,23,0.5)',  color: '#9a7209' },
+  'Understandable Mistake': { bg: '#f7e8db', border: 'rgba(255,140,0,0.5)',   color: '#c4690a' },
+  'Strategy Disaster':      { bg: '#f7e3e3', border: 'rgba(232,0,45,0.45)',   color: '#c4122f' },
 }
 
 type Phase = 'idle' | 'question' | 'answered' | 'finished'
@@ -117,15 +117,15 @@ export function ChampionshipDeciderGame() {
         {/* ── IDLE ── */}
         {phase === 'idle' && (
           <motion.div key="idle" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-            className="rounded-2xl border border-[#1a1a1a] bg-[#080808] p-8 text-center space-y-5"
+            className="rounded-2xl border border-[#dcd5c6] bg-[#fbf9f4] p-8 text-center space-y-5"
           >
-            <div className="w-12 h-12 mx-auto rounded-full border border-[#d4a017]/30 bg-[#0f0d06] flex items-center justify-center">
+            <div className="w-12 h-12 mx-auto rounded-full border border-[#d4a017]/40 bg-[#f7efd6] flex items-center justify-center">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d4a017" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M3 18V9l9-6 9 6v9" />
                 <path d="M9 18V12h6v6" />
               </svg>
             </div>
-            <p className="text-white text-sm leading-relaxed max-w-sm mx-auto">
+            <p className="text-[#1a1712] text-sm leading-relaxed max-w-sm mx-auto">
               {SCENARIOS.length} real F1 strategy moments. One decision each.
               Make the call from the pit wall and see how you score against history.
             </p>
@@ -154,10 +154,10 @@ export function ChampionshipDeciderGame() {
           >
             {/* Progress + running score */}
             <div className="flex items-center justify-between px-1">
-              <span className="text-white/65 text-xs font-mono">Scenario {index + 1} of {total}</span>
+              <span className="text-[#1a1712]/65 text-xs font-mono">Scenario {index + 1} of {total}</span>
               <span className="text-[#d4a017] text-xs font-mono font-bold">{score} pts</span>
             </div>
-            <div className="h-0.5 bg-[#111111] rounded-full overflow-hidden">
+            <div className="h-0.5 bg-[#ece6d9] rounded-full overflow-hidden">
               <motion.div
                 className="h-full bg-[#d4a017] rounded-full"
                 animate={{ width: `${(index / total) * 100}%` }}
@@ -168,19 +168,19 @@ export function ChampionshipDeciderGame() {
             {/* 2-col on desktop */}
             <div className="md:grid md:grid-cols-2 md:gap-6 space-y-4 md:space-y-0">
               {/* Left: Scenario card */}
-              <div className="rounded-2xl border border-[#1a1a1a] bg-[#080808] overflow-hidden">
-                <div className="border-b border-[#111111] px-5 py-4">
+              <div className="rounded-2xl border border-[#dcd5c6] bg-[#fbf9f4] overflow-hidden">
+                <div className="border-b border-[#e2dccd] px-5 py-4">
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <p className="text-[#d4a017] text-[10px] font-mono uppercase tracking-widest mb-1.5">
                         {current.grandPrix} · {current.year}
                       </p>
-                      <h3 className="text-white text-lg font-semibold" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+                      <h3 className="text-[#1a1712] text-lg font-semibold" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
                         {current.title}
                       </h3>
-                      <p className="text-white text-xs mt-1 opacity-50">{current.subtitle}</p>
+                      <p className="text-[#1a1712] text-xs mt-1 opacity-50">{current.subtitle}</p>
                     </div>
-                    <p className="text-white text-[10px] font-mono shrink-0 text-right leading-relaxed opacity-30">
+                    <p className="text-[#1a1712] text-[10px] font-mono shrink-0 text-right leading-relaxed opacity-30">
                       {current.lap}
                     </p>
                   </div>
@@ -190,16 +190,16 @@ export function ChampionshipDeciderGame() {
                   <p className="text-[#d4a017] text-[10px] font-mono uppercase tracking-widest">{current.role}</p>
                   <ul className="space-y-2">
                     {current.context.map((line, i) => (
-                      <li key={i} className="flex items-start gap-2.5 text-white text-sm leading-relaxed">
-                        <span className="text-white mt-0.5 shrink-0 text-base leading-none opacity-20">›</span>
+                      <li key={i} className="flex items-start gap-2.5 text-[#1a1712] text-sm leading-relaxed">
+                        <span className="text-[#1a1712] mt-0.5 shrink-0 text-base leading-none opacity-20">›</span>
                         {line}
                       </li>
                     ))}
                   </ul>
                 </div>
 
-                <div className="border-t border-[#111111] px-5 py-3">
-                  <p className="text-white text-sm font-medium">{current.question}</p>
+                <div className="border-t border-[#e2dccd] px-5 py-3">
+                  <p className="text-[#1a1712] text-sm font-medium">{current.question}</p>
                 </div>
               </div>
 
@@ -220,8 +220,8 @@ export function ChampionshipDeciderGame() {
                           phase === 'answered' && isSelected
                             ? ''
                             : phase === 'answered'
-                            ? 'bg-[#050505] border-[#0d0d0d] text-white/65'
-                            : 'bg-[#0f0f0f] border-[#1a1a1a] text-white hover:border-[#d4a017]/30 hover:bg-[#0f0f08]',
+                            ? 'bg-[#f3eee3] border-[#e2dccd] text-[#1a1712]/65'
+                            : 'bg-[#ffffff] border-[#dcd5c6] text-[#1a1712] hover:border-[#d4a017]/40 hover:bg-[#f7efd6]',
                         ].join(' ')}
                         style={
                           phase === 'answered' && isSelected
@@ -238,7 +238,7 @@ export function ChampionshipDeciderGame() {
                 <AnimatePresence>
                   {phase === 'answered' && selected && (
                     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-3">
-                      <div className="rounded-xl border border-[#1a1a1a] bg-[#060606] px-5 py-4 space-y-3">
+                      <div className="rounded-xl border border-[#dcd5c6] bg-[#fbf9f4] px-5 py-4 space-y-3">
                         <div className="flex items-center gap-2.5">
                           <span
                             className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-widest font-bold"
@@ -252,14 +252,14 @@ export function ChampionshipDeciderGame() {
                           </span>
                           <span className="text-[#d4a017] text-xs font-mono">+{selected.score} pts</span>
                         </div>
-                        <p className="text-white text-sm leading-relaxed">{selected.explanation}</p>
-                        <div className="border-t border-[#111111] pt-3">
+                        <p className="text-[#1a1712] text-sm leading-relaxed">{selected.explanation}</p>
+                        <div className="border-t border-[#e2dccd] pt-3">
                           <p className="text-[#d4a017] text-[10px] font-mono uppercase tracking-widest mb-1.5">What actually happened</p>
-                          <p className="text-white text-sm leading-relaxed opacity-60">{current.actualOutcome}</p>
+                          <p className="text-[#1a1712] text-sm leading-relaxed opacity-60">{current.actualOutcome}</p>
                         </div>
-                        <div className="border-t border-[#111111] pt-3">
-                          <p className="text-white text-[10px] font-mono uppercase tracking-widest mb-1.5 opacity-30">Did you know?</p>
-                          <p className="text-white text-xs leading-relaxed opacity-40">{current.didYouKnow}</p>
+                        <div className="border-t border-[#e2dccd] pt-3">
+                          <p className="text-[#1a1712] text-[10px] font-mono uppercase tracking-widest mb-1.5 opacity-30">Did you know?</p>
+                          <p className="text-[#1a1712] text-xs leading-relaxed opacity-40">{current.didYouKnow}</p>
                         </div>
                       </div>
                       <button onClick={handleNext}
@@ -281,7 +281,7 @@ export function ChampionshipDeciderGame() {
           const maxScore = SCENARIOS.length * 100
           return (
             <motion.div key="finished" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-              className="rounded-2xl border border-[#1a1a1a] bg-[#080808] p-8 space-y-6"
+              className="rounded-2xl border border-[#dcd5c6] bg-[#fbf9f4] p-8 space-y-6"
             >
               {isNewBest && (
                 <motion.div
@@ -296,29 +296,29 @@ export function ChampionshipDeciderGame() {
               )}
 
               <div className="text-center space-y-1">
-                <p className="text-white/65 text-xs font-mono uppercase tracking-widest">Final Score</p>
+                <p className="text-[#1a1712]/65 text-xs font-mono uppercase tracking-widest">Final Score</p>
                 <motion.div
                   initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
                   transition={{ type: 'spring', stiffness: 220, damping: 14, delay: 0.08 }}
                 >
                   <span className="text-6xl font-bold font-mono" style={{ color: rating.color }}>{finalScore}</span>
-                  <span className="text-2xl text-white/65 font-mono"> / {maxScore}</span>
+                  <span className="text-2xl text-[#1a1712]/65 font-mono"> / {maxScore}</span>
                 </motion.div>
               </div>
 
               <div className="text-center space-y-1">
                 <p className="text-xl font-semibold" style={{ color: rating.color }}>{rating.label}</p>
-                <p className="text-white text-sm">{rating.message}</p>
+                <p className="text-[#1a1712] text-sm">{rating.message}</p>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                <div className="rounded-xl border border-[#141414] bg-[#070707] px-3 py-3 text-center">
+                <div className="rounded-xl border border-[#dcd5c6] bg-[#f3eee3] px-3 py-3 text-center">
                   <p className="text-xl font-mono font-bold" style={{ color: RESULT_STYLES['Perfect Call'].color }}>{finalPerfect}</p>
-                  <p className="text-white/65 text-[10px] font-mono uppercase tracking-wider mt-0.5">Perfect Calls</p>
+                  <p className="text-[#1a1712]/65 text-[10px] font-mono uppercase tracking-wider mt-0.5">Perfect Calls</p>
                 </div>
-                <div className="rounded-xl border border-[#141414] bg-[#070707] px-3 py-3 text-center">
-                  <p className="text-xl font-mono font-bold text-white">{stats.bestScore}</p>
-                  <p className="text-white/65 text-[10px] font-mono uppercase tracking-wider mt-0.5">Personal Best</p>
+                <div className="rounded-xl border border-[#dcd5c6] bg-[#f3eee3] px-3 py-3 text-center">
+                  <p className="text-xl font-mono font-bold text-[#1a1712]">{stats.bestScore}</p>
+                  <p className="text-[#1a1712]/65 text-[10px] font-mono uppercase tracking-wider mt-0.5">Personal Best</p>
                 </div>
               </div>
 
@@ -333,7 +333,7 @@ export function ChampionshipDeciderGame() {
                   Play Again
                 </button>
                 <a href="/games"
-                  className="block w-full px-6 py-3 border border-[#1a1a1a] text-white/65 text-sm font-medium rounded-xl hover:border-[#333333] hover:text-white transition-all text-center"
+                  className="block w-full px-6 py-3 border border-[#dcd5c6] text-[#1a1712]/65 text-sm font-medium rounded-xl hover:border-[#c4bca8] hover:text-[#1a1712] transition-all text-center"
                 >
                   Back to Mini Games
                 </a>
@@ -352,9 +352,9 @@ export function ChampionshipDeciderGame() {
             { label: 'Games',      value: String(stats.gamesPlayed) },
             { label: 'Best Rating', value: stats.bestRating || '—' },
           ].map(s => (
-            <div key={s.label} className="rounded-xl border border-[#141414] bg-[#070707] px-3 py-3 text-center">
-              <p className="text-white text-sm font-mono font-bold truncate">{s.value}</p>
-              <p className="text-white/65 text-[10px] font-mono uppercase tracking-wider mt-0.5">{s.label}</p>
+            <div key={s.label} className="rounded-xl border border-[#dcd5c6] bg-[#f3eee3] px-3 py-3 text-center">
+              <p className="text-[#1a1712] text-sm font-mono font-bold truncate">{s.value}</p>
+              <p className="text-[#1a1712]/65 text-[10px] font-mono uppercase tracking-wider mt-0.5">{s.label}</p>
             </div>
           ))}
         </motion.div>

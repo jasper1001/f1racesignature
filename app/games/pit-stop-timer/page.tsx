@@ -46,14 +46,14 @@ export default function PitStopTimerPage() {
         },
       }) }} />
       <Header />
-      <main className="pt-14 min-h-screen" style={{ background: '#030303' }}>
+      <main className="pt-14 min-h-screen" style={{ background: '#f4f1ea' }}>
 
         {/* Hero */}
-        <div className="relative border-b border-[#0f0f0f] py-16 px-6 text-center overflow-hidden">
+        <div className="relative border-b border-[#dcd5c6] py-16 px-6 text-center overflow-hidden">
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
-              backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px)',
+              backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.045) 1px, transparent 1px)',
               backgroundSize: '28px 28px',
             }}
           />
@@ -67,19 +67,19 @@ export default function PitStopTimerPage() {
             Pit Wall
           </p>
           <h1
-            className="relative text-4xl md:text-5xl text-white mb-4"
+            className="relative text-4xl md:text-5xl text-[#1a1712] mb-4"
             style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
           >
             Pit Stop Timer
           </h1>
-          <p className="relative text-white text-sm max-w-sm mx-auto opacity-50">
+          <p className="relative text-[#6b6358] text-sm max-w-sm mx-auto">
             Can you release the car at the perfect moment?
           </p>
         </div>
 
         {/* Game */}
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
-          <div className="rounded-2xl bg-[#060606] overflow-hidden p-5 md:p-8" style={{ border: '1px solid rgba(6,182,212,0.25)', boxShadow: '0 0 0 1px rgba(6,182,212,0.06), 0 0 40px rgba(6,182,212,0.06)' }}>
+          <div className="rounded-2xl bg-[#fbf9f4] overflow-hidden p-5 md:p-8" style={{ border: '1px solid rgba(6,182,212,0.25)', boxShadow: '0 0 0 1px rgba(6,182,212,0.06), 0 0 40px rgba(6,182,212,0.06)' }}>
             <PitStopTimerGame />
           </div>
         </div>

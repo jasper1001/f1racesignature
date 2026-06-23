@@ -79,8 +79,8 @@ function strokeWidthFromViewBox(viewBox: string): number {
 // ── Circuit silhouette ────────────────────────────────────────────────────────
 function CircuitSilhouette({ circuit, flash }: { circuit: Circuit; flash: 'none' | 'correct' | 'wrong' }) {
   const sw = strokeWidthFromViewBox(circuit.viewBox)
-  const color = flash === 'correct' ? '#38b000' : flash === 'wrong' ? '#e8002d' : '#ffffff'
-  const glow  = flash === 'correct' ? '0 0 16px 4px rgba(56,176,0,0.4)' : flash === 'wrong' ? '0 0 16px 4px rgba(232,0,45,0.4)' : '0 0 12px 2px rgba(255,255,255,0.08)'
+  const color = flash === 'correct' ? '#2e8b00' : flash === 'wrong' ? '#d11030' : '#16120c'
+  const glow  = flash === 'correct' ? '0 0 16px 4px rgba(56,176,0,0.4)' : flash === 'wrong' ? '0 0 16px 4px rgba(232,0,45,0.4)' : '0 0 10px 2px rgba(0,0,0,0.10)'
 
   return (
     <div className="w-full flex items-center justify-center p-6 md:p-8">
@@ -167,8 +167,8 @@ export function TrackOutlineGame() {
 
   if (circuits.length === 0) {
     return (
-      <div className="rounded-2xl border border-[#1a1a1a] bg-[#080808] p-8 text-center">
-        <p className="text-white/65 text-sm font-mono">Loading circuits…</p>
+      <div className="rounded-2xl border border-[#dcd5c6] bg-[#fbf9f4] p-8 text-center">
+        <p className="text-[#1a1712]/65 text-sm font-mono">Loading circuits…</p>
       </div>
     )
   }
@@ -180,16 +180,16 @@ export function TrackOutlineGame() {
         {/* ── IDLE ── */}
         {phase === 'idle' && (
           <motion.div key="idle" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-            className="rounded-2xl border border-[#1a1a1a] bg-[#080808] p-8 text-center space-y-5"
+            className="rounded-2xl border border-[#dcd5c6] bg-[#fbf9f4] p-8 text-center space-y-5"
           >
             <div className="flex items-center justify-center gap-4 opacity-30">
               {circuits.slice(0, 3).map(c => (
                 <svg key={c.id} viewBox={c.viewBox} className="h-16 w-auto" xmlns="http://www.w3.org/2000/svg">
-                  <path d={c.path} fill="none" stroke="white" strokeWidth={strokeWidthFromViewBox(c.viewBox)} strokeLinecap="round" strokeLinejoin="round" />
+                  <path d={c.path} fill="none" stroke="#16120c" strokeWidth={strokeWidthFromViewBox(c.viewBox)} strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               ))}
             </div>
-            <p className="text-white text-sm leading-relaxed max-w-sm mx-auto">
+            <p className="text-[#1a1712] text-sm leading-relaxed max-w-sm mx-auto">
               A circuit silhouette is shown — no name, no labels.
               Pick the correct track from four options.
               10 circuits, then your final score.
@@ -208,12 +208,12 @@ export function TrackOutlineGame() {
 
             {/* Round header */}
             <div className="flex items-center justify-between px-1">
-              <p className="text-white text-xs font-mono uppercase tracking-widest">Which circuit is this?</p>
-              <span className="text-white/65 text-xs font-mono">{round} / {TOTAL_ROUNDS}</span>
+              <p className="text-[#1a1712] text-xs font-mono uppercase tracking-widest">Which circuit is this?</p>
+              <span className="text-[#1a1712]/65 text-xs font-mono">{round} / {TOTAL_ROUNDS}</span>
             </div>
 
             {/* Progress bar */}
-            <div className="h-0.5 bg-[#111111] rounded-full overflow-hidden">
+            <div className="h-0.5 bg-[#ece6d9] rounded-full overflow-hidden">
               <motion.div
                 className="h-full bg-[#d4a017] rounded-full"
                 initial={{ width: `${((round - 1) / TOTAL_ROUNDS) * 100}%` }}
@@ -226,8 +226,8 @@ export function TrackOutlineGame() {
             <div className="md:grid md:grid-cols-2 md:gap-6 space-y-4 md:space-y-0">
               {/* Left: Circuit silhouette */}
               <div
-                className="rounded-2xl border bg-[#080808] transition-colors duration-300 flex items-center"
-                style={{ borderColor: phase === 'answered' ? (isCorrect ? 'rgba(56,176,0,0.3)' : 'rgba(232,0,45,0.3)') : '#1a1a1a', minHeight: 280 }}
+                className="rounded-2xl border bg-[#fbf9f4] transition-colors duration-300 flex items-center"
+                style={{ borderColor: phase === 'answered' ? (isCorrect ? 'rgba(56,176,0,0.4)' : 'rgba(232,0,45,0.4)') : '#dcd5c6', minHeight: 280 }}
               >
                 <CircuitSilhouette circuit={answer} flash={flash} />
               </div>
@@ -248,10 +248,10 @@ export function TrackOutlineGame() {
                         whileTap={phase === 'question' ? { scale: 0.97 } : {}}
                         className={[
                           'px-4 py-3 rounded-xl text-sm font-medium border transition-all duration-200 text-left cursor-pointer disabled:cursor-default',
-                          showCorrect  ? 'bg-[#0a1a08] border-[#38b000]/60 text-[#38b000]'
-                          : showWrong  ? 'bg-[#1a0808] border-[#e8002d]/60 text-[#e8002d]'
-                          : phase === 'answered' ? 'bg-[#060606] border-[#111111] text-white/65'
-                          : 'bg-[#0f0f0f] border-[#1a1a1a] text-white hover:border-[#d4a017]/40 hover:bg-[#0f0f08]',
+                          showCorrect  ? 'bg-[#e6f0e0] border-[#38b000]/60 text-[#2e7d00]'
+                          : showWrong  ? 'bg-[#f7e3e3] border-[#e8002d]/60 text-[#c4122f]'
+                          : phase === 'answered' ? 'bg-[#f3eee3] border-[#e2dccd] text-[#1a1712]/55'
+                          : 'bg-[#ffffff] border-[#dcd5c6] text-[#1a1712] hover:border-[#d4a017]/50 hover:bg-[#f7efd6]',
                         ].join(' ')}
                       >
                         {opt.name}
@@ -263,11 +263,11 @@ export function TrackOutlineGame() {
                 <AnimatePresence>
                   {phase === 'answered' && (
                     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-3">
-                      <div className="rounded-xl border border-[#1a1a1a] bg-[#060606] px-5 py-4">
+                      <div className="rounded-xl border border-[#dcd5c6] bg-[#fbf9f4] px-5 py-4">
                         <p className="text-[#d4a017] text-[10px] font-mono uppercase tracking-widest mb-2">
                           {isCorrect ? 'Correct!' : `It was ${answer.name}`}
                         </p>
-                        <p className="text-white text-sm leading-relaxed">
+                        <p className="text-[#1a1712] text-sm leading-relaxed">
                           {CIRCUIT_FACTS[answer.id] ?? `${answer.name} — ${answer.location}.`}
                         </p>
                       </div>
@@ -289,7 +289,7 @@ export function TrackOutlineGame() {
           const rating = getGameRating(finalScore)
           return (
             <motion.div key="finished" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-              className="rounded-2xl border border-[#1a1a1a] bg-[#080808] p-8 text-center space-y-5"
+              className="rounded-2xl border border-[#dcd5c6] bg-[#fbf9f4] p-8 text-center space-y-5"
             >
               {isNewBest && (
                 <motion.div
@@ -302,20 +302,20 @@ export function TrackOutlineGame() {
               )}
 
               <div>
-                <p className="text-white/65 text-xs font-mono uppercase tracking-widest mb-3">Final Score</p>
+                <p className="text-[#1a1712]/65 text-xs font-mono uppercase tracking-widest mb-3">Final Score</p>
                 <motion.div
                   initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
                   transition={{ type: 'spring', stiffness: 220, damping: 14, delay: 0.08 }}
                   className="flex items-baseline justify-center gap-1"
                 >
                   <span className="text-6xl font-bold font-mono" style={{ color: rating.color }}>{finalScore}</span>
-                  <span className="text-2xl text-white/65 font-mono">/ 10</span>
+                  <span className="text-2xl text-[#1a1712]/65 font-mono">/ 10</span>
                 </motion.div>
               </div>
 
               <div>
                 <p className="text-lg font-semibold" style={{ color: rating.color }}>{rating.label}</p>
-                <p className="text-white text-sm mt-1">{rating.sub}</p>
+                <p className="text-[#1a1712] text-sm mt-1">{rating.sub}</p>
               </div>
 
               <div className="flex flex-col gap-3">
@@ -343,9 +343,9 @@ export function TrackOutlineGame() {
             { label: 'Correct',    value: String(stats.totalCorrect) },
             { label: 'Games',      value: String(stats.gamesPlayed) },
           ].map(s => (
-            <div key={s.label} className="rounded-xl border border-[#141414] bg-[#070707] px-3 py-3 text-center">
-              <p className="text-white text-base font-mono font-bold">{s.value}</p>
-              <p className="text-white/65 text-[10px] font-mono uppercase tracking-wider mt-0.5">{s.label}</p>
+            <div key={s.label} className="rounded-xl border border-[#dcd5c6] bg-[#f3eee3] px-3 py-3 text-center">
+              <p className="text-[#1a1712] text-base font-mono font-bold">{s.value}</p>
+              <p className="text-[#1a1712]/65 text-[10px] font-mono uppercase tracking-wider mt-0.5">{s.label}</p>
             </div>
           ))}
         </motion.div>

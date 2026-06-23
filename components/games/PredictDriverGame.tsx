@@ -190,9 +190,9 @@ function SetupScreen({ onStart }: { onStart: (m: GameMode, d: Difficulty) => voi
       className="w-full max-w-lg mx-auto"
     >
       {/* Rules */}
-      <div className="rounded-2xl border border-[#1a1a1a] bg-[#080808] p-6 mb-5">
-        <p className="text-white text-[10px] font-mono uppercase tracking-widest mb-3">How to play</p>
-        <ul className="space-y-2 text-white text-sm leading-relaxed">
+      <div className="rounded-2xl border border-[#dcd5c6] bg-[#fbf9f4] p-6 mb-5">
+        <p className="text-[#1a1712] text-[10px] font-mono uppercase tracking-widest mb-3">How to play</p>
+        <ul className="space-y-2 text-[#1a1712] text-sm leading-relaxed">
           <li className="flex gap-2.5">
             <span className="text-[#d4a017] shrink-0">—</span>
             Guess the mystery F1 driver in <span className="text-[#d4a017]">6 attempts</span>.
@@ -224,7 +224,7 @@ function SetupScreen({ onStart }: { onStart: (m: GameMode, d: Difficulty) => voi
 
       {/* Mode */}
       <div className="mb-4">
-        <p className="text-white text-[10px] font-mono uppercase tracking-widest mb-2.5">Mode</p>
+        <p className="text-[#1a1712] text-[10px] font-mono uppercase tracking-widest mb-2.5">Mode</p>
         <div className="grid grid-cols-2 gap-2">
           {(['daily', 'endless'] as GameMode[]).map(m => (
             <button
@@ -233,7 +233,7 @@ function SetupScreen({ onStart }: { onStart: (m: GameMode, d: Difficulty) => voi
               className={`py-3.5 rounded-xl border font-medium text-sm capitalize transition-all ${
                 mode === m
                   ? 'border-[#d4a017]/50 bg-[#d4a017]/10 text-[#d4a017]'
-                  : 'border-[#1a1a1a] bg-[#080808] text-white hover:border-[#2a2a2a]'
+                  : 'border-[#dcd5c6] bg-[#fbf9f4] text-[#1a1712] hover:border-[#cfc7b5]'
               }`}
             >
               {m === 'daily' ? '📅 Daily' : '∞ Endless'}
@@ -244,7 +244,7 @@ function SetupScreen({ onStart }: { onStart: (m: GameMode, d: Difficulty) => voi
 
       {/* Difficulty */}
       <div className="mb-6">
-        <p className="text-white text-[10px] font-mono uppercase tracking-widest mb-2.5">Difficulty</p>
+        <p className="text-[#1a1712] text-[10px] font-mono uppercase tracking-widest mb-2.5">Difficulty</p>
         <div className="grid grid-cols-2 gap-2">
           {DIFFICULTIES.map(d => (
             <button
@@ -253,13 +253,13 @@ function SetupScreen({ onStart }: { onStart: (m: GameMode, d: Difficulty) => voi
               className={`py-3 px-4 rounded-xl border text-left transition-all ${
                 difficulty === d.key
                   ? 'border-[#d4a017]/50 bg-[#d4a017]/10'
-                  : 'border-[#1a1a1a] bg-[#080808] hover:border-[#2a2a2a]'
+                  : 'border-[#dcd5c6] bg-[#fbf9f4] hover:border-[#cfc7b5]'
               }`}
             >
-              <p className={`text-sm font-medium ${difficulty === d.key ? 'text-[#d4a017]' : 'text-white'}`}>
+              <p className={`text-sm font-medium ${difficulty === d.key ? 'text-[#d4a017]' : 'text-[#1a1712]'}`}>
                 {d.label}
               </p>
-              <p className="text-white/70 text-xs mt-0.5">{d.desc}</p>
+              <p className="text-[#1a1712]/70 text-xs mt-0.5">{d.desc}</p>
             </button>
           ))}
         </div>
@@ -308,7 +308,7 @@ function GameScreen({
     <div className="w-full">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
-        <span className="text-white text-[10px] font-mono uppercase tracking-widest">
+        <span className="text-[#1a1712] text-[10px] font-mono uppercase tracking-widest">
           {mode === 'daily' ? 'Daily' : 'Endless'} · {difficulty}
         </span>
         <div className="flex items-center gap-1.5">
@@ -318,11 +318,11 @@ function GameScreen({
               className={`w-3 h-3 rounded-full border transition-colors ${
                 i < guesses.length
                   ? 'bg-[#d4a017] border-[#d4a017]'
-                  : 'bg-transparent border-[#2a2a2a]'
+                  : 'bg-transparent border-[#cfc7b5]'
               }`}
             />
           ))}
-          <span className="text-white text-xs font-mono ml-2">{remaining} left</span>
+          <span className="text-[#1a1712] text-xs font-mono ml-2">{remaining} left</span>
         </div>
       </div>
 
@@ -343,7 +343,7 @@ function GameScreen({
           {COLUMNS.map(col => (
             <div
               key={col.key}
-              className="text-white/65 text-[10px] font-mono uppercase tracking-wider text-center"
+              className="text-[#1a1712]/65 text-[10px] font-mono uppercase tracking-wider text-center"
               style={{ flex: col.flex, minWidth: col.minWidth }}
             >
               {col.label}
@@ -362,10 +362,10 @@ function GameScreen({
               className="flex gap-1"
             >
               <div
-                className="flex items-center px-2 rounded-lg border border-[#1a1a1a] bg-[#080808]"
+                className="flex items-center px-2 rounded-lg border border-[#dcd5c6] bg-[#fbf9f4]"
                 style={{ flex: '0 0 100px', minHeight: 48 }}
               >
-                <span className="text-white text-xs font-medium leading-snug">{g.driver.name}</span>
+                <span className="text-[#1a1712] text-xs font-medium leading-snug">{g.driver.name}</span>
               </div>
               {COLUMNS.map(col => (
                 <HintCell
@@ -381,11 +381,11 @@ function GameScreen({
           {/* Empty remaining rows */}
           {Array.from({ length: remaining }, (_, i) => (
             <div key={`empty-${i}`} className="flex gap-1 opacity-20">
-              <div className="h-12 rounded-lg border border-[#111111]" style={{ flex: '0 0 100px' }} />
+              <div className="h-12 rounded-lg border border-[#e2dccd]" style={{ flex: '0 0 100px' }} />
               {COLUMNS.map(col => (
                 <div
                   key={col.key}
-                  className="h-12 rounded-lg border border-[#111111]"
+                  className="h-12 rounded-lg border border-[#e2dccd]"
                   style={{ flex: col.flex, minWidth: col.minWidth }}
                 />
               ))}
@@ -400,9 +400,9 @@ function GameScreen({
 // ── Hint cell ─────────────────────────────────────────────────────────────────
 
 const COLOR_CLASSES: Record<HintColor, string> = {
-  green:  'bg-[#0d2010] border-[#38b000]/35 text-[#38b000]',
-  yellow: 'bg-[#1a1400] border-[#d4a017]/35 text-[#d4a017]',
-  red:    'bg-[#150808] border-[#883333]/35 text-[#cc4444]',
+  green:  'bg-[#e6f0e0] border-[#38b000]/45 text-[#2e7d00]',
+  yellow: 'bg-[#f5edd2] border-[#d4a017]/45 text-[#9a7209]',
+  red:    'bg-[#f7e3e3] border-[#cc4444]/45 text-[#c4122f]',
 }
 
 function HintCell({ hint, colFlex, colMinWidth }: { hint: CellHint; colFlex: number; colMinWidth: number }) {
@@ -472,7 +472,7 @@ function DriverSearch({
         onChange={e => { setQuery(e.target.value); setOpen(true) }}
         onFocus={() => query && setOpen(true)}
         placeholder={disabled ? 'No guesses remaining' : 'Search for a driver…'}
-        className="w-full px-4 py-3.5 rounded-xl border border-[#1a1a1a] bg-[#080808] text-white text-sm placeholder-[#888888] focus:outline-none focus:border-[#d4a017]/40 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+        className="w-full px-4 py-3.5 rounded-xl border border-[#dcd5c6] bg-[#fbf9f4] text-[#1a1712] text-sm placeholder-[#a89f8c] focus:outline-none focus:border-[#d4a017]/40 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
       />
 
       <AnimatePresence>
@@ -482,16 +482,16 @@ function DriverSearch({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 4 }}
             transition={{ duration: 0.15 }}
-            className="absolute z-20 left-0 right-0 mt-1 rounded-xl border border-[#1a1a1a] bg-[#0a0a0a] overflow-hidden shadow-2xl"
+            className="absolute z-20 left-0 right-0 mt-1 rounded-xl border border-[#dcd5c6] bg-[#ffffff] overflow-hidden shadow-2xl"
           >
             {results.map(driver => (
               <button
                 key={driver.id}
                 onMouseDown={() => select(driver)}
-                className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-[#111111] transition-colors border-b border-[#0f0f0f] last:border-0"
+                className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-[#ece6d9] transition-colors border-b border-[#e2dccd] last:border-0"
               >
-                <span className="text-white text-sm">{driver.name}</span>
-                <span className="text-white/70 text-xs font-mono">
+                <span className="text-[#1a1712] text-sm">{driver.name}</span>
+                <span className="text-[#1a1712]/70 text-xs font-mono">
                   {driver.nationality} · {driver.debutYear}
                 </span>
               </button>
@@ -540,70 +540,70 @@ function ResultScreen({
       className="w-full max-w-lg mx-auto"
     >
       {/* Outcome */}
-      <div className="rounded-2xl border border-[#1a1a1a] bg-[#080808] overflow-hidden mb-4">
-        <div className="px-6 py-5 border-b border-[#111111]">
+      <div className="rounded-2xl border border-[#dcd5c6] bg-[#fbf9f4] overflow-hidden mb-4">
+        <div className="px-6 py-5 border-b border-[#e2dccd]">
           <p className={`text-[10px] font-mono uppercase tracking-widest mb-1 ${won ? 'text-[#38b000]' : 'text-[#cc4444]'}`}>
             {won ? (dailyAlreadyPlayed ? 'Already completed today' : 'Correct!') : 'The answer was'}
           </p>
           <h2
-            className="text-2xl md:text-3xl text-white"
+            className="text-2xl md:text-3xl text-[#1a1712]"
             style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
           >
             {mystery.name}
           </h2>
-          <p className="text-white text-sm mt-1">
+          <p className="text-[#1a1712] text-sm mt-1">
             {mystery.nationality} · {mystery.championships > 0 ? `${mystery.championships}× World Champion` : 'No championships'} · Debuted {mystery.debutYear}
           </p>
         </div>
 
         {/* Stats row */}
-        <div className="grid grid-cols-3 divide-x divide-[#111111]">
+        <div className="grid grid-cols-3 divide-x divide-[#e2dccd]">
           <div className="px-4 py-4 text-center">
-            <p className="text-white text-[10px] font-mono uppercase tracking-wider mb-1">Wins</p>
-            <p className="text-white text-lg font-mono">{mystery.wins}</p>
+            <p className="text-[#1a1712] text-[10px] font-mono uppercase tracking-wider mb-1">Wins</p>
+            <p className="text-[#1a1712] text-lg font-mono">{mystery.wins}</p>
           </div>
           <div className="px-4 py-4 text-center">
-            <p className="text-white text-[10px] font-mono uppercase tracking-wider mb-1">Poles</p>
-            <p className="text-white text-lg font-mono">{mystery.poles}</p>
+            <p className="text-[#1a1712] text-[10px] font-mono uppercase tracking-wider mb-1">Poles</p>
+            <p className="text-[#1a1712] text-lg font-mono">{mystery.poles}</p>
           </div>
           <div className="px-4 py-4 text-center">
-            <p className="text-white text-[10px] font-mono uppercase tracking-wider mb-1">Teams</p>
-            <p className="text-white text-sm font-mono">{mystery.teams.length}</p>
+            <p className="text-[#1a1712] text-[10px] font-mono uppercase tracking-wider mb-1">Teams</p>
+            <p className="text-[#1a1712] text-sm font-mono">{mystery.teams.length}</p>
           </div>
         </div>
       </div>
 
       {/* Session stats */}
       {!dailyAlreadyPlayed && (
-        <div className="rounded-2xl border border-[#1a1a1a] bg-[#080808] p-5 mb-4">
-          <p className="text-white text-[10px] font-mono uppercase tracking-widest mb-4">Your stats</p>
+        <div className="rounded-2xl border border-[#dcd5c6] bg-[#fbf9f4] p-5 mb-4">
+          <p className="text-[#1a1712] text-[10px] font-mono uppercase tracking-widest mb-4">Your stats</p>
           {mode === 'daily' ? (
             <div className="flex items-center justify-center gap-8">
               <div className="text-center">
-                <p className="text-white text-2xl font-mono">{streak.current}</p>
-                <p className="text-white text-xs font-mono mt-1">Current streak</p>
+                <p className="text-[#1a1712] text-2xl font-mono">{streak.current}</p>
+                <p className="text-[#1a1712] text-xs font-mono mt-1">Current streak</p>
               </div>
-              <div className="w-px h-10 bg-[#111111]" />
+              <div className="w-px h-10 bg-[#ece6d9]" />
               <div className="text-center">
-                <p className="text-white text-2xl font-mono">{streak.best}</p>
-                <p className="text-white text-xs font-mono mt-1">Best streak</p>
+                <p className="text-[#1a1712] text-2xl font-mono">{streak.best}</p>
+                <p className="text-[#1a1712] text-xs font-mono mt-1">Best streak</p>
               </div>
             </div>
           ) : (
             <div className="flex items-center justify-center gap-6">
               <div className="text-center">
-                <p className="text-white text-2xl font-mono">{endless.wins}</p>
-                <p className="text-white text-xs font-mono mt-1">Wins</p>
+                <p className="text-[#1a1712] text-2xl font-mono">{endless.wins}</p>
+                <p className="text-[#1a1712] text-xs font-mono mt-1">Wins</p>
               </div>
-              <div className="w-px h-10 bg-[#111111]" />
+              <div className="w-px h-10 bg-[#ece6d9]" />
               <div className="text-center">
-                <p className="text-white text-2xl font-mono">{endless.streak}</p>
-                <p className="text-white text-xs font-mono mt-1">Streak</p>
+                <p className="text-[#1a1712] text-2xl font-mono">{endless.streak}</p>
+                <p className="text-[#1a1712] text-xs font-mono mt-1">Streak</p>
               </div>
-              <div className="w-px h-10 bg-[#111111]" />
+              <div className="w-px h-10 bg-[#ece6d9]" />
               <div className="text-center">
-                <p className="text-white text-2xl font-mono">{endless.best}</p>
-                <p className="text-white text-xs font-mono mt-1">Best</p>
+                <p className="text-[#1a1712] text-2xl font-mono">{endless.best}</p>
+                <p className="text-[#1a1712] text-xs font-mono mt-1">Best</p>
               </div>
             </div>
           )}
@@ -612,15 +612,15 @@ function ResultScreen({
 
       {/* Guess summary */}
       {guesses.length > 0 && (
-        <div className="rounded-2xl border border-[#1a1a1a] bg-[#080808] p-5 mb-5">
-          <p className="text-white text-[10px] font-mono uppercase tracking-widest mb-3">
+        <div className="rounded-2xl border border-[#dcd5c6] bg-[#fbf9f4] p-5 mb-5">
+          <p className="text-[#1a1712] text-[10px] font-mono uppercase tracking-widest mb-3">
             {won ? `Solved in ${guesses.length} ${guesses.length === 1 ? 'guess' : 'guesses'}` : `${guesses.length} / ${MAX_GUESSES} guesses used`}
           </p>
           <div className="space-y-1">
             {guesses.map((g, i) => (
               <div key={g.driver.id} className="flex items-center gap-2">
-                <span className="text-white text-[10px] font-mono w-4">{i + 1}</span>
-                <span className={`text-sm ${g.driver.id === mystery.id ? 'text-[#38b000]' : 'text-white'}`}>
+                <span className="text-[#1a1712] text-[10px] font-mono w-4">{i + 1}</span>
+                <span className={`text-sm ${g.driver.id === mystery.id ? 'text-[#38b000]' : 'text-[#1a1712]'}`}>
                   {g.driver.name}
                 </span>
                 {g.driver.id === mystery.id && (
@@ -647,13 +647,13 @@ function ResultScreen({
               Play Again
             </button>
           ) : (
-            <p className="flex-1 py-4 text-center text-white text-sm font-mono">
+            <p className="flex-1 py-4 text-center text-[#1a1712] text-sm font-mono">
               Come back tomorrow for a new driver.
             </p>
           )}
           <button
             onClick={onBackToSetup}
-            className="flex-1 py-4 bg-white/5 text-white font-medium rounded-xl border border-white/10 hover:bg-white/8 transition-all"
+            className="flex-1 py-4 bg-[#1a1712]/5 text-[#1a1712] font-medium rounded-xl border border-[#1a1712]/12 hover:bg-[#1a1712]/8 transition-all"
           >
             Change Mode
           </button>

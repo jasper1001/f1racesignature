@@ -154,15 +154,15 @@ export default function GamesPage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(gamesJsonLd) }} />
       <Header />
-      <main className="pt-14 min-h-screen" style={{ background: '#030303' }}>
+      <main className="pt-14 min-h-screen" style={{ background: '#f4f1ea' }}>
 
         {/* Hero */}
-        <div className="relative border-b border-[#0f0f0f] py-20 px-6 text-center overflow-hidden">
+        <div className="relative border-b border-[#dcd5c6] py-20 px-6 text-center overflow-hidden">
           {/* Dot-grid texture */}
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
-              backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.035) 1px, transparent 1px)',
+              backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.045) 1px, transparent 1px)',
               backgroundSize: '28px 28px',
             }}
           />
@@ -177,12 +177,12 @@ export default function GamesPage() {
             Mini Games
           </p>
           <h1
-            className="relative text-4xl md:text-5xl text-white mb-4"
+            className="relative text-4xl md:text-5xl text-[#1a1712] mb-4"
             style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
           >
             Test Your F1 Instincts
           </h1>
-          <p className="relative text-white max-w-md mx-auto text-sm leading-relaxed">
+          <p className="relative text-[#1a1712] max-w-md mx-auto text-sm leading-relaxed">
             Lightweight F1-themed challenges you can complete in under two minutes.
             Best scores saved automatically.
           </p>
@@ -195,7 +195,7 @@ export default function GamesPage() {
               <Link
                 key={game.id}
                 href={game.href}
-                className="group relative block rounded-2xl border border-[#1a1a1a] bg-[#080808] p-6 transition-all duration-300 overflow-hidden hover:border-[#252525] hover:-translate-y-0.5 hover:shadow-2xl"
+                className="group relative block rounded-2xl border border-[#dcd5c6] bg-[#fbf9f4] p-6 transition-all duration-300 overflow-hidden hover:border-[#c4bca8] hover:-translate-y-0.5 hover:shadow-xl"
               >
                 {/* Left accent stripe */}
                 <div
@@ -231,16 +231,16 @@ export default function GamesPage() {
 
                 {/* Title */}
                 <h2
-                  className="text-2xl text-white mb-3 transition-colors duration-200"
+                  className="text-2xl text-[#1a1712] mb-3 transition-colors duration-200"
                   style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
                 >
                   {game.title}
                 </h2>
 
-                <p className="text-white text-sm leading-relaxed mb-5">{game.description}</p>
+                <p className="text-[#1a1712] text-sm leading-relaxed mb-5">{game.description}</p>
 
                 <div className="flex items-center justify-between">
-                  <span className="text-white text-xs font-mono">{game.duration}</span>
+                  <span className="text-[#1a1712] text-xs font-mono">{game.duration}</span>
                   <span
                     className="inline-flex items-center gap-1.5 text-sm font-semibold transition-transform duration-200 group-hover:translate-x-0.5"
                     style={{ color: game.accent }}
@@ -255,21 +255,21 @@ export default function GamesPage() {
             ))}
 
             {/* Coming soon */}
-            <div className="relative rounded-2xl border border-[#0f0f0f] bg-[#050505] p-6 overflow-hidden">
-              <div className="absolute left-0 top-0 bottom-0 w-[3px] rounded-l-2xl bg-[#1a1a1a]" />
+            <div className="relative rounded-2xl border border-dashed border-[#d0c8b6] bg-[#efe9dd] p-6 overflow-hidden">
+              <div className="absolute left-0 top-0 bottom-0 w-[3px] rounded-l-2xl bg-[#d0c8b6]" />
               <div className="mb-5">
-                <div className="w-12 h-12 rounded-xl border border-[#111111] bg-[#080808] flex items-center justify-center">
-                  <span className="text-[#222222] text-xl">?</span>
+                <div className="w-12 h-12 rounded-xl border border-[#d8d2c4] bg-[#f4f1ea] flex items-center justify-center">
+                  <span className="text-[#a89f8c] text-xl">?</span>
                 </div>
               </div>
-              <p className="text-[#222222] text-xs font-mono uppercase tracking-widest mb-2">Coming Soon</p>
+              <p className="text-[#a89f8c] text-xs font-mono uppercase tracking-widest mb-2">Coming Soon</p>
               <h2
-                className="text-2xl text-[#222222] mb-3"
+                className="text-2xl text-[#a89f8c] mb-3"
                 style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
               >
                 More Challenges
               </h2>
-              <p className="text-[#1a1a1a] text-sm leading-relaxed">More F1 mini games are in development.</p>
+              <p className="text-[#b3aa97] text-sm leading-relaxed">More F1 mini games are in development.</p>
             </div>
           </div>
         </div>

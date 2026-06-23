@@ -49,14 +49,14 @@ export default function PredictDriverPage() {
         },
       }) }} />
       <Header />
-      <main className="pt-14 min-h-screen" style={{ background: '#030303' }}>
+      <main className="pt-14 min-h-screen" style={{ background: '#f4f1ea' }}>
 
         {/* Hero */}
-        <div className="relative border-b border-[#0f0f0f] py-16 px-6 text-center overflow-hidden">
+        <div className="relative border-b border-[#dcd5c6] py-16 px-6 text-center overflow-hidden">
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
-              backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.035) 1px, transparent 1px)',
+              backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.045) 1px, transparent 1px)',
               backgroundSize: '28px 28px',
             }}
           />
@@ -69,7 +69,7 @@ export default function PredictDriverPage() {
 
           <Link
             href="/games"
-            className="relative inline-flex items-center gap-1.5 text-white text-xs font-mono uppercase tracking-widest hover:text-[#6366f1] transition-colors mb-6"
+            className="relative inline-flex items-center gap-1.5 text-[#1a1712] text-xs font-mono uppercase tracking-widest hover:text-[#6366f1] transition-colors mb-6"
           >
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
               <path d="M8 2L4 6l4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -81,18 +81,18 @@ export default function PredictDriverPage() {
             F1 Wordle
           </p>
           <h1
-            className="relative text-4xl md:text-5xl text-white mb-4"
+            className="relative text-4xl md:text-5xl text-[#1a1712] mb-4"
             style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
           >
             Predict the Driver
           </h1>
-          <p className="relative text-white text-sm max-w-sm mx-auto leading-relaxed">
+          <p className="relative text-[#1a1712] text-sm max-w-sm mx-auto leading-relaxed">
             Can you identify the mystery F1 driver in 6 guesses?
           </p>
         </div>
 
         <div className="max-w-6xl mx-auto px-4 py-12">
-          <div className="rounded-2xl bg-[#060606] overflow-hidden p-5 md:p-8" style={{ border: '1px solid rgba(99,102,241,0.25)', boxShadow: '0 0 0 1px rgba(99,102,241,0.06), 0 0 40px rgba(99,102,241,0.06)' }}>
+          <div className="rounded-2xl bg-[#fbf9f4] overflow-hidden p-5 md:p-8" style={{ border: '1px solid rgba(99,102,241,0.25)', boxShadow: '0 0 0 1px rgba(99,102,241,0.06), 0 0 40px rgba(99,102,241,0.06)' }}>
             <PredictDriverGame />
           </div>
         </div>

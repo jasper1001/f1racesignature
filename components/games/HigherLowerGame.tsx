@@ -166,7 +166,7 @@ export function HigherLowerGame() {
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border"
             style={{ background: 'rgba(212,160,23,0.08)', borderColor: 'rgba(212,160,23,0.2)' }}
           >
-            <span className="text-white text-[10px] font-mono uppercase tracking-widest">Streak</span>
+            <span className="text-[#1a1712] text-[10px] font-mono uppercase tracking-widest">Streak</span>
             <motion.span
               key={streak}
               initial={{ scale: 1.5 }}
@@ -188,9 +188,9 @@ export function HigherLowerGame() {
           </div>
         </div>
         {/* Best */}
-        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/8 bg-white/4">
-          <span className="text-white text-[10px] font-mono uppercase tracking-widest">Best</span>
-          <span className="text-white text-xl font-mono font-bold tabular-nums">{bestStreak}</span>
+        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[#1a1712]/10 bg-[#1a1712]/4">
+          <span className="text-[#1a1712] text-[10px] font-mono uppercase tracking-widest">Best</span>
+          <span className="text-[#1a1712] text-xl font-mono font-bold tabular-nums">{bestStreak}</span>
         </div>
       </div>
 
@@ -225,18 +225,18 @@ export function HigherLowerGame() {
           initial={{ opacity: 0, x: -16 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.3 }}
-          className="flex-1 rounded-2xl border border-[#1f1f1f] p-6 flex flex-col items-center justify-center text-center relative overflow-hidden"
+          className="flex-1 rounded-2xl border border-[#dcd5c6] p-6 flex flex-col items-center justify-center text-center relative overflow-hidden"
           style={{
             minHeight: 188,
-            background: 'linear-gradient(145deg, #0e0e0e 0%, #080808 100%)',
+            background: 'linear-gradient(145deg, #ffffff 0%, #f3eee3 100%)',
           }}
         >
           {/* Top edge highlight */}
-          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/6 to-transparent" />
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#1a1712]/10 to-transparent" />
 
-          <p className="text-white text-[10px] font-mono uppercase tracking-widest mb-3 opacity-50">Driver A</p>
+          <p className="text-[#1a1712] text-[10px] font-mono uppercase tracking-widest mb-3 opacity-50">Driver A</p>
           <p
-            className="text-white text-xl font-semibold leading-snug mb-4"
+            className="text-[#1a1712] text-xl font-semibold leading-snug mb-4"
             style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
           >
             {driverA.name}
@@ -254,7 +254,7 @@ export function HigherLowerGame() {
 
         {/* VS badge */}
         <div className="flex md:flex-col items-center justify-center gap-2 py-2 md:py-0 md:px-1">
-          <div className="hidden md:block w-px flex-1 bg-[#1a1a1a]" />
+          <div className="hidden md:block w-px flex-1 bg-[#dcd5c6]" />
           <div
             className="w-12 h-12 rounded-full flex items-center justify-center shrink-0"
             style={{
@@ -265,7 +265,7 @@ export function HigherLowerGame() {
           >
             <span className="text-[#d4a017] font-mono font-bold text-xs tracking-widest">VS</span>
           </div>
-          <div className="hidden md:block w-px flex-1 bg-[#1a1a1a]" />
+          <div className="hidden md:block w-px flex-1 bg-[#dcd5c6]" />
         </div>
 
         {/* Driver B */}
@@ -279,20 +279,20 @@ export function HigherLowerGame() {
             minHeight: 188,
             background: phase === 'revealing'
               ? isCorrect
-                ? 'linear-gradient(145deg, #0c1f0c 0%, #080808 100%)'
-                : 'linear-gradient(145deg, #1f0c0c 0%, #080808 100%)'
-              : 'linear-gradient(145deg, #0e0e0e 0%, #080808 100%)',
+                ? 'linear-gradient(145deg, #e3f0dd 0%, #f6f2e8 100%)'
+                : 'linear-gradient(145deg, #f5e0e0 0%, #f6f2e8 100%)'
+              : 'linear-gradient(145deg, #ffffff 0%, #f3eee3 100%)',
             borderColor: phase === 'revealing'
               ? isCorrect ? 'rgba(56,176,0,0.4)' : 'rgba(204,68,68,0.4)'
-              : '#1f1f1f',
+              : '#dcd5c6',
           }}
         >
           {/* Top edge highlight */}
-          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/6 to-transparent" />
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#1a1712]/10 to-transparent" />
 
-          <p className="text-white text-[10px] font-mono uppercase tracking-widest mb-3 opacity-50">Driver B</p>
+          <p className="text-[#1a1712] text-[10px] font-mono uppercase tracking-widest mb-3 opacity-50">Driver B</p>
           <p
-            className="text-white text-xl font-semibold leading-snug mb-4"
+            className="text-[#1a1712] text-xl font-semibold leading-snug mb-4"
             style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
           >
             {driverB.name}
@@ -304,7 +304,7 @@ export function HigherLowerGame() {
                 key="hidden"
                 exit={{ opacity: 0, scale: 0.6 }}
                 className="text-5xl font-mono font-bold"
-                style={{ color: 'rgba(255,255,255,0.12)' }}
+                style={{ color: 'rgba(0,0,0,0.18)' }}
               >
                 ?
               </motion.p>
@@ -353,17 +353,17 @@ export function HigherLowerGame() {
               >
                 {isCorrect ? '✓ Correct!' : '✗ Wrong!'}
               </p>
-              <p className="text-white text-sm">
+              <p className="text-[#1a1712] text-sm">
                 <span className="font-semibold">{driverB.name}</span> has{' '}
                 <span className="font-semibold">{bVal > aVal ? 'more' : 'fewer'}</span>{' '}
                 {STAT_CONFIG[stat].toLowerCase()} than{' '}
                 <span className="font-semibold">{driverA.name}</span>{' '}
-                <span style={{ color: 'rgba(255,255,255,0.45)' }}>({aVal} vs {bVal})</span>
+                <span style={{ color: 'rgba(0,0,0,0.45)' }}>({aVal} vs {bVal})</span>
               </p>
             </div>
 
             {/* Fun fact */}
-            <div className="rounded-xl border border-[#1a1a1a] bg-[#080808] p-4 relative overflow-hidden">
+            <div className="rounded-xl border border-[#dcd5c6] bg-[#fbf9f4] p-4 relative overflow-hidden">
               <span
                 className="absolute top-1 left-3 font-serif text-5xl leading-none select-none pointer-events-none"
                 style={{ color: 'rgba(212,160,23,0.12)' }}
@@ -371,7 +371,7 @@ export function HigherLowerGame() {
                 "
               </span>
               <p className="text-[#d4a017] text-[10px] font-mono uppercase tracking-widest mb-1.5 pl-2">Did you know?</p>
-              <p className="text-white text-sm leading-relaxed pl-2">{winner.fact}</p>
+              <p className="text-[#1a1712] text-sm leading-relaxed pl-2">{winner.fact}</p>
             </div>
           </motion.div>
         )}
@@ -450,20 +450,20 @@ function EndScreen({
       className="w-full"
     >
       {/* Score card */}
-      <div className="rounded-2xl border border-[#1a1a1a] overflow-hidden mb-4 relative" style={{ background: 'linear-gradient(160deg, #0e0e0e 0%, #080808 100%)' }}>
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/6 to-transparent" />
-        <div className="px-6 py-6 text-center border-b border-[#111111]">
+      <div className="rounded-2xl border border-[#dcd5c6] overflow-hidden mb-4 relative" style={{ background: 'linear-gradient(160deg, #ffffff 0%, #f3eee3 100%)' }}>
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#1a1712]/10 to-transparent" />
+        <div className="px-6 py-6 text-center border-b border-[#e2dccd]">
           <p className="text-[#cc4444] text-[10px] font-mono uppercase tracking-widest mb-4">Game Over</p>
           <motion.p
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: 'spring', stiffness: 200, damping: 16, delay: 0.1 }}
-            className="text-white font-mono font-bold mb-1 tabular-nums"
+            className="text-[#1a1712] font-mono font-bold mb-1 tabular-nums"
             style={{ fontSize: '5rem', lineHeight: 1, textShadow: '0 0 40px rgba(212,160,23,0.2)' }}
           >
             {streak}
           </motion.p>
-          <p className="text-white text-sm font-mono mb-5 opacity-60">Streak</p>
+          <p className="text-[#1a1712] text-sm font-mono mb-5 opacity-60">Streak</p>
           <motion.span
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -480,23 +480,23 @@ function EndScreen({
           </motion.span>
         </div>
 
-        <div className="grid grid-cols-3 divide-x divide-[#111111]">
+        <div className="grid grid-cols-3 divide-x divide-[#e2dccd]">
           {[
             { label: 'Best',    value: bestStreak },
             { label: 'Games',   value: persist.totalGames },
             { label: 'Correct', value: persist.totalCorrect },
           ].map(s => (
             <div key={s.label} className="px-4 py-4 text-center">
-              <p className="text-white text-[10px] font-mono uppercase tracking-wider mb-1 opacity-50">{s.label}</p>
-              <p className="text-white text-xl font-mono font-bold tabular-nums">{s.value}</p>
+              <p className="text-[#1a1712] text-[10px] font-mono uppercase tracking-wider mb-1 opacity-50">{s.label}</p>
+              <p className="text-[#1a1712] text-xl font-mono font-bold tabular-nums">{s.value}</p>
             </div>
           ))}
         </div>
       </div>
 
       {/* Rating ladder */}
-      <div className="rounded-2xl border border-[#1a1a1a] bg-[#080808] p-5 mb-4">
-        <p className="text-white text-[10px] font-mono uppercase tracking-widest mb-3 opacity-50">Rating Scale</p>
+      <div className="rounded-2xl border border-[#dcd5c6] bg-[#fbf9f4] p-5 mb-4">
+        <p className="text-[#1a1712] text-[10px] font-mono uppercase tracking-widest mb-3 opacity-50">Rating Scale</p>
         <div className="space-y-2">
           {RATINGS.map(r => (
             <div
@@ -510,7 +510,7 @@ function EndScreen({
               <span
                 className="text-sm font-medium"
                 style={{
-                  color: r.label === rating ? '#d4a017' : 'rgba(255,255,255,0.3)',
+                  color: r.label === rating ? '#9a7209' : 'rgba(0,0,0,0.5)',
                   fontWeight: r.label === rating ? 700 : 400,
                 }}
               >
@@ -518,7 +518,7 @@ function EndScreen({
               </span>
               <span
                 className="text-xs font-mono"
-                style={{ color: r.label === rating ? '#d4a017' : 'rgba(255,255,255,0.2)' }}
+                style={{ color: r.label === rating ? '#9a7209' : 'rgba(0,0,0,0.38)' }}
               >
                 {r.range}
               </span>

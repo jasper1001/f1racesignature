@@ -41,6 +41,25 @@ export default function StudioPage() {
   const [zoom, setZoom] = useState(0.85)
   const [mobileTab, setMobileTab] = useState<MobileTab>('preview')
 
+  // Mobile preview — scale the poster to fit the available pane so it never
+  // overflows (a CSS transform doesn't shrink the layout box, so an oversized
+  // poster gets centered and clipped with no way to scroll to it).
+  const mobilePreviewRef = useRef<HTMLDivElement>(null)
+  const [mobileScale, setMobileScale] = useState(0.6)
+  useEffect(() => {
+    if (mobileTab !== 'preview' || !selectedDriverId) return
+    const compute = () => {
+      const el = mobilePreviewRef.current
+      if (!el) return
+      const pad = 24
+      const s = Math.min((el.clientWidth - pad) / POSTER_W, (el.clientHeight - pad) / POSTER_H)
+      setMobileScale(Math.max(0.1, +s.toFixed(3)))
+    }
+    compute()
+    window.addEventListener('resize', compute)
+    return () => window.removeEventListener('resize', compute)
+  }, [mobileTab, selectedDriverId])
+
   // Fullscreen canvas — overlay the poster scaled to fit the viewport
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [fsScale, setFsScale] = useState(1)
@@ -418,23 +437,21 @@ export default function StudioPage() {
                     <ExportButton onBeforeExport={() => setIsPlaying(false)} />
                   </div>
                 </div>
-                {/* Poster — scaled to fit mobile screen */}
-                <div className="flex-1 flex items-center justify-center overflow-auto p-4">
+                {/* Poster — scaled to fit the mobile pane so it never overflows */}
+                <div ref={mobilePreviewRef} className="flex-1 flex items-center justify-center overflow-hidden p-3">
                   {!selectedDriver ? (
                     <div className="text-center">
                       <p className="text-[#aaaaaa] text-sm mb-1">Select a driver to begin</p>
                       <p className="text-[#2a2a2a] text-xs">Tap Controls tab below</p>
                     </div>
                   ) : (
-                    <div
-                      className="poster-wrapper origin-top"
-                      style={{
-                        transform: 'scale(0.62)',
-                        transformOrigin: 'top center',
-                        marginBottom: '-244px',
-                      }}
-                    >
-                      <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compares={compares} playbackProgress={livePlayback} />
+                    <div style={{ width: POSTER_W * mobileScale, height: POSTER_H * mobileScale }}>
+                      <div
+                        className="poster-wrapper"
+                        style={{ transform: `scale(${mobileScale})`, transformOrigin: 'top left' }}
+                      >
+                        <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compares={compares} playbackProgress={livePlayback} />
+                      </div>
                     </div>
                   )}
                 </div>
