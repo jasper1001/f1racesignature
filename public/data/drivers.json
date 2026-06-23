@@ -196,5 +196,27 @@
     "isFree": false,
     "championships": 0,
     "bio": "The teenage prodigy who turned hype into history. Promoted straight to Mercedes, Antonelli answered every doubt with a pole-to-flag win at Monaco — composure and raw speed far beyond his years."
+  },
+  {
+    "id": "raikkonen",
+    "name": "Kimi Räikkönen",
+    "shortName": "RAI",
+    "team": "Ferrari",
+    "nationality": "Finnish",
+    "color": "#9b0000",
+    "isFree": true,
+    "championships": 1,
+    "bio": "The Iceman — ruthless natural speed wrapped in total indifference to the circus around it. 2007 world champion for Ferrari, and one of the most naturally gifted drivers of his era."
+  },
+  {
+    "id": "rosberg",
+    "name": "Nico Rosberg",
+    "shortName": "ROS",
+    "team": "Mercedes",
+    "nationality": "German",
+    "color": "#00d2be",
+    "isFree": true,
+    "championships": 1,
+    "bio": "Beat the greatest driver of his generation in equal machinery, then walked away days later. Rosberg's 2016 title was a campaign of relentless precision — and the nerve to retire on top."
   }
 ]

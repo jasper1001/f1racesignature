@@ -119,6 +119,18 @@ const TEAM_TRANSFERS: Record<string, TeamStint[]> = {
   antonelli: [
     { team: "Mercedes", startYear: 2025, endYear: null, color: "#00d2be" },
   ],
+  raikkonen: [
+    { team: "Sauber", startYear: 2001, endYear: 2001, color: "#52e252" },
+    { team: "McLaren", startYear: 2002, endYear: 2006, color: "#ff8000" },
+    { team: "Ferrari", startYear: 2007, endYear: 2009, color: "#dc0000" },
+    { team: "Lotus", startYear: 2012, endYear: 2013, color: "#f4c020" },
+    { team: "Ferrari", startYear: 2014, endYear: 2018, color: "#dc0000" },
+    { team: "Alfa Romeo", startYear: 2019, endYear: 2021, color: "#900000" },
+  ],
+  rosberg: [
+    { team: "Williams", startYear: 2006, endYear: 2009, color: "#005aff" },
+    { team: "Mercedes", startYear: 2010, endYear: 2016, color: "#00d2be" },
+  ],
 }
 
 export function getTeamTransfers(driverId: string): TeamStint[] {

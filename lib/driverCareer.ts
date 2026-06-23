@@ -166,6 +166,24 @@ export const DRIVER_CAREERS: DriverCareer[] = [
       'In 2026 the prodigy turned promise into a defining result with a pole-to-flag victory at Monaco — the most demanding circuit on the calendar to lead from the front, where a single lapse over seventy-eight laps ends the race against the barriers. To control it from pole as a teenager, against the most experienced grid in the sport, was the performance that moved Antonelli from "future of Mercedes" to a driver the rest of the grid now has to account for. The ceiling, on the evidence so far, is as high as anyone\'s in the field.',
     ],
   },
+  {
+    driverId: 'raikkonen',
+    career: [
+      'Kimi Räikkönen arrived in Formula 1 in 2001 with one of the thinnest résumés in the sport\'s history — just 23 car races before his Sauber debut — and a superlicence granted only after officials were persuaded he was an exception to every rule about experience. He answered the doubt on his first weekend, scoring points at the Australian Grand Prix, and within a year McLaren had signed him to replace Mika Häkkinen. The raw, almost eerie natural speed was obvious immediately; so was the indifference to everything around it that would make him the most distinctive personality of his generation.',
+      'The McLaren years from 2002 to 2006 should have brought a championship and, but for serial mechanical failures, probably would have. He lost the 2003 and 2005 titles as much to unreliability as to anyone\'s driving, and the 2005 season in particular — including a last-lap pass on Giancarlo Fisichella at Suzuka after starting seventeenth — established him as perhaps the fastest pure racer on the grid. When the wins came they were often spectacular, carved out from grid positions that should have made them impossible.',
+      'His world championship came in 2007, his first year at Ferrari, in the closest finish the sport had seen. Räikkönen trailed the two feuding McLarens of Hamilton and Alonso with two races to go and won both, taking the title at the final round in Brazil by a single point. It was a championship won on raw pace and ruthless execution at exactly the moment it was needed — the last Ferrari drivers\' title for fifteen years, and the validation of a talent that had always deserved one.',
+      'After a sabbatical in rallying, Räikkönen returned in 2012 and reminded everyone he had lost nothing, winning in Abu Dhabi with the famous radio message telling his engineers to leave him alone. A second Ferrari spell and a long final chapter at Sauber and Alfa Romeo followed, where he became the most experienced driver in the sport\'s history. The deadpan one-liners turned him into a cult figure, but underneath the "Iceman" persona was one of the most naturally gifted drivers ever to sit in a Formula 1 car.',
+    ],
+  },
+  {
+    driverId: 'rosberg',
+    career: [
+      'Nico Rosberg carried a Formula 1 surname before he ever drove the car — his father Keke was the 1982 world champion — but he built his own career on method rather than inheritance. Fluent in five languages and analytical to the core, he entered the sport with Williams in 2006, marking his debut at Bahrain with the fastest lap and an immediate reputation as a thinking driver. Through four seasons at a declining Williams he showed flashes of the front-running pace the car rarely allowed him to convert.',
+      'His move to Mercedes in 2010 placed him alongside the returning Michael Schumacher, and Rosberg consistently out-scored the seven-time champion over their three years together — quiet evidence of his quality that the wider paddock was slow to acknowledge. His first win came in China in 2012, and as Mercedes built toward the hybrid era he positioned himself perfectly: established, fast, and embedded at the team that was about to dominate Formula 1 completely.',
+      'From 2014 the Mercedes years became a private war with Lewis Hamilton, his childhood karting friend turned fiercest rival. For three seasons they fought for championships in the same dominant car, a contest that grew increasingly bitter — Spa 2014, the collision in Spain 2016, the cold silences. Rosberg lost the 2014 and 2015 titles but refused to break, reorganising his entire approach around the single goal of beating the most complete driver of the era in equal machinery.',
+      'In 2016 he did it. A season of relentless precision, capitalising on every Hamilton misfortune and giving nothing away under extraordinary pressure, delivered the world championship by five points — sealed with a nerveless drive at Abu Dhabi. Then, five days later, Rosberg retired. At 31, as reigning world champion, he simply walked away, having achieved the one thing he had built his entire life around. It remains one of the most singular decisions in the sport\'s history.',
+    ],
+  },
 ]
 
 export function getDriverCareer(driverId: string): string[] {
