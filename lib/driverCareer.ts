@@ -193,6 +193,30 @@ export const DRIVER_CAREERS: DriverCareer[] = [
       'On the strength of that performance, Haas signed him to a full-time race seat for 2025 alongside Esteban Ocon. The Jeddah drive remains the defining image of his early career: a teenager handed an impossible assignment at no notice, who answered it with the calm of a driver who had been doing it for years.',
     ],
   },
+  {
+    driverId: 'hulkenberg',
+    career: [
+      'Nico Hülkenberg arrived in Formula 1 in 2010 with one of the most decorated junior records of his generation — champion of the GP2 Series at the first attempt in 2009 — and almost immediately produced one of the great qualifying performances of the era. At the 2010 Brazilian Grand Prix, in a Williams that had no business being near the front, he took a stunning pole position in changeable conditions, beating the entire field by over a second. It was the first signal of a recurring theme: raw single-lap speed that flattered the machinery he was given.',
+      'What followed was a career defined by a strange and cruel statistic. Across spells at Williams, Force India, Sauber and Renault, Hülkenberg established himself as one of the most reliable and respected drivers on the grid — quick, racecraft-savvy, and metronomically consistent in the midfield — yet the podium kept eluding him. He accumulated the unwanted record for the most Grand Prix starts without a top-three finish, a run so long it became the defining narrative around him, overshadowing a 2015 Le Mans 24 Hours victory on his debut and a reputation as the best stand-in driver in the sport.',
+      'The breakthrough finally came at the 2025 British Grand Prix. Starting nineteenth in a Sauber, Hülkenberg drove a faultless wet-weather race, picking off cars through the chaos at Silverstone to finish third — his first Formula 1 podium after a record-breaking wait that the entire paddock had come to see as one of the sport\'s great injustices. The release of fifteen years of near-misses made it one of the most popular results in recent memory, and set up his move to the works Audi team for the new era.',
+    ],
+  },
+  {
+    driverId: 'hakkinen',
+    career: [
+      'Mika Häkkinen reached Formula 1 in 1991 with Lotus and joined McLaren in 1993, but his defining chapter nearly never came. In qualifying for the 1995 Australian Grand Prix in Adelaide he suffered a near-fatal crash, his life saved by an emergency trackside tracheotomy. That he returned at all was remarkable; that he returned to become a double world champion is one of the great comeback stories in the sport\'s history.',
+      'His back-to-back world championships in 1998 and 1999 with McLaren-Mercedes came at the height of Michael Schumacher\'s powers, and the rivalry between the two became the defining contest of the era — Häkkinen the cool, understated Finn against Schumacher\'s relentless intensity. Schumacher would later name Häkkinen as the rival he respected and feared the most, a verdict that says everything about how the paddock rated the quiet man from Vantaa.',
+      'The image that endures is the 2000 Belgian Grand Prix. Hunting Schumacher down at Spa, Häkkinen swept past at over 320 km/h on the run to Les Combes, both cars threading either side of the backmarker Ricardo Zonta — an overtake so audacious it is still cited as the greatest in modern Formula 1. He took a sabbatical after 2001 that became retirement, leaving with twenty wins, two titles and the rare distinction of having been the benchmark against which the greatest driver of his generation measured himself.',
+    ],
+  },
+  {
+    driverId: 'webber',
+    career: [
+      'Mark Webber announced himself in the most fitting way possible: on his Formula 1 debut at his home Australian Grand Prix in 2002, driving a modest Minardi, he finished fifth and scored points — a fairy-tale start that brought the Melbourne crowd to its feet and marked him out as a talent worth watching. Tough, combative and uncompromising, he spent his early years extracting results from uncompetitive Jaguar and Williams machinery before the move that would define him.',
+      'Joining Red Bull Racing in 2007, Webber grew with the team as it rose to the front of the grid. His first Grand Prix victory came at the 2009 German Grand Prix, and in 2010 he reached his peak — back-to-back wins in Spain and Monaco, the latter a commanding pole-to-flag drive through the principality, carried him to the top of the World Championship standings. He finished that season third in a four-way title fight, the closest he would come to the crown.',
+      'His years alongside Sebastian Vettel produced one of the most charged intra-team rivalries of the era, crystallised by the infamous "Multi-21" episode at the 2013 Malaysian Grand Prix. Webber retired from Formula 1 at the end of 2013 with nine Grand Prix victories and a reputation as one of the toughest racers of his generation, then went on to win the 2015 World Endurance Championship with Porsche — proof that the competitive fire never dimmed.',
+    ],
+  },
 ]
 
 export function getDriverCareer(driverId: string): string[] {

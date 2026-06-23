@@ -1285,5 +1285,44 @@
     "description": "A cool head in chaos — Norris mastered a treacherous wet-dry season opener at Albert Park to win, the ideal start to a title campaign.",
     "isFree": true,
     "telemetryFile": "norris_australia_2025"
+  },
+  {
+    "id": "hulkenberg_silverstone_2025",
+    "driverId": "hulkenberg",
+    "name": "British Grand Prix 2025",
+    "circuit": "silverstone",
+    "circuitName": "Silverstone Circuit",
+    "year": 2025,
+    "location": "Silverstone, England",
+    "lapTime": "1:29.500",
+    "description": "The longest wait in Formula 1 history, finally over — after a record number of starts without a podium, Hülkenberg charged from nineteenth to third in a chaotic wet British Grand Prix to claim his first rostrum at last.",
+    "isFree": true,
+    "telemetryFile": "hulkenberg_silverstone_2025"
+  },
+  {
+    "id": "hakkinen_spa_2000",
+    "driverId": "hakkinen",
+    "name": "Belgian Grand Prix 2000",
+    "circuit": "spa",
+    "circuitName": "Circuit de Spa-Francorchamps",
+    "year": 2000,
+    "location": "Stavelot, Belgium",
+    "lapTime": "1:51.000",
+    "description": "The greatest overtake of his generation — Häkkinen swept around Schumacher at over 320 km/h, both cars either side of a backmarker through Les Combes, and went on to win at Spa with the cool precision that defined the Flying Finn.",
+    "isFree": true,
+    "telemetryFile": "hakkinen_spa_2000"
+  },
+  {
+    "id": "webber_monaco_2010",
+    "driverId": "webber",
+    "name": "Monaco Grand Prix 2010",
+    "circuit": "monaco",
+    "circuitName": "Circuit de Monaco",
+    "year": 2010,
+    "location": "Monte Carlo, Monaco",
+    "lapTime": "1:15.500",
+    "description": "Pole and a faultless lights-to-flag win on the streets of Monaco — the second leg of Webber's back-to-back triumphs that briefly carried him to the top of the 2010 World Championship.",
+    "isFree": true,
+    "telemetryFile": "webber_monaco_2010"
   }
 ]
