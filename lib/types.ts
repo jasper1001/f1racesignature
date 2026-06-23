@@ -73,11 +73,18 @@ export type ArtTheme =
   | 'carbon_fiber'
   | 'championship_gold'
   | 'neon_racing'
-  | 'vintage_f1'
   | 'blueprint'
   | 'monaco_night'
-  | 'podium_champagne'
   | 'helmet_cam'
+  | 'british_racing_green'
+  | 'carbon_mono'
+  | 'ferrari_rosso'
+  | 'mercedes_silver'
+  | 'mclaren_papaya'
+  | 'redbull_midnight'
+  | 'gallery_print'
+
+export type ThemeTexture = 'none' | 'carbon' | 'grain' | 'paper' | 'grid'
 
 export type ExportFormat =
   | 'poster_portrait'
@@ -103,6 +110,10 @@ export interface ThemeConfig {
   s2Color: string
   s3Color: string
   isFree: boolean
+  // Surface texture overlaid on the poster background.
+  texture: ThemeTexture
+  // CSS font-family for the large display title (driver name / hero).
+  displayFont: string
 }
 
 export interface VizModeConfig {

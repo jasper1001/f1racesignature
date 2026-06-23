@@ -624,7 +624,7 @@ export function PosterPreview({
           <text x={box.x + boxW - 8} y={box.y + 16} textAnchor="end" fill={carColor} fontSize="12" fontFamily="monospace" fontWeight="700" letterSpacing="1.5">
             {phase}
           </text>
-          <text x={box.x + boxW - 8} y={box.y + 33} textAnchor="end" fill="#ffffff" fontSize="16" fontFamily="monospace" fontWeight="700">
+          <text x={box.x + boxW - 8} y={box.y + 33} textAnchor="end" fill={theme.textColor} fontSize="16" fontFamily="monospace" fontWeight="700">
             {Math.round(hSpeed)} km/h
           </text>
         </g>
@@ -658,6 +658,11 @@ export function PosterPreview({
           fill={`url(#bgGradient)`}
           opacity="0.4"
         />
+        {/* Surface texture — distinguishes themes by material, not just colour */}
+        {theme.texture === 'carbon' && <rect width={POSTER_W} height={POSTER_H} fill="url(#texCarbon)" />}
+        {theme.texture === 'grid' && <rect width={POSTER_W} height={POSTER_H} fill="url(#texGrid)" />}
+        {theme.texture === 'grain' && <rect width={POSTER_W} height={POSTER_H} filter="url(#texGrain)" opacity="0.06" />}
+        {theme.texture === 'paper' && <rect width={POSTER_W} height={POSTER_H} filter="url(#texPaper)" opacity="0.5" />}
 
         <defs>
           <radialGradient id="bgGradient" cx="50%" cy="40%" r="60%">
@@ -667,6 +672,24 @@ export function PosterPreview({
           <filter id="glowFilter" x="-20%" y="-20%" width="140%" height="140%">
             <feGaussianBlur stdDeviation="3" result="blur" />
             <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          </filter>
+          {/* Carbon twill — faint diagonal weave */}
+          <pattern id="texCarbon" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <rect width="4" height="8" fill="#ffffff" opacity="0.022" />
+          </pattern>
+          {/* Blueprint grid — drawn in the primary line colour */}
+          <pattern id="texGrid" width="26" height="26" patternUnits="userSpaceOnUse">
+            <path d="M 26 0 L 0 0 0 26" fill="none" stroke={theme.primaryLine} strokeWidth="0.5" opacity="0.12" />
+          </pattern>
+          {/* Film grain — light specks for dark themes */}
+          <filter id="texGrain" x="0" y="0" width="100%" height="100%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch" result="n" />
+            <feColorMatrix in="n" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.7 0" />
+          </filter>
+          {/* Paper fibre — dark specks for the light theme */}
+          <filter id="texPaper" x="0" y="0" width="100%" height="100%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="3" stitchTiles="stitch" result="n" />
+            <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.1  0 0 0 0 0.08  0 0 0 0 0.05  0 0 0 0.6 0" />
           </filter>
         </defs>
 
@@ -693,7 +716,7 @@ export function PosterPreview({
           textAnchor="middle"
           fill={theme.textColor}
           fontSize="28"
-          fontFamily="Georgia, serif"
+          fontFamily={theme.displayFont}
           fontStyle="italic"
           letterSpacing="1"
         >
@@ -836,7 +859,7 @@ export function PosterPreview({
                 {telemetry?.lapTime ?? '—:——.———'}
               </text>
               {driver && (
-                <text x={R} y={y0 + 40} textAnchor="end" fill="#ffffff" fontSize="20" fontFamily="Georgia, serif" fontStyle="italic">
+                <text x={R} y={y0 + 40} textAnchor="end" fill={theme.textColor} fontSize="20" fontFamily={theme.displayFont} fontStyle="italic">
                   {driver.shortName}
                 </text>
               )}
@@ -881,16 +904,16 @@ export function PosterPreview({
                   : null
                 const gap = fastestRival !== null ? parseLapSeconds(telemetry.lapTime) - fastestRival : null
                 const stats = [
-                  { label: 'TOP SPEED',  val: `${telemetry.topSpeed} km/h`, color: '#ffffff' },
-                  { label: 'AVG SPEED',  val: `${telemetry.averageSpeed} km/h`, color: '#ffffff' },
-                  { label: 'SAMPLES',    val: `${telemetry.points.length} pts`, color: '#ffffff' },
+                  { label: 'TOP SPEED',  val: `${telemetry.topSpeed} km/h`, color: theme.textColor },
+                  { label: 'AVG SPEED',  val: `${telemetry.averageSpeed} km/h`, color: theme.textColor },
+                  { label: 'SAMPLES',    val: `${telemetry.points.length} pts`, color: theme.textColor },
                   gap !== null
                     ? {
                         label: 'GAP',
                         val: `${gap > 0.0005 ? '+' : gap < -0.0005 ? '−' : ''}${Math.abs(gap).toFixed(3)}s`,
-                        color: gap > 0.0005 ? '#ff4444' : gap < -0.0005 ? '#00e676' : '#ffffff',
+                        color: gap > 0.0005 ? '#ff4444' : gap < -0.0005 ? '#00e676' : theme.textColor,
                       }
-                    : { label: 'BENCHMARK', val: telemetry.benchmarkLapTime, color: '#ffffff' },
+                    : { label: 'BENCHMARK', val: telemetry.benchmarkLapTime, color: theme.textColor },
                 ]
                 const colW = W / 4
                 return stats.map((s, i) => (
