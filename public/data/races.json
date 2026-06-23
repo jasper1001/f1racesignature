@@ -1051,5 +1051,70 @@
     "description": "Second place was all he needed and second place is what he managed — through enormous late pressure, Rosberg held his nerve at Yas Marina to clinch the 2016 World Championship.",
     "isFree": true,
     "telemetryFile": "rosberg_abu_dhabi_2016"
+  },
+  {
+    "id": "verstappen_las_vegas_2023",
+    "driverId": "verstappen",
+    "name": "Las Vegas Grand Prix 2023",
+    "circuit": "las_vegas",
+    "circuitName": "Las Vegas Street Circuit",
+    "year": 2023,
+    "location": "Las Vegas, USA",
+    "lapTime": "1:35.490",
+    "description": "An instant classic on the Strip — a first-corner clash and a five-second penalty only set up a wheel-to-wheel duel with Leclerc that Verstappen won under the neon, the standout drive of a record-breaking season.",
+    "isFree": true,
+    "telemetryFile": "verstappen_las_vegas_2023"
+  },
+  {
+    "id": "leclerc_las_vegas_2023",
+    "driverId": "leclerc",
+    "name": "Las Vegas Grand Prix 2023",
+    "circuit": "las_vegas",
+    "circuitName": "Las Vegas Street Circuit",
+    "year": 2023,
+    "location": "Las Vegas, USA",
+    "lapTime": "1:34.900",
+    "description": "Pole position and a last-lap pass on Pérez for second — Leclerc lit up Las Vegas' dazzling debut, taking the fight to Verstappen down the Strip all night long.",
+    "isFree": true,
+    "telemetryFile": "leclerc_las_vegas_2023"
+  },
+  {
+    "id": "perez_las_vegas_2023",
+    "driverId": "perez",
+    "name": "Las Vegas Grand Prix 2023",
+    "circuit": "las_vegas",
+    "circuitName": "Las Vegas Street Circuit",
+    "year": 2023,
+    "location": "Las Vegas, USA",
+    "lapTime": "1:35.800",
+    "description": "A charging drive through the pack under the lights — Pérez fought onto the inaugural Las Vegas podium before being pipped for second on the very last lap.",
+    "isFree": true,
+    "telemetryFile": "perez_las_vegas_2023"
+  },
+  {
+    "id": "russell_las_vegas_2024",
+    "driverId": "russell",
+    "name": "Las Vegas Grand Prix 2024",
+    "circuit": "las_vegas",
+    "circuitName": "Las Vegas Street Circuit",
+    "year": 2024,
+    "location": "Las Vegas, USA",
+    "lapTime": "1:34.500",
+    "description": "Pole and a commanding lights-to-flag win on the Strip, leading a Mercedes one-two on a cold Vegas night as Verstappen sealed the title behind him.",
+    "isFree": true,
+    "telemetryFile": "russell_las_vegas_2024"
+  },
+  {
+    "id": "hamilton_las_vegas_2024",
+    "driverId": "hamilton",
+    "name": "Las Vegas Grand Prix 2024",
+    "circuit": "las_vegas",
+    "circuitName": "Las Vegas Street Circuit",
+    "year": 2024,
+    "location": "Las Vegas, USA",
+    "lapTime": "1:34.700",
+    "description": "A storming drive to second under the Vegas lights, completing a Mercedes one-two on a cold night that finally lit up the Silver Arrows.",
+    "isFree": true,
+    "telemetryFile": "hamilton_las_vegas_2024"
   }
 ]
