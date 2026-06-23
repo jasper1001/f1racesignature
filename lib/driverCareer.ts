@@ -184,6 +184,15 @@ export const DRIVER_CAREERS: DriverCareer[] = [
       'In 2016 he did it. A season of relentless precision, capitalising on every Hamilton misfortune and giving nothing away under extraordinary pressure, delivered the world championship by five points — sealed with a nerveless drive at Abu Dhabi. Then, five days later, Rosberg retired. At 31, as reigning world champion, he simply walked away, having achieved the one thing he had built his entire life around. It remains one of the most singular decisions in the sport\'s history.',
     ],
   },
+  {
+    driverId: 'bearman',
+    career: [
+      'Oliver Bearman arrived in single-seaters as one of the most highly rated products of the Ferrari Driver Academy, and he made the case immediately. In 2021 he won both the Italian Formula 4 and the ADAC German Formula 4 championships in the same season with Van Amersfoort Racing — a dominant junior campaign that marked him out as the standout British prospect of his generation.',
+      'He stepped up through FIA Formula 3 in 2022 and into Formula 2 with Prema in 2023, where as a rookie he won multiple feature races and ran near the front against far more experienced drivers. By the start of 2024 he was the most talked-about young driver on the Ferrari books, waiting for a Formula 1 opportunity that arrived far sooner, and far more dramatically, than anyone expected.',
+      'That opportunity came at the 2024 Saudi Arabian Grand Prix. Carlos Sainz was ruled out on the morning of qualifying with appendicitis, and Bearman — eighteen years old, with no prior Formula 1 race weekend — was dropped into a Ferrari at one of the fastest and most unforgiving street circuits on the calendar. He qualified eleventh, then drove a composed, mistake-free race to finish seventh, scoring points on his debut and becoming the youngest driver ever to race for Ferrari. Further substitute outings for Haas later that season only reinforced the verdict.',
+      'On the strength of that performance, Haas signed him to a full-time race seat for 2025 alongside Esteban Ocon. The Jeddah drive remains the defining image of his early career: a teenager handed an impossible assignment at no notice, who answered it with the calm of a driver who had been doing it for years.',
+    ],
+  },
 ]
 
 export function getDriverCareer(driverId: string): string[] {

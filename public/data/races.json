@@ -1116,5 +1116,18 @@
     "description": "A storming drive to second under the Vegas lights, completing a Mercedes one-two on a cold night that finally lit up the Silver Arrows.",
     "isFree": true,
     "telemetryFile": "hamilton_las_vegas_2024"
+  },
+  {
+    "id": "bearman_jeddah_2024",
+    "driverId": "bearman",
+    "name": "Saudi Arabian Grand Prix 2024",
+    "circuit": "jeddah",
+    "circuitName": "Jeddah Corniche Circuit",
+    "year": 2024,
+    "location": "Jeddah, Saudi Arabia",
+    "lapTime": "1:32.500",
+    "description": "Eighteen years old, no practice, dropped into a sick Carlos Sainz's Ferrari on the morning of qualifying at one of the fastest street circuits on earth — Bearman answered with a composed run to seventh and points on his Formula 1 debut.",
+    "isFree": true,
+    "telemetryFile": "bearman_jeddah_2024"
   }
 ]

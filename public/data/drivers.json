@@ -218,5 +218,16 @@
     "isFree": true,
     "championships": 1,
     "bio": "Beat the greatest driver of his generation in equal machinery, then walked away days later. Rosberg's 2016 title was a campaign of relentless precision — and the nerve to retire on top."
+  },
+  {
+    "id": "bearman",
+    "name": "Oliver Bearman",
+    "shortName": "BEA",
+    "team": "Haas",
+    "nationality": "British",
+    "color": "#e6002b",
+    "isFree": true,
+    "championships": 0,
+    "bio": "Ferrari's academy jewel who scored points on his Formula 1 debut at eighteen — thrown into a sick Carlos Sainz's seat at Jeddah with no practice and racing like he belonged there. Britain's brightest young prospect."
   }
 ]
