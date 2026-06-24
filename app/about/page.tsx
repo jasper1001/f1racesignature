@@ -48,8 +48,20 @@ export default function AboutPage() {
               </p>
               <p>
                 Pick a driver, pick a race, choose a visualization style (racing line, speed heatmap,
-                sector split, or overtake map), apply one of eight artistic themes, and export a
-                high-resolution PNG — completely free, with no account required.
+                sector split, or overtake map), apply one of eight artistic themes, and export your
+                work — completely free, with no account required. You can save a high-resolution PNG,
+                an Instagram-ready square, or an animated MP4 replay that draws the lap on in real time.
+              </p>
+              <p>
+                You can also put drivers side by side. The head-to-head mode overlays up to three
+                racers on the same circuit, drawing each of their flying laps in distinct colours and
+                breaking down the gap between them in a live stats panel — the clearest way to see
+                exactly where one driver beats another.
+              </p>
+              <p>
+                The library keeps growing. We regularly add new drivers and their signature laps —
+                from modern names to all-time greats — alongside new circuits, so there is always a
+                fresh combination of driver and track to turn into art.
               </p>
               <p>
                 The project was built as a love letter to the sport: a way to make the invisible
@@ -74,10 +86,31 @@ export default function AboutPage() {
                 <li><strong className="text-white">Team Radio Guess</strong> — match iconic radio transmissions to their drivers.</li>
                 <li><strong className="text-white">Predict the Driver</strong> — Wordle-style driver identification in six guesses.</li>
                 <li><strong className="text-white">Higher or Lower</strong> — compare career statistics between F1 drivers.</li>
+                <li><strong className="text-white">Pit Stop Timer</strong> — nail the perfect stop and chase a sub-two-second time.</li>
               </ul>
               <p>
                 Each game includes share buttons so you can post your result to X (Twitter) or Facebook.
               </p>
+            </div>
+          </section>
+
+          {/* Blog */}
+          <section>
+            <h2 className="text-xs font-mono uppercase tracking-widest text-white/65 mb-5">The Blog</h2>
+            <div className="space-y-4 text-white/65 leading-relaxed">
+              <p>
+                We also publish a growing{' '}
+                <a href="/blog" className="text-[#d4a017] hover:underline">F1 blog</a>{' '}
+                — free, in-depth articles for fans of every level. Whether you are completely new to
+                the sport or want to understand the data behind it, there is something to read.
+              </p>
+              <ul className="space-y-1.5 list-disc list-inside pl-2">
+                <li><strong className="text-white">F1 Basics</strong> — beginner guides explaining how the sport works.</li>
+                <li><strong className="text-white">F1 Technology</strong> — reading telemetry, racing lines, and what the sector colours mean.</li>
+                <li><strong className="text-white">F1 History</strong> — the greatest laps, drivers, and championship battles.</li>
+                <li><strong className="text-white">F1 Circuits</strong> — the tracks that define the sport, past and present.</li>
+                <li><strong className="text-white">F1 2026</strong> — the new season, from the Cadillac entry to the Madrid Grand Prix.</li>
+              </ul>
             </div>
           </section>
 
