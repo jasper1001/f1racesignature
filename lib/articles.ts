@@ -728,6 +728,64 @@ export const ARTICLES: Article[] = [
       },
     ],
   },
+
+  {
+    slug: 'beginner-guide-to-f1',
+    title: 'A Beginner\'s Guide to Formula 1: How the Sport Works',
+    description: 'New to Formula 1? A clear, jargon-free guide to how F1 works — the race weekend, points and championships, pit stops, tyres, DRS, and how to start watching.',
+    date: '2026-06-24',
+    readMinutes: 8,
+    category: 'F1 Basics',
+    intro: 'Formula 1 can look impossibly complicated from the outside — twenty cars, dozens of rules, endless talk of tyres and strategy and aerodynamics. But underneath all of it is a simple sport: the fastest driver and car combination over a season wins. This guide breaks down everything a newcomer needs to follow a Grand Prix with confidence, from what actually happens across a race weekend to the handful of rules that decide who wins.',
+    sections: [
+      {
+        heading: 'What Formula 1 Actually Is',
+        paragraphs: [
+          'Formula 1 is the highest class of single-seater motor racing in the world. Ten teams — soon to be eleven, with Cadillac joining in 2026 — each build two cars and field two drivers, making a grid of twenty to twenty-two cars. The "Formula" in the name refers to the detailed set of technical rules every car must obey: the cars are not bought off a shelf but designed and built by each team to a shared rulebook, which is why a Red Bull, a Ferrari, and a Mercedes look broadly similar but perform very differently.',
+          'Across a season, the teams travel the world to race at around twenty-four different circuits, from street tracks like Monaco and Singapore to purpose-built venues like Silverstone and Suzuka. Each race is called a Grand Prix. The goal is simple to state and extraordinarily hard to achieve: score more points than anyone else over the full season by finishing races as high up the order as possible.',
+        ],
+      },
+      {
+        heading: 'The Race Weekend: Practice, Qualifying, Race',
+        paragraphs: [
+          'A standard Formula 1 weekend is spread across three days. Friday is for practice — two sessions in which teams run their cars to gather data, try setup changes, and learn how the tyres behave at that circuit. Practice does not score any points; it is preparation. A third practice session usually follows on Saturday morning.',
+          'Saturday afternoon is qualifying, which sets the starting order for the race. Qualifying is split into three knockout segments — Q1, Q2, and Q3. The slowest five cars are eliminated after Q1, another five after Q2, and the final ten fight for pole position in Q3. The driver who sets the single fastest lap in Q3 starts the race from the front, a position called pole position. Qualifying is where you see the cars at their absolute limit over one lap.',
+          'Sunday is the race itself — the main event, run over a set distance of roughly 305 kilometres (about 50 to 70 laps depending on the circuit). The race is where championship points are won. Some weekends also include a Sprint: a shorter race, usually on Saturday, that awards a smaller number of points and has its own separate qualifying session.',
+        ],
+      },
+      {
+        heading: 'How Points and Championships Work',
+        paragraphs: [
+          'Points are awarded to the top ten finishers in each Grand Prix. The winner takes 25 points, then 18 for second, 15 for third, and so on down to a single point for tenth place. One extra point is available for the driver who sets the fastest lap of the race, provided they finish in the top ten. Anyone finishing eleventh or lower scores nothing.',
+          'There are actually two championships running at once. The Drivers\' Championship goes to the individual driver who accumulates the most points across the season — this is the title most fans follow, and the one that makes a driver a "world champion." The Constructors\' Championship goes to the team that scores the most points combined across both its cars. The Constructors\' title matters enormously to the teams because prize money and prestige are tied to it.',
+          'Because points accumulate all year, the championship is a marathon, not a single race. A driver can have a bad weekend and recover; consistency over a full season usually beats occasional brilliance. The title is often not decided until the final races, which is what gives the season its long-running drama.',
+        ],
+      },
+      {
+        heading: 'Pit Stops and Tyre Strategy',
+        paragraphs: [
+          'One rule shapes almost every race: drivers must use at least two different types of tyre during a dry Grand Prix. Tyres come in compounds ranging from soft to hard. Soft tyres are faster but wear out quickly; hard tyres are slower but last much longer. Choosing when to switch from one to another — and how many times to stop — is the heart of race strategy.',
+          'A pit stop, where the car comes in for fresh tyres, takes only around two to three seconds of actual stationary time thanks to a crew of around twenty people working in perfect coordination. But the time spent driving in and out of the pit lane adds roughly twenty seconds overall, so every stop is a calculated trade-off. Teams try to time their stops to gain track position — pitting earlier than a rival to jump ahead is called an "undercut," while staying out longer to leapfrog them is an "overcut."',
+          'This is why a race can be won or lost in the pit lane as much as on the track. A driver can be quicker all afternoon and still lose the race to a smarter strategy or a faster pit stop.',
+        ],
+      },
+      {
+        heading: 'DRS, Overtaking and the Rules of Racing',
+        paragraphs: [
+          'Overtaking in Formula 1 is genuinely difficult because the cars create aerodynamic turbulence — "dirty air" — that makes it harder to follow closely. To help, the sport uses DRS (Drag Reduction System): a flap on the rear wing that a driver can open to reduce drag and gain a burst of straight-line speed. DRS can only be used in designated zones on the track, and only when a driver is within one second of the car ahead. It is a tool to help close-quarters racing, not a magic overtake button.',
+          'On-track battles are governed by racing rules designed to keep things fair and safe. Drivers are allowed to defend their position but cannot make more than one defensive move, and they must leave a car\'s width of space when a rival is alongside. Breaking these rules — causing a collision, gaining an advantage by going off track, speeding in the pit lane — earns penalties, ranging from a few seconds added to a driver\'s race time to grid drops at the next event.',
+          'Races are also controlled by flags and lights. Yellow flags warn of danger and require drivers to slow down; a red flag stops the session entirely. When there is a hazard on track, a Safety Car may be deployed to bunch the field together at reduced speed until it is safe to race again — a moment that often reshuffles strategy dramatically.',
+        ],
+      },
+      {
+        heading: 'How to Start Watching',
+        paragraphs: [
+          'The best way into Formula 1 is to pick a driver or a team to follow — having someone to root for transforms a procession of cars into a story you care about. Pay attention to the qualifying session on Saturday to understand the grid, then watch how the race unfolds from there. Do not worry about understanding every strategic nuance at first; the basics of who is leading, who is catching whom, and who just pitted are enough to enjoy a race.',
+          'It also helps to understand the data behind the racing, because so much of F1 is invisible from a single camera angle. Learning to read a speed trace, a racing line, or the coloured sector times on the timing screen turns a confusing blur into a readable contest — our guides on reading F1 telemetry and what the sector colours mean are good next steps. And if you want to see how a single legendary lap looks when its real data is rendered as art, the F1RaceSignature gallery is a vivid way to appreciate just how much skill is packed into ninety seconds of driving.',
+        ],
+      },
+    ],
+  },
 ]
 
 export function getArticle(slug: string): Article | undefined {

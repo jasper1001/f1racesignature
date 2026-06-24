@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   },
 }
 
-const CATEGORY_ORDER = ['F1 2026', 'F1 History', 'F1 Technology', 'F1 Circuits']
+const CATEGORY_ORDER = ['F1 Basics', 'F1 2026', 'F1 History', 'F1 Technology', 'F1 Circuits']
 
 export default function BlogPage() {
   const byCategory = CATEGORY_ORDER.map((cat) => ({
