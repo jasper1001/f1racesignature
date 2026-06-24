@@ -367,6 +367,7 @@ export const ARTICLES: Article[] = [
         paragraphs: [
           'During a race, sector times are tracked continuously to monitor tyre degradation and identify when a car\'s lap times are beginning to fall significantly. The pattern of degradation is different across sectors — tyres often lose performance progressively in the more demanding, higher-energy corners first. Watching the split between Sector 1 and Sector 3 degradation rates can indicate whether a set of tyres is degrading uniformly (healthy) or losing performance specifically in one type of corner (potentially heading toward a cliff).',
           'Safety car periods change the strategic calculus immediately. When the safety car is deployed, teams must decide in seconds whether to pit. The sector time data from the laps immediately before and after the safety car helps engineers calculate whether the undercut — pitting under the safety car for fresh tyres — will produce enough pace advantage on the restart to justify the position loss from stopping.',
+          'If you are still getting to grips with the green, purple, and yellow flashes on the timing screen, our companion guide on what F1 sector colours mean breaks down each colour in plain terms — a useful starting point before diving into the deeper strategy picture covered here.',
         ],
       },
     ],
