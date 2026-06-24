@@ -680,6 +680,53 @@ export const ARTICLES: Article[] = [
       },
     ],
   },
+
+  {
+    slug: 'what-do-f1-sector-colours-mean',
+    title: 'What Do F1 Sector Colours Mean? Green, Purple, Yellow and White Explained',
+    description: 'Green, purple, yellow, white — a clear, simple guide to what the sector and lap time colours mean on an F1 timing screen, and why they matter in qualifying and the race.',
+    date: '2026-06-24',
+    readMinutes: 5,
+    category: 'F1 Technology',
+    intro: 'If you have ever watched a Formula 1 qualifying session and seen the timing screen flash green, purple, yellow, and white, you have seen the sport\'s simplest and most useful language. Those colours tell you, at a glance, who is fastest, who just improved, and who is falling back — without a single number needing to be read. Here is exactly what each colour means, and how to use them to follow a session like an engineer.',
+    sections: [
+      {
+        heading: 'The Four Colours at a Glance',
+        paragraphs: [
+          'Formula 1 timing uses four main colours to describe a sector time or a lap time. Purple means the fastest time set by anyone in the session so far — the outright best, sometimes called the "session best." Green means a personal best: the driver has beaten their own previous best for that sector or lap, but someone else is still quicker overall. Yellow means the time is slower than that driver\'s own previous best. White is a standard time that is not a personal best, an outright best, or a comparison against a recent benchmark — essentially a "normal" completed time.',
+          'The simplest way to remember it: purple is the best in the whole session, green is the best for that particular driver, and yellow is slower than they have gone before. Once you internalise that, a timing screen full of colour suddenly reads like a live story of who is gaining and who is losing.',
+        ],
+      },
+      {
+        heading: 'Purple: The Fastest Time of the Session',
+        paragraphs: [
+          'A purple sector is the headline colour of qualifying. When a driver lights up a sector purple, they have just set the fastest time anyone has managed in that sector all session. String three purple sectors together on the same lap and you have a lap that is almost certainly going to be provisional pole — the theoretical "perfect lap" is simply the sum of the three fastest sectors set by anyone, and a driver who owns all three is at the very limit.',
+          'Purple times are why qualifying is so watchable. As each driver crosses a timing line, the screen updates instantly, and a single purple sector late in the session can signal that pole position is about to change hands. Engineers and fans alike watch the sector colours before the final lap time even appears, because the colours reveal the outcome a few seconds early.',
+        ],
+      },
+      {
+        heading: 'Green and Yellow: Personal Bests and Slower Laps',
+        paragraphs: [
+          'Green is a personal best. It tells you a driver is improving relative to their own earlier efforts, even if they are not the fastest on track. In practice and qualifying, a run of green sectors means a driver is finding time as the track rubbers in, the fuel load drops, or they simply build confidence lap by lap. Green is progress — just not necessarily the lead.',
+          'Yellow is the opposite signal: slower than that driver\'s own previous best for the sector. A yellow sector can mean many things — a small mistake, traffic, a deliberately slow lap to cool the tyres, or an out-lap or in-lap that was never meant to be quick. During a race, watching a driver\'s sectors tick from green to yellow over a stint is one of the clearest visual signs that their tyres are degrading and lap time is slipping away.',
+        ],
+      },
+      {
+        heading: 'White and the Special Case of Speed Traps',
+        paragraphs: [
+          'White times are the baseline. A white sector or lap time is simply a completed time that is not flagged as an outright best, a personal best, or slower than a recent benchmark. On a busy timing screen, white times are the quiet majority — laps being completed normally without any record being set.',
+          'It is worth noting that the same colour logic appears elsewhere on F1 graphics, including speed-trap readings and mini-sectors. The principle stays the same: purple for the best of the session, green for a personal best, yellow for slower than before. Once you know the code in one place, you can read it everywhere on the broadcast.',
+        ],
+      },
+      {
+        heading: 'Why the Colours Matter Beyond Qualifying',
+        paragraphs: [
+          'The colours are not just for qualifying drama — they are a diagnostic tool. Because every circuit is divided into three sectors, the colours let you instantly see where a driver is strong and where they are losing out. A driver who is purple in Sector 1 but yellow in Sector 3 is fast in one type of corner and struggling in another, which points to a car setup trade-off or a specific weakness on that part of the track.',
+          'During the race, the same colours track tyre life and pace in real time. A leader whose sectors stay green is managing the gap comfortably; a chasing driver suddenly flashing purple sectors is a sign an undercut or a charge is on. If you want to go deeper into how teams turn those three sector splits into strategy and setup decisions, our companion guide on understanding F1 sector times breaks down the full picture — and you can see real lap data rendered as art across the F1RaceSignature gallery.',
+        ],
+      },
+    ],
+  },
 ]
 
 export function getArticle(slug: string): Article | undefined {
