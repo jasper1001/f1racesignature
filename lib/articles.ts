@@ -741,7 +741,7 @@ export const ARTICLES: Article[] = [
       {
         heading: 'What Formula 1 Actually Is',
         paragraphs: [
-          'Formula 1 is the highest class of single-seater motor racing in the world. Ten teams — soon to be eleven, with Cadillac joining in 2026 — each build two cars and field two drivers, making a grid of twenty to twenty-two cars. The "Formula" in the name refers to the detailed set of technical rules every car must obey: the cars are not bought off a shelf but designed and built by each team to a shared rulebook, which is why a Red Bull, a Ferrari, and a Mercedes look broadly similar but perform very differently.',
+          'Formula 1 is the highest class of single-seater motor racing in the world. Eleven teams — including Cadillac, which joined the grid for the 2026 season — each build two cars and field two drivers, making a grid of twenty-two cars. The "Formula" in the name refers to the detailed set of technical rules every car must obey: the cars are not bought off a shelf but designed and built by each team to a shared rulebook, which is why a Red Bull, a Ferrari, and a Mercedes look broadly similar but perform very differently.',
           'Across a season, the teams travel the world to race at around twenty-four different circuits, from street tracks like Monaco and Singapore to purpose-built venues like Silverstone and Suzuka. Each race is called a Grand Prix. The goal is simple to state and extraordinarily hard to achieve: score more points than anyone else over the full season by finishing races as high up the order as possible.',
         ],
       },
