@@ -131,6 +131,28 @@ const TEAM_TRANSFERS: Record<string, TeamStint[]> = {
     { team: "Williams", startYear: 2006, endYear: 2009, color: "#005aff" },
     { team: "Mercedes", startYear: 2010, endYear: 2016, color: "#00d2be" },
   ],
+  bearman: [
+    { team: "Haas", startYear: 2024, endYear: null, color: "#b6babd" },
+  ],
+  hulkenberg: [
+    { team: "Williams", startYear: 2010, endYear: 2010, color: "#005aff" },
+    { team: "Force India", startYear: 2012, endYear: 2012, color: "#f596c8" },
+    { team: "Sauber", startYear: 2013, endYear: 2013, color: "#52e252" },
+    { team: "Force India", startYear: 2014, endYear: 2016, color: "#f596c8" },
+    { team: "Renault", startYear: 2017, endYear: 2019, color: "#ffd700" },
+    { team: "Haas", startYear: 2023, endYear: 2024, color: "#b6babd" },
+    { team: "Sauber", startYear: 2025, endYear: null, color: "#52e252" },
+  ],
+  hakkinen: [
+    { team: "Lotus", startYear: 1991, endYear: 1992, color: "#f4c020" },
+    { team: "McLaren", startYear: 1993, endYear: 2001, color: "#ff8000" },
+  ],
+  webber: [
+    { team: "Minardi", startYear: 2002, endYear: 2002, color: "#c79a2e" },
+    { team: "Jaguar", startYear: 2003, endYear: 2004, color: "#0b5c2e" },
+    { team: "Williams", startYear: 2005, endYear: 2006, color: "#005aff" },
+    { team: "Red Bull Racing", startYear: 2007, endYear: 2013, color: "#1e41ff" },
+  ],
 }
 
 export function getTeamTransfers(driverId: string): TeamStint[] {
