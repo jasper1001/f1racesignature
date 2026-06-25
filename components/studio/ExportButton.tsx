@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useStudioStore } from '@/lib/store'
 import { isExportFree, UPGRADE_REASONS } from '@/lib/freemium'
+import { canDownload, recordDownload, DAILY_DOWNLOAD_LIMIT } from '@/lib/downloadLimit'
 import { EXPORT_FORMATS, themeById } from '@/lib/themes'
 import { Analytics } from '@/lib/analytics'
 
@@ -23,6 +24,11 @@ export function ExportButton({ onBeforeExport }: { onBeforeExport?: () => void }
       return
     }
     if (!selectedDriverId || !selectedRaceId) return
+
+    if (!canDownload()) {
+      alert(`You've reached the daily limit of ${DAILY_DOWNLOAD_LIMIT} downloads. Please come back tomorrow.`)
+      return
+    }
 
     // Stop any lap playback so the export captures the full static poster
     onBeforeExport?.()
@@ -81,6 +87,7 @@ export function ExportButton({ onBeforeExport }: { onBeforeExport?: () => void }
           link.click()
 
           URL.revokeObjectURL(url)
+          recordDownload()
           Analytics.exportCompleted(exportFormat, selectedDriverId, selectedRaceId)
           resolve()
         }

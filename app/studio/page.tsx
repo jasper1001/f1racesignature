@@ -21,6 +21,7 @@ import { useStudioStore } from '@/lib/store'
 import { fetchDrivers, fetchRaces, fetchTelemetry, fetchCircuits } from '@/lib/data'
 import { themeById, EXPORT_FORMATS } from '@/lib/themes'
 import { recordLapVideo, canRecordMp4 } from '@/lib/lapVideo'
+import { canDownload, recordDownload, DAILY_DOWNLOAD_LIMIT } from '@/lib/downloadLimit'
 import { Analytics } from '@/lib/analytics'
 import type { VizMode, ArtTheme } from '@/lib/types'
 
@@ -211,6 +212,10 @@ export default function StudioPage() {
       alert('Sorry — MP4 export needs a browser with WebCodecs (try the latest Chrome, Edge, or Safari).')
       return
     }
+    if (!canDownload()) {
+      alert(`You've reached the daily limit of ${DAILY_DOWNLOAD_LIMIT} downloads. Please come back tomorrow.`)
+      return
+    }
 
     // Use the selected export format's aspect (e.g. Instagram square), sized for
     // video: scale so the short edge is ~1080, capped, and even (H.264 needs
@@ -279,6 +284,7 @@ export default function StudioPage() {
       link.href = url
       link.click()
       URL.revokeObjectURL(url)
+      recordDownload()
       Analytics.exportCompleted('mp4_replay', selectedDriverId!, selectedRaceId!)
     } catch (err) {
       console.error('MP4 export failed', err)
