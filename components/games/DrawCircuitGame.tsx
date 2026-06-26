@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
@@ -122,6 +122,17 @@ export function DrawCircuitGame() {
   const lastPtRef = useRef<Pt | null>(null)
   const lastIdRef = useRef<string | null>(null)
   const gameRef = useRef<HTMLDivElement>(null)
+
+  // Block native touch-scrolling on the canvas while drawing. iOS Safari doesn't
+  // reliably honour `touch-action: none` on an SVG, so cancel the scroll directly
+  // with a non-passive listener (React's onPointer* handlers are passive for this).
+  useEffect(() => {
+    const el = svgRef.current
+    if (!el || phase !== 'drawing') return
+    const prevent = (e: TouchEvent) => e.preventDefault()
+    el.addEventListener('touchmove', prevent, { passive: false })
+    return () => el.removeEventListener('touchmove', prevent)
+  }, [phase])
 
   const pickCircuit = useCallback((): Circuit | null => {
     if (circuits.length === 0) return null
