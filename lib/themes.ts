@@ -269,8 +269,8 @@ export const THEMES: ThemeConfig[] = [
 export const VIZ_MODES: VizModeConfig[] = [
   {
     id: 'racing_line',
-    name: 'Racing Line',
-    description: 'The exact GPS path traced through every corner',
+    name: 'Lap Trace',
+    description: 'The exact GPS path the car traced around the lap',
     isFree: true,
   },
   {

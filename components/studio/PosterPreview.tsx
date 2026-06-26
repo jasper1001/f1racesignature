@@ -185,8 +185,6 @@ function CircuitBackground({ path, fit }: { path: string; fit: CircuitFit }) {
         <path d={path} fill="none" stroke="#3a3a3a" strokeWidth={sw(34)} strokeLinecap="round" strokeLinejoin="round" opacity="0.95" />
         {/* Lighter inner surface, leaving a darker edge so it reads as a road */}
         <path d={path} fill="none" stroke="#5a5a5a" strokeWidth={sw(24)} strokeLinecap="round" strokeLinejoin="round" opacity="0.5" />
-        {/* Centre dashed line */}
-        <path d={path} fill="none" stroke="#888888" strokeWidth={sw(1.6)} strokeLinecap="round" strokeLinejoin="round" opacity="0.35" strokeDasharray={`${sw(9)} ${sw(9)}`} />
       </g>
     </g>
   )
