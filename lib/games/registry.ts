@@ -63,6 +63,32 @@ export const GAMES: GameMeta[] = [
     badge: 'Quick Play',
   },
   {
+    id: 'draw-the-circuit',
+    href: '/games/draw-the-circuit',
+    tag: 'Circuit Art',
+    title: 'Draw the Circuit',
+    description:
+      "You're given a circuit name — draw its outline from memory in one stroke, then see how close you got to the real layout. Easy at Monaco, brutal at Suzuka.",
+    blurb: 'Sketch an F1 track from memory and get scored on accuracy.',
+    duration: '~1 minute',
+    accent: '#ec4899',
+    icon: '✏️',
+    badge: 'New',
+  },
+  {
+    id: 'connections',
+    href: '/games/connections',
+    tag: 'Daily Puzzle',
+    title: 'F1 Connections',
+    description:
+      "A daily F1 twist on Connections. Sort sixteen tiles into four hidden groups — drivers, teams, circuits and more. Four wrong guesses and you're out.",
+    blurb: 'Sort 16 F1 tiles into four hidden groups — mind the overlaps.',
+    duration: '~3 minutes',
+    accent: '#14b8a6',
+    icon: '🧩',
+    badge: 'New',
+  },
+  {
     id: 'higher-lower',
     href: '/games/higher-lower',
     tag: 'Stat Battle',

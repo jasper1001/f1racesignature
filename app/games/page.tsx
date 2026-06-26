@@ -46,7 +46,7 @@ const gamesJsonLd = {
       name: 'F1 Mini Games',
       description: 'Free Formula 1 mini games — reaction tests, trivia, driver puzzles and more.',
       url: 'https://f1racesignature.site/games',
-      numberOfItems: 8,
+      numberOfItems: GAMES.length,
       itemListElement: GAMES.map((g, i) => ({
         '@type': 'ListItem',
         position: i + 1,
