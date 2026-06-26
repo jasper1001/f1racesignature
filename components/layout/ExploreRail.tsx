@@ -111,6 +111,10 @@ export function ExploreRail() {
   const items = FEATURES.filter((f) => !pathname.startsWith(f.href))
   if (items.length === 0) return null
 
+  // The rail overlaps game interactions on small screens — hide it on mobile
+  // for the games section (keeps it on tablet/desktop).
+  const onGames = pathname.startsWith('/games')
+
   return (
     <>
       {/* Mobile dismiss backdrop — tap anywhere to close */}
@@ -125,7 +129,7 @@ export function ExploreRail() {
       <div
         onMouseEnter={canHover ? () => { interacted.current = true; setOpen(true) } : undefined}
         onMouseLeave={canHover ? () => setOpen(false) : undefined}
-        className="fixed right-0 top-1/2 -translate-y-1/2 z-30 flex items-stretch"
+        className={`fixed right-0 top-1/2 -translate-y-1/2 z-30 items-stretch ${onGames ? 'hidden sm:flex' : 'flex'}`}
       >
       {/* Sliding panel */}
       <div
