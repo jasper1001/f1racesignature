@@ -52,7 +52,7 @@ export const PUZZLES: ConnPuzzle[] = [
   {
     groups: [
       { category: 'UK-based teams', difficulty: 0, members: ['McLaren', 'Williams', 'Mercedes', 'Aston Martin'] },
-      { category: 'Teams not based in the UK', difficulty: 1, members: ['Ferrari', 'Alpine', 'Sauber', 'Haas'] },
+      { category: 'Teams not based in the UK', difficulty: 1, members: ['Ferrari', 'Sauber', 'RB', 'Haas'] },
       { category: 'Asian Grands Prix', difficulty: 2, members: ['Suzuka', 'Shanghai', 'Singapore', 'Qatar'] },
       { category: "Hamilton's teammates", difficulty: 3, members: ['Bottas', 'Button', 'Alonso', 'Kovalainen'] },
     ],

@@ -138,11 +138,12 @@ export function TierListGame() {
     return `🏎️ My F1 Tier List — ${subject.label}\n${lines.join('\n')}\nf1racesignature.site/games/tier-list`
   })()
 
-  // ── Reusable chip ──────────────────────────────────────────────────────────
-  function Chip({ it }: { it: TierItem }) {
+  // ── Chip renderer (plain function, not a nested component, to avoid remounts) ──
+  const renderChip = (it: TierItem) => {
     const isDragging = dragId === it.id
     return (
       <button
+        key={it.id}
         onPointerDown={e => startDrag(e, it.id)}
         className={`px-3 py-2 rounded-lg text-xs sm:text-sm font-semibold border transition-shadow cursor-grab active:cursor-grabbing select-none ${
           isDragging ? 'opacity-30 border-dashed border-[#c4bca8] bg-[#f3eee3] text-[#1a1712]/50' : 'border-[#dcd5c6] bg-[#fbf9f4] text-[#1a1712] hover:shadow-md'
@@ -196,7 +197,7 @@ export function TierListGame() {
                 className="flex-1 min-h-[60px] p-2 flex flex-wrap gap-2 items-center content-center transition-colors"
                 style={{ background: isHover ? `${t.color}14` : '#fbf9f4' }}
               >
-                {itemsIn(t.id).map(it => <Chip key={it.id} it={it} />)}
+                {itemsIn(t.id).map(renderChip)}
               </div>
             </div>
           )
@@ -216,7 +217,7 @@ export function TierListGame() {
             background: hoverZone === POOL_ID ? `${ACCENT}0d` : '#efe9dd',
           }}
         >
-          {itemsIn(POOL_ID).map(it => <Chip key={it.id} it={it} />)}
+          {itemsIn(POOL_ID).map(renderChip)}
           {itemsIn(POOL_ID).length === 0 && (
             <span className="text-[#1a1712]/35 text-xs font-mono px-1">Empty — everything placed.</span>
           )}

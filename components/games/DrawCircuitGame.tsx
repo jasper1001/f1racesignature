@@ -1,11 +1,12 @@
 'use client'
 
-import { useState, useRef, useCallback, useEffect } from 'react'
+import { useState, useRef, useCallback } from 'react'
+import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
 import { ShareButtons } from '@/components/games/ShareButtons'
 import { NextGameCard } from '@/components/games/NextGameCard'
-import { fetchCircuits } from '@/lib/data'
+import { fetchCircuits, fetchRaces } from '@/lib/data'
 import type { Circuit } from '@/lib/types'
 
 const ACCENT = '#ec4899'
@@ -106,6 +107,7 @@ type Phase = 'idle' | 'drawing' | 'result'
 export function DrawCircuitGame() {
   const { data: circuitsMap = {} } = useQuery({ queryKey: ['circuits'], queryFn: fetchCircuits })
   const circuits = Object.values(circuitsMap) as Circuit[]
+  const { data: races = [] } = useQuery({ queryKey: ['races'], queryFn: fetchRaces })
 
   const [phase, setPhase] = useState<Phase>('idle')
   const [circuit, setCircuit] = useState<Circuit | null>(null)
@@ -339,6 +341,8 @@ export function DrawCircuitGame() {
         {/* ── RESULT ── */}
         {phase === 'result' && circuit && (() => {
           const rating = getRating(score)
+          const studioRace = races.find(r => r.circuit === circuit.id)
+          const studioHref = studioRace ? `/studio?race=${studioRace.id}` : '/studio'
           return (
             <motion.div key="result" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
               className="rounded-2xl border border-[#dcd5c6] bg-[#fbf9f4] p-6 md:p-8 space-y-6"
@@ -391,6 +395,38 @@ export function DrawCircuitGame() {
                   <p className="text-[#1a1712]/70 text-sm">{rating.sub}</p>
                 </div>
               </div>
+
+              {/* Studio bridge */}
+              <Link
+                href={studioHref}
+                className="group relative flex items-center gap-4 rounded-2xl border p-4 overflow-hidden transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+                style={{ borderColor: 'rgba(212,160,23,0.4)', background: 'rgba(212,160,23,0.06)' }}
+              >
+                <div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  style={{ background: 'radial-gradient(ellipse 70% 60% at 0% 50%, rgba(212,160,23,0.14) 0%, transparent 65%)' }}
+                />
+                <span
+                  className="relative inline-flex items-center justify-center w-11 h-11 rounded-xl text-2xl shrink-0"
+                  style={{ background: 'rgba(212,160,23,0.12)', border: '1px solid rgba(212,160,23,0.3)' }}
+                >
+                  🖼️
+                </span>
+                <div className="relative min-w-0 flex-1">
+                  <p className="text-[#d4a017] text-[10px] font-mono uppercase tracking-widest font-semibold mb-0.5">
+                    See the real thing
+                  </p>
+                  <p className="text-[#1a1712] text-sm leading-snug">
+                    Open <span className="font-semibold">{shortName(circuit)}</span> in the Studio and turn its data into framed art.
+                  </p>
+                </div>
+                <span className="relative inline-flex items-center gap-1.5 text-sm font-semibold text-[#d4a017] shrink-0 transition-transform duration-200 group-hover:translate-x-0.5">
+                  Open
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
+              </Link>
 
               <div className="flex flex-col gap-3">
                 <ShareButtons
