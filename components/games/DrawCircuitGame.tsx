@@ -55,7 +55,31 @@ function normalize(pts: Pt[]): Pt[] {
   return pts.map(p => ({ x: (p.x - cx) * scale, y: (p.y - cy) * scale }))
 }
 
-function avgMinDist(a: Pt[], b: Pt[]): number {
+/** Resample a polyline to n points evenly spaced by arc length (fair comparison). */
+function resample(pts: Pt[], n: number): Pt[] {
+  if (pts.length < 2) return pts
+  const seg: number[] = []
+  let total = 0
+  for (let i = 1; i < pts.length; i++) {
+    const d = Math.hypot(pts[i].x - pts[i - 1].x, pts[i].y - pts[i - 1].y)
+    seg.push(d); total += d
+  }
+  if (total === 0) return pts
+  const step = total / (n - 1)
+  const out: Pt[] = [pts[0]]
+  let acc = 0, si = 0
+  for (let i = 1; i < n; i++) {
+    const target = i * step
+    while (si < seg.length && acc + seg[si] < target) { acc += seg[si]; si++ }
+    if (si >= seg.length) { out.push(pts[pts.length - 1]); continue }
+    const t = (target - acc) / seg[si]
+    out.push({ x: pts[si].x + (pts[si + 1].x - pts[si].x) * t, y: pts[si].y + (pts[si + 1].y - pts[si].y) * t })
+  }
+  return out
+}
+
+/** RMS of nearest-neighbour distances from a → b (penalises large deviations). */
+function rmsMinDist(a: Pt[], b: Pt[]): number {
   let sum = 0
   for (const p of a) {
     let best = Infinity
@@ -63,28 +87,30 @@ function avgMinDist(a: Pt[], b: Pt[]): number {
       const d = (p.x - q.x) ** 2 + (p.y - q.y) ** 2
       if (d < best) best = d
     }
-    sum += Math.sqrt(best)
+    sum += best
   }
-  return sum / a.length
+  return Math.sqrt(sum / a.length)
 }
 
-/** Symmetric chamfer distance between two normalised point clouds (lower = closer). */
+/** Symmetric RMS chamfer distance between two normalised point clouds (lower = closer). */
 function chamfer(a: Pt[], b: Pt[]): number {
-  return (avgMinDist(a, b) + avgMinDist(b, a)) / 2
+  return (rmsMinDist(a, b) + rmsMinDist(b, a)) / 2
 }
 
 function scoreDrawing(user: Pt[], target: Pt[]): number {
   if (user.length < 2 || target.length < 2) return 0
-  const d = chamfer(normalize(user), normalize(target))
-  // ~0.0 = perfect overlay, ~0.30 = unrecognisable.
-  return Math.max(0, Math.min(100, Math.round(100 * (1 - d / 0.3))))
+  const u = normalize(resample(user, 100))
+  const t = normalize(resample(target, 100))
+  const d = chamfer(u, t)
+  // ~0 = perfect overlay; ~0.16+ = unrecognisable shape.
+  return Math.max(0, Math.min(100, Math.round(100 * (1 - d / 0.16))))
 }
 
 function getRating(score: number): { label: string; color: string; sub: string } {
-  if (score >= 88) return { label: 'Draughtsman', color: ACCENT, sub: 'Pixel-perfect. The studio would hire you.' }
-  if (score >= 72) return { label: 'Pole Position', color: '#22c55e', sub: 'Seriously sharp — you know this track by heart.' }
-  if (score >= 52) return { label: 'On the Podium', color: '#84cc16', sub: 'Clearly recognisable. Solid lap.' }
-  if (score >= 32) return { label: 'Points Finish', color: '#f59e0b', sub: 'The shape is there… mostly.' }
+  if (score >= 80) return { label: 'Draughtsman', color: ACCENT, sub: 'Pixel-perfect. The studio would hire you.' }
+  if (score >= 62) return { label: 'Pole Position', color: '#22c55e', sub: 'Seriously sharp — you know this track by heart.' }
+  if (score >= 42) return { label: 'On the Podium', color: '#84cc16', sub: 'Clearly recognisable. Solid lap.' }
+  if (score >= 22) return { label: 'Points Finish', color: '#f59e0b', sub: 'The shape is there… mostly.' }
   return { label: 'Off Track', color: '#ef4444', sub: 'Into the gravel. Give it another go.' }
 }
 
@@ -123,18 +149,49 @@ export function DrawCircuitGame() {
   const lastIdRef = useRef<string | null>(null)
   const gameRef = useRef<HTMLDivElement>(null)
 
-  // Block native touch-scrolling on the canvas while drawing. iOS Safari doesn't
-  // reliably honour `touch-action: none` on an SVG, so cancel the scroll directly
-  // with a non-passive listener (React's onPointer* handlers are passive for this).
+  // Touch drawing via native non-passive listeners. iOS WebKit (Safari AND Chrome)
+  // is unreliable with pointer events + touch-action on inline content, so we drive
+  // touch directly here and preventDefault to stop the page scrolling. Mouse/pen is
+  // handled by the React onPointer* handlers below.
   useEffect(() => {
     const el = surfaceRef.current
     if (!el || phase !== 'drawing') return
-    const prevent = (e: TouchEvent) => e.preventDefault()
-    el.addEventListener('touchmove', prevent, { passive: false })
-    el.addEventListener('touchstart', prevent, { passive: false })
+
+    const point = (clientX: number, clientY: number): Pt => {
+      const r = el.getBoundingClientRect()
+      return { x: ((clientX - r.left) / r.width) * VB_W, y: ((clientY - r.top) / r.height) * VB_H }
+    }
+    const start = (e: TouchEvent) => {
+      e.preventDefault()
+      const t = e.touches[0]
+      if (!t) return
+      drawingRef.current = true
+      const p = point(t.clientX, t.clientY)
+      lastPtRef.current = p
+      setPoints([p])
+    }
+    const move = (e: TouchEvent) => {
+      if (!drawingRef.current) return
+      e.preventDefault()
+      const t = e.touches[0]
+      if (!t) return
+      const p = point(t.clientX, t.clientY)
+      const last = lastPtRef.current
+      if (last && (p.x - last.x) ** 2 + (p.y - last.y) ** 2 < 9) return
+      lastPtRef.current = p
+      setPoints(prev => [...prev, p])
+    }
+    const end = () => { drawingRef.current = false }
+
+    el.addEventListener('touchstart', start, { passive: false })
+    el.addEventListener('touchmove', move, { passive: false })
+    el.addEventListener('touchend', end)
+    el.addEventListener('touchcancel', end)
     return () => {
-      el.removeEventListener('touchmove', prevent)
-      el.removeEventListener('touchstart', prevent)
+      el.removeEventListener('touchstart', start)
+      el.removeEventListener('touchmove', move)
+      el.removeEventListener('touchend', end)
+      el.removeEventListener('touchcancel', end)
     }
   }, [phase])
 
@@ -177,7 +234,7 @@ export function DrawCircuitGame() {
   }
 
   function handlePointerDown(e: React.PointerEvent) {
-    if (phase !== 'drawing') return
+    if (phase !== 'drawing' || e.pointerType === 'touch') return
     e.preventDefault()
     e.currentTarget.setPointerCapture?.(e.pointerId)
     drawingRef.current = true
@@ -187,7 +244,7 @@ export function DrawCircuitGame() {
   }
 
   function handlePointerMove(e: React.PointerEvent) {
-    if (!drawingRef.current || phase !== 'drawing') return
+    if (!drawingRef.current || phase !== 'drawing' || e.pointerType === 'touch') return
     const p = toSvgPoint(e)
     const last = lastPtRef.current
     // Throttle by distance to keep the point list lean.
@@ -196,7 +253,8 @@ export function DrawCircuitGame() {
     setPoints(prev => [...prev, p])
   }
 
-  function handlePointerUp() {
+  function handlePointerUp(e: React.PointerEvent) {
+    if (e.pointerType === 'touch') return
     drawingRef.current = false
   }
 
