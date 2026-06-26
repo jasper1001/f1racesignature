@@ -106,12 +106,59 @@ function scoreDrawing(user: Pt[], target: Pt[]): number {
   return Math.max(0, Math.min(100, Math.round(100 * (1 - d / 0.16))))
 }
 
-function getRating(score: number): { label: string; color: string; sub: string } {
-  if (score >= 80) return { label: 'Draughtsman', color: ACCENT, sub: 'Pixel-perfect. The studio would hire you.' }
-  if (score >= 62) return { label: 'Pole Position', color: '#22c55e', sub: 'Seriously sharp — you know this track by heart.' }
-  if (score >= 42) return { label: 'On the Podium', color: '#84cc16', sub: 'Clearly recognisable. Solid lap.' }
-  if (score >= 22) return { label: 'Points Finish', color: '#f59e0b', sub: 'The shape is there… mostly.' }
-  return { label: 'Off Track', color: '#ef4444', sub: 'Into the gravel. Give it another go.' }
+interface Rating { label: string; color: string; lines: string[] }
+
+function getRating(score: number): Rating {
+  if (score >= 80) return {
+    label: 'Adrian Newey', color: ACCENT,
+    lines: [
+      'Adrian Newey wants his pencil back. Genuinely immaculate.',
+      "Pixel-perfect. Red Bull's design office is on the phone.",
+      "That's a championship-winning lap. Simply lovely.",
+      'You clearly have a wind tunnel in the garage.',
+    ],
+  }
+  if (score >= 62) return {
+    label: 'Pole Lap', color: '#22c55e',
+    lines: [
+      'Purple sector! Crofty is losing his mind in commentary.',
+      'GET IN THERE! That is a seriously clean lap.',
+      'Front-row stuff — you know this circuit by heart.',
+      "Hammer time. That'll do nicely.",
+    ],
+  }
+  if (score >= 42) return {
+    label: 'On the Podium', color: '#84cc16',
+    lines: [
+      "P3 — but you'll happily spray the champagne.",
+      'A proper "smooth operator" lap. Solid points.',
+      'Brundle nods approvingly on the gridwalk.',
+      'Clearly recognisable. Plan B worked out.',
+    ],
+  }
+  if (score >= 22) return {
+    label: 'Points Finish', color: '#f59e0b',
+    lines: [
+      'The shape is… there-ish. Bono, my eyes are gone.',
+      'We are checking. We are checking.',
+      'P10 and a point for effort. We move.',
+      "It's giving 'first lap in the wet'.",
+    ],
+  }
+  return {
+    label: 'Gravel Trap', color: '#ef4444',
+    lines: [
+      "Into the gravel — that's a Maldonado special.",
+      'IS THAT GLOCK?! …no, no it is not.',
+      'Grosjean called, he wants his racing line back.',
+      "Leave me alone, I know what I'm doing. (You did not.)",
+      'Beached it at Turn 1. Bring out the crane.',
+    ],
+  }
+}
+
+function pickLine(r: Rating): string {
+  return r.lines[Math.floor(Math.random() * r.lines.length)]
 }
 
 // ── Stats ───────────────────────────────────────────────────────────────────────
@@ -139,6 +186,7 @@ export function DrawCircuitGame() {
   const [circuit, setCircuit] = useState<Circuit | null>(null)
   const [points, setPoints] = useState<Pt[]>([])
   const [score, setScore] = useState(0)
+  const [flavor, setFlavor] = useState('')
   const [isNewBest, setIsNewBest] = useState(false)
   const [stats, setStats] = useState<Stats>(loadStats)
 
@@ -229,6 +277,7 @@ export function DrawCircuitGame() {
       }
     }
     const s = scoreDrawing(points, target)
+    setFlavor(pickLine(getRating(s)))
     const newBest = s > stats.bestScore
     const newStats: Stats = {
       bestScore: Math.max(stats.bestScore, s),
@@ -421,7 +470,7 @@ export function DrawCircuitGame() {
                     <span className="text-2xl text-[#1a1712]/55 font-mono">%</span>
                   </div>
                   <p className="text-lg font-semibold" style={{ color: rating.color }}>{rating.label}</p>
-                  <p className="text-[#1a1712]/70 text-sm">{rating.sub}</p>
+                  <p className="text-[#1a1712]/70 text-sm">{flavor}</p>
                 </div>
               </div>
 
