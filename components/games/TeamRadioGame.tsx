@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { RADIO_QUOTES, type RadioQuote } from '@/lib/games/teamRadioData'
 import { ShareButtons } from '@/components/games/ShareButtons'
+import { NextGameCard } from '@/components/games/NextGameCard'
 
 const ROUNDS = 10
 const POINTS_PER_CORRECT = 100
@@ -405,6 +406,7 @@ function ResultScreen({
             All Games
           </a>
         </div>
+        <NextGameCard currentId="team-radio" />
       </div>
     </motion.div>
   )

@@ -4,6 +4,7 @@ import { useState, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { SCENARIOS, getRating, type Scenario, type StrategyOption, type ResultType } from '@/lib/games/strategyScenarios'
 import { ShareButtons } from '@/components/games/ShareButtons'
+import { NextGameCard } from '@/components/games/NextGameCard'
 
 const STATS_KEY = 'f1rs_games_strategy'
 
@@ -337,6 +338,7 @@ export function ChampionshipDeciderGame() {
                 >
                   Back to Mini Games
                 </a>
+                <NextGameCard currentId="championship-decider" />
               </div>
             </motion.div>
           )

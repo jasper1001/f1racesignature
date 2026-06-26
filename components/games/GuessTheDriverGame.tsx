@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { DRIVERS, CLUE_DEFS, scorePotential, type DriverEntry } from '@/lib/games/guessDriverData'
 import { ShareButtons } from '@/components/games/ShareButtons'
+import { NextGameCard } from '@/components/games/NextGameCard'
 
 const STATS_KEY = 'f1rs_games_guess_driver'
 
@@ -366,6 +367,7 @@ export function GuessTheDriverGame() {
               >
                 Next Driver
               </button>
+              <NextGameCard currentId="guess-the-driver" />
             </div>
           </motion.div>
         )}
@@ -397,6 +399,7 @@ export function GuessTheDriverGame() {
             >
               Try Another Driver
             </button>
+            <NextGameCard currentId="guess-the-driver" />
           </motion.div>
         )}
 

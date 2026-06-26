@@ -9,6 +9,7 @@ import { SteeringWheelIcon } from '@/components/icons/SteeringWheel'
 const NAV_LINKS = [
   { href: '/', label: 'Home' },
   { href: '/studio', label: 'Studio' },
+  { href: '/games', label: 'Mini Games' },
   { href: '/gallery', label: 'Gallery' },
   { href: '/drivers', label: 'Drivers' },
   { href: '/blog', label: 'Blog' },
@@ -16,7 +17,6 @@ const NAV_LINKS = [
   { href: '/results', label: '2026 Season' },
   { href: '/schedule', label: 'Schedule' },
   { href: '/calendar', label: 'Calendar' },
-  { href: '/games', label: 'Mini Games' },
 ]
 
 export function Header() {

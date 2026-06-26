@@ -4,9 +4,9 @@ import { Footer } from '@/components/layout/Footer'
 import { PitStopTimerGame } from '@/components/games/PitStopTimerGame'
 
 export const metadata: Metadata = {
-  title: 'F1 Pit Stop Timer — Pit Wall Game',
+  title: 'F1 Pit Stop Timer Game — Test Your Reaction Speed | F1RaceSignature',
   description:
-    'A target stop time is shown — can you release the car at the perfect moment? Too early is an unsafe release. Too late loses positions. Rookie, Pro, and Elite modes.',
+    'How fast are your reactions? Time your pit stop release like an F1 crew chief. Beat the benchmark.',
   keywords: ['F1 pit stop game', 'pit wall timer', 'Formula 1 pit stop', 'F1 precision game', 'F1 mini game', 'pit stop timer game'],
   alternates: { canonical: '/games/pit-stop-timer' },
   openGraph: {

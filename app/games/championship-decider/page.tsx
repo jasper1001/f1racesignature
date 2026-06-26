@@ -5,9 +5,9 @@ import { Footer } from '@/components/layout/Footer'
 import { ChampionshipDeciderGame } from '@/components/games/ChampionshipDeciderGame'
 
 export const metadata: Metadata = {
-  title: 'F1 Championship Decider — Strategy Quiz',
+  title: 'F1 Championship Decider Game — Pit Wall Strategy Quiz | F1RaceSignature',
   description:
-    'Relive real F1 strategy moments from the pit wall. Abu Dhabi 2021, Monaco 2016, Turkey 2020. Would you have made the right call? Prove you belong on the pit wall.',
+    'Relive real F1 title-deciding moments — Abu Dhabi 2021, Monaco 2016, Turkey 2020 — and make the call from the pit wall. Would you have lifted the trophy?',
   keywords: ['F1 strategy game', 'championship decider', 'pit wall strategy quiz', 'F1 decision game', 'Formula 1 strategy', 'F1 mini game'],
   alternates: { canonical: '/games/championship-decider' },
   openGraph: {

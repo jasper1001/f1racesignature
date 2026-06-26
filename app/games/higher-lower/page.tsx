@@ -5,9 +5,9 @@ import { Footer } from '@/components/layout/Footer'
 import { HigherLowerGame } from '@/components/games/HigherLowerGame'
 
 export const metadata: Metadata = {
-  title: 'F1 Higher or Lower — Driver Stat Battle',
+  title: 'F1 Higher or Lower Game — Driver Stat Battle | F1RaceSignature',
   description:
-    'Does Driver B have more career wins than Driver A? Compare F1 stats across wins, poles, podiums, fastest laps, and championships. One wrong answer ends your streak.',
+    'Does Verstappen have more wins than Hamilton? Compare F1 drivers across wins, poles, podiums and titles. One wrong call ends your streak.',
   keywords: ['F1 higher or lower', 'F1 stats game', 'Formula 1 driver comparison', 'F1 stat battle', 'F1 mini game', 'Formula 1 statistics game'],
   alternates: { canonical: '/games/higher-lower' },
   openGraph: {

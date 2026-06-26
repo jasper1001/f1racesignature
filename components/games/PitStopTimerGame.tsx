@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { ShareButtons } from '@/components/games/ShareButtons'
+import { NextGameCard } from '@/components/games/NextGameCard'
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
@@ -335,6 +336,10 @@ export function PitStopTimerGame() {
             </button>
           </div>
 
+        </div>
+
+        <div className="mt-6">
+          <NextGameCard currentId="pit-stop-timer" />
         </div>
       </div>
     )

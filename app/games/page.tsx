@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-import { RADIO_QUOTES } from '@/lib/games/teamRadioData'
+import { GAMES } from '@/lib/games/registry'
 
 export const metadata: Metadata = {
   title: 'F1 Mini Games — Reaction Tests, Trivia & Driver Puzzles',
@@ -30,97 +30,6 @@ export const metadata: Metadata = {
     images: ['/opengraph-image'],
   },
 }
-
-const GAMES = [
-  {
-    id: 'lights-out',
-    href: '/games/lights-out',
-    tag: 'Reaction Test',
-    title: 'Lights Out',
-    description:
-      "Watch all five starting lights illuminate one by one. The moment they go dark — tap as fast as you can. Don't jump the start.",
-    duration: '~30 seconds',
-    accent: '#ef4444',
-    icon: '🚦',
-  },
-  {
-    id: 'guess-the-driver',
-    href: '/games/guess-the-driver',
-    tag: 'F1 Knowledge',
-    title: 'Guess the Driver',
-    description:
-      'Clues about an F1 driver are revealed one at a time. Identify them early for maximum points. 53 drivers across every era.',
-    duration: '~1 minute',
-    accent: '#f59e0b',
-    icon: '🏎️',
-  },
-  {
-    id: 'track-outline',
-    href: '/games/track-outline',
-    tag: 'Circuit Knowledge',
-    title: 'Track Outline Quiz',
-    description:
-      'A circuit silhouette is shown — no name, no labels. Pick the correct track from four options across 10 rounds.',
-    duration: '~2 minutes',
-    accent: '#a855f7',
-    icon: '🗺️',
-  },
-  {
-    id: 'championship-decider',
-    href: '/games/championship-decider',
-    tag: 'F1 Strategy',
-    title: 'Championship Decider',
-    description:
-      'Relive real F1 strategy moments and decide what you would do from the pit wall. Abu Dhabi 2021. Monaco 2016. Turkey 2020.',
-    duration: '~10 minutes',
-    accent: '#3b82f6',
-    icon: '🏆',
-  },
-  {
-    id: 'team-radio',
-    href: '/games/team-radio',
-    tag: 'F1 Knowledge',
-    title: 'Team Radio Guess',
-    description:
-      `Famous quotes from the pit wall. A transmission plays — you pick the driver. ${RADIO_QUOTES.length} legendary radio moments across every era.`,
-    duration: '~3 minutes',
-    accent: '#10b981',
-    icon: '📻',
-  },
-  {
-    id: 'predict-driver',
-    href: '/games/predict-driver',
-    tag: 'F1 Wordle',
-    title: 'Predict the Driver',
-    description:
-      'Wordle for F1. Identify the mystery driver in 6 guesses using nationality, wins, poles, debut year, and team hints. Daily + Endless modes.',
-    duration: '~2 minutes',
-    accent: '#6366f1',
-    icon: '🎯',
-  },
-  {
-    id: 'higher-lower',
-    href: '/games/higher-lower',
-    tag: 'Stat Battle',
-    title: 'Higher or Lower',
-    description:
-      'Does Driver B have more career wins than Driver A? Compare stats across wins, poles, podiums, fastest laps, championships and race starts. Build your streak.',
-    duration: 'Endless',
-    accent: '#f97316',
-    icon: '⚡',
-  },
-  {
-    id: 'pit-stop-timer',
-    href: '/games/pit-stop-timer',
-    tag: 'Pit Wall',
-    title: 'Pit Stop Timer',
-    description:
-      'A target stop time is shown. Start the timer and release the car as close to it as possible. Too early is an unsafe release. Too late loses positions.',
-    duration: '~1 minute',
-    accent: '#06b6d4',
-    icon: '⏱️',
-  },
-]
 
 const gamesJsonLd = {
   '@context': 'https://schema.org',
@@ -210,6 +119,20 @@ export default function GamesPage() {
                     background: `radial-gradient(ellipse 75% 65% at 0% 50%, ${game.accent}16 0%, transparent 65%)`,
                   }}
                 />
+
+                {/* Engagement badge */}
+                {game.badge && (
+                  <span
+                    className="absolute top-5 right-5 inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-mono uppercase tracking-widest font-semibold"
+                    style={{
+                      color: game.accent,
+                      background: `${game.accent}14`,
+                      border: `1px solid ${game.accent}33`,
+                    }}
+                  >
+                    {game.badge}
+                  </span>
+                )}
 
                 {/* Game icon */}
                 <div className="mb-5">

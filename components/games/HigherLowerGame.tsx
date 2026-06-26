@@ -11,6 +11,7 @@ import {
 } from '@/lib/games/higherLowerData'
 import { Analytics } from '@/lib/analytics'
 import { ShareButtons } from '@/components/games/ShareButtons'
+import { NextGameCard } from '@/components/games/NextGameCard'
 
 // ── Persistence ───────────────────────────────────────────────────────────────
 
@@ -543,6 +544,7 @@ function EndScreen({
         >
           Play Again
         </button>
+        <NextGameCard currentId="higher-lower" />
       </div>
     </motion.div>
   )

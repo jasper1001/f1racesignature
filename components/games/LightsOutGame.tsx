@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ShareButtons } from '@/components/games/ShareButtons'
+import { NextGameCard } from '@/components/games/NextGameCard'
 
 const LIGHT_INTERVAL = 800
 const MIN_GO_DELAY = 200
@@ -281,6 +282,8 @@ export function LightsOutGame() {
           ))}
         </motion.div>
       )}
+
+      {phase === 'result' && <NextGameCard currentId="lights-out" />}
     </div>
   )
 }

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ShareButtons } from '@/components/games/ShareButtons'
+import { NextGameCard } from '@/components/games/NextGameCard'
 import {
   DRIVERS,
   getPool,
@@ -658,6 +659,7 @@ function ResultScreen({
             Change Mode
           </button>
         </div>
+        <NextGameCard currentId="predict-driver" />
       </div>
     </motion.div>
   )
