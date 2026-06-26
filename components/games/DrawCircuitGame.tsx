@@ -116,7 +116,7 @@ export function DrawCircuitGame() {
   const [isNewBest, setIsNewBest] = useState(false)
   const [stats, setStats] = useState<Stats>(loadStats)
 
-  const svgRef = useRef<SVGSVGElement>(null)
+  const surfaceRef = useRef<HTMLDivElement>(null)
   const measureRef = useRef<SVGPathElement>(null)
   const drawingRef = useRef(false)
   const lastPtRef = useRef<Pt | null>(null)
@@ -127,11 +127,15 @@ export function DrawCircuitGame() {
   // reliably honour `touch-action: none` on an SVG, so cancel the scroll directly
   // with a non-passive listener (React's onPointer* handlers are passive for this).
   useEffect(() => {
-    const el = svgRef.current
+    const el = surfaceRef.current
     if (!el || phase !== 'drawing') return
     const prevent = (e: TouchEvent) => e.preventDefault()
     el.addEventListener('touchmove', prevent, { passive: false })
-    return () => el.removeEventListener('touchmove', prevent)
+    el.addEventListener('touchstart', prevent, { passive: false })
+    return () => {
+      el.removeEventListener('touchmove', prevent)
+      el.removeEventListener('touchstart', prevent)
+    }
   }, [phase])
 
   const pickCircuit = useCallback((): Circuit | null => {
@@ -164,8 +168,8 @@ export function DrawCircuitGame() {
   }, [pickCircuit])
 
   function toSvgPoint(e: React.PointerEvent): Pt {
-    const svg = svgRef.current!
-    const rect = svg.getBoundingClientRect()
+    const el = surfaceRef.current!
+    const rect = el.getBoundingClientRect()
     return {
       x: ((e.clientX - rect.left) / rect.width) * VB_W,
       y: ((e.clientY - rect.top) / rect.height) * VB_H,
@@ -175,7 +179,7 @@ export function DrawCircuitGame() {
   function handlePointerDown(e: React.PointerEvent) {
     if (phase !== 'drawing') return
     e.preventDefault()
-    ;(e.target as Element).setPointerCapture?.(e.pointerId)
+    e.currentTarget.setPointerCapture?.(e.pointerId)
     drawingRef.current = true
     const p = toSvgPoint(e)
     lastPtRef.current = p
@@ -294,25 +298,28 @@ export function DrawCircuitGame() {
               )})()}
             </div>
 
-            {/* Canvas */}
+            {/* Canvas — pointer/touch handling lives on the div (WebKit handles
+                touch-action reliably on a div, not on an inline <svg>). */}
             <div
-              className="relative rounded-2xl border bg-[#fbf9f4] overflow-hidden"
-              style={{ borderColor: '#dcd5c6' }}
+              ref={surfaceRef}
+              className="relative rounded-2xl border bg-[#fbf9f4] overflow-hidden cursor-crosshair select-none"
+              style={{ borderColor: '#dcd5c6', aspectRatio: `${VB_W} / ${VB_H}`, touchAction: 'none' }}
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerUp}
+              onPointerCancel={handlePointerUp}
+              onPointerLeave={handlePointerUp}
             >
               {/* Dot grid */}
               <div className="absolute inset-0 pointer-events-none" style={{
                 backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.06) 1px, transparent 1px)',
                 backgroundSize: '24px 24px',
               }} />
+              {/* Drawing (visual only — does not receive pointer events) */}
               <svg
-                ref={svgRef}
                 viewBox={`0 0 ${VB_W} ${VB_H}`}
-                className="relative w-full block cursor-crosshair"
-                style={{ aspectRatio: `${VB_W} / ${VB_H}`, touchAction: 'none' }}
-                onPointerDown={handlePointerDown}
-                onPointerMove={handlePointerMove}
-                onPointerUp={handlePointerUp}
-                onPointerLeave={handlePointerUp}
+                preserveAspectRatio="none"
+                className="absolute inset-0 w-full h-full pointer-events-none"
               >
                 {points.length > 1 && (
                   <polyline
