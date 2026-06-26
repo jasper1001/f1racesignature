@@ -18,7 +18,7 @@ import { OnboardingModal } from '@/components/studio/OnboardingModal'
 import { hasSeen, markSeen } from '@/lib/onboarding'
 import Link from 'next/link'
 import { useStudioStore } from '@/lib/store'
-import { fetchDrivers, fetchRaces, fetchTelemetry, fetchCircuits } from '@/lib/data'
+import { fetchDrivers, fetchRaces, fetchTelemetry, fetchCircuits, fetchTrackCenterline } from '@/lib/data'
 import { themeById, EXPORT_FORMATS } from '@/lib/themes'
 import { recordLapVideo, canRecordMp4 } from '@/lib/lapVideo'
 import { canDownload, recordDownload, DAILY_DOWNLOAD_LIMIT } from '@/lib/downloadLimit'
@@ -178,6 +178,13 @@ export default function StudioPage() {
     queryKey: ['telemetry', selectedRace?.telemetryFile],
     queryFn: () => fetchTelemetry(selectedRace!.telemetryFile),
     enabled: Boolean(selectedRace?.telemetryFile),
+  })
+
+  // Real OSM track centreline for the 'Racing Line' viz (null when not built yet).
+  const { data: trackCenterline = null } = useQuery({
+    queryKey: ['track', selectedCircuit?.id],
+    queryFn: () => fetchTrackCenterline(selectedCircuit!.id),
+    enabled: Boolean(selectedCircuit?.id),
   })
 
   // Compare (head-to-head) laps — up to two, so three cars total. Two fixed
@@ -390,7 +397,7 @@ export default function StudioPage() {
                 <EmptyState />
               ) : (
                 <div className="poster-wrapper" style={{ zoom: zoom }}>
-                  <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compares={compares} playbackProgress={livePlayback} />
+                  <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compares={compares} playbackProgress={livePlayback} trackCenterline={trackCenterline} />
                 </div>
               )}
             </div>
@@ -456,7 +463,7 @@ export default function StudioPage() {
                         className="poster-wrapper"
                         style={{ transform: `scale(${mobileScale})`, transformOrigin: 'top left' }}
                       >
-                        <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compares={compares} playbackProgress={livePlayback} />
+                        <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compares={compares} playbackProgress={livePlayback} trackCenterline={trackCenterline} />
                       </div>
                     </div>
                   )}
@@ -516,7 +523,7 @@ export default function StudioPage() {
               </button>
             </div>
             <div className="poster-wrapper" style={{ transform: `scale(${fsScale})`, transformOrigin: 'center' }}>
-              <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compares={compares} playbackProgress={livePlayback} />
+              <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compares={compares} playbackProgress={livePlayback} trackCenterline={trackCenterline} />
             </div>
           </motion.div>
         )}

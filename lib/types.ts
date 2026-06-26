@@ -65,9 +65,24 @@ export interface Circuit {
 
 export type VizMode =
   | 'racing_line'
+  | 'racing_line_real'
   | 'speed_heatmap'
   | 'sector_split'
   | 'overtake_map'
+
+// Real circuit centreline (from OpenStreetMap), in the same 500x420 PATH space as
+// Circuit.path, so the actual racing line can be overlaid on a true track surface.
+export interface TrackCenterline {
+  id: string
+  source: string
+  viewBox: string
+  perimeterM: number
+  lapLengthM: number
+  alignRmsNorm: number
+  // Track width in PATH units (≈15 m), for drawing the asphalt ribbon to scale.
+  widthPath: number
+  centerlinePath: string
+}
 
 export type ArtTheme =
   | 'carbon_fiber'

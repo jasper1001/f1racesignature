@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import type { Driver, Race, Telemetry, Circuit, ThemeConfig, VizMode } from '@/lib/types'
+import type { Driver, Race, Telemetry, Circuit, ThemeConfig, VizMode, TrackCenterline } from '@/lib/types'
 import { RacingLine } from '@/components/visualizations/RacingLine'
 import { SpeedHeatmap } from '@/components/visualizations/SpeedHeatmap'
 import { SectorSplit } from '@/components/visualizations/SectorSplit'
@@ -129,6 +129,8 @@ interface PosterPreviewProps {
   compares?: ComparisonLap[]
   // Lap playback: 0..1 progress, or null when not playing
   playbackProgress?: number | null
+  // Real OSM track centreline for the 'racing_line_real' viz (null = fall back).
+  trackCenterline?: TrackCenterline | null
 }
 
 function parseLapSeconds(s: string): number {
@@ -186,6 +188,25 @@ function CircuitBackground({ path, fit }: { path: string; fit: CircuitFit }) {
         {/* Lighter inner surface, leaving a darker edge so it reads as a road */}
         <path d={path} fill="none" stroke="#5a5a5a" strokeWidth={sw(24)} strokeLinecap="round" strokeLinejoin="round" opacity="0.5" />
       </g>
+    </g>
+  )
+}
+
+// Real circuit surface for the "Racing Line" viz: an OSM-derived centreline drawn
+// as an asphalt ribbon at true track width (in PATH units, so it scales with the
+// fit), with a kerb-like edge. The actual racing line is overlaid separately, so
+// it visibly runs wide on entry and clips the apex inside this ribbon.
+function RealTrackRibbon({ path, fit, widthPx }: { path: string; fit: CircuitFit; widthPx: number }) {
+  // Paths render inside scale(fit.scale), so divide by it to keep the ribbon a
+  // CONSTANT on-screen thickness (widthPx) on every circuit and zoom level.
+  const sw = (px: number) => px / fit.scale
+  return (
+    <g transform={`translate(${fit.tx}, ${fit.ty}) scale(${fit.scale})`}>
+      {/* Kerb / track edge */}
+      <path d={path} fill="none" stroke="#e3e3e3" strokeWidth={sw(widthPx + 2.5)} strokeLinecap="round" strokeLinejoin="round" opacity="0.28" />
+      {/* Asphalt surface */}
+      <path d={path} fill="none" stroke="#2c2c2c" strokeWidth={sw(widthPx)} strokeLinecap="round" strokeLinejoin="round" />
+      <path d={path} fill="none" stroke="#444444" strokeWidth={sw(widthPx * 0.62)} strokeLinecap="round" strokeLinejoin="round" opacity="0.6" />
     </g>
   )
 }
@@ -252,6 +273,7 @@ export function PosterPreview({
   isFreeTier = true,
   compares = [],
   playbackProgress = null,
+  trackCenterline = null,
 }: PosterPreviewProps) {
   const svgRef = useRef<SVGSVGElement>(null)
 
@@ -275,6 +297,12 @@ export function PosterPreview({
     return 0
   })()
   const circuitPath = circuit ? rotatePath(circuit.path, rot) : null
+
+  // 'Racing Line' mode: when a real OSM track centreline exists for this circuit,
+  // render it as a to-scale asphalt ribbon under the racing line. Shares the same
+  // rotation + fit as the circuit path so the lap stays glued to the track.
+  const realTrack = vizMode === 'racing_line_real' && trackCenterline ? trackCenterline : null
+  const realTrackPath = realTrack ? rotatePath(realTrack.centerlinePath, rot) : null
 
   // The one fit shared by the outline (via CircuitBackground) and the racing
   // line below — computed once so the two paths can never diverge.
@@ -445,7 +473,8 @@ export function PosterPreview({
     const props = { points: vizPoints, theme, width: POSTER_W, height: POSTER_H, driverColor }
 
     switch (vizMode) {
-      case 'racing_line':   return <RacingLine {...props} />
+      case 'racing_line':      return <RacingLine {...props} />
+      case 'racing_line_real': return <RacingLine {...props} strokeWidth={2.2} />
       case 'speed_heatmap': return <SpeedHeatmap {...props} />
       case 'sector_split':  return <SectorSplit {...props} />
       case 'overtake_map':  return <OvertakeMap {...props} />
@@ -741,8 +770,10 @@ export function PosterPreview({
           )
         })()}
 
-        {/* Circuit area */}
-        {circuitPath && <CircuitBackground path={circuitPath} fit={fit} />}
+        {/* Circuit area — real to-scale track for 'Racing Line', else the stylised ribbon */}
+        {realTrackPath
+          ? <RealTrackRibbon path={realTrackPath} fit={fit} widthPx={17} />
+          : circuitPath && <CircuitBackground path={circuitPath} fit={fit} />}
 
         {/* Visualization overlay — playback when playing, draw-on reveal while the
             line is still drawing itself, otherwise the settled static viz */}

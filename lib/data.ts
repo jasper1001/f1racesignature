@@ -1,4 +1,4 @@
-import type { Driver, Race, Circuit, Telemetry } from './types'
+import type { Driver, Race, Circuit, Telemetry, TrackCenterline } from './types'
 
 // Default fetch revalidates against the CDN (so new drivers/races appear after a
 // deploy), while TanStack Query's staleTime: Infinity means each file is fetched
@@ -21,6 +21,19 @@ export async function fetchCircuits(): Promise<Record<string, Circuit>> {
 export async function fetchTelemetry(fileKey: string): Promise<Telemetry> {
   const res = await fetch(`/data/telemetry/${fileKey}.json`)
   return res.json()
+}
+
+// Real OSM-derived track centreline for the "Racing Line" viz. Only some circuits
+// have a built track file (see scripts/build-racingline-track.mjs) — returns null
+// for those that don't, so the viz can fall back gracefully.
+export async function fetchTrackCenterline(circuitId: string): Promise<TrackCenterline | null> {
+  try {
+    const res = await fetch(`/data/tracks/${circuitId}.json`)
+    if (!res.ok) return null
+    return res.json()
+  } catch {
+    return null
+  }
 }
 
 export function getRacesForDriver(races: Race[], driverId: string): Race[] {

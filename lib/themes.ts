@@ -274,6 +274,12 @@ export const VIZ_MODES: VizModeConfig[] = [
     isFree: true,
   },
   {
+    id: 'racing_line_real',
+    name: 'Racing Line',
+    description: 'The lap overlaid on the real track, cutting the apexes',
+    isFree: true,
+  },
+  {
     id: 'speed_heatmap',
     name: 'Speed Heatmap',
     description: 'Circuit colored blue → red by speed',
