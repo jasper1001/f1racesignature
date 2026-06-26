@@ -89,6 +89,19 @@ export const GAMES: GameMeta[] = [
     badge: 'New',
   },
   {
+    id: 'tier-list',
+    href: '/games/tier-list',
+    tag: 'Hot Takes',
+    title: "Rank 'Em",
+    description:
+      'Drag F1 drivers, teams and circuits into S–D tiers and build your own ranking. No right answers — just settle the debate and share your hot takes.',
+    blurb: 'Drag drivers and teams into S–D tiers and share your ranking.',
+    duration: '~2 minutes',
+    accent: '#f43f5e',
+    icon: '🏅',
+    badge: 'New',
+  },
+  {
     id: 'higher-lower',
     href: '/games/higher-lower',
     tag: 'Stat Battle',
