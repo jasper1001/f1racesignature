@@ -102,6 +102,19 @@ export const GAMES: GameMeta[] = [
     badge: 'New',
   },
   {
+    id: 'career-path',
+    href: '/games/career-path',
+    tag: 'Guess the Driver',
+    title: 'Career Path',
+    description:
+      'Toro Rosso, Red Bull, Aston Martin… A driver\'s teams are revealed one at a time. Name the driver on the fewest teams you can for the highest score.',
+    blurb: 'Name the F1 driver from the teams they raced for.',
+    duration: '~2 minutes',
+    accent: '#0ea5e9',
+    icon: '🔀',
+    badge: 'New',
+  },
+  {
     id: 'higher-lower',
     href: '/games/higher-lower',
     tag: 'Stat Battle',
