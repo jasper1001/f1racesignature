@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useCallback, useEffect } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
@@ -149,52 +149,6 @@ export function DrawCircuitGame() {
   const lastIdRef = useRef<string | null>(null)
   const gameRef = useRef<HTMLDivElement>(null)
 
-  // Touch drawing via native non-passive listeners. iOS WebKit (Safari AND Chrome)
-  // is unreliable with pointer events + touch-action on inline content, so we drive
-  // touch directly here and preventDefault to stop the page scrolling. Mouse/pen is
-  // handled by the React onPointer* handlers below.
-  useEffect(() => {
-    const el = surfaceRef.current
-    if (!el || phase !== 'drawing') return
-
-    const point = (clientX: number, clientY: number): Pt => {
-      const r = el.getBoundingClientRect()
-      return { x: ((clientX - r.left) / r.width) * VB_W, y: ((clientY - r.top) / r.height) * VB_H }
-    }
-    const start = (e: TouchEvent) => {
-      e.preventDefault()
-      const t = e.touches[0]
-      if (!t) return
-      drawingRef.current = true
-      const p = point(t.clientX, t.clientY)
-      lastPtRef.current = p
-      setPoints([p])
-    }
-    const move = (e: TouchEvent) => {
-      if (!drawingRef.current) return
-      e.preventDefault()
-      const t = e.touches[0]
-      if (!t) return
-      const p = point(t.clientX, t.clientY)
-      const last = lastPtRef.current
-      if (last && (p.x - last.x) ** 2 + (p.y - last.y) ** 2 < 9) return
-      lastPtRef.current = p
-      setPoints(prev => [...prev, p])
-    }
-    const end = () => { drawingRef.current = false }
-
-    el.addEventListener('touchstart', start, { passive: false })
-    el.addEventListener('touchmove', move, { passive: false })
-    el.addEventListener('touchend', end)
-    el.addEventListener('touchcancel', end)
-    return () => {
-      el.removeEventListener('touchstart', start)
-      el.removeEventListener('touchmove', move)
-      el.removeEventListener('touchend', end)
-      el.removeEventListener('touchcancel', end)
-    }
-  }, [phase])
-
   const pickCircuit = useCallback((): Circuit | null => {
     if (circuits.length === 0) return null
     let next = circuits[Math.floor(Math.random() * circuits.length)]
@@ -234,7 +188,7 @@ export function DrawCircuitGame() {
   }
 
   function handlePointerDown(e: React.PointerEvent) {
-    if (phase !== 'drawing' || e.pointerType === 'touch') return
+    if (phase !== 'drawing') return
     e.preventDefault()
     e.currentTarget.setPointerCapture?.(e.pointerId)
     drawingRef.current = true
@@ -244,7 +198,7 @@ export function DrawCircuitGame() {
   }
 
   function handlePointerMove(e: React.PointerEvent) {
-    if (!drawingRef.current || phase !== 'drawing' || e.pointerType === 'touch') return
+    if (!drawingRef.current || phase !== 'drawing') return
     const p = toSvgPoint(e)
     const last = lastPtRef.current
     // Throttle by distance to keep the point list lean.
@@ -253,8 +207,7 @@ export function DrawCircuitGame() {
     setPoints(prev => [...prev, p])
   }
 
-  function handlePointerUp(e: React.PointerEvent) {
-    if (e.pointerType === 'touch') return
+  function handlePointerUp() {
     drawingRef.current = false
   }
 
