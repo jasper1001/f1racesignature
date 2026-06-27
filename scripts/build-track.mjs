@@ -192,14 +192,26 @@ const centre = R.map((r, i) => {
   const wide = cur.filter((p) => dist(p, r) < band * 2 && aligned(p))
   return wide.length ? centroid(wide) : { x: r.x, y: r.y }
 })
-// Safeguard: the real centreline is always within ~half a track-width of the racing
-// line. Wherever the snap landed further than that, it grabbed the wrong tarmac (a
-// crossover's other branch) — clamp those back to the racing line so no shortcut is
-// drawn across the crossing.
-const maxOffset = 15 * scale * 0.9 // ~half a track width
-for (let i = 0; i < centre.length; i++) {
-  if (dist(centre[i], R[i]) > maxOffset) centre[i] = { x: R[i].x, y: R[i].y }
-}
+// Crossover handling: where the racing line passes close to ITSELF (a figure-8
+// crossing, e.g. Suzuka), snapping is ambiguous and tends to cut a diagonal shortcut
+// across the X. In that small window follow the racing line directly — it's a near
+// straight crossing there anyway — so no shortcut is ever drawn.
+const wPath = 15 * scale
+const crossing = R.map((r, i) => {
+  for (let j = 0; j < R.length; j++) {
+    const di = Math.min(Math.abs(i - j), R.length - Math.abs(i - j))
+    if (di > 14 && dist(r, R[j]) < 2.2 * wPath) return true
+  }
+  return false
+})
+const CW = 16
+const crossWin = R.map((_, i) => {
+  for (let k = -CW; k <= CW; k++) if (crossing[(i + k + R.length) % R.length]) return true
+  return false
+})
+for (let i = 0; i < centre.length; i++) if (crossWin[i]) centre[i] = { x: R[i].x, y: R[i].y }
+const nCross = crossWin.filter(Boolean).length
+if (nCross) console.log(`  crossover window: ${nCross}/${R.length} points follow the racing line`)
 // smooth (closed moving average) + resample
 const sm = centre.map((_, i) => {
   let x = 0, y = 0, w = 0

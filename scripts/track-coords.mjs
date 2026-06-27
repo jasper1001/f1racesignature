@@ -1,7 +1,13 @@
 // Approx circuit centres (lat, lon) + optional lapLength override (m) for circuits
-// whose circuits.json lapLength is 0. Used to fetch OSM raceway geometry.
+// whose circuits.json lapLength is 0. Used to fetch OSM geometry.
+//
+// `roads: true` marks street circuits that have no usable highway=raceway loop —
+// fetch the public road network instead (highway=primary|secondary|tertiary|
+// residential|unclassified|trunk|living_street around the centre); the reference-
+// guided builder then selects the circuit roads via the racing line. Monaco is built
+// this way. The same query unlocks baku / las_vegas / marina_bay / australia.
 export const COORDS = {
-  monaco:        { lat: 43.7347, lon: 7.4206 },
+  monaco:        { lat: 43.7384, lon: 7.4246, roads: true },
   silverstone:   { lat: 52.0733, lon: -1.0142 },
   spa:           { lat: 50.4372, lon: 5.9714 },
   bahrain:       { lat: 26.0325, lon: 50.5106 },
