@@ -140,11 +140,15 @@ function LeaderboardInner({ gameId, score, suffix = '', ascending = false, accen
               style={you ? { background: `${accent}14`, border: `1px solid ${accent}40` } : { border: '1px solid transparent' }}>
               <span className="w-6 text-right font-mono font-bold tabular-nums" style={{ color: i < 3 ? accent : '#1a171255' }}>{i + 1}</span>
               <span className="flex-1 min-w-0 truncate text-[#1a1712] font-medium">
-                {r.country && <span className="mr-1" title={r.country}>{flagEmoji(r.country)}</span>}
+                {r.country && <span className="mr-1">{flagEmoji(r.country)}</span>}
                 {r.username}{you && <span className="text-[10px] font-mono ml-1.5" style={{ color: accent }}>YOU</span>}
-                {(r.fav_team || r.fav_driver) && (
-                  <span className="block text-[10px] font-mono text-[#1a1712]/45 truncate">
-                    {[r.fav_driver, r.fav_team].filter(Boolean).join(' · ')}
+                {(r.country || r.fav_team || r.fav_driver) && (
+                  <span className="block text-[10px] font-mono text-[#1a1712]/50 truncate mt-0.5">
+                    {r.country && <span className="text-[#1a1712]/70">{flagEmoji(r.country)} {r.country}</span>}
+                    {r.country && (r.fav_driver || r.fav_team) && ' · '}
+                    {r.fav_driver && <><span className="opacity-60">fav. driver</span> {r.fav_driver}</>}
+                    {r.fav_driver && r.fav_team && ' · '}
+                    {r.fav_team && <><span className="opacity-60">team</span> {r.fav_team}</>}
                   </span>
                 )}
               </span>
@@ -158,7 +162,7 @@ function LeaderboardInner({ gameId, score, suffix = '', ascending = false, accen
             style={{ background: `${accent}14`, border: `1px solid ${accent}40` }}>
             <span className="w-6 text-right font-mono font-bold tabular-nums" style={{ color: accent }}>{mine.rank}</span>
             <span className="flex-1 min-w-0 truncate text-[#1a1712] font-medium">
-              {mine.row.country && <span className="mr-1">{flagEmoji(mine.row.country)}</span>}
+              {mine.row.country && <span className="text-[#1a1712]/70 mr-1.5">{flagEmoji(mine.row.country)} {mine.row.country}</span>}
               {mine.row.username}<span className="text-[10px] font-mono ml-1.5" style={{ color: accent }}>YOU</span>
             </span>
             <span className="font-mono font-bold tabular-nums text-[#1a1712]">{mine.row.score}{suffix}</span>
