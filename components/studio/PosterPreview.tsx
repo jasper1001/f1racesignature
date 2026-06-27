@@ -211,6 +211,24 @@ function RealTrackRibbon({ path, fit, widthPx }: { path: string; fit: CircuitFit
   )
 }
 
+// Stylised track ribbon built directly from the lap line (poster-space 0-1 points),
+// used for real GPS laps where the stored outlines don't match the actual path. The
+// thin racing line is drawn on top from the SAME points, so it can never drift off.
+function LineRibbon({ pts }: { pts: { x: number; y: number }[] }) {
+  if (pts.length < 2) return null
+  const d =
+    pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${(p.x * POSTER_W).toFixed(1)} ${(p.y * POSTER_H).toFixed(1)}`).join(' ') +
+    ` L ${(pts[0].x * POSTER_W).toFixed(1)} ${(pts[0].y * POSTER_H).toFixed(1)}` // close the lap
+  return (
+    <g>
+      {/* Asphalt track surface — wide road ribbon */}
+      <path d={d} fill="none" stroke="#3a3a3a" strokeWidth={34} strokeLinecap="round" strokeLinejoin="round" opacity="0.95" />
+      {/* Lighter inner surface, leaving a darker edge so it reads as a road */}
+      <path d={d} fill="none" stroke="#5a5a5a" strokeWidth={24} strokeLinecap="round" strokeLinejoin="round" opacity="0.5" />
+    </g>
+  )
+}
+
 function wrapText(text: string, maxChars: number): string[] {
   const words = text.split(' ')
   const lines: string[] = []
@@ -285,10 +303,24 @@ export function PosterPreview({
   const [reveal, setReveal] = useState<number | null>(null)
   const revealRaf = useRef<number | null>(null)
 
+  // How the lap was produced decides where the track ribbon comes from:
+  //   • real GPS laps (source 'fastf1') are the car's actual path — ground truth.
+  //     Our stored outlines (circuits.json path AND the OSM centreline) are both
+  //     distorted relative to it (alignment residual ≫ track width), so no transform
+  //     places the lap on them. We therefore build the ribbon FROM the lap line
+  //     itself, guaranteeing the racing line sits on its track.
+  //   • generated-template laps are co-registered with the circuits.json outline, so
+  //     they keep the real circuit outline as the ribbon.
+  // Both can occur on one circuit (e.g. Red Bull Ring: a 2024 GPS lap + a 2016 one).
+  const isRealGps = telemetry?.source === 'fastf1'
+  const geomPath = isRealGps ? null : (circuit?.path ?? null)
+
   // Auto-orient portrait tracks to landscape, in path space (outline + telemetry alike).
   // A manual override wins when present (diagonal tracks the bbox rule can't read).
   const rot = (() => {
-    if (circuit) return CIRCUIT_ROTATION[circuit.id] ?? landscapeRotation(pathBounds(circuit.path))
+    const override = circuit ? CIRCUIT_ROTATION[circuit.id] : undefined
+    if (override !== undefined) return override
+    if (geomPath) return landscapeRotation(pathBounds(geomPath))
     if (telemetry && telemetry.points.length > 1) {
       const xs = telemetry.points.map((p) => p.x)
       const ys = telemetry.points.map((p) => p.y)
@@ -296,12 +328,12 @@ export function PosterPreview({
     }
     return 0
   })()
-  const circuitPath = circuit ? rotatePath(circuit.path, rot) : null
+  const circuitPath = geomPath ? rotatePath(geomPath, rot) : null
 
-  // 'Racing Line' mode: when a real OSM track centreline exists for this circuit,
-  // render it as a to-scale asphalt ribbon under the racing line. Shares the same
-  // rotation + fit as the circuit path so the lap stays glued to the track.
-  const realTrack = vizMode === 'racing_line_real' && trackCenterline ? trackCenterline : null
+  // 'Racing Line' (real) mode draws the OSM centreline as a to-scale asphalt ribbon —
+  // but only for generated laps that are actually registered to it. Real GPS laps
+  // don't match the (distorted) centreline, so they fall through to the lap-line ribbon.
+  const realTrack = vizMode === 'racing_line_real' && trackCenterline && !isRealGps ? trackCenterline : null
   const realTrackPath = realTrack ? rotatePath(realTrack.centerlinePath, rot) : null
 
   // The one fit shared by the outline (via CircuitBackground) and the racing
@@ -327,8 +359,8 @@ export function PosterPreview({
   // ribbon doesn't reach (so they never sit on top of the circuit).
   const trackScreenPts: { x: number; y: number }[] = (() => {
     const out: { x: number; y: number }[] = []
-    if (circuit) {
-      const nums = circuit.path.match(/-?\d+\.?\d*/g)?.map(Number) ?? []
+    if (geomPath) {
+      const nums = geomPath.match(/-?\d+\.?\d*/g)?.map(Number) ?? []
       for (let i = 0; i + 1 < nums.length; i += 2) {
         const p = rotatePathCoord(nums[i], nums[i + 1], rot)
         out.push({ x: p.x * fit.scale + fit.tx, y: p.y * fit.scale + fit.ty })
@@ -770,10 +802,13 @@ export function PosterPreview({
           )
         })()}
 
-        {/* Circuit area — real to-scale track for 'Racing Line', else the stylised ribbon */}
+        {/* Circuit area — real to-scale OSM track, the circuits.json outline, or (for
+            real GPS laps with no matching outline) a ribbon built from the lap itself */}
         {realTrackPath
           ? <RealTrackRibbon path={realTrackPath} fit={fit} widthPx={17} />
-          : circuitPath && <CircuitBackground path={circuitPath} fit={fit} />}
+          : circuitPath
+            ? <CircuitBackground path={circuitPath} fit={fit} />
+            : <LineRibbon pts={vizPoints} />}
 
         {/* Visualization overlay — playback when playing, draw-on reveal while the
             line is still drawing itself, otherwise the settled static viz */}
@@ -800,8 +835,8 @@ export function PosterPreview({
           // Tested against the actual track points; preference order favours the
           // lower-left, sitting just above the bottom watermark.
           const trackPts: { x: number; y: number }[] = []
-          if (circuit) {
-            const nums = circuit.path.match(/-?\d+\.?\d*/g)?.map(Number) ?? []
+          if (geomPath) {
+            const nums = geomPath.match(/-?\d+\.?\d*/g)?.map(Number) ?? []
             for (let i = 0; i + 1 < nums.length; i += 2) {
               const p = rotatePathCoord(nums[i], nums[i + 1], rot)
               trackPts.push({ x: p.x * fit.scale + fit.tx, y: p.y * fit.scale + fit.ty })

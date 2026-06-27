@@ -69,13 +69,21 @@ def resample(pts, count):
         out.append(pts[j] + (pts[j + 1] - pts[j]) * f)
     return np.array(out)
 
-def _sim(src, dst):
-    """Least-squares 2D similarity (rotation+scale+translation, no reflection)
-    mapping src->dst. Returns (2x2 A, 2 t) with dst ~= A@src.T + t."""
+def _rigid(src, dst):
+    """Least-squares 2D RIGID transform (rotation+translation, scale LOCKED at 1,
+    no reflection) mapping src->dst. Returns (2x2 A, 2 t) with dst ~= A@src.T + t.
+
+    The ICP refine must not touch scale: nearest-neighbour matching a corner-cutting
+    racing line onto the centreline biases a scale-estimating fit toward shrinking
+    the line (it collapsed ~9% over 15 iterations, drifting the lap off the ribbon).
+    The coarse Procrustes already sets the correct scale; here we only refine the
+    rotation/offset, so the lap stays the right size."""
     sc, dc = src.mean(0), dst.mean(0)
     s, d = src - sc, dst - dc
     sz, dz = s[:, 0] + 1j * s[:, 1], d[:, 0] + 1j * d[:, 1]
     lam = np.vdot(sz, dz) / np.vdot(sz, sz)
+    if abs(lam) > 0:
+        lam = lam / abs(lam)  # unit modulus → pure rotation, no scale change
     A = np.array([[lam.real, -lam.imag], [lam.imag, lam.real]])
     return A, dc - A @ sc
 
@@ -107,13 +115,14 @@ def align(gps, path, N=300):
     Atot = (As / Bs) * np.array([[lam.real, -lam.imag], [lam.imag, lam.real]])
     ttot = Ac - Atot @ Bc
     # ICP refine against the target loop (fixes small systematic rotation/offset).
+    # Rigid only (no scale) — see _rigid: a scaling refine collapses the line.
     Bref = reflect(B)
     cur = (Atot @ Bref.T).T + ttot
     for _ in range(15):
         # nearest target point for each current point
         d2 = ((cur[:, None, :] - A[None, :, :]) ** 2).sum(2)
         nn = A[d2.argmin(1)]
-        dA, dt = _sim(cur, nn)
+        dA, dt = _rigid(cur, nn)
         cur = (dA @ cur.T).T + dt
         Atot = dA @ Atot; ttot = dA @ ttot + dt
     def fwd(pts):

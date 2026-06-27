@@ -48,6 +48,10 @@ export interface Telemetry {
   benchmarkLapTime: string
   championshipPoints: number[]
   points: TelemetryPoint[]
+  // 'fastf1' for real per-driver GPS laps (aligned to the OSM track centreline);
+  // absent for the older generated-template laps (co-registered with circuits.json
+  // path). Determines which frame the racing line lives in — see PosterPreview.
+  source?: string
 }
 
 export interface Circuit {
