@@ -8,7 +8,8 @@ const ContentSecurityPolicy = [
   "style-src 'self' 'unsafe-inline'",
   "font-src 'self'",
   "img-src 'self' data: blob:",
-  "connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com https://www.googletagmanager.com https://api.jolpi.ca",
+  // Supabase: REST + auth over https, realtime over wss (leaderboards)
+  "connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com https://www.googletagmanager.com https://api.jolpi.ca https://*.supabase.co wss://*.supabase.co",
   "frame-src 'none'",
   "object-src 'none'",
   "base-uri 'self'",

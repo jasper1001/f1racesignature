@@ -1,7 +1,9 @@
 node_modules/
 .next/
 .env*
+!.env.local.example
 scripts/cache/
 *.local
+!.env.local.example
 .DS_Store
 dist/

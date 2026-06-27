@@ -12,6 +12,7 @@ import {
 import { Analytics } from '@/lib/analytics'
 import { ShareButtons } from '@/components/games/ShareButtons'
 import { NextGameCard } from '@/components/games/NextGameCard'
+import { Leaderboard } from '@/components/games/Leaderboard'
 
 // ── Persistence ───────────────────────────────────────────────────────────────
 
@@ -544,6 +545,7 @@ function EndScreen({
         >
           Play Again
         </button>
+        <Leaderboard gameId="higher-lower" score={bestStreak} accent="#f97316" />
         <NextGameCard currentId="higher-lower" />
       </div>
     </motion.div>

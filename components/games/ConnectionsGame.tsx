@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ShareButtons } from '@/components/games/ShareButtons'
 import { NextGameCard } from '@/components/games/NextGameCard'
+import { Leaderboard } from '@/components/games/Leaderboard'
 import {
   PUZZLES,
   DIFFICULTY_COLORS,
@@ -411,6 +412,7 @@ function OverPanel({
             Come back tomorrow for a new puzzle.
           </p>
         )}
+        {streak && <Leaderboard gameId="connections" score={streak.best} accent="#14b8a6" />}
         <NextGameCard currentId="connections" />
       </div>
     </motion.div>

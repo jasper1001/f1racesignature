@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.108.2",
     "@tanstack/react-query": "^5.62.3",
     "framer-motion": "^11.13.1",
     "html2canvas": "^1.4.1",

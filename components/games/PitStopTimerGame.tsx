@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { ShareButtons } from '@/components/games/ShareButtons'
 import { NextGameCard } from '@/components/games/NextGameCard'
+import { Leaderboard } from '@/components/games/Leaderboard'
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
@@ -337,6 +338,12 @@ export function PitStopTimerGame() {
           </div>
 
         </div>
+
+        {result.label !== 'Unsafe Release' && (
+          <div className="mt-6">
+            <Leaderboard gameId="pit-stop-timer" score={Math.round(Math.abs(diff) * 1000)} ascending suffix="ms" accent="#06b6d4" />
+          </div>
+        )}
 
         <div className="mt-6">
           <NextGameCard currentId="pit-stop-timer" />

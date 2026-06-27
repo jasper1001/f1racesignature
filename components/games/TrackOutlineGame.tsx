@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
 import { ShareButtons } from '@/components/games/ShareButtons'
 import { NextGameCard } from '@/components/games/NextGameCard'
+import { Leaderboard } from '@/components/games/Leaderboard'
 import { fetchCircuits } from '@/lib/data'
 import type { Circuit } from '@/lib/types'
 
@@ -329,6 +330,7 @@ export function TrackOutlineGame() {
                 >
                   Play Again
                 </button>
+                <Leaderboard gameId="track-outline" score={finalScore} accent="#a855f7" />
                 <NextGameCard currentId="track-outline" />
               </div>
             </motion.div>

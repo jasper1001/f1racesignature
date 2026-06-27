@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
 import { ShareButtons } from '@/components/games/ShareButtons'
 import { NextGameCard } from '@/components/games/NextGameCard'
+import { Leaderboard } from '@/components/games/Leaderboard'
 import { fetchCircuits, fetchRaces } from '@/lib/data'
 import type { Circuit } from '@/lib/types'
 
@@ -473,6 +474,9 @@ export function DrawCircuitGame() {
                   <p className="text-[#1a1712]/70 text-sm">{flavor}</p>
                 </div>
               </div>
+
+              {/* Global leaderboard (renders only once Supabase is configured) */}
+              <Leaderboard gameId="draw-the-circuit" score={score} suffix="%" accent={ACCENT} meta={{ circuit: circuit.id }} />
 
               {/* Studio bridge */}
               <Link

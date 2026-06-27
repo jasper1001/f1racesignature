@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { RADIO_QUOTES, type RadioQuote } from '@/lib/games/teamRadioData'
 import { ShareButtons } from '@/components/games/ShareButtons'
 import { NextGameCard } from '@/components/games/NextGameCard'
+import { Leaderboard } from '@/components/games/Leaderboard'
 
 const ROUNDS = 10
 const POINTS_PER_CORRECT = 100
@@ -406,6 +407,7 @@ function ResultScreen({
             All Games
           </a>
         </div>
+        <Leaderboard gameId="team-radio" score={score} accent="#10b981" />
         <NextGameCard currentId="team-radio" />
       </div>
     </motion.div>

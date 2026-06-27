@@ -4,6 +4,7 @@ import { Fragment, useState, useEffect, useRef, useMemo, useCallback } from 'rea
 import { motion, AnimatePresence } from 'framer-motion'
 import { ShareButtons } from '@/components/games/ShareButtons'
 import { NextGameCard } from '@/components/games/NextGameCard'
+import { Leaderboard } from '@/components/games/Leaderboard'
 import { DRIVERS, type Driver } from '@/lib/games/predictDriverData'
 
 const ACCENT = '#0ea5e9'
@@ -346,6 +347,7 @@ export function CareerPathGame() {
               >
                 Next Driver
               </button>
+              <Leaderboard gameId="career-path" score={finalScore} accent="#0ea5e9" />
               <NextGameCard currentId="career-path" />
             </div>
           </motion.div>

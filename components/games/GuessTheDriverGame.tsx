@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { DRIVERS, CLUE_DEFS, scorePotential, type DriverEntry } from '@/lib/games/guessDriverData'
 import { ShareButtons } from '@/components/games/ShareButtons'
 import { NextGameCard } from '@/components/games/NextGameCard'
+import { Leaderboard } from '@/components/games/Leaderboard'
 
 const STATS_KEY = 'f1rs_games_guess_driver'
 
@@ -367,6 +368,7 @@ export function GuessTheDriverGame() {
               >
                 Next Driver
               </button>
+              <Leaderboard gameId="guess-the-driver" score={finalScore} accent="#f59e0b" />
               <NextGameCard currentId="guess-the-driver" />
             </div>
           </motion.div>
