@@ -752,11 +752,11 @@ export function PosterPreview({
             : driver?.name ?? 'Select a Driver'}
         </text>
 
-        {/* Badge — viz mode, or HEAD TO HEAD when comparing */}
+        {/* Badge — viz mode, plus HEAD TO HEAD when comparing, so the label always
+            reflects what's actually on screen (e.g. "RACING LINE · HEAD TO HEAD"). */}
         {(() => {
-          const label = isComparing
-            ? 'HEAD TO HEAD'
-            : (VIZ_MODES.find((v) => v.id === vizMode)?.name ?? vizMode).toUpperCase()
+          const modeName = (VIZ_MODES.find((v) => v.id === vizMode)?.name ?? vizMode).toUpperCase()
+          const label = isComparing ? `${modeName} · HEAD TO HEAD` : modeName
           const badgeW = label.length * 7.4 + 30
           return (
             <g transform={`translate(${POSTER_W / 2 - badgeW / 2}, 66)`}>
