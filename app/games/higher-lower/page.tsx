@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { LeaderboardView } from '@/components/games/LeaderboardView'
 import { HigherLowerGame } from '@/components/games/HigherLowerGame'
 
 export const metadata: Metadata = {
@@ -95,6 +96,7 @@ export default function HigherLowerPage() {
           <div className="rounded-2xl bg-[#fbf9f4] overflow-hidden p-5 md:p-8" style={{ border: '1px solid rgba(249,115,22,0.25)', boxShadow: '0 0 0 1px rgba(249,115,22,0.06), 0 0 40px rgba(249,115,22,0.06)' }}>
             <HigherLowerGame />
           </div>
+          <div className="mt-6"><LeaderboardView gameId="higher-lower" /></div>
         </div>
       </main>
       <Footer />

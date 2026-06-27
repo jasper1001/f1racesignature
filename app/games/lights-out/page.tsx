@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { LeaderboardView } from '@/components/games/LeaderboardView'
 import { LightsOutGame } from '@/components/games/LightsOutGame'
 
 export const metadata: Metadata = {
@@ -97,6 +98,7 @@ export default function LightsOutPage() {
             <div className="rounded-2xl bg-[#fbf9f4] overflow-hidden p-5 md:p-8" style={{ border: '1px solid rgba(239,68,68,0.25)', boxShadow: '0 0 0 1px rgba(239,68,68,0.06), 0 0 40px rgba(239,68,68,0.06)' }}>
               <LightsOutGame />
             </div>
+          <div className="mt-6"><LeaderboardView gameId="lights-out" /></div>
             <div className="mt-6 md:mt-0">
               <p className="text-[10px] font-mono text-[#1a1712] uppercase tracking-widest opacity-30 mb-3">Rating Scale</p>
               <div className="space-y-2">

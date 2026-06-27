@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { GAMES } from '@/lib/games/registry'
+import { LeaderboardsHub } from '@/components/games/LeaderboardsHub'
 
 export const metadata: Metadata = {
   title: 'F1 Mini Games — Reaction Tests, Trivia & Driver Puzzles',
@@ -196,6 +197,8 @@ export default function GamesPage() {
             </div>
           </div>
         </div>
+
+        <LeaderboardsHub />
       </main>
       <Footer />
     </>

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { LeaderboardView } from '@/components/games/LeaderboardView'
 import { CareerPathGame } from '@/components/games/CareerPathGame'
 
 const ACCENT = '#0ea5e9'
@@ -93,6 +94,7 @@ export default function CareerPathPage() {
           <div className="rounded-2xl bg-[#fbf9f4] overflow-hidden p-5 md:p-8" style={{ border: '1px solid rgba(14,165,233,0.25)', boxShadow: '0 0 0 1px rgba(14,165,233,0.06), 0 0 40px rgba(14,165,233,0.06)' }}>
             <CareerPathGame />
           </div>
+          <div className="mt-6"><LeaderboardView gameId="career-path" /></div>
         </div>
       </main>
       <Footer />

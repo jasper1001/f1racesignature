@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { LeaderboardView } from '@/components/games/LeaderboardView'
 import { TeamRadioGame } from '@/components/games/TeamRadioGame'
 import { RADIO_QUOTES } from '@/lib/games/teamRadioData'
 
@@ -96,6 +97,7 @@ export default function TeamRadioPage() {
           <div className="rounded-2xl bg-[#fbf9f4] overflow-hidden p-5 md:p-8" style={{ border: '1px solid rgba(16,185,129,0.25)', boxShadow: '0 0 0 1px rgba(16,185,129,0.06), 0 0 40px rgba(16,185,129,0.06)' }}>
             <TeamRadioGame />
           </div>
+          <div className="mt-6"><LeaderboardView gameId="team-radio" /></div>
         </div>
       </main>
       <Footer />

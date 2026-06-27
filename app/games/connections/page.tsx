@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { LeaderboardView } from '@/components/games/LeaderboardView'
 import { ConnectionsGame } from '@/components/games/ConnectionsGame'
 
 const ACCENT = '#14b8a6'
@@ -93,6 +94,7 @@ export default function ConnectionsPage() {
           <div className="rounded-2xl bg-[#fbf9f4] overflow-hidden p-5 md:p-8" style={{ border: '1px solid rgba(20,184,166,0.25)', boxShadow: '0 0 0 1px rgba(20,184,166,0.06), 0 0 40px rgba(20,184,166,0.06)' }}>
             <ConnectionsGame />
           </div>
+          <div className="mt-6"><LeaderboardView gameId="connections" /></div>
         </div>
       </main>
       <Footer />
