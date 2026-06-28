@@ -14,6 +14,7 @@ export const LEADERBOARD_META: Record<string, LeaderboardMeta> = {
   'championship-decider': { accent: '#3b82f6' },
   'pit-stop-timer':       { accent: '#06b6d4', ascending: true, suffix: 'ms' },
   'track-outline':        { accent: '#a855f7' },
+  'track-builder':        { accent: '#84cc16', ascending: true, suffix: 'ms' },
   'connections':          { accent: '#14b8a6' },
   'career-path':          { accent: '#0ea5e9' },
   'higher-lower':         { accent: '#f97316' },
@@ -25,7 +26,7 @@ export const LEADERBOARD_META: Record<string, LeaderboardMeta> = {
 
 // Games that have a leaderboard, in display order (for the hub picker).
 export const LEADERBOARD_GAME_IDS = [
-  'draw-the-circuit', 'lights-out', 'pit-stop-timer', 'track-outline',
+  'draw-the-circuit', 'track-builder', 'lights-out', 'pit-stop-timer', 'track-outline',
   'higher-lower', 'guess-the-driver', 'career-path', 'predict-driver',
   'team-radio', 'connections', 'championship-decider',
 ] as const

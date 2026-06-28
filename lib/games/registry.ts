@@ -76,6 +76,19 @@ export const GAMES: GameMeta[] = [
     badge: 'New',
   },
   {
+    id: 'track-builder',
+    href: '/games/track-builder',
+    tag: 'Circuit Puzzle',
+    title: 'Track Builder',
+    description:
+      'A real F1 circuit, scrambled into tiles. Swap them to rebuild the track as fast as you can — then race the global clock.',
+    blurb: 'Rebuild a scrambled F1 circuit against the clock — fastest build wins.',
+    duration: '~1 minute',
+    accent: '#84cc16',
+    icon: '🏗️',
+    badge: 'New',
+  },
+  {
     id: 'connections',
     href: '/games/connections',
     tag: 'Daily Puzzle',
