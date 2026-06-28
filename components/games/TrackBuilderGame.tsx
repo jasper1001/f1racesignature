@@ -332,7 +332,7 @@ export function TrackBuilderGame() {
 
         <div
           className="mx-auto grid w-full"
-          style={{ maxWidth: 440, gridTemplateColumns: `repeat(${puzzle.n}, 1fr)`, gap: 5 }}
+          style={{ maxWidth: 440, gridTemplateColumns: `repeat(${puzzle.n}, 1fr)`, gap: 2 }}
         >
           {order.map((_, pos) => renderTile(pos))}
         </div>
