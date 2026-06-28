@@ -5,8 +5,9 @@ import { useQuery } from '@tanstack/react-query'
 import { fetchDrivers } from '@/lib/data'
 import {
   submitScore, getLeaderboard, getMyEntry, loadProfile, saveProfile,
-  usernameError, cleanUsername, supabaseEnabled, type ScoreRow,
+  cleanUsername, supabaseEnabled, type ScoreRow,
 } from '@/lib/leaderboard'
+import { generateRacerName, isRacerName } from '@/lib/racerName'
 import { COUNTRIES, flagEmoji } from '@/lib/countries'
 import { LeaderboardRows } from '@/components/games/LeaderboardRows'
 
@@ -31,7 +32,11 @@ function LeaderboardInner({ gameId, score, suffix = '', ascending = false, accen
   const teams = useMemo(() => Array.from(new Set(drivers.map((d) => d.team).filter(Boolean))).sort(), [drivers])
 
   const saved = useMemo(loadProfile, [])
-  const [name, setName] = useState(saved?.username ?? '')
+  // Keep a saved name only if it's a valid generated racer name; old free-text
+  // names (pre-2026-06-28) are dropped so the server doesn't reject them.
+  const [name, setName] = useState(saved && isRacerName(saved.username) ? saved.username : '')
+  // Generate after mount (client-only, to avoid an SSR hydration mismatch from Math.random).
+  useEffect(() => { if (!name) setName(generateRacerName()) }, [name])
   const [team, setTeam] = useState(saved?.favTeam ?? '')
   const [driver, setDriver] = useState(saved?.favDriver ?? '')
   const [country, setCountry] = useState(saved?.country ?? '')
@@ -53,8 +58,6 @@ function LeaderboardInner({ gameId, score, suffix = '', ascending = false, accen
   useEffect(() => { refresh().catch(() => {}) }, [refresh])
 
   const submit = async () => {
-    const e = usernameError(name)
-    if (e) { setErr(e); return }
     setStatus('submitting'); setErr(null)
     try {
       const profile = { username: cleanUsername(name), favTeam: team || null, favDriver: driver || null, country: country || null }
@@ -80,13 +83,21 @@ function LeaderboardInner({ gameId, score, suffix = '', ascending = false, accen
           <p className="text-sm text-[#1a1712]">
             You scored <b style={{ color: accent }}>{score}{suffix}</b> — add your name to the board.
           </p>
-          <input
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Your name"
-            maxLength={24}
-            className="w-full px-3 py-2 rounded-lg border border-[#dcd5c6] bg-white text-[#1a1712] text-sm outline-none focus:border-[#c4bca8]"
-          />
+          <div className="flex items-center gap-2">
+            <div className="flex-1 px-3 py-2 rounded-lg border border-[#dcd5c6] bg-white text-[#1a1712] text-sm font-mono truncate">
+              {name || '…'}
+            </div>
+            <button
+              type="button"
+              onClick={() => setName(generateRacerName())}
+              title="Generate another name"
+              aria-label="Generate another name"
+              className="px-3 py-2 rounded-lg border border-[#dcd5c6] bg-white text-base hover:bg-[#f4f1ea] active:scale-95 transition-all"
+            >
+              🎲
+            </button>
+          </div>
+          <p className="text-[11px] text-[#1a1712]/55">Your racer name — tap 🎲 for another.</p>
           {!showFavs ? (
             <button onClick={() => setShowFavs(true)} className="text-[11px] font-mono text-[#1a1712]/55 hover:text-[#1a1712] underline">
               + add country / favourites (optional)
