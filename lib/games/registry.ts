@@ -102,6 +102,19 @@ export const GAMES: GameMeta[] = [
     badge: 'New',
   },
   {
+    id: 'guess-the-lap-time',
+    href: '/games/guess-the-lap-time',
+    tag: 'Time Trial',
+    title: 'Guess the Lap Time',
+    description:
+      "A real F1 lap is shown — circuit, driver and year. Slide to guess its lap time; the closer you are, the lower your score.",
+    blurb: 'How fast was that F1 lap? Slide to guess — closest wins.',
+    duration: '~2 minutes',
+    accent: '#e11d48',
+    icon: '⏲️',
+    badge: 'New',
+  },
+  {
     id: 'connections',
     href: '/games/connections',
     tag: 'Daily Puzzle',

@@ -27,6 +27,7 @@ insert into public.game_config (game_id, sort_dir, min_score, max_score, label) 
   ('pit-stop-timer',       'asc',  0,   10000,  'Closest (ms)'),
   ('track-outline',        'desc', 0,   10,     'Correct / 10'),
   ('name-that-lap',        'desc', 0,   10,     'Correct / 10'),
+  ('guess-the-lap-time',   'asc',  0,   400000, 'Total off (ms)'),
   ('track-builder',        'asc',  0,   600000, 'Build time (ms)'),
   ('track-builder-rookie', 'asc',  0,   600000, 'Build time (ms)'),
   ('track-builder-elite',  'asc',  0,   900000, 'Build time (ms)'),
