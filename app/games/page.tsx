@@ -6,18 +6,18 @@ import { GAMES } from '@/lib/games/registry'
 import { LeaderboardsHub } from '@/components/games/LeaderboardsHub'
 
 export const metadata: Metadata = {
-  title: 'F1 Mini Games — Reaction Tests, Trivia & Driver Puzzles',
+  title: 'F1 Mini Games — Reaction Tests, Trivia & Circuit Puzzles',
   description:
-    'Six free Formula 1 mini games: beat the lights-out reaction test, nail the pit-stop timer, guess the driver Wordle-style, identify track outlines, and more. No sign-up needed.',
+    'Free Formula 1 mini games: rebuild a circuit in the Track Builder puzzle, beat the lights-out reaction test, nail the pit-stop timer, guess the driver Wordle-style, identify track outlines, and more. No sign-up needed.',
   keywords: [
-    'F1 mini games', 'Formula 1 reaction test', 'F1 lights out game', 'F1 Wordle',
-    'pit stop timer game', 'F1 trivia game', 'guess the F1 driver', 'F1 track quiz',
-    'F1 championship game', 'F1 team radio game', 'Formula 1 game free',
+    'F1 mini games', 'F1 puzzle game', 'F1 track builder', 'Formula 1 reaction test',
+    'F1 lights out game', 'F1 Wordle', 'pit stop timer game', 'F1 trivia game',
+    'guess the F1 driver', 'F1 track quiz', 'F1 championship game', 'Formula 1 game free',
   ],
   alternates: { canonical: '/games' },
   openGraph: {
-    title: 'F1 Mini Games — Reaction Tests, Trivia & Driver Puzzles',
-    description: 'Six free F1 mini games: lights-out reaction test, pit-stop timer, driver Wordle, track quiz and more.',
+    title: 'F1 Mini Games — Reaction Tests, Trivia & Circuit Puzzles',
+    description: 'Free F1 mini games: the Track Builder circuit puzzle, lights-out reaction test, pit-stop timer, driver Wordle, track quiz and more.',
     url: '/games',
     type: 'website',
     siteName: 'F1RaceSignature',
@@ -26,8 +26,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'F1 Mini Games — Reaction Tests, Trivia & Driver Puzzles',
-    description: 'Six free F1 mini games to test your reflexes, knowledge, and racing instincts.',
+    title: 'F1 Mini Games — Reaction Tests, Trivia & Circuit Puzzles',
+    description: 'Free F1 mini games to test your reflexes, knowledge, and racing instincts — including the new Track Builder circuit puzzle.',
     images: ['/opengraph-image'],
   },
 }

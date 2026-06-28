@@ -279,11 +279,11 @@ export default function HomePage() {
                     Test Your F1 Instincts
                   </h2>
                   <p className="text-white/65 text-sm mt-2 max-w-md">
-                    Reaction tests, driver quizzes, circuit challenges, and pit-wall strategy — four
-                    free games you can finish in under two minutes.
+                    Reaction tests, driver quizzes, circuit puzzles, and pit-wall strategy — a
+                    growing collection of free games you can finish in under two minutes.
                   </p>
                   <div className="flex flex-wrap gap-2 mt-4">
-                    {['Reaction Test', 'F1 Knowledge', 'Circuit Quiz', 'F1 Strategy'].map((tag) => (
+                    {['Reaction Test', 'F1 Knowledge', 'Circuit Puzzle', 'F1 Strategy'].map((tag) => (
                       <span
                         key={tag}
                         className="text-white/65 text-xs font-mono uppercase tracking-wider border border-[#1a1a1a] rounded px-2 py-0.5"

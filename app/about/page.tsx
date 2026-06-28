@@ -76,20 +76,27 @@ export default function AboutPage() {
             <div className="space-y-4 text-white/65 leading-relaxed">
               <p>
                 Alongside the poster studio, F1RaceSignature includes a free collection of Formula 1
-                mini-games — all playable in your browser with no account required.
+                mini-games — from quick reaction tests to circuit puzzles, all playable in your
+                browser with no account required.
               </p>
               <ul className="space-y-1.5 list-disc list-inside pl-2">
-                <li><strong className="text-white">Lights Out</strong> — test your reaction time against the F1 starting lights.</li>
-                <li><strong className="text-white">Guess the Driver</strong> — identify a driver from progressively revealed clues.</li>
+                <li><strong className="text-white">Track Builder</strong> — rebuild a scrambled F1 circuit from its tiles as fast as you can, then race the clock on the leaderboards.</li>
+                <li><strong className="text-white">Draw the Circuit</strong> — sketch a track from memory and get scored on how close you got.</li>
                 <li><strong className="text-white">Track Outline Quiz</strong> — name the circuit from its silhouette alone.</li>
-                <li><strong className="text-white">Championship Decider</strong> — make pit-wall strategy calls from real race moments.</li>
-                <li><strong className="text-white">Team Radio Guess</strong> — match iconic radio transmissions to their drivers.</li>
-                <li><strong className="text-white">Predict the Driver</strong> — Wordle-style driver identification in six guesses.</li>
-                <li><strong className="text-white">Higher or Lower</strong> — compare career statistics between F1 drivers.</li>
                 <li><strong className="text-white">Pit Stop Timer</strong> — nail the perfect stop and chase a sub-two-second time.</li>
+                <li><strong className="text-white">Lights Out</strong> — test your reaction time against the F1 starting lights.</li>
+                <li><strong className="text-white">Championship Decider</strong> — make pit-wall strategy calls from real race moments.</li>
+                <li><strong className="text-white">F1 Connections</strong> — sort sixteen tiles into four hidden F1 groups.</li>
+                <li><strong className="text-white">Career Path</strong> — name the driver from the teams they raced for.</li>
+                <li><strong className="text-white">Higher or Lower</strong> — compare career statistics between F1 drivers.</li>
+                <li><strong className="text-white">Predict the Driver</strong> — Wordle-style driver identification in six guesses.</li>
+                <li><strong className="text-white">Guess the Driver</strong> — identify a driver from progressively revealed clues.</li>
+                <li><strong className="text-white">Team Radio Guess</strong> — match iconic radio transmissions to their drivers.</li>
+                <li><strong className="text-white">Rank &apos;Em</strong> — drag drivers, teams and circuits into your own S–D tier list.</li>
               </ul>
               <p>
-                Each game includes share buttons so you can post your result to X (Twitter) or Facebook.
+                Many games keep global leaderboards, and each one includes share buttons so you can
+                post your result to X (Twitter) or Facebook.
               </p>
             </div>
           </section>
