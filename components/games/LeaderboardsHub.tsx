@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { GAMES } from '@/lib/games/registry'
 import { LEADERBOARD_GAME_IDS, LEADERBOARD_META } from '@/lib/games/leaderboardMeta'
 import { LeaderboardView } from '@/components/games/LeaderboardView'
+import { TrackBuilderLeaderboards } from '@/components/games/TrackBuilderLeaderboards'
 import { supabaseEnabled } from '@/lib/leaderboard'
 
 // Central "Leaderboards" section for the /games hub: pick a game, see its board.
@@ -45,7 +46,10 @@ export function LeaderboardsHub() {
         })}
       </div>
 
-      <LeaderboardView key={active} gameId={active} limit={10} title={`${GAMES.find((g) => g.id === active)?.title ?? ''} — Top Scores`} />
+      {/* Track Builder has three per-difficulty boards → show its own toggle. */}
+      {active === 'track-builder'
+        ? <TrackBuilderLeaderboards key="track-builder" />
+        : <LeaderboardView key={active} gameId={active} limit={10} title={`${GAMES.find((g) => g.id === active)?.title ?? ''} — Top Scores`} />}
     </section>
   )
 }
