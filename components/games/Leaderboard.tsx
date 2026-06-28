@@ -9,6 +9,7 @@ import {
 } from '@/lib/leaderboard'
 import { generateRacerName, isRacerName } from '@/lib/racerName'
 import { COUNTRIES, flagEmoji } from '@/lib/countries'
+import { formatScore } from '@/lib/games/formatScore'
 import { LeaderboardRows } from '@/components/games/LeaderboardRows'
 
 interface Props {
@@ -81,7 +82,7 @@ function LeaderboardInner({ gameId, score, suffix = '', ascending = false, accen
       {status !== 'done' && (
         <div className="rounded-xl border border-[#e2dccd] bg-[#fbf9f4] p-3 space-y-3">
           <p className="text-sm text-[#1a1712]">
-            You scored <b style={{ color: accent }}>{score}{suffix}</b> — add your name to the board.
+            You scored <b style={{ color: accent }}>{formatScore(score, suffix)}</b> — add your name to the board.
           </p>
           <div className="flex items-center gap-2">
             <div className="flex-1 px-3 py-2 rounded-lg border border-[#dcd5c6] bg-white text-[#1a1712] text-sm font-mono truncate">

@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { flagEmoji } from '@/lib/countries'
+import { formatScore } from '@/lib/games/formatScore'
 import type { ScoreRow } from '@/lib/leaderboard'
 
 // Shared board body — the ranked rows + the player's own row when outside the top.
@@ -40,7 +41,7 @@ export function LeaderboardRows({
                 </span>
               )}
             </span>
-            <span className="font-mono font-bold tabular-nums text-[#1a1712]">{r.score}{suffix}</span>
+            <span className="font-mono font-bold tabular-nums text-[#1a1712]">{formatScore(r.score, suffix)}</span>
           </motion.div>
         )
       })}
@@ -52,7 +53,7 @@ export function LeaderboardRows({
             {mine.row.country && <span className="text-[#1a1712]/70 mr-1.5">{flagEmoji(mine.row.country)} {mine.row.country}</span>}
             {mine.row.username}<span className="text-[10px] font-mono ml-1.5" style={{ color: accent }}>YOU</span>
           </span>
-          <span className="font-mono font-bold tabular-nums text-[#1a1712]">{mine.row.score}{suffix}</span>
+          <span className="font-mono font-bold tabular-nums text-[#1a1712]">{formatScore(mine.row.score, suffix)}</span>
         </div>
       )}
     </div>
