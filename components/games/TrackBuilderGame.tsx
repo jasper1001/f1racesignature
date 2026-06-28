@@ -22,7 +22,9 @@ const BOARD_ID: Record<Difficulty, string> = {
   elite: 'track-builder-elite',
 }
 
-type Phase = 'idle' | 'playing' | 'result'
+// 'solved' is a brief transitional phase: the board snaps flush into one seamless
+// circuit before handing off to the 'result' screen.
+type Phase = 'idle' | 'playing' | 'solved' | 'result'
 
 // ── Geometry ─────────────────────────────────────────────────────────────────
 interface Puzzle {
@@ -128,7 +130,11 @@ export function TrackBuilderGame() {
 
   const startRef = useRef(0)
   const rafRef = useRef<number | null>(null)
+  const solveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const gameRef = useRef<HTMLDivElement>(null)
+
+  // Clear the pending snap→result timeout if the component unmounts mid-animation.
+  useEffect(() => () => { if (solveTimer.current) clearTimeout(solveTimer.current) }, [])
 
   const n = GRID[difficulty]
   const puzzle = useMemo(
@@ -154,6 +160,7 @@ export function TrackBuilderGame() {
     let ord = shuffled(pz.n * pz.n)
     let guard = 0
     while (isSolved(ord, pz.isEmpty) && guard++ < 50) ord = shuffled(pz.n * pz.n)
+    if (solveTimer.current) clearTimeout(solveTimer.current)
     setCircuit(pick)
     setOrder(ord)
     setSelected(null)
@@ -180,7 +187,11 @@ export function TrackBuilderGame() {
     setStats(next)
     saveStats(next)
     setIsBest(best)
-    setPhase('result')
+    // Let the tiles snap flush for a beat, then reveal the result screen.
+    setSelected(null)
+    setPhase('solved')
+    if (solveTimer.current) clearTimeout(solveTimer.current)
+    solveTimer.current = setTimeout(() => setPhase('result'), 900)
   }, [stats, difficulty])
 
   const tapTile = useCallback((pos: number) => {
@@ -213,28 +224,30 @@ export function TrackBuilderGame() {
     const vb = `${puzzle.sqX + c * puzzle.cell} ${puzzle.sqY + r * puzzle.cell} ${puzzle.cell} ${puzzle.cell}`
     const correct = tile === pos || (puzzle.isEmpty[tile] && puzzle.isEmpty[pos])
     const sel = selected === pos
-    const solved = phase === 'result'
+    // On solve the tiles collapse flush (no border / radius) so the circuit reads
+    // as one seamless picture, and the line turns the accent colour.
+    const solved = phase === 'solved'
     return (
       <button
         key={pos}
         onClick={() => tapTile(pos)}
         disabled={solved}
-        className="relative aspect-square w-full overflow-hidden transition-all duration-150 active:scale-[0.97] disabled:cursor-default"
+        className="relative aspect-square w-full overflow-hidden transition-all duration-300 active:scale-[0.97] disabled:cursor-default"
         style={{
           background: '#fbf9f4',
-          border: sel
-            ? `2px solid ${ACCENT}`
-            : solved
-              ? '1px solid rgba(132,204,22,0.5)'
+          border: solved
+            ? '1px solid transparent'
+            : sel
+              ? `2px solid ${ACCENT}`
               : correct
                 ? '1px solid rgba(132,204,22,0.35)'
                 : '1px solid #dcd5c6',
           boxShadow: sel ? `0 0 0 3px ${ACCENT}33` : correct && !solved ? 'inset 0 0 18px rgba(132,204,22,0.12)' : 'none',
-          borderRadius: 6,
+          borderRadius: solved ? 0 : 6,
         }}
       >
         <svg viewBox={vb} className="w-full h-full" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
-          <path d={puzzle.circuit.path} fill="none" stroke="#16120c" strokeWidth={puzzle.stroke} strokeLinecap="round" strokeLinejoin="round" />
+          <path d={puzzle.circuit.path} fill="none" stroke={solved ? ACCENT : '#16120c'} strokeWidth={puzzle.stroke} strokeLinecap="round" strokeLinejoin="round" style={{ transition: 'stroke 0.3s' }} />
         </svg>
       </button>
     )
@@ -310,7 +323,8 @@ export function TrackBuilderGame() {
   }
 
   // ── Playing ──────────────────────────────────────────────────────────────────
-  if (phase === 'playing' && puzzle) {
+  if ((phase === 'playing' || phase === 'solved') && puzzle) {
+    const done = phase === 'solved'
     return (
       <div ref={gameRef} className="p-5 md:p-8">
         <div className="flex items-center justify-between mb-4">
@@ -320,30 +334,32 @@ export function TrackBuilderGame() {
               <path d={puzzle.circuit.path} fill="none" stroke="#16120c" strokeWidth={puzzle.stroke} strokeLinecap="round" strokeLinejoin="round" />
             </svg>
             <div>
-              <p className="text-[10px] font-mono uppercase tracking-widest" style={{ color: ACCENT }}>Rebuild</p>
+              <p className="text-[10px] font-mono uppercase tracking-widest" style={{ color: ACCENT }}>{done ? 'Complete' : 'Rebuild'}</p>
               <p className="text-[#1a1712] text-sm font-semibold leading-tight">{puzzle.circuit.name}</p>
             </div>
           </div>
           <div className="text-right">
-            <p className="text-2xl font-bold font-mono tabular-nums text-[#1a1712] leading-none">{fmt(elapsed)}</p>
+            <p className="text-2xl font-bold font-mono tabular-nums leading-none" style={{ color: done ? ACCENT : '#1a1712' }}>{fmt(done ? finalMs : elapsed)}</p>
             <p className="text-[10px] font-mono text-[#1a1712]/55 mt-1">{placed}/{puzzle.n * puzzle.n} placed · {moves} moves</p>
           </div>
         </div>
 
         <div
           className="mx-auto grid w-full"
-          style={{ maxWidth: 440, gridTemplateColumns: `repeat(${puzzle.n}, 1fr)`, gap: 2 }}
+          style={{ maxWidth: 440, gridTemplateColumns: `repeat(${puzzle.n}, 1fr)`, gap: done ? 0 : 2, transition: 'gap 0.45s ease' }}
         >
           {order.map((_, pos) => renderTile(pos))}
         </div>
 
-        <div className="mt-5 flex justify-center">
-          <button
-            onClick={() => setPhase('idle')}
-            className="px-4 py-2 rounded-xl border border-[#dcd5c6] text-[#1a1712] text-sm opacity-50 hover:opacity-90 hover:border-[#c4bca8] transition-all"
-          >
-            Give up
-          </button>
+        <div className="mt-5 flex justify-center h-9">
+          {!done && (
+            <button
+              onClick={() => setPhase('idle')}
+              className="px-4 py-2 rounded-xl border border-[#dcd5c6] text-[#1a1712] text-sm opacity-50 hover:opacity-90 hover:border-[#c4bca8] transition-all"
+            >
+              Give up
+            </button>
+          )}
         </div>
       </div>
     )
