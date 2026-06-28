@@ -115,6 +115,19 @@ export const GAMES: GameMeta[] = [
     badge: 'New',
   },
   {
+    id: 'podium-scramble',
+    href: '/games/podium-scramble',
+    tag: 'Race Results',
+    title: 'Podium Scramble',
+    description:
+      'A famous F1 race with its podium scrambled. Reorder the three drivers into the correct finishing order — P1, P2, P3. Six races, fewest positions off wins.',
+    blurb: 'A scrambled F1 podium — can you put P1, P2 and P3 back in order?',
+    duration: '~2 minutes',
+    accent: '#d4a017',
+    icon: '🥇',
+    badge: 'New',
+  },
+  {
     id: 'connections',
     href: '/games/connections',
     tag: 'Daily Puzzle',
