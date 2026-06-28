@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import type { Driver, Race, Telemetry, Circuit, ThemeConfig, VizMode, TrackCenterline } from '@/lib/types'
 import { RacingLine } from '@/components/visualizations/RacingLine'
@@ -10,9 +10,13 @@ import { OvertakeMap } from '@/components/visualizations/OvertakeMap'
 import { VIZ_MODES } from '@/lib/themes'
 import { interpolateColor, distinctColors } from '@/lib/data'
 import { teamAtYear } from '@/lib/driverTeams'
+import { computeRacingLine } from '@/lib/racingLine'
 
 const POSTER_W = 720
 const POSTER_H = 800
+// On-screen width (px) of the real-track asphalt ribbon in "Racing Line" mode.
+// Wide enough that the racing line visibly runs to the edges and clips apexes.
+const REAL_RIBBON_PX = 30
 // Track container — the box the circuit outline + racing line are fitted into.
 const CIRCUIT_AREA = { x: 40, y: 86, w: 640, h: 464 }
 // Coordinate space the circuit paths are authored in (scripts/generate-circuits.mjs).
@@ -174,6 +178,44 @@ function carAtFraction(
   }
 }
 
+// Normalised cumulative arc-length (0..1) along a polyline.
+function cumFrac(pts: { x: number; y: number }[]): number[] {
+  const f = [0]
+  let total = 0
+  for (let i = 1; i < pts.length; i++) {
+    total += Math.hypot(pts[i].x - pts[i - 1].x, pts[i].y - pts[i - 1].y)
+    f.push(total)
+  }
+  return total > 0 ? f.map((d) => d / total) : f.map((_, i) => i / Math.max(1, pts.length - 1))
+}
+
+// Carry telemetry's speed/throttle/brake onto an alternate lap geometry (the ideal
+// racing line) by matching cumulative-distance fraction, so the playback car can
+// drive the SAME line that's drawn while keeping the real speed/throttle/brake
+// profile. Returns one sample per geometry point.
+function attrsAlongGeometry(
+  geom: { x: number; y: number }[],
+  tel: { x: number; y: number; speed: number; throttle?: number; brake?: number }[],
+): { x: number; y: number; speed: number; throttle: number; brake: number }[] {
+  const tf = cumFrac(tel)
+  const gf = cumFrac(geom)
+  return geom.map((g, j) => {
+    const f = gf[j]
+    let i = 0
+    while (i < tf.length - 2 && tf[i + 1] < f) i++
+    const span = (tf[i + 1] - tf[i]) || 1
+    const t = Math.min(1, Math.max(0, (f - tf[i]) / span))
+    const a = tel[i], b = tel[Math.min(tel.length - 1, i + 1)]
+    return {
+      x: g.x,
+      y: g.y,
+      speed: a.speed + (b.speed - a.speed) * t,
+      throttle: (a.throttle ?? 0) + ((b.throttle ?? 0) - (a.throttle ?? 0)) * t,
+      brake: (a.brake ?? 0) + ((b.brake ?? 0) - (a.brake ?? 0)) * t,
+    }
+  })
+}
+
 function CircuitBackground({ path, fit }: { path: string; fit: CircuitFit }) {
   // The paths render inside a scale(fit.scale) group, so a raw strokeWidth gets
   // multiplied by the fit — fattening the ribbon on big/scaled-up circuits until
@@ -330,15 +372,19 @@ export function PosterPreview({
   })()
   const circuitPath = geomPath ? rotatePath(geomPath, rot) : null
 
-  // 'Racing Line' (real) mode draws the OSM centreline as a to-scale asphalt ribbon —
-  // but only for generated laps that are actually registered to it. Real GPS laps
-  // don't match the (distorted) centreline, so they fall through to the lap-line ribbon.
-  const realTrack = vizMode === 'racing_line_real' && trackCenterline && !isRealGps ? trackCenterline : null
+  // 'Racing Line' (real) mode draws the OSM centreline as a to-scale asphalt ribbon
+  // and overlays the IDEAL geometric racing line (computed from the centreline, see
+  // racingLinePoints below). Used for ALL laps here — GPS or generated — because the
+  // line is derived from the track, not the telemetry, so it never depends on the
+  // lap aligning to the (sometimes-distorted) centreline.
+  const realTrack = vizMode === 'racing_line_real' && trackCenterline ? trackCenterline : null
   const realTrackPath = realTrack ? rotatePath(realTrack.centerlinePath, rot) : null
 
   // The one fit shared by the outline (via CircuitBackground) and the racing
-  // line below — computed once so the two paths can never diverge.
-  const fit = computeCircuitFit(fitBounds(circuitPath, telemetry, rot))
+  // line below — computed once so the two paths can never diverge. In 'Racing Line'
+  // mode the real-track ribbon is what's drawn, so frame the fit to IT (the lap may
+  // be a GPS path with different bounds); otherwise frame the circuit outline/lap.
+  const fit = computeCircuitFit(fitBounds(realTrackPath ?? circuitPath, telemetry, rot))
 
   const toPosterSpace = (tel: Telemetry | null) =>
     tel?.points.map((pt) => {
@@ -354,6 +400,30 @@ export function PosterPreview({
   // Map raw 0-1 telemetry coords into poster-space 0-1
   // Viz components then multiply by POSTER_W/H to get final pixels.
   const vizPoints = toPosterSpace(telemetry)
+
+  // "Racing Line" mode: instead of the centre-following telemetry template,
+  // compute the IDEAL geometric racing line on the real track — a min-curvature
+  // path that swings to the edges and clips apexes within the asphalt corridor.
+  // Computed in the (rotated) PATH space the ribbon is drawn in, then mapped to
+  // poster space via the same shared fit so it sits exactly on the ribbon.
+  const racingLinePoints = useMemo(() => {
+    if (!realTrackPath) return null
+    const nums = realTrackPath.match(/-?\d+\.?\d*/g)?.map(Number) ?? []
+    const center: { x: number; y: number }[] = []
+    for (let i = 0; i + 1 < nums.length; i += 2) center.push({ x: nums[i], y: nums[i + 1] })
+    if (center.length < 8) return null
+    // Drop a duplicated closing point so the loop wraps cleanly.
+    const first = center[0], last = center[center.length - 1]
+    if (Math.hypot(first.x - last.x, first.y - last.y) < 1.5) center.pop()
+    // Corridor half-width in PATH units: the on-screen ribbon stroke is
+    // REAL_RIBBON_PX, drawn inside scale(fit), so its PATH width is /scale.
+    // Keep a kerb margin so the line stays on asphalt, not the white edge.
+    const corridorHalf = Math.max(2, (REAL_RIBBON_PX / 2 - 4) / fit.scale)
+    return computeRacingLine(center, corridorHalf).map((p) => ({
+      x: (p.x * fit.scale + fit.tx) / POSTER_W,
+      y: (p.y * fit.scale + fit.ty) / POSTER_H,
+    }))
+  }, [realTrackPath, fit.scale, fit.tx, fit.ty])
 
   // The track outline in screen px — used to place overlay readouts in a corner the
   // ribbon doesn't reach (so they never sit on top of the circuit).
@@ -413,6 +483,10 @@ export function PosterPreview({
   const driverColor = palette[0]
   const compareLaps = compareBase.map((c, i) => ({ ...c, color: palette[i + 1] }))
   const isComparing = compareLaps.length > 0
+
+  // The primary lap line for the static viz + draw-on reveal. In "Racing Line"
+  // mode (single lap) this is the ideal geometric line; otherwise the telemetry.
+  const primaryLine = racingLinePoints && !isComparing ? racingLinePoints : vizPoints
 
   // Kick off the draw-on reveal when the lap / mode / compare set changes. We key
   // on telemetry identity (a new selection fetches a fresh object), vizMode and
@@ -506,7 +580,10 @@ export function PosterPreview({
 
     switch (vizMode) {
       case 'racing_line':      return <RacingLine {...props} />
-      case 'racing_line_real': return <RacingLine {...props} strokeWidth={2.2} />
+      case 'racing_line_real':
+        // Draw the ideal geometric racing line (edge-apex-edge) on the real
+        // track ribbon; fall back to the telemetry line if no track file.
+        return <RacingLine {...props} points={racingLinePoints ?? vizPoints} strokeWidth={racingLinePoints ? 3 : 2.2} />
       case 'speed_heatmap': return <SpeedHeatmap {...props} />
       case 'sector_split':  return <SectorSplit {...props} />
       case 'overtake_map':  return <OvertakeMap {...props} />
@@ -542,7 +619,7 @@ export function PosterPreview({
 
     const lines = isComparing
       ? [{ points: vizPoints, color: driverColor }, ...compareLaps.map((c) => ({ points: c.points, color: c.color }))]
-      : [{ points: vizPoints, color: driverColor }]
+      : [{ points: primaryLine, color: driverColor }]
 
     return (
       <g>
@@ -636,23 +713,39 @@ export function PosterPreview({
     // ── Single car: trail coloured by throttle/brake ──
     // The car paints the lap as it drives it — green when on the throttle, amber on
     // a lift/coast, red into the braking zones (throttle is 0..100, brake 0..1).
-    const pts = vizPoints.map((p) => ({ x: p.x * POSTER_W, y: p.y * POSTER_H, speed: p.speed, throttle: p.throttle ?? 0, brake: p.brake ?? 0 }))
+    // In 'Racing Line' mode the car drives the IDEAL line that's drawn (with the real
+    // speed/throttle/brake carried onto it); otherwise it drives the telemetry path.
+    const useRacingLine = !!racingLinePoints && !isComparing
+    const base = useRacingLine
+      ? attrsAlongGeometry(racingLinePoints!, vizPoints)
+      : vizPoints.map((p) => ({ x: p.x, y: p.y, speed: p.speed, throttle: p.throttle ?? 0, brake: p.brake ?? 0 }))
+    const pts = base.map((p) => ({ x: p.x * POSTER_W, y: p.y * POSTER_H, speed: p.speed, throttle: p.throttle, brake: p.brake }))
     const n = pts.length
     const tbColor = (throttle: number, brake: number) =>
       brake > 0.05
         ? interpolateColor('#ff8c42', '#ff2020', Math.min(1, brake))            // lift-off → hard braking
         : interpolateColor('#ffce3a', '#27e06b', Math.min(1, throttle / 100))   // coasting → full throttle
 
-    const headF = playbackProgress * (n - 1)
-    const headIdx = Math.min(n - 1, Math.floor(headF))
-    const frac = headF - headIdx
-    const a = pts[headIdx]
-    const b = pts[Math.min(n - 1, headIdx + 1)]
-    const hx = a.x + (b.x - a.x) * frac
-    const hy = a.y + (b.y - a.y) * frac
-    const hSpeed = a.speed + (b.speed - a.speed) * frac
-    const hThrottle = a.throttle + (b.throttle - a.throttle) * frac
-    const hBrake = a.brake + (b.brake - a.brake) * frac
+    // Head position. The racing line is sampled by distance (not time), so pace it by
+    // the speed profile (slow in corners); the telemetry path keeps its linear index.
+    let headIdx: number, hx: number, hy: number, hSpeed: number, hThrottle: number, hBrake: number
+    if (useRacingLine) {
+      const tau = lapTimeProfile(pts)
+      const h = carAtFraction(pts, tau, playbackProgress)
+      headIdx = h.idx; hx = h.x; hy = h.y; hSpeed = h.speed
+      hThrottle = pts[headIdx].throttle; hBrake = pts[headIdx].brake
+    } else {
+      const headF = playbackProgress * (n - 1)
+      headIdx = Math.min(n - 1, Math.floor(headF))
+      const frac = headF - headIdx
+      const a = pts[headIdx]
+      const b = pts[Math.min(n - 1, headIdx + 1)]
+      hx = a.x + (b.x - a.x) * frac
+      hy = a.y + (b.y - a.y) * frac
+      hSpeed = a.speed + (b.speed - a.speed) * frac
+      hThrottle = a.throttle + (b.throttle - a.throttle) * frac
+      hBrake = a.brake + (b.brake - a.brake) * frac
+    }
     const carColor = tbColor(hThrottle, hBrake)
     const phase = hBrake > 0.05 ? 'BRAKING' : hThrottle > 95 ? 'FULL THROTTLE' : 'LIFT'
 
@@ -662,7 +755,7 @@ export function PosterPreview({
     for (let i = 1; i <= headIdx; i++) {
       segs.push({ x1: pts[i - 1].x, y1: pts[i - 1].y, x2: pts[i].x, y2: pts[i].y, color: tbColor(pts[i - 1].throttle, pts[i - 1].brake) })
     }
-    segs.push({ x1: pts[headIdx].x, y1: pts[headIdx].y, x2: hx, y2: hy, color: tbColor(a.throttle, a.brake) })
+    segs.push({ x1: pts[headIdx].x, y1: pts[headIdx].y, x2: hx, y2: hy, color: tbColor(pts[headIdx].throttle, pts[headIdx].brake) })
 
     // Readout chip, placed in whichever circuit-area corner is clear of the track.
     const boxW = 118, boxH = 40
@@ -805,7 +898,7 @@ export function PosterPreview({
         {/* Circuit area — real to-scale OSM track, the circuits.json outline, or (for
             real GPS laps with no matching outline) a ribbon built from the lap itself */}
         {realTrackPath
-          ? <RealTrackRibbon path={realTrackPath} fit={fit} widthPx={17} />
+          ? <RealTrackRibbon path={realTrackPath} fit={fit} widthPx={REAL_RIBBON_PX} />
           : circuitPath
             ? <CircuitBackground path={circuitPath} fit={fit} />
             : <LineRibbon pts={vizPoints} />}

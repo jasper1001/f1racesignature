@@ -1,9 +1,10 @@
 'use client'
 
-import type { TelemetryPoint, ThemeConfig } from '@/lib/types'
+import type { ThemeConfig } from '@/lib/types'
 
 interface RacingLineProps {
-  points: TelemetryPoint[]
+  // Only x/y are read, so both telemetry points and a computed racing line fit.
+  points: { x: number; y: number }[]
   theme: ThemeConfig
   width: number
   height: number
