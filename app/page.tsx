@@ -6,6 +6,7 @@ import { HowItWorks } from '@/components/landing/HowItWorks'
 import { FeaturedGallery } from '@/components/landing/FeaturedGallery'
 import { FAQ } from '@/components/landing/FAQ'
 import { ThisWeekendBanner } from '@/components/landing/ThisWeekendBanner'
+import { GamesOfTheDay } from '@/components/landing/GamesOfTheDay'
 import { FAQ_ITEMS } from '@/lib/faq'
 import { ARTICLES } from '@/lib/articles'
 import { getAllDrivers } from '@/lib/serverData'
@@ -53,6 +54,10 @@ export default function HomePage() {
         <ThisWeekendBanner />
         <Hero />
         <HowItWorks />
+
+        {/* Games of the Day — three daily-rotating picks */}
+        <GamesOfTheDay />
+
         <FeaturedGallery />
 
         {/* Latest from the Blog */}

@@ -62,7 +62,7 @@ const FEATURES = [
 
 export function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
+    <section className="relative overflow-hidden">
       {/* Background grid */}
       <div
         className="absolute inset-0 opacity-[0.03]"
@@ -80,7 +80,7 @@ export function Hero() {
       />
       <div className="absolute bottom-0 left-0 right-0 h-40" style={{ background: 'linear-gradient(to bottom, transparent, #030303)' }} />
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 py-24 lg:py-32">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 py-12 lg:py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
           {/* Left: tagline */}
