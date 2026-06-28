@@ -11,12 +11,16 @@ import type { Circuit } from '@/lib/types'
 const ACCENT = '#84cc16'
 const STATS_KEY = 'f1rs_games_track_builder'
 
-// 4×4 ("Pro") is the canonical mode that posts to the global leaderboard, so
-// every submitted time is comparable. Other sizes are practice (local best only).
+// Each difficulty has its OWN leaderboard so times only race the same grid size.
 type Difficulty = 'rookie' | 'pro' | 'elite'
 const GRID: Record<Difficulty, number> = { rookie: 3, pro: 4, elite: 5 }
 const LABEL: Record<Difficulty, string> = { rookie: 'Rookie · 3×3', pro: 'Pro · 4×4', elite: 'Elite · 5×5' }
-const RANKED: Difficulty = 'pro'
+// Pro keeps the base id; rookie/elite get their own board ids (game_config rows).
+const BOARD_ID: Record<Difficulty, string> = {
+  rookie: 'track-builder-rookie',
+  pro: 'track-builder',
+  elite: 'track-builder-elite',
+}
 
 type Phase = 'idle' | 'playing' | 'result'
 
@@ -236,7 +240,6 @@ export function TrackBuilderGame() {
     )
   }
 
-  const ranked = difficulty === RANKED
   const placed = puzzle ? order.filter((tile, pos) => tile === pos || (puzzle.isEmpty[tile] && puzzle.isEmpty[pos])).length : 0
 
   // ── Idle ─────────────────────────────────────────────────────────────────────
@@ -270,7 +273,7 @@ export function TrackBuilderGame() {
                 ))}
               </div>
               <p className="text-[11px] text-[#1a1712]/55 mt-2">
-                Pro (4×4) posts to the global leaderboard. Rookie & Elite are practice (local best only).
+                Each difficulty has its own global leaderboard — your time only races the same grid size.
               </p>
             </div>
           </div>
@@ -397,15 +400,9 @@ export function TrackBuilderGame() {
           </div>
         </div>
 
-        {ranked ? (
-          <div className="mt-6">
-            <Leaderboard gameId="track-builder" score={Math.round(finalMs)} ascending suffix="ms" accent={ACCENT} meta={{ circuit: puzzle.circuit.id, moves }} />
-          </div>
-        ) : (
-          <p className="mt-6 text-center text-xs text-[#1a1712]/55">
-            Play <button onClick={() => { setDifficulty(RANKED); setPhase('idle') }} className="underline font-semibold" style={{ color: '#5a8a10' }}>Pro (4×4)</button> to post your time to the global leaderboard.
-          </p>
-        )}
+        <div className="mt-6">
+          <Leaderboard gameId={BOARD_ID[difficulty]} score={Math.round(finalMs)} ascending suffix="ms" accent={ACCENT} meta={{ circuit: puzzle.circuit.id, moves }} />
+        </div>
 
         <div className="mt-6">
           <NextGameCard currentId="track-builder" />

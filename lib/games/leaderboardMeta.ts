@@ -15,6 +15,10 @@ export const LEADERBOARD_META: Record<string, LeaderboardMeta> = {
   'pit-stop-timer':       { accent: '#06b6d4', ascending: true, suffix: 'ms' },
   'track-outline':        { accent: '#a855f7' },
   'track-builder':        { accent: '#84cc16', ascending: true, suffix: 'ms' },
+  // Per-difficulty boards (browsed via the toggle on the game page; the hub shows
+  // the Pro board under the single 'track-builder' tab above).
+  'track-builder-rookie': { accent: '#84cc16', ascending: true, suffix: 'ms' },
+  'track-builder-elite':  { accent: '#84cc16', ascending: true, suffix: 'ms' },
   'connections':          { accent: '#14b8a6' },
   'career-path':          { accent: '#0ea5e9' },
   'higher-lower':         { accent: '#f97316' },
