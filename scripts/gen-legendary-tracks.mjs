@@ -179,24 +179,9 @@ const ADDITIONS = [
     championshipPoints: [0, 18, 33, 45, 58, 70, 76, 83, 95, 113, 133, 156, 171, 175, 187, 202],
     description: "Sainz's maiden Grand Prix victory on his 150th start — he held off a charging Leclerc and Pérez after a late safety car to win an epic British Grand Prix.",
   },
-  {
-    id: 'schumacher_silverstone_2004', driverId: 'schumacher', circuit: 'silverstone',
-    circuitName: 'Silverstone Circuit', location: 'Silverstone, England', year: 2004,
-    name: 'British Grand Prix 2004', source: 'hamilton_silverstone_2020',
-    lapTime: '1:18.739', sectors: { s1Time: 24.000, s2Time: 24.739, s3Time: 30.000 },
-    topSpeed: 322, averageSpeed: 232,
-    championshipPoints: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 128, 138, 148, 158],
-    description: "Another flawless drive in Ferrari's imperious 2004 campaign — Schumacher controlled the British Grand Prix from the front with metronomic precision.",
-  },
-  {
-    id: 'prost_silverstone_1993', driverId: 'prost', circuit: 'silverstone',
-    circuitName: 'Silverstone Circuit', location: 'Silverstone, England', year: 1993,
-    name: 'British Grand Prix 1993', source: 'hamilton_silverstone_2020',
-    lapTime: '1:22.515', sectors: { s1Time: 25.000, s2Time: 27.515, s3Time: 30.000 },
-    topSpeed: 315, averageSpeed: 224,
-    championshipPoints: [10, 16, 26, 36, 47, 57, 67, 77, 81, 87, 91, 95, 99, 99, 99, 99],
-    description: "The Professor at his peak in the dominant Williams — a controlled lights-to-flag win at Silverstone on his way to a fourth and final world championship.",
-  },
+  // Note: the pre-2010 Silverstone laps (Prost 1993, Schumacher 2004) were removed —
+  // they predate the 2010 "Arena" redesign, so the Hamilton-2020 line is the wrong
+  // layout, and no real source for the old layout was available. See git history.
   // ── Yas Marina Circuit (Abu Dhabi) — extra laps reuse the Verstappen 2021 line ──
   {
     id: 'hamilton_abu_dhabi_2014', driverId: 'hamilton', circuit: 'abu_dhabi',

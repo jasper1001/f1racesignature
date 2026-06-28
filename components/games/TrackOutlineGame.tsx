@@ -98,7 +98,8 @@ type Phase = 'idle' | 'question' | 'answered' | 'finished'
 
 export function TrackOutlineGame() {
   const { data: circuitsMap = {} } = useQuery({ queryKey: ['circuits'], queryFn: fetchCircuits })
-  const circuits = Object.values(circuitsMap) as Circuit[]
+  // Exclude historic-layout variants (e.g. old Yas Marina) — they'd duplicate a track.
+  const circuits = (Object.values(circuitsMap) as Circuit[]).filter((c) => !c.variant)
 
   const [phase, setPhase]               = useState<Phase>('idle')
   const [answer, setAnswer]             = useState<Circuit | null>(null)

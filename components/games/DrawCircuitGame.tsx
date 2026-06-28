@@ -180,7 +180,8 @@ type Phase = 'idle' | 'drawing' | 'result'
 
 export function DrawCircuitGame() {
   const { data: circuitsMap = {} } = useQuery({ queryKey: ['circuits'], queryFn: fetchCircuits })
-  const circuits = Object.values(circuitsMap) as Circuit[]
+  // Exclude historic-layout variants (e.g. old Yas Marina) — they'd duplicate a track.
+  const circuits = (Object.values(circuitsMap) as Circuit[]).filter((c) => !c.variant)
   const { data: races = [] } = useQuery({ queryKey: ['races'], queryFn: fetchRaces })
 
   const [phase, setPhase] = useState<Phase>('idle')

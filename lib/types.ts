@@ -65,6 +65,10 @@ export interface Circuit {
   path: string
   sector1End: number
   sector2End: number
+  // Set for historic-layout circuits (e.g. the pre-2021 Yas Marina). These exist so
+  // old races render on the correct outline, but should be excluded from "all circuits"
+  // content like the guess-the-track / draw-the-circuit games (they'd be duplicates).
+  variant?: string
 }
 
 export type VizMode =
