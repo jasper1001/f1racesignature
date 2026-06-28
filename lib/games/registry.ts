@@ -89,6 +89,19 @@ export const GAMES: GameMeta[] = [
     badge: 'New',
   },
   {
+    id: 'name-that-lap',
+    href: '/games/name-that-lap',
+    tag: 'Telemetry Quiz',
+    title: 'Name That Lap',
+    description:
+      'A real F1 lap is drawn out as a racing line — no name, no labels. Read the shape and name the circuit from four options.',
+    blurb: 'A racing line with no labels — can you name the circuit from its shape?',
+    duration: '~2 minutes',
+    accent: '#8b5cf6',
+    icon: '📈',
+    badge: 'New',
+  },
+  {
     id: 'connections',
     href: '/games/connections',
     tag: 'Daily Puzzle',

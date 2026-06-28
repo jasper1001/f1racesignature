@@ -26,6 +26,7 @@ insert into public.game_config (game_id, sort_dir, min_score, max_score, label) 
   ('championship-decider', 'desc', 0,   6000,   'Score'),
   ('pit-stop-timer',       'asc',  0,   10000,  'Closest (ms)'),
   ('track-outline',        'desc', 0,   10,     'Correct / 10'),
+  ('name-that-lap',        'desc', 0,   10,     'Correct / 10'),
   ('track-builder',        'asc',  0,   600000, 'Build time (ms)'),
   ('track-builder-rookie', 'asc',  0,   600000, 'Build time (ms)'),
   ('track-builder-elite',  'asc',  0,   900000, 'Build time (ms)'),

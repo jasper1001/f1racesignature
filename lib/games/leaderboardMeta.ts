@@ -14,6 +14,7 @@ export const LEADERBOARD_META: Record<string, LeaderboardMeta> = {
   'championship-decider': { accent: '#3b82f6' },
   'pit-stop-timer':       { accent: '#06b6d4', ascending: true, suffix: 'ms' },
   'track-outline':        { accent: '#a855f7' },
+  'name-that-lap':        { accent: '#8b5cf6' },
   'track-builder':        { accent: '#84cc16', ascending: true, suffix: 'ms' },
   // Per-difficulty boards (browsed via the toggle on the game page; the hub shows
   // the Pro board under the single 'track-builder' tab above).
@@ -30,7 +31,7 @@ export const LEADERBOARD_META: Record<string, LeaderboardMeta> = {
 
 // Games that have a leaderboard, in display order (for the hub picker).
 export const LEADERBOARD_GAME_IDS = [
-  'draw-the-circuit', 'track-builder', 'lights-out', 'pit-stop-timer', 'track-outline',
-  'higher-lower', 'guess-the-driver', 'career-path', 'predict-driver',
+  'draw-the-circuit', 'track-builder', 'name-that-lap', 'lights-out', 'pit-stop-timer',
+  'track-outline', 'higher-lower', 'guess-the-driver', 'career-path', 'predict-driver',
   'team-radio', 'connections', 'championship-decider',
 ] as const
