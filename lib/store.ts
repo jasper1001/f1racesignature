@@ -34,8 +34,8 @@ interface StudioStore extends StudioState {
 export const useStudioStore = create<StudioStore>((set) => ({
   selectedDriverId: 'hamilton',
   // Default to a comparison-rich circuit so head-to-head works on first load:
-  // Interlagos also has Senna '91, Verstappen '16, Vettel '12 and Russell '22.
-  selectedRaceId: 'hamilton_interlagos_2008',
+  // Baku also has Leclerc '22, Verstappen '22, Vettel '18 and Pérez '21.
+  selectedRaceId: 'hamilton_baku_2018',
   vizMode: 'racing_line',
   theme: 'carbon_fiber',
   exportFormat: 'poster_portrait',

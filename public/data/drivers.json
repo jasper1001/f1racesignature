@@ -22,61 +22,6 @@
     "bio": "Redefining the ceiling of what's possible in a Formula 1 car. Fearless, unyielding, and devastatingly fast in all conditions."
   },
   {
-    "id": "schumacher",
-    "name": "Michael Schumacher",
-    "shortName": "MSC",
-    "team": "Ferrari",
-    "nationality": "German",
-    "color": "#dc0000",
-    "isFree": false,
-    "championships": 7,
-    "bio": "The benchmark against which all greats are measured. An athlete who combined raw pace with relentless dedication to elevate the sport itself."
-  },
-  {
-    "id": "senna",
-    "name": "Ayrton Senna",
-    "shortName": "SEN",
-    "team": "McLaren",
-    "nationality": "Brazilian",
-    "color": "#38b000",
-    "isFree": false,
-    "championships": 3,
-    "bio": "The purest racing driver who ever lived. His qualifying laps in Monaco were performances that transcended sport and entered the realm of art."
-  },
-  {
-    "id": "prost",
-    "name": "Alain Prost",
-    "shortName": "PRO",
-    "team": "McLaren",
-    "nationality": "French",
-    "color": "#ff6b00",
-    "isFree": false,
-    "championships": 4,
-    "bio": "The Professor. Where others attacked corners, Prost solved them — extracting every tenth through intellect, smoothness, and relentless consistency."
-  },
-  {
-    "id": "lauda",
-    "name": "Niki Lauda",
-    "shortName": "LAU",
-    "team": "Ferrari",
-    "nationality": "Austrian",
-    "color": "#e8002d",
-    "isFree": false,
-    "championships": 3,
-    "bio": "Courage incarnate. His return to racing 40 days after a near-fatal inferno at the Nürburgring is the most extraordinary act in motorsport history."
-  },
-  {
-    "id": "alonso",
-    "name": "Fernando Alonso",
-    "shortName": "ALO",
-    "team": "Aston Martin",
-    "nationality": "Spanish",
-    "color": "#229971",
-    "isFree": false,
-    "championships": 2,
-    "bio": "The complete racing driver. Gifted in qualifying, masterful in strategy, and capable of performances that defy the limits of his machinery."
-  },
-  {
     "id": "vettel",
     "name": "Sebastian Vettel",
     "shortName": "VET",
@@ -143,28 +88,6 @@
     "bio": "The king of tyre management and street circuits. Checo's racecraft and ability to make a set of tyres last forever made him the perfect wingman to a champion."
   },
   {
-    "id": "ricciardo",
-    "name": "Daniel Ricciardo",
-    "shortName": "RIC",
-    "team": "McLaren",
-    "nationality": "Australian",
-    "color": "#e8911f",
-    "isFree": false,
-    "championships": 0,
-    "bio": "The Honey Badger. A late-braking assassin with the widest smile in the paddock — when Ricciardo sent it down the inside, no gap was ever truly closed."
-  },
-  {
-    "id": "gasly",
-    "name": "Pierre Gasly",
-    "shortName": "GAS",
-    "team": "Alpine",
-    "nationality": "French",
-    "color": "#0093cc",
-    "isFree": false,
-    "championships": 0,
-    "bio": "From the depths of a demotion to the top step at Monza. Gasly's against-all-odds victory is one of the most emotional fairy tales in modern Formula 1."
-  },
-  {
     "id": "ocon",
     "name": "Esteban Ocon",
     "shortName": "OCO",
@@ -187,17 +110,6 @@
     "bio": "Ice-cold from the moment he arrived. A junior-category steamroller whose maturity and racecraft made him a Grand Prix winner faster than almost anyone expected."
   },
   {
-    "id": "antonelli",
-    "name": "Andrea Kimi Antonelli",
-    "shortName": "ANT",
-    "team": "Mercedes",
-    "nationality": "Italian",
-    "color": "#00d2be",
-    "isFree": false,
-    "championships": 0,
-    "bio": "The teenage prodigy who turned hype into history. Promoted straight to Mercedes, Antonelli answered every doubt with a pole-to-flag win at Monaco — composure and raw speed far beyond his years."
-  },
-  {
     "id": "raikkonen",
     "name": "Kimi Räikkönen",
     "shortName": "RAI",
@@ -207,17 +119,6 @@
     "isFree": true,
     "championships": 1,
     "bio": "The Iceman — ruthless natural speed wrapped in total indifference to the circus around it. 2007 world champion for Ferrari, and one of the most naturally gifted drivers of his era."
-  },
-  {
-    "id": "rosberg",
-    "name": "Nico Rosberg",
-    "shortName": "ROS",
-    "team": "Mercedes",
-    "nationality": "German",
-    "color": "#00d2be",
-    "isFree": true,
-    "championships": 1,
-    "bio": "Beat the greatest driver of his generation in equal machinery, then walked away days later. Rosberg's 2016 title was a campaign of relentless precision — and the nerve to retire on top."
   },
   {
     "id": "bearman",
@@ -240,27 +141,5 @@
     "isFree": true,
     "championships": 0,
     "bio": "For years the finest driver never to stand on a Formula 1 podium — a qualifying specialist whose record wait finally ended with a stunning charge through the wet to third at Silverstone in 2025."
-  },
-  {
-    "id": "hakkinen",
-    "name": "Mika Häkkinen",
-    "shortName": "HAK",
-    "team": "McLaren",
-    "nationality": "Finnish",
-    "color": "#c0c0c0",
-    "isFree": true,
-    "championships": 2,
-    "bio": "The Flying Finn — ice-cool and devastatingly fast, the one rival Michael Schumacher said he truly feared. Two world titles for McLaren and the author of the greatest overtake of his era."
-  },
-  {
-    "id": "webber",
-    "name": "Mark Webber",
-    "shortName": "WEB",
-    "team": "Red Bull",
-    "nationality": "Australian",
-    "color": "#3671c6",
-    "isFree": true,
-    "championships": 0,
-    "bio": "Tough, fast and fiercely combative — the Australian who scored points on debut at his home race and grew into a Monaco-conquering Red Bull race winner and 2010 title contender."
   }
 ]
