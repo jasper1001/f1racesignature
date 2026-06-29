@@ -5,6 +5,7 @@ import './globals.css'
 import { Providers } from '@/components/Providers'
 import { CookieBanner } from '@/components/layout/CookieBanner'
 import { ExploreRail } from '@/components/layout/ExploreRail'
+import { FloatingAffiliateAd } from '@/components/landing/FloatingAffiliateAd'
 
 const GA_MEASUREMENT_ID = 'G-HVKDBEVYBD'
 const SITE_URL = 'https://f1racesignature.site'
@@ -190,6 +191,7 @@ export default function RootLayout({
       <body>
         <Providers>{children}</Providers>
         <ExploreRail />
+        <FloatingAffiliateAd />
         <CookieBanner />
       </body>
     </html>

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { InlineAffiliateAd } from '@/components/landing/InlineAffiliateAd'
 import { TrackBuilderLeaderboards } from '@/components/games/TrackBuilderLeaderboards'
 import { TrackBuilderGame } from '@/components/games/TrackBuilderGame'
 
@@ -79,12 +80,16 @@ export default function TrackBuilderPage() {
         </div>
 
         {/* Game */}
+        <InlineAffiliateAd placement="game-top" />
+
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
           <div className="rounded-2xl bg-[#fbf9f4] overflow-hidden p-1 md:p-2" style={{ border: '1px solid rgba(132,204,22,0.25)', boxShadow: '0 0 0 1px rgba(132,204,22,0.06), 0 0 40px rgba(132,204,22,0.06)' }}>
             <TrackBuilderGame />
           </div>
           <div className="mt-6"><TrackBuilderLeaderboards /></div>
         </div>
+
+        <InlineAffiliateAd placement="game-bottom" />
 
       </main>
       <Footer />

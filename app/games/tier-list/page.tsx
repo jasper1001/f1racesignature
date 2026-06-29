@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { InlineAffiliateAd } from '@/components/landing/InlineAffiliateAd'
 import { TierListGame } from '@/components/games/TierListGame'
 
 const ACCENT = '#f43f5e'
@@ -89,11 +90,15 @@ export default function TierListPage() {
           </p>
         </div>
 
+        <InlineAffiliateAd placement="game-top" />
+
+
         <div className="max-w-2xl mx-auto px-4 py-12">
           <div className="rounded-2xl bg-[#fbf9f4] overflow-hidden p-5 md:p-8" style={{ border: '1px solid rgba(244,63,94,0.25)', boxShadow: '0 0 0 1px rgba(244,63,94,0.06), 0 0 40px rgba(244,63,94,0.06)' }}>
             <TierListGame />
           </div>
         </div>
+        <InlineAffiliateAd placement="game-bottom" />
       </main>
       <Footer />
     </>

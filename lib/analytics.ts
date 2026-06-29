@@ -86,4 +86,20 @@ export const Analytics = {
 
   hlPlayAgain: () =>
     trackEvent('hl_play_again'),
+
+  // ── Affiliate shelf (Amazon merch) ────────────────────────────────────────
+  // Conversion-intent click on a product → Amazon. `product_id` is our own id
+  // from affiliateProducts.ts so we can attribute without Amazon's reporting.
+  affiliateClicked: (params: {
+    productId: string
+    team: string
+    type: string
+    placement: string
+  }) =>
+    trackEvent('affiliate_click', {
+      product_id: params.productId,
+      team: params.team,
+      type: params.type,
+      placement: params.placement,
+    }),
 }

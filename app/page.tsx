@@ -7,6 +7,7 @@ import { FeaturedGallery } from '@/components/landing/FeaturedGallery'
 import { FAQ } from '@/components/landing/FAQ'
 import { ThisWeekendBanner } from '@/components/landing/ThisWeekendBanner'
 import { GamesOfTheDay } from '@/components/landing/GamesOfTheDay'
+import { AffiliateShelf } from '@/components/landing/AffiliateShelf'
 import { FAQ_ITEMS } from '@/lib/faq'
 import { ARTICLES } from '@/lib/articles'
 import { getAllDrivers } from '@/lib/serverData'
@@ -308,6 +309,9 @@ export default function HomePage() {
             </Link>
           </div>
         </section>
+
+        {/* Official F1 merch — Amazon affiliate shelf */}
+        <AffiliateShelf placement="homepage" />
 
         <FAQ />
 

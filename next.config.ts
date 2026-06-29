@@ -7,7 +7,8 @@ const ContentSecurityPolicy = [
   "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com",
   "style-src 'self' 'unsafe-inline'",
   "font-src 'self'",
-  "img-src 'self' data: blob:",
+  // Amazon product images (affiliate shelf) are served from the Amazon media CDN
+  "img-src 'self' data: blob: https://m.media-amazon.com",
   // Supabase: REST + auth over https, realtime over wss (leaderboards)
   "connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com https://www.googletagmanager.com https://api.jolpi.ca https://*.supabase.co wss://*.supabase.co",
   "frame-src 'none'",

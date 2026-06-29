@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { InlineAffiliateAd } from '@/components/landing/InlineAffiliateAd'
 import { LeaderboardView } from '@/components/games/LeaderboardView'
 import { PodiumScrambleGame } from '@/components/games/PodiumScrambleGame'
 
@@ -65,12 +66,16 @@ export default function PodiumScramblePage() {
         </div>
 
         {/* Game */}
+        <InlineAffiliateAd placement="game-top" />
+
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
           <div className="rounded-2xl bg-[#fbf9f4] overflow-hidden p-5 md:p-8" style={{ border: '1px solid rgba(212,160,23,0.30)', boxShadow: '0 0 0 1px rgba(212,160,23,0.06), 0 0 40px rgba(212,160,23,0.06)' }}>
             <PodiumScrambleGame />
           </div>
           <div className="mt-6"><LeaderboardView gameId="podium-scramble" /></div>
         </div>
+
+        <InlineAffiliateAd placement="game-bottom" />
 
       </main>
       <Footer />

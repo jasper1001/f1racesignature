@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { InlineAffiliateAd } from '@/components/landing/InlineAffiliateAd'
 import { LeaderboardView } from '@/components/games/LeaderboardView'
 import { LightsOutGame } from '@/components/games/LightsOutGame'
 
@@ -93,6 +94,9 @@ export default function LightsOutPage() {
           </p>
         </div>
 
+        <InlineAffiliateAd placement="game-top" />
+
+
         <div className="max-w-5xl mx-auto px-6 py-12">
           <div className="md:grid md:grid-cols-[1fr_200px] md:gap-6 md:items-start">
             <div className="rounded-2xl bg-[#fbf9f4] overflow-hidden p-5 md:p-8" style={{ border: '1px solid rgba(239,68,68,0.25)', boxShadow: '0 0 0 1px rgba(239,68,68,0.06), 0 0 40px rgba(239,68,68,0.06)' }}>
@@ -117,6 +121,7 @@ export default function LightsOutPage() {
             </div>
           </div>
         </div>
+        <InlineAffiliateAd placement="game-bottom" />
       </main>
       <Footer />
     </>
