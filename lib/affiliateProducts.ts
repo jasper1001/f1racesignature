@@ -81,15 +81,13 @@ export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
     enabled: true,
   },
   {
-    // TODO: needs a real affiliate link — the supplied "aff link" was an image URL.
-    // Disabled so it won't appear in ads until the amzn.to link is provided.
     id: 'ferrari-toy-001',
     team: 'ferrari',
     type: 'Toy',
     category: 'Collectibles',
-    affiliateUrl: 'https://m.media-amazon.com/images/I/61RVcfh6zaL._AC_SX679_.jpg',
+    affiliateUrl: 'https://amzn.to/4fa3Tiw',
     imageUrl: 'https://m.media-amazon.com/images/I/61RVcfh6zaL._AC_SX679_.jpg',
-    enabled: false,
+    enabled: true,
   },
   {
     id: 'ferrari-tshirt-001',
