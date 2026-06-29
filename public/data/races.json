@@ -364,32 +364,6 @@
     "telemetryFile": "piastri_hungary_2024"
   },
   {
-    "id": "hamilton_barcelona_2026",
-    "driverId": "hamilton",
-    "name": "Barcelona Grand Prix 2026",
-    "circuit": "barcelona",
-    "circuitName": "Circuit de Barcelona-Catalunya",
-    "year": 2026,
-    "location": "Barcelona, Spain",
-    "lapTime": "1:20.122",
-    "description": "Hamilton's first victory in Ferrari red. A commanding display at the Circuit de Catalunya — controlled pace, immaculate tyre management, and the calm of a seven-time champion writing a new chapter in scarlet.",
-    "isFree": false,
-    "telemetryFile": "hamilton_barcelona_2026"
-  },
-  {
-    "id": "antonelli_monaco_2026",
-    "driverId": "antonelli",
-    "name": "Monaco Grand Prix 2026",
-    "circuit": "monaco",
-    "circuitName": "Circuit de Monaco",
-    "year": 2026,
-    "location": "Monte Carlo, Monaco",
-    "lapTime": "1:12.051",
-    "description": "A statement carved into the streets of Monte Carlo. Antonelli put his Mercedes on pole and never looked back — a pole-to-flag victory that announced Formula 1's next great talent in the sport's most unforgiving arena.",
-    "isFree": false,
-    "telemetryFile": "antonelli_monaco_2026"
-  },
-  {
     "id": "senna_suzuka_1988",
     "driverId": "senna",
     "name": "Japanese Grand Prix 1988",
@@ -1196,19 +1170,6 @@
     "telemetryFile": "verstappen_mexico_2021"
   },
   {
-    "id": "perez_mexico_2022",
-    "driverId": "perez",
-    "name": "Mexico City Grand Prix 2022",
-    "circuit": "mexico",
-    "circuitName": "Autódromo Hermanos Rodríguez",
-    "year": 2022,
-    "location": "Mexico City, Mexico",
-    "lapTime": "1:19.300",
-    "description": "Deafening grandstands willing him on — Pérez delivered the home podium Mexico craved, third at the Autódromo Hermanos Rodríguez before his adoring crowd.",
-    "isFree": true,
-    "telemetryFile": "perez_mexico_2022"
-  },
-  {
     "id": "verstappen_imola_2022",
     "driverId": "verstappen",
     "name": "Emilia-Romagna Grand Prix 2022",
@@ -1298,31 +1259,5 @@
     "description": "Pole and a faultless lights-to-flag win on the streets of Monaco — the second leg of Webber's back-to-back triumphs that briefly carried him to the top of the 2010 World Championship.",
     "isFree": true,
     "telemetryFile": "webber_monaco_2010"
-  },
-  {
-    "id": "russell_canada_2026",
-    "driverId": "russell",
-    "name": "Canadian Grand Prix 2026",
-    "circuit": "canada",
-    "circuitName": "Circuit Gilles-Villeneuve",
-    "year": 2026,
-    "location": "Montréal, Canada",
-    "lapTime": "1:13.150",
-    "description": "Russell converted pole into a commanding lights-to-flag win on the streets of Montréal — leading a Mercedes resurgence and seizing the championship lead with the ice-cool precision of a driver hitting his stride.",
-    "isFree": false,
-    "telemetryFile": "russell_canada_2026"
-  },
-  {
-    "id": "russell_austria_2026",
-    "driverId": "russell",
-    "name": "Austrian Grand Prix 2026",
-    "circuit": "red_bull_ring",
-    "circuitName": "Red Bull Ring",
-    "year": 2026,
-    "location": "Spielberg, Austria",
-    "lapTime": "1:05.700",
-    "description": "Back-to-back for Russell. A faultless lights-to-flag drive through the Styrian hills extended his Mercedes hot streak and tightened his grip on the championship lead at the Red Bull Ring.",
-    "isFree": false,
-    "telemetryFile": "russell_austria_2026"
   }
 ]

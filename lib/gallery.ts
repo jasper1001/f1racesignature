@@ -433,18 +433,4 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     vizMode: 'racing_line',
     isPremium: false,
     badge: 'Maiden Win',
-  },
-  {
-    id: 'perez_hometown_roar',
-    title: 'Hometown Roar',
-    subtitle: 'Pérez — Mexico City 2022',
-    driverId: 'perez',
-    raceId: 'perez_mexico_2022',
-    circuitId: 'mexico',
-    driverColor: '#d4a017',
-    theme: 'championship_gold',
-    vizMode: 'racing_line',
-    isPremium: false,
-    badge: 'Home Hero',
-  },
-]
+  },]

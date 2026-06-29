@@ -228,14 +228,6 @@ export const RACE_STORIES: RaceStory[] = [
       'The Hungarian Grand Prix was the completion of a rapid education. Piastri had arrived in Formula 1 twelve months earlier as a junior champion who had never tested a Formula 1 car in anger before his debut. He ended his second season winning grands prix for a top team with the composure and authority of a driver many years senior to him. The question for those watching Piastri closely is not whether he will challenge for world championships — it is how many he will win, and how soon the first will arrive.',
     ],
   },
-  {
-    raceId: 'hamilton_barcelona_2026',
-    story: [
-      'Lewis Hamilton\'s first victory in Ferrari red came at the Circuit de Barcelona-Catalunya at the Spanish Grand Prix in 2026, and the manner of it was wholly characteristic of a seven-time champion who has never needed drama to make his point. From pole position, Hamilton controlled the pace from the first lap, managing the gap to his pursuers through tyre strategy and the economy of driving that has always been his greatest gift — going as quickly as necessary to win, not a fraction faster.',
-      'The move to Ferrari that had been one of Formula 1\'s most discussed potential story lines for years had finally materialised at the start of 2026, and the paddock had watched with interest to see how Hamilton would adapt to a new engineering culture, a new car philosophy, and the particular pressure that wearing red brings. His answer across the early part of the season had been measured and patient — learning, contributing to the car\'s development, integrating with a team that has its own ways of doing things. Barcelona was the moment when the accumulation of that work produced its first victory.',
-      'The celebration, in front of the Barcelona crowd and with the Ferrari garage behind him, carried the emotional weight that only a first win with a new team can carry. Hamilton had won with McLaren and with Mercedes — now he had won with Ferrari, completing a set of team affiliations that no other driver in Formula 1 history has assembled. He is 41 years old. He is still winning. The career that appeared to reach its statistical peak in 2020 is still being written, and the final chapter is being written in scarlet.',
-    ],
-  },
 ]
 
 export function getRaceStory(raceId: string): string[] {
