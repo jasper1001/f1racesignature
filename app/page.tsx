@@ -3,7 +3,6 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { Hero } from '@/components/landing/Hero'
 import { HowItWorks } from '@/components/landing/HowItWorks'
-import { FeaturedGallery } from '@/components/landing/FeaturedGallery'
 import { FAQ } from '@/components/landing/FAQ'
 import { ThisWeekendBanner } from '@/components/landing/ThisWeekendBanner'
 import { GamesOfTheDay } from '@/components/landing/GamesOfTheDay'
@@ -57,8 +56,6 @@ export default function HomePage() {
 
         {/* Games of the Day — three daily-rotating picks */}
         <GamesOfTheDay />
-
-        <FeaturedGallery />
 
         {/* Latest from the Blog */}
         <section className="py-12 md:py-14 border-t border-[#0f0f0f]">
@@ -204,8 +201,6 @@ export default function HomePage() {
             <p className="text-white/65 text-sm leading-relaxed">
               Browse the full{' '}
               <Link href="/drivers" className="text-[#d4a017] hover:underline">driver collection</Link>,
-              explore the{' '}
-              <Link href="/gallery" className="text-[#d4a017] hover:underline">poster gallery</Link>,
               read our{' '}
               <Link href="/blog" className="text-[#d4a017] hover:underline">F1 articles and analysis</Link>,
               or follow the{' '}

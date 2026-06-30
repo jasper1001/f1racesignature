@@ -19,20 +19,6 @@ const FEATURES = [
     ),
   },
   {
-    href: '/gallery',
-    tag: 'Explore',
-    title: 'Gallery',
-    description: 'Browse the full collection of community-generated race posters.',
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <rect x="2" y="2" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
-        <rect x="11" y="2" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
-        <rect x="2" y="11" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
-        <rect x="11" y="11" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
-      </svg>
-    ),
-  },
-  {
     href: '/results',
     tag: 'Live',
     title: '2026 Season',
@@ -118,10 +104,10 @@ export function Hero() {
                 Create Your Poster
               </Link>
               <Link
-                href="/gallery"
+                href="/results"
                 className="inline-flex items-center gap-2 px-8 py-4 bg-white/5 text-white font-medium rounded-xl border border-white/10 hover:bg-white/8 hover:border-white/15 transition-all"
               >
-                View Gallery
+                2026 Standings
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                   <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>

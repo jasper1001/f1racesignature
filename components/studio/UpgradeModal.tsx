@@ -28,7 +28,6 @@ const TIERS = [
       'Everything in Paddock Pass',
       'All export formats (5 sizes)',
       'No watermark on exports',
-      'Gallery collection access',
       'Early access to new features',
     ],
     cta: 'Go Champion',

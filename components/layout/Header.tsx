@@ -10,7 +10,6 @@ const NAV_LINKS = [
   { href: '/', label: 'Home' },
   { href: '/studio', label: 'Studio' },
   { href: '/games', label: 'Mini Games' },
-  { href: '/gallery', label: 'Gallery' },
   { href: '/drivers', label: 'Drivers' },
   { href: '/blog', label: 'Blog' },
   { href: '/garage', label: 'My Garage' },

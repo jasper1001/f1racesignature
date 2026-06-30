@@ -43,7 +43,6 @@ export function Footer() {
                 <Link href="/results" className="text-white/65 hover:text-white transition-colors">2026 Season</Link>
                 <Link href="/studio" className="text-white/65 hover:text-white transition-colors">Studio</Link>
                 <Link href="/schedule" className="text-white/65 hover:text-white transition-colors">Schedule</Link>
-                <Link href="/gallery" className="text-white/65 hover:text-white transition-colors">Gallery</Link>
                 <Link href="/calendar" className="text-white/65 hover:text-white transition-colors">Calendar</Link>
                 <Link href="/drivers" className="text-white/65 hover:text-white transition-colors">Drivers</Link>
                 <Link href="/games" className="text-white/65 hover:text-white transition-colors">Mini Games</Link>

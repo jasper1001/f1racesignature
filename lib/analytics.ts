@@ -44,9 +44,6 @@ export const Analytics = {
   upgradeModalOpened: (reason: string) =>
     trackEvent('upgrade_modal_opened', { reason }),
 
-  galleryItemClicked: (itemId: string) =>
-    trackEvent('gallery_item_clicked', { item_id: itemId }),
-
   compareToggled: (enabled: boolean) =>
     trackEvent('compare_toggled', { enabled }),
 

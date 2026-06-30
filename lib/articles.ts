@@ -723,7 +723,7 @@ export const ARTICLES: Article[] = [
         heading: 'Why the Colours Matter Beyond Qualifying',
         paragraphs: [
           'The colours are not just for qualifying drama — they are a diagnostic tool. Because every circuit is divided into three sectors, the colours let you instantly see where a driver is strong and where they are losing out. A driver who is purple in Sector 1 but yellow in Sector 3 is fast in one type of corner and struggling in another, which points to a car setup trade-off or a specific weakness on that part of the track.',
-          'During the race, the same colours track tyre life and pace in real time. A leader whose sectors stay green is managing the gap comfortably; a chasing driver suddenly flashing purple sectors is a sign an undercut or a charge is on. If you want to go deeper into how teams turn those three sector splits into strategy and setup decisions, our companion guide on understanding F1 sector times breaks down the full picture — and you can see real lap data rendered as art across the F1RaceSignature gallery.',
+          'During the race, the same colours track tyre life and pace in real time. A leader whose sectors stay green is managing the gap comfortably; a chasing driver suddenly flashing purple sectors is a sign an undercut or a charge is on. If you want to go deeper into how teams turn those three sector splits into strategy and setup decisions, our companion guide on understanding F1 sector times breaks down the full picture — and you can see real lap data rendered as art in the F1RaceSignature studio.',
         ],
       },
     ],
@@ -781,7 +781,7 @@ export const ARTICLES: Article[] = [
         heading: 'How to Start Watching',
         paragraphs: [
           'The best way into Formula 1 is to pick a driver or a team to follow — having someone to root for transforms a procession of cars into a story you care about. Pay attention to the qualifying session on Saturday to understand the grid, then watch how the race unfolds from there. Do not worry about understanding every strategic nuance at first; the basics of who is leading, who is catching whom, and who just pitted are enough to enjoy a race.',
-          'It also helps to understand the data behind the racing, because so much of F1 is invisible from a single camera angle. Learning to read a speed trace, a racing line, or the coloured sector times on the timing screen turns a confusing blur into a readable contest — our guides on reading F1 telemetry and what the sector colours mean are good next steps. And if you want to see how a single legendary lap looks when its real data is rendered as art, the F1RaceSignature gallery is a vivid way to appreciate just how much skill is packed into ninety seconds of driving.',
+          'It also helps to understand the data behind the racing, because so much of F1 is invisible from a single camera angle. Learning to read a speed trace, a racing line, or the coloured sector times on the timing screen turns a confusing blur into a readable contest — our guides on reading F1 telemetry and what the sector colours mean are good next steps. And if you want to see how a single legendary lap looks when its real data is rendered as art, the F1RaceSignature studio is a vivid way to appreciate just how much skill is packed into ninety seconds of driving.',
         ],
       },
     ],

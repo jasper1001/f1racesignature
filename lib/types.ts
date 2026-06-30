@@ -154,20 +154,6 @@ export interface ExportFormatConfig {
   isFree: boolean
 }
 
-export interface GalleryItem {
-  id: string
-  title: string
-  subtitle: string
-  driverId: string
-  raceId: string
-  circuitId: string
-  driverColor: string
-  theme: ArtTheme
-  vizMode: VizMode
-  isPremium: boolean
-  badge?: string
-}
-
 export interface StudioState {
   selectedDriverId: string | null
   selectedRaceId: string | null

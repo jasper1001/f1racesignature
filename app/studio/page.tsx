@@ -117,7 +117,7 @@ export default function StudioPage() {
     setIsPlaying(false)
   }, [selectedDriverId, selectedRaceId, vizMode, theme, compareEnabled, compareRaceIds])
 
-  // Apply a preset passed in via URL (e.g. clicking a gallery poster)
+  // Apply a preset passed in via URL (e.g. a driver-page poster link)
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     const driverId = params.get('driver') ?? undefined
