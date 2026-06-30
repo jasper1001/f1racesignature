@@ -1,0 +1,13 @@
+#!/bin/sh
+# Pre-commit gate: block commits that introduce invalid or fabricated race data.
+#
+# Activated via `git config core.hooksPath .githooks`, which the npm "prepare"
+# script sets automatically on install. Run manually anytime with `npm run validate`.
+
+echo "Validating race data..."
+if ! node scripts/validate-races.mjs; then
+  echo ""
+  echo "Commit blocked: race data failed validation (see errors above)."
+  echo "Fix the data, then re-check with: npm run validate"
+  exit 1
+fi
