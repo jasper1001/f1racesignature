@@ -24,16 +24,16 @@ export interface GameMeta {
 
 export const GAMES: GameMeta[] = [
   {
-    id: 'livery-designer',
-    href: '/games/livery-designer',
-    tag: 'Car Design',
-    title: 'Livery Designer',
+    id: 'track-builder',
+    href: '/games/track-builder',
+    tag: 'Circuit Puzzle',
+    title: 'Track Builder',
     description:
-      'Design your own F1 car in 3D. Paint the bodywork, nose, wings, sidepods and wheels, pick a finish, add your number and name, then spin it and share it.',
-    blurb: 'Paint and style your own F1 car in 3D, then spin it and share it.',
-    duration: 'Endless',
-    accent: '#e0115f',
-    icon: '🎨',
+      'A real F1 circuit, scrambled into tiles. Swap them to rebuild the track as fast as you can — then race the global clock.',
+    blurb: 'Rebuild a scrambled F1 circuit against the clock — fastest build wins.',
+    duration: '~1 minute',
+    accent: '#84cc16',
+    icon: '🏗️',
     badge: 'New',
   },
   {
@@ -86,19 +86,6 @@ export const GAMES: GameMeta[] = [
     duration: '~1 minute',
     accent: '#ec4899',
     icon: '✏️',
-    badge: 'New',
-  },
-  {
-    id: 'track-builder',
-    href: '/games/track-builder',
-    tag: 'Circuit Puzzle',
-    title: 'Track Builder',
-    description:
-      'A real F1 circuit, scrambled into tiles. Swap them to rebuild the track as fast as you can — then race the global clock.',
-    blurb: 'Rebuild a scrambled F1 circuit against the clock — fastest build wins.',
-    duration: '~1 minute',
-    accent: '#84cc16',
-    icon: '🏗️',
     badge: 'New',
   },
   {
@@ -238,6 +225,19 @@ export const GAMES: GameMeta[] = [
     duration: '~30 seconds',
     accent: '#ef4444',
     icon: '🚦',
+  },
+  {
+    id: 'livery-designer',
+    href: '/games/livery-designer',
+    tag: 'Car Design',
+    title: 'Livery Designer',
+    description:
+      'Design your own F1 car in 3D. Paint the bodywork, nose, wings, sidepods and wheels, pick a finish, add your number and name, then spin it and share it.',
+    blurb: 'Paint and style your own F1 car in 3D, then spin it and share it.',
+    duration: 'Endless',
+    accent: '#e0115f',
+    icon: '🎨',
+    badge: 'New',
   },
 ]
 
