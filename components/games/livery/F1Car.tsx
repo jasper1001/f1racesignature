@@ -8,6 +8,11 @@ import { makePatternTexture, makeNumberTexture, makeNameTexture } from './textur
 
 type Vec = [number, number, number]
 
+// Coordinate convention: +Z = front of car, -Z = rear, +Y = up, X = width.
+// Modelled toward a modern ground-effect (2022+) F1 silhouette: long, low,
+// big 18" low-profile wheels with aero covers, multi-element wings, downwash
+// sidepods, floor edges, beam wing + diffuser.
+
 // ── Finish → physically-based paint parameters ──────────────────────────────────
 // MeshPhysicalMaterial + clearcoat reads as real automotive paint once the scene
 // supplies an environment map (see Scene.tsx Lightformers).
@@ -34,52 +39,93 @@ function Strut({ a, b, r = 0.02, mat }: { a: Vec; b: Vec; r?: number; mat: THREE
   )
 }
 
-// One full corner of suspension (upper + lower wishbones, pushrod, track rod).
-function suspensionSegments(wx: number, wy: number, wz: number): [Vec, Vec][] {
-  const s = Math.sign(wx) || 1
-  const upLo: Vec = [wx - s * 0.15, wy - 0.05, wz]
-  const upHi: Vec = [wx - s * 0.15, wy + 0.12, wz]
-  return [
-    [upLo, [s * 0.3, wy - 0.08, wz - 0.28]],
-    [upLo, [s * 0.3, wy - 0.08, wz + 0.28]],
-    [upHi, [s * 0.28, wy + 0.2, wz - 0.24]],
-    [upHi, [s * 0.28, wy + 0.2, wz + 0.24]],
-    [upHi, [wx - s * 0.05, wy - 0.12, wz + 0.12]],
-    [upLo, [s * 0.3, wy + 0.02, wz + 0.32]],
-  ]
+// A flat aero blade between two points (suspension wishbones): a thin box whose
+// chord lies horizontal and whose thin axis is vertical, like a real F1 arm.
+function Blade({ a, b, w = 0.07, t = 0.02, mat }: { a: Vec; b: Vec; w?: number; t?: number; mat: THREE.Material }) {
+  const va = new THREE.Vector3(...a)
+  const vb = new THREE.Vector3(...b)
+  const dir = new THREE.Vector3().subVectors(vb, va)
+  const len = dir.length() || 0.001
+  dir.normalize()
+  const pos = new THREE.Vector3().addVectors(va, vb).multiplyScalar(0.5)
+  // Pick a reference up that isn't parallel to the arm, then build an orthonormal
+  // basis so the box's X (chord) is horizontal and Z (thickness) stays thin.
+  const up = Math.abs(dir.y) > 0.9 ? new THREE.Vector3(1, 0, 0) : new THREE.Vector3(0, 1, 0)
+  const wide = new THREE.Vector3().crossVectors(up, dir).normalize()
+  // Right-handed basis (X=wide, Y=dir, Z=thin) so the quaternion is a pure
+  // rotation — wide×dir, not dir×wide, or the blade twists to point up.
+  const thin = new THREE.Vector3().crossVectors(wide, dir).normalize()
+  const quat = new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().makeBasis(wide, dir, thin))
+  return (
+    <mesh position={pos} quaternion={quat} material={mat} castShadow>
+      <boxGeometry args={[w, len, t]} />
+    </mesh>
+  )
 }
 
-// A spoked wheel: rounded tyre (lathe), brake disc, rim ring, spokes, hub nut.
-function Wheel({ pos, tireGeo, tireMat, rimMat, carbonMat, accentMat }: {
-  pos: Vec; tireGeo: THREE.BufferGeometry
-  tireMat: THREE.Material; rimMat: THREE.Material; carbonMat: THREE.Material; accentMat: THREE.Material
+// Low-profile tyre cross-section (lathe around Y, then laid on its side in Wheel).
+// R = tyre outer radius, halfW = half tread width, rimR = inner (rim) radius.
+function makeTyre(R: number, halfW: number, rimR: number): THREE.LatheGeometry {
+  const pts = [
+    new THREE.Vector2(rimR, -halfW),
+    new THREE.Vector2(R - 0.05, -halfW),
+    new THREE.Vector2(R, -halfW + 0.06),
+    new THREE.Vector2(R, halfW - 0.06),
+    new THREE.Vector2(R - 0.05, halfW),
+    new THREE.Vector2(rimR, halfW),
+  ]
+  return new THREE.LatheGeometry(pts, 44)
+}
+
+// Modern F1 wheel: low-profile tyre + solid aero wheel cover (front gets an
+// over-tyre winglet), inboard brake duct. Spokes are hidden behind the cover.
+function Wheel({ pos, front, tireGeo, mats }: {
+  pos: Vec; front: boolean; tireGeo: THREE.BufferGeometry
+  mats: Record<string, THREE.Material>
 }) {
-  const out = (Math.sign(pos[0]) || 1) * 0.17
+  const s = Math.sign(pos[0]) || 1
+  const out = s * (front ? 0.17 : 0.22)
   return (
     <group position={pos}>
-      <mesh geometry={tireGeo} rotation={[0, 0, Math.PI / 2]} material={tireMat} castShadow />
-      <group position={[out, 0, 0]}>
-        {/* brake disc */}
-        <mesh rotation={[0, 0, Math.PI / 2]} material={carbonMat}>
-          <cylinderGeometry args={[0.18, 0.18, 0.05, 24]} />
-        </mesh>
-        {/* rim outer ring */}
-        <mesh rotation={[0, Math.PI / 2, 0]} material={rimMat}>
-          <torusGeometry args={[0.2, 0.03, 12, 28]} />
-        </mesh>
-        {/* spokes */}
-        {Array.from({ length: 6 }).map((_, i) => (
-          <mesh key={i} rotation={[(i * Math.PI) / 3, 0, 0]} material={rimMat}>
-            <boxGeometry args={[0.04, 0.36, 0.025]} />
-          </mesh>
-        ))}
-        {/* hub nut */}
-        <mesh rotation={[0, 0, Math.PI / 2]} material={accentMat}>
-          <cylinderGeometry args={[0.055, 0.055, 0.1, 8]} />
-        </mesh>
-      </group>
+      <mesh geometry={tireGeo} rotation={[0, 0, Math.PI / 2]} material={mats.tire} castShadow />
+      {/* outboard aero wheel cover (gold disc) */}
+      <mesh position={[out, 0, 0]} rotation={[0, 0, Math.PI / 2]} material={mats.rim} castShadow>
+        <cylinderGeometry args={[0.28, 0.28, 0.02, 36]} />
+      </mesh>
+      {/* rim pinstripe + hub, sitting proud of the cover on the outboard face */}
+      <mesh position={[out + s * 0.02, 0, 0]} rotation={[0, Math.PI / 2, 0]} material={mats.accent}>
+        <torusGeometry args={[0.19, 0.014, 12, 40]} />
+      </mesh>
+      <mesh position={[out + s * 0.035, 0, 0]} rotation={[0, 0, Math.PI / 2]} material={mats.carbon}>
+        <cylinderGeometry args={[0.055, 0.055, 0.04, 16]} />
+      </mesh>
+      {/* inboard brake duct face */}
+      <mesh position={[-out * 0.75, 0, 0]} rotation={[0, 0, Math.PI / 2]} material={mats.carbon}>
+        <cylinderGeometry args={[0.2, 0.2, 0.03, 24]} />
+      </mesh>
     </group>
   )
+}
+
+// One corner of pushrod suspension: upper + lower wishbones (two legs each) and
+// a track/pushrod, from the wheel hub inboard to the chassis.
+function suspensionSegments(wx: number, wy: number, wz: number, front: boolean): [Vec, Vec][] {
+  const s = Math.sign(wx) || 1
+  const hubIn = wx - s * 0.16
+  // Inboard mount: the slender nose up front, the gearbox casing at the rear —
+  // both narrow, so the wishbones reach the centreline bodywork instead of air.
+  const cx = s * (front ? 0.14 : 0.15)
+  const dz = front ? 0.26 : 0.3
+  return [
+    // lower wishbone (V)
+    [[hubIn, wy - 0.06, wz], [cx, wy - 0.1, wz - dz]],
+    [[hubIn, wy - 0.06, wz], [cx, wy - 0.1, wz + dz]],
+    // upper wishbone (V)
+    [[hubIn, wy + 0.12, wz], [cx, wy + 0.16, wz - dz * 0.85]],
+    [[hubIn, wy + 0.12, wz], [cx, wy + 0.16, wz + dz * 0.85]],
+    // pushrod
+    [[hubIn, wy - 0.04, wz], [cx, wy + 0.2, wz + (front ? 0.1 : -0.1)]],
+  ]
 }
 
 function Decal({ map, position, rotation, scale }: {
@@ -104,17 +150,10 @@ export function F1Car({ design }: { design: LiveryDesign }) {
   useEffect(() => () => { numTex.dispose() }, [numTex])
   useEffect(() => () => { nameTex.dispose() }, [nameTex])
 
-  // ── Rounded tyre cross-section (lathe around Y, then laid on its side) ──
-  const tireGeo = useMemo(() => {
-    const pts = [
-      new THREE.Vector2(0.2, -0.17), new THREE.Vector2(0.31, -0.17),
-      new THREE.Vector2(0.35, -0.12), new THREE.Vector2(0.36, 0),
-      new THREE.Vector2(0.35, 0.12), new THREE.Vector2(0.31, 0.17),
-      new THREE.Vector2(0.2, 0.17),
-    ]
-    return new THREE.LatheGeometry(pts, 40)
-  }, [])
-  useEffect(() => () => tireGeo.dispose(), [tireGeo])
+  // ── Tyres (front narrower than rear, both low-profile big-rim) ──
+  const tireFront = useMemo(() => makeTyre(0.42, 0.15, 0.26), [])
+  const tireRear = useMemo(() => makeTyre(0.43, 0.2, 0.26), [])
+  useEffect(() => () => { tireFront.dispose(); tireRear.dispose() }, [tireFront, tireRear])
 
   // ── Shared materials (disposed on change) ──
   const mats = useMemo(() => {
@@ -138,136 +177,178 @@ export function F1Car({ design }: { design: LiveryDesign }) {
   }, [colors, finish, bodyTex])
   useEffect(() => () => { Object.values(mats).forEach((m) => m.dispose()) }, [mats])
 
-  const wheels: Vec[] = [
-    [0.95, 0.36, 1.55], [-0.95, 0.36, 1.55],
-    [1.0, 0.36, -1.7], [-1.0, 0.36, -1.7],
-  ]
+  // Wheel centres: front narrower track, rear slightly wider; long wheelbase.
+  const frontWheels: Vec[] = [[0.92, 0.42, 1.6], [-0.92, 0.42, 1.6]]
+  const rearWheels: Vec[] = [[0.98, 0.43, -1.78], [-0.98, 0.43, -1.78]]
 
   return (
-    <group position={[0, -0.35, 0]} rotation={[0, -0.5, 0]}>
-      {/* ── Floor + side edges + diffuser ── */}
-      <RoundedBox args={[1.35, 0.07, 4.0]} radius={0.03} smoothness={3} position={[0, 0.12, -0.15]} material={mats.carbon} receiveShadow castShadow />
-      {[0.68, -0.68].map((x, i) => (
-        <RoundedBox key={i} args={[0.06, 0.14, 3.9]} radius={0.02} position={[x, 0.16, -0.15]} material={mats.carbon} castShadow />
+    <group position={[0, -0.42, 0]} rotation={[0, -0.5, 0]}>
+      {/* ════════ FLOOR ════════ */}
+      {/* main plank */}
+      <RoundedBox args={[1.28, 0.06, 4.4]} radius={0.03} smoothness={3} position={[0, 0.14, -0.15]} material={mats.carbon} receiveShadow castShadow />
+      {/* raised floor edges (2022 edge wings) */}
+      {[0.66, -0.66].map((x, i) => (
+        <RoundedBox key={i} args={[0.06, 0.1, 3.4]} radius={0.02} position={[x, 0.18, -0.1]} material={mats.carbon} castShadow />
       ))}
-      <mesh position={[0, 0.26, -2.15]} rotation={[0.5, 0, 0]} material={mats.carbon} castShadow>
-        <boxGeometry args={[1.1, 0.5, 0.4]} />
-      </mesh>
-
-      {/* ── Monocoque / cockpit tub ── */}
-      <RoundedBox args={[0.74, 0.44, 2.3]} radius={0.16} smoothness={5} position={[0, 0.46, 0.15]} material={mats.body} castShadow />
-      {/* cockpit opening */}
-      <RoundedBox args={[0.4, 0.22, 0.62]} radius={0.08} position={[0, 0.62, -0.02]} material={mats.glass} />
-
-      {/* ── Nose cone (tapered, oval, drooped) ── */}
-      <group position={[0, 0.4, 1.55]} scale={[1.12, 0.82, 1]}>
-        <mesh rotation={[-Math.PI / 2 + 0.06, 0, 0]} material={mats.nose} castShadow>
-          <cylinderGeometry args={[0.1, 0.27, 1.5, 28]} />
-        </mesh>
-        <mesh position={[0, 0.04, 0.74]} material={mats.nose} castShadow>
-          <sphereGeometry args={[0.1, 18, 18]} />
-        </mesh>
-      </group>
-
-      {/* ── Engine cover (tapering to the rear) + airbox + shark fin ── */}
-      <group position={[0, 0.5, -1.05]} scale={[1, 1, 1]}>
-        <mesh rotation={[Math.PI / 2, 0, 0]} material={mats.body} castShadow>
-          <cylinderGeometry args={[0.1, 0.32, 1.7, 26]} />
-        </mesh>
-      </group>
-      {/* airbox snorkel behind the driver, with a forward-facing intake mouth */}
-      <mesh position={[0, 0.82, -0.34]} material={mats.body} castShadow>
-        <sphereGeometry args={[0.16, 20, 16]} />
-      </mesh>
-      <mesh position={[0, 0.83, -0.2]} rotation={[Math.PI / 2, 0, 0]} material={mats.glass}>
-        <cylinderGeometry args={[0.07, 0.07, 0.12, 16]} />
-      </mesh>
-      {/* shark fin */}
-      <mesh position={[0, 0.78, -1.45]} material={mats.body} castShadow>
-        <boxGeometry args={[0.03, 0.42, 1.0]} />
-      </mesh>
-
-      {/* ── Sidepods (with inlet recess) ── */}
-      {[0.56, -0.56].map((x, i) => (
-        <group key={i}>
-          <RoundedBox args={[0.46, 0.42, 1.5]} radius={0.14} smoothness={4} position={[x, 0.42, -0.05]} rotation={[0, 0, x > 0 ? -0.05 : 0.05]} material={mats.sidepods} castShadow />
-          <RoundedBox args={[0.22, 0.24, 0.12]} radius={0.05} position={[x, 0.44, 0.7]} material={mats.glass} />
-        </group>
-      ))}
-      {/* bargeboards */}
+      {/* front floor fences */}
       {[0.5, -0.5].map((x, i) => (
-        <mesh key={i} position={[x, 0.34, 0.95]} rotation={[0, x > 0 ? 0.2 : -0.2, 0]} material={mats.carbon} castShadow>
-          <boxGeometry args={[0.03, 0.28, 0.5]} />
+        <mesh key={i} position={[x, 0.16, 1.1]} rotation={[0, x > 0 ? 0.15 : -0.15, 0]} material={mats.carbon} castShadow>
+          <boxGeometry args={[0.025, 0.16, 0.7]} />
+        </mesh>
+      ))}
+      {/* diffuser — upswept rear floor section with vertical strakes */}
+      <mesh position={[0, 0.24, -2.18]} rotation={[-0.5, 0, 0]} material={mats.carbon} castShadow>
+        <boxGeometry args={[1.12, 0.42, 0.05]} />
+      </mesh>
+      {[-0.42, -0.14, 0.14, 0.42].map((x, i) => (
+        <mesh key={i} position={[x, 0.26, -2.16]} rotation={[-0.5, 0, 0]} material={mats.carbon} castShadow>
+          <boxGeometry args={[0.025, 0.4, 0.08]} />
         </mesh>
       ))}
 
-      {/* ── Front wing (2 elements + endplates + pylons) ── */}
-      <RoundedBox args={[1.8, 0.04, 0.42]} radius={0.02} position={[0, 0.13, 2.55]} rotation={[0.04, 0, 0]} material={mats.wings} castShadow />
-      <RoundedBox args={[1.7, 0.035, 0.22]} radius={0.02} position={[0, 0.26, 2.62]} rotation={[0.28, 0, 0]} material={mats.wings} castShadow />
-      {[0.88, -0.88].map((x, i) => (
-        <RoundedBox key={i} args={[0.04, 0.3, 0.55]} radius={0.02} position={[x, 0.24, 2.55]} rotation={[0, x > 0 ? -0.06 : 0.06, 0]} material={mats.wings} castShadow />
-      ))}
-      <Strut a={[0.13, 0.2, 2.35]} b={[0.13, 0.42, 2.55]} r={0.018} mat={mats.wings} />
-      <Strut a={[-0.13, 0.2, 2.35]} b={[-0.13, 0.42, 2.55]} r={0.018} mat={mats.wings} />
+      {/* ════════ MONOCOQUE / cockpit tub ════════ */}
+      <RoundedBox args={[0.72, 0.4, 2.5]} radius={0.18} smoothness={5} position={[0, 0.44, 0.05]} material={mats.body} castShadow />
+      {/* raised cockpit coaming */}
+      <RoundedBox args={[0.6, 0.3, 1.2]} radius={0.14} smoothness={4} position={[0, 0.52, -0.25]} material={mats.body} castShadow />
+      {/* cockpit opening (dark recess) */}
+      <RoundedBox args={[0.36, 0.16, 0.66]} radius={0.07} position={[0, 0.66, -0.05]} material={mats.glass} />
 
-      {/* ── Rear wing (main + flap + endplates + swan-neck + beam + DRS light) ── */}
-      <RoundedBox args={[1.25, 0.05, 0.34]} radius={0.02} position={[0, 1.08, -2.2]} rotation={[-0.22, 0, 0]} material={mats.wings} castShadow />
-      <RoundedBox args={[1.25, 0.04, 0.2]} radius={0.02} position={[0, 0.92, -2.28]} rotation={[-0.1, 0, 0]} material={mats.wings} castShadow />
-      {[0.62, -0.62].map((x, i) => (
-        <RoundedBox key={i} args={[0.04, 0.6, 0.6]} radius={0.03} position={[x, 0.85, -2.22]} material={mats.wings} castShadow />
-      ))}
-      <Strut a={[0.1, 0.6, -1.95]} b={[0.1, 1.06, -2.18]} r={0.022} mat={mats.wings} />
-      <Strut a={[-0.1, 0.6, -1.95]} b={[-0.1, 1.06, -2.18]} r={0.022} mat={mats.wings} />
-      <RoundedBox args={[1.0, 0.04, 0.16]} radius={0.02} position={[0, 0.56, -2.12]} material={mats.wings} castShadow />
-      <mesh position={[0, 0.66, -2.35]} material={mats.light}>
-        <boxGeometry args={[0.08, 0.12, 0.04]} />
+      {/* ════════ NOSE — sharp tapered chisel sweeping down to the wing ════════ */}
+      {/* flattened wedge (wider than tall) coming to a point at the front */}
+      <group position={[0, 0.46, 1.55]} rotation={[0.05, 0, 0]} scale={[0.82, 0.62, 1]}>
+        <mesh rotation={[-Math.PI / 2 + 0.16, 0, 0]} material={mats.nose} castShadow>
+          <cylinderGeometry args={[0.44, 0.015, 2.15, 26]} />
+        </mesh>
+      </group>
+
+      {/* ════════ FRONT WING — cascading elements sweeping up into flared endplates ════════ */}
+      {/* central span: 4 stacked elements with rising chord */}
+      <RoundedBox args={[1.5, 0.035, 0.52]} radius={0.02} position={[0, 0.1, 2.5]} rotation={[0.05, 0, 0]} material={mats.wings} castShadow />
+      <RoundedBox args={[1.44, 0.03, 0.22]} radius={0.02} position={[0, 0.17, 2.62]} rotation={[0.3, 0, 0]} material={mats.wings} castShadow />
+      <RoundedBox args={[1.38, 0.03, 0.17]} radius={0.02} position={[0, 0.25, 2.66]} rotation={[0.46, 0, 0]} material={mats.wings} castShadow />
+      <RoundedBox args={[1.32, 0.03, 0.14]} radius={0.02} position={[0, 0.33, 2.69]} rotation={[0.58, 0, 0]} material={mats.wings} castShadow />
+      {/* outboard sections rolling up toward the endplates */}
+      {[0.82, -0.82].map((x, i) => {
+        const s = x > 0 ? 1 : -1
+        return (
+          <group key={i}>
+            <RoundedBox args={[0.36, 0.03, 0.5]} radius={0.02} position={[x, 0.16, 2.52]} rotation={[0.1, 0, s * -0.5]} material={mats.wings} castShadow />
+            <RoundedBox args={[0.3, 0.03, 0.22]} radius={0.02} position={[x + s * 0.05, 0.29, 2.62]} rotation={[0.34, 0, s * -0.62]} material={mats.wings} castShadow />
+          </group>
+        )
+      })}
+      {/* endplates — tall, flared outward at the top */}
+      {[0.94, -0.94].map((x, i) => {
+        const s = x > 0 ? 1 : -1
+        return (
+          <RoundedBox key={i} args={[0.04, 0.48, 0.62]} radius={0.02} position={[x, 0.32, 2.55]} rotation={[0, s * -0.08, s * -0.22]} material={mats.wings} castShadow />
+        )
+      })}
+
+      {/* ════════ SIDEPODS (high inlet, downwash ramp to rear) ════════ */}
+      {[0.55, -0.55].map((x, i) => {
+        const s = x > 0 ? 1 : -1
+        return (
+          <group key={i}>
+            {/* inlet block */}
+            <RoundedBox args={[0.5, 0.44, 0.62]} radius={0.12} smoothness={4} position={[x, 0.48, 0.62]} material={mats.sidepods} castShadow />
+            {/* inlet mouth */}
+            <RoundedBox args={[0.32, 0.3, 0.12]} radius={0.05} position={[x, 0.48, 0.95]} material={mats.glass} />
+            {/* downwash body, tucking down + inward toward the rear */}
+            <RoundedBox args={[0.48, 0.4, 1.5]} radius={0.16} smoothness={4} position={[x, 0.4, -0.35]} rotation={[0.12, 0, s * 0.12]} material={mats.sidepods} castShadow />
+            {/* undercut */}
+            <mesh position={[x + s * 0.18, 0.26, -0.4]} rotation={[0, 0, s * 0.5]} material={mats.carbon}>
+              <boxGeometry args={[0.12, 0.16, 1.5]} />
+            </mesh>
+          </group>
+        )
+      })}
+
+      {/* ════════ ENGINE COVER + AIRBOX + SHARK FIN ════════ */}
+      {/* airbox (roof intake) — wedge with a dark mouth, not a sphere */}
+      <RoundedBox args={[0.3, 0.28, 0.5]} radius={0.08} smoothness={4} position={[0, 0.74, -0.5]} rotation={[-0.12, 0, 0]} material={mats.body} castShadow />
+      <mesh position={[0, 0.78, -0.28]} rotation={[1.35, 0, 0]} material={mats.glass}>
+        <cylinderGeometry args={[0.1, 0.12, 0.06, 20]} />
       </mesh>
+      {/* spine tapering to the rear crash structure */}
+      <group position={[0, 0.5, -1.2]}>
+        <mesh rotation={[Math.PI / 2, 0, 0]} material={mats.body} castShadow>
+          <cylinderGeometry args={[0.08, 0.3, 1.6, 26]} />
+        </mesh>
+      </group>
+      {/* shark fin */}
+      <mesh position={[0, 0.72, -1.35]} material={mats.body} castShadow>
+        <boxGeometry args={[0.025, 0.4, 1.1]} />
+      </mesh>
+      {/* rear gearbox / crash-structure casing — the rear suspension mounts to it */}
+      <RoundedBox args={[0.3, 0.36, 0.8]} radius={0.06} smoothness={4} position={[0, 0.46, -1.72]} material={mats.carbon} castShadow />
 
-      {/* ── Halo ──
-          Hoop laid flat (rotation X = π/2) around the cockpit and raised above the
-          driver, with a central front pillar + two rear mounts that meet the tub. */}
-      <mesh position={[0, 0.76, -0.05]} rotation={[Math.PI / 2, 0, 0]} material={mats.halo} castShadow>
+      {/* ════════ HALO ════════ */}
+      <mesh position={[0, 0.78, -0.1]} rotation={[Math.PI / 2, 0, 0]} material={mats.halo} castShadow>
         <torusGeometry args={[0.34, 0.05, 16, 40]} />
       </mesh>
-      {/* central front V-pillar — angled forward of the helmet down to the nose deck */}
-      <Strut a={[0, 0.75, 0.3]} b={[0, 0.48, 0.46]} r={0.035} mat={mats.halo} />
-      {/* rear side mounts behind the driver (ring rear-sides ≈ x ±0.2, z -0.33) */}
-      <Strut a={[0.2, 0.75, -0.33]} b={[0.16, 0.5, -0.46]} r={0.03} mat={mats.halo} />
-      <Strut a={[-0.2, 0.75, -0.33]} b={[-0.16, 0.5, -0.46]} r={0.03} mat={mats.halo} />
+      <Strut a={[0, 0.77, 0.26]} b={[0, 0.5, 0.42]} r={0.035} mat={mats.halo} />
+      <Strut a={[0.2, 0.77, -0.38]} b={[0.16, 0.52, -0.5]} r={0.03} mat={mats.halo} />
+      <Strut a={[-0.2, 0.77, -0.38]} b={[-0.16, 0.52, -0.5]} r={0.03} mat={mats.halo} />
 
-      {/* ── Driver: helmet + visor (only the crown sits above the cockpit) ── */}
-      <mesh position={[0, 0.6, -0.1]} material={mats.accent} castShadow>
-        <sphereGeometry args={[0.115, 22, 22]} />
-      </mesh>
-      <mesh position={[0, 0.61, 0.0]} material={mats.glass}>
-        <boxGeometry args={[0.15, 0.035, 0.04]} />
-      </mesh>
-
-      {/* ── Mirrors ── */}
-      {[0.36, -0.36].map((x, i) => (
+      {/* ════════ MIRRORS ════════ */}
+      {[0.4, -0.4].map((x, i) => (
         <group key={i}>
-          <Strut a={[x * 0.6, 0.58, 0.42]} b={[x, 0.6, 0.4]} r={0.012} mat={mats.carbon} />
-          <RoundedBox args={[0.1, 0.07, 0.07]} radius={0.02} position={[x, 0.6, 0.4]} material={mats.body} castShadow />
+          <Strut a={[x * 0.55, 0.6, 0.45]} b={[x, 0.62, 0.42]} r={0.012} mat={mats.carbon} />
+          <RoundedBox args={[0.1, 0.07, 0.06]} radius={0.02} position={[x, 0.62, 0.42]} material={mats.body} castShadow />
         </group>
       ))}
 
-      {/* ── Suspension ── */}
-      {wheels.map((w, wi) =>
-        suspensionSegments(w[0], w[1], w[2]).map((seg, si) => (
-          <Strut key={`${wi}-${si}`} a={seg[0]} b={seg[1]} r={0.017} mat={mats.carbon} />
+      {/* ════════ REAR WING (main + DRS flap + endplates + swan-neck + beam) ════════ */}
+      <RoundedBox args={[1.08, 0.045, 0.34]} radius={0.02} position={[0, 1.02, -2.4]} rotation={[-0.24, 0, 0]} material={mats.wings} castShadow />
+      <RoundedBox args={[1.08, 0.04, 0.2]} radius={0.02} position={[0, 0.86, -2.48]} rotation={[-0.08, 0, 0]} material={mats.wings} castShadow />
+      {[0.54, -0.54].map((x, i) => (
+        <RoundedBox key={i} args={[0.04, 0.58, 0.62]} radius={0.03} position={[x, 0.82, -2.42]} material={mats.wings} castShadow />
+      ))}
+      {/* swan-neck supports */}
+      <Strut a={[0.1, 0.58, -2.0]} b={[0.1, 1.0, -2.36]} r={0.022} mat={mats.wings} />
+      <Strut a={[-0.1, 0.58, -2.0]} b={[-0.1, 1.0, -2.36]} r={0.022} mat={mats.wings} />
+      {/* beam wing */}
+      <RoundedBox args={[0.95, 0.04, 0.16]} radius={0.02} position={[0, 0.56, -2.3]} material={mats.wings} castShadow />
+      {/* rear crash structure + exhaust + rain light */}
+      <mesh position={[0, 0.5, -2.0]} rotation={[Math.PI / 2, 0, 0]} material={mats.carbon} castShadow>
+        <cylinderGeometry args={[0.07, 0.11, 0.4, 16]} />
+      </mesh>
+      <mesh position={[0, 0.55, -2.2]} rotation={[Math.PI / 2, 0, 0]} material={mats.carbon}>
+        <cylinderGeometry args={[0.05, 0.06, 0.12, 16]} />
+      </mesh>
+      <mesh position={[0, 0.42, -2.18]} material={mats.light}>
+        <boxGeometry args={[0.07, 0.1, 0.04]} />
+      </mesh>
+
+      {/* ════════ SUSPENSION ════════ */}
+      {frontWheels.map((w, wi) =>
+        suspensionSegments(w[0], w[1], w[2], true).map((seg, si) => (
+          <Blade key={`f${wi}-${si}`} a={seg[0]} b={seg[1]} w={0.075} t={0.022} mat={mats.carbon} />
+        )),
+      )}
+      {rearWheels.map((w, wi) =>
+        suspensionSegments(w[0], w[1], w[2], false).map((seg, si) => (
+          <Blade key={`r${wi}-${si}`} a={seg[0]} b={seg[1]} w={0.085} t={0.024} mat={mats.carbon} />
         )),
       )}
 
-      {/* ── Wheels ── */}
-      {wheels.map((w, i) => (
-        <Wheel key={i} pos={w} tireGeo={tireGeo} tireMat={mats.tire} rimMat={mats.rim} carbonMat={mats.carbon} accentMat={mats.accent} />
+      {/* ════════ WHEELS ════════ */}
+      {frontWheels.map((w, i) => (
+        <Wheel key={`fw${i}`} pos={w} front tireGeo={tireFront} mats={mats} />
+      ))}
+      {rearWheels.map((w, i) => (
+        <Wheel key={`rw${i}`} pos={w} front={false} tireGeo={tireRear} mats={mats} />
       ))}
 
-      {/* ── Decals: number on sidepods + nose, name on engine cover ── */}
-      <Decal map={numTex} position={[0.81, 0.46, -0.05]} rotation={[0, Math.PI / 2, 0]} scale={[0.38, 0.38]} />
-      <Decal map={numTex} position={[-0.81, 0.46, -0.05]} rotation={[0, -Math.PI / 2, 0]} scale={[0.38, 0.38]} />
-      <Decal map={numTex} position={[0, 0.5, 1.05]} rotation={[-Math.PI / 2 + 0.06, 0, Math.PI / 2]} scale={[0.3, 0.3]} />
-      <Decal map={nameTex} position={[0, 0.74, -0.95]} rotation={[-Math.PI / 2, 0, Math.PI]} scale={[0.42, 0.11]} />
+      {/* ════════ DECALS: number on nose + sidepods, name on engine cover ════════ */}
+      {/* number on the nose top (sits on the slimmer nose, clear of the cockpit) */}
+      <Decal map={numTex} position={[0, 0.49, 1.82]} rotation={[-Math.PI / 2 + 0.18, 0, Math.PI / 2]} scale={[0.2, 0.2]} />
+      {/* number on each sidepod outer face — proud of the bodywork so it never buries */}
+      <Decal map={numTex} position={[0.82, 0.5, 0.55]} rotation={[0, Math.PI / 2, 0]} scale={[0.26, 0.26]} />
+      <Decal map={numTex} position={[-0.82, 0.5, 0.55]} rotation={[0, -Math.PI / 2, 0]} scale={[0.26, 0.26]} />
+      {/* name on the engine cover spine */}
+      <Decal map={nameTex} position={[0, 0.71, -1.0]} rotation={[-Math.PI / 2, 0, Math.PI]} scale={[0.34, 0.085]} />
     </group>
   )
 }
