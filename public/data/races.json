@@ -7,7 +7,7 @@
     "circuitName": "Silverstone Circuit",
     "year": 2020,
     "location": "Silverstone, England",
-    "lapTime": "1:27.369",
+    "lapTime": "1:24.303",
     "description": "A masterclass in wet-to-dry transitions. Hamilton led from pole while nursing a puncture on the final lap to claim victory — a moment of sheer willpower.",
     "isFree": true,
     "telemetryFile": "hamilton_silverstone_2020"
@@ -20,7 +20,7 @@
     "circuitName": "Yas Marina Circuit",
     "year": 2021,
     "location": "Abu Dhabi, UAE",
-    "lapTime": "1:26.103",
+    "lapTime": "1:22.109",
     "description": "The championship decided on the final lap of the final race. A moment that will be debated for generations — a lap that changed Formula 1 history.",
     "isFree": true,
     "telemetryFile": "verstappen_abu_dhabi_2021"
@@ -124,7 +124,7 @@
     "circuitName": "Marina Bay Street Circuit",
     "year": 2022,
     "location": "Singapore",
-    "lapTime": "1:46.458",
+    "lapTime": "1:49.434",
     "description": "Pérez drove a faultless race under the lights, controlling two late safety-car restarts and surviving a track-limits investigation to take a commanding win.",
     "isFree": true,
     "telemetryFile": "perez_singapore_2022"
@@ -137,7 +137,7 @@
     "circuitName": "Marina Bay Street Circuit",
     "year": 2024,
     "location": "Singapore",
-    "lapTime": "1:34.486",
+    "lapTime": "1:29.525",
     "description": "Norris dominated from pole on the revised Marina Bay layout, pulling clear under the lights for a statement win that cut deep into the championship lead.",
     "isFree": true,
     "telemetryFile": "norris_singapore_2024"
@@ -150,7 +150,7 @@
     "circuitName": "Silverstone Circuit",
     "year": 2022,
     "location": "Silverstone, England",
-    "lapTime": "1:30.510",
+    "lapTime": "1:40.190",
     "description": "Sainz's maiden Grand Prix victory on his 150th start — he held off a charging Leclerc and Pérez after a late safety car to win an epic British Grand Prix.",
     "isFree": true,
     "telemetryFile": "sainz_silverstone_2022"
@@ -163,7 +163,7 @@
     "circuitName": "Yas Marina Circuit",
     "year": 2024,
     "location": "Abu Dhabi, UAE",
-    "lapTime": "1:25.637",
+    "lapTime": "1:22.595",
     "description": "Norris closed the season with a commanding lights-to-flag win at Yas Marina, sealing McLaren's first constructors' title in twenty-six years.",
     "isFree": true,
     "telemetryFile": "norris_abu_dhabi_2024"
@@ -176,7 +176,7 @@
     "circuitName": "Baku City Circuit",
     "year": 2018,
     "location": "Baku, Azerbaijan",
-    "lapTime": "1:43.200",
+    "lapTime": "1:41.677",
     "description": "Handed the lead by a late puncture for Bottas, Hamilton pounced to win a wild Baku race he had looked set to lose — a swing of fortune that reshaped the title fight.",
     "isFree": true,
     "telemetryFile": "hamilton_baku_2018"
@@ -202,7 +202,7 @@
     "circuitName": "Baku City Circuit",
     "year": 2022,
     "location": "Baku, Azerbaijan",
-    "lapTime": "1:42.800",
+    "lapTime": "1:41.706",
     "description": "Red Bull dominance on the Baku straights — Verstappen swept past his rivals into the lead and cruised away, stretching his championship advantage with ruthless ease.",
     "isFree": true,
     "telemetryFile": "verstappen_baku_2022"
@@ -215,7 +215,7 @@
     "circuitName": "Baku City Circuit",
     "year": 2018,
     "location": "Baku, Azerbaijan",
-    "lapTime": "1:42.500",
+    "lapTime": "1:41.498",
     "description": "Vettel led from pole and looked set for victory until a late safety-car restart — a lock-up into Turn 1 cost him the race, a costly moment in a tightening title fight.",
     "isFree": true,
     "telemetryFile": "vettel_baku_2018"
@@ -228,7 +228,7 @@
     "circuitName": "Miami International Autodrome",
     "year": 2023,
     "location": "Miami, USA",
-    "lapTime": "1:28.200",
+    "lapTime": "1:26.814",
     "description": "From ninth on the grid to a commanding win — Verstappen carved through the field on the Miami straights to underline a season of total dominance.",
     "isFree": true,
     "telemetryFile": "verstappen_miami_2023"
@@ -254,7 +254,7 @@
     "circuitName": "Miami International Autodrome",
     "year": 2022,
     "location": "Miami, USA",
-    "lapTime": "1:29.100",
+    "lapTime": "1:28.986",
     "description": "A measured drive to the podium at the first Miami Grand Prix — Sainz backed up the Ferrari front row with a controlled third place on the bumpy street-style layout.",
     "isFree": true,
     "telemetryFile": "sainz_miami_2022"
@@ -267,7 +267,7 @@
     "circuitName": "Miami International Autodrome",
     "year": 2023,
     "location": "Miami, USA",
-    "lapTime": "1:28.500",
+    "lapTime": "1:26.841",
     "description": "Pérez converted pole into the early lead at Miami and looked set for the win before his charging team-mate swept past — a sign of the title fight slipping away.",
     "isFree": true,
     "telemetryFile": "perez_miami_2023"
@@ -280,7 +280,7 @@
     "circuitName": "Miami International Autodrome",
     "year": 2025,
     "location": "Miami, USA",
-    "lapTime": "1:27.900",
+    "lapTime": "1:26.269",
     "description": "A controlled McLaren one-two led home by Piastri — he managed the pace at the front through the Miami heat to take a statement win in the championship fight.",
     "isFree": true,
     "telemetryFile": "piastri_miami_2025"
@@ -293,7 +293,7 @@
     "circuitName": "Red Bull Ring",
     "year": 2021,
     "location": "Spielberg, Austria",
-    "lapTime": "1:05.683",
+    "lapTime": "1:03.720",
     "description": "Pole, fastest lap and a lights-to-flag win at Red Bull's home race — Verstappen was untouchable at the Red Bull Ring, the high point of a dominant championship run.",
     "isFree": true,
     "telemetryFile": "verstappen_austria_2021"
@@ -306,7 +306,7 @@
     "circuitName": "Red Bull Ring",
     "year": 2022,
     "location": "Spielberg, Austria",
-    "lapTime": "1:06.200",
+    "lapTime": "1:05.013",
     "description": "Leclerc beat Verstappen in a straight fight, passing him three times as a throttle issue bit late — a rare 2022 weekend where Ferrari's pace held to the flag.",
     "isFree": true,
     "telemetryFile": "leclerc_austria_2022"
@@ -319,7 +319,7 @@
     "circuitName": "Red Bull Ring",
     "year": 2024,
     "location": "Spielberg, Austria",
-    "lapTime": "1:05.900",
+    "lapTime": "1:04.840",
     "description": "Handed the lead when the leaders collided, Russell pounced to take a surprise Mercedes win at the Red Bull Ring after a tense late-race scrap.",
     "isFree": true,
     "telemetryFile": "russell_austria_2024"
@@ -332,7 +332,7 @@
     "circuitName": "Red Bull Ring",
     "year": 2024,
     "location": "Spielberg, Austria",
-    "lapTime": "1:04.900",
+    "lapTime": "1:04.718",
     "description": "Norris hunted down the lead and was wheel-to-wheel for the win until a clash with Verstappen ended his charge — a what-might-have-been at the Red Bull Ring.",
     "isFree": true,
     "telemetryFile": "norris_austria_2024"
@@ -345,7 +345,7 @@
     "circuitName": "Sochi Autodrom",
     "year": 2019,
     "location": "Sochi, Russia",
-    "lapTime": "1:35.761",
+    "lapTime": "1:32.030",
     "description": "Hamilton inherited the lead through a Virtual Safety Car cycle and controlled it to the flag at Sochi — a strategic Mercedes win on his way to a sixth title.",
     "isFree": true,
     "telemetryFile": "hamilton_sochi_2019"
@@ -358,7 +358,7 @@
     "circuitName": "Sochi Autodrom",
     "year": 2021,
     "location": "Sochi, Russia",
-    "lapTime": "1:36.200",
+    "lapTime": "1:38.396",
     "description": "From the back of the grid to second in the closing laps — Verstappen's late call for intermediates as the rain arrived turned a damage-limitation day into a points coup.",
     "isFree": true,
     "telemetryFile": "verstappen_sochi_2021"
@@ -371,7 +371,7 @@
     "circuitName": "Sochi Autodrom",
     "year": 2021,
     "location": "Sochi, Russia",
-    "lapTime": "1:35.500",
+    "lapTime": "1:41.993",
     "description": "A maiden pole and a long-awaited first win in sight — Norris led at Sochi until late rain caught McLaren out, a heartbreaking what-might-have-been.",
     "isFree": true,
     "telemetryFile": "norris_sochi_2021"
@@ -384,7 +384,7 @@
     "circuitName": "Sochi Autodrom",
     "year": 2021,
     "location": "Sochi, Russia",
-    "lapTime": "1:36.000",
+    "lapTime": "1:42.510",
     "description": "Sainz led his home-from-home Ferrari into the early lead at Sochi and held on for a podium, a high point of his first season in red.",
     "isFree": true,
     "telemetryFile": "sainz_sochi_2021"
@@ -397,7 +397,7 @@
     "circuitName": "Sochi Autodrom",
     "year": 2019,
     "location": "Sochi, Russia",
-    "lapTime": "1:35.900",
+    "lapTime": "1:31.628",
     "description": "Pole position and the early lead for Leclerc at Sochi, part of a blistering late-2019 run of qualifying performances in the Ferrari.",
     "isFree": true,
     "telemetryFile": "leclerc_sochi_2019"
@@ -410,7 +410,7 @@
     "circuitName": "Las Vegas Street Circuit",
     "year": 2023,
     "location": "Las Vegas, USA",
-    "lapTime": "1:35.490",
+    "lapTime": "1:33.104",
     "description": "An instant classic on the Strip — a first-corner clash and a five-second penalty only set up a wheel-to-wheel duel with Leclerc that Verstappen won under the neon, the standout drive of a record-breaking season.",
     "isFree": true,
     "telemetryFile": "verstappen_las_vegas_2023"
@@ -423,7 +423,7 @@
     "circuitName": "Las Vegas Street Circuit",
     "year": 2023,
     "location": "Las Vegas, USA",
-    "lapTime": "1:34.900",
+    "lapTime": "1:32.726",
     "description": "Pole position and a last-lap pass on Pérez for second — Leclerc lit up Las Vegas' dazzling debut, taking the fight to Verstappen down the Strip all night long.",
     "isFree": true,
     "telemetryFile": "leclerc_las_vegas_2023"
@@ -436,7 +436,7 @@
     "circuitName": "Las Vegas Street Circuit",
     "year": 2023,
     "location": "Las Vegas, USA",
-    "lapTime": "1:35.800",
+    "lapTime": "1:33.855",
     "description": "A charging drive through the pack under the lights — Pérez fought onto the inaugural Las Vegas podium before being pipped for second on the very last lap.",
     "isFree": true,
     "telemetryFile": "perez_las_vegas_2023"
@@ -449,7 +449,7 @@
     "circuitName": "Las Vegas Street Circuit",
     "year": 2024,
     "location": "Las Vegas, USA",
-    "lapTime": "1:34.500",
+    "lapTime": "1:32.312",
     "description": "Pole and a commanding lights-to-flag win on the Strip, leading a Mercedes one-two on a cold Vegas night as Verstappen sealed the title behind him.",
     "isFree": true,
     "telemetryFile": "russell_las_vegas_2024"
@@ -462,7 +462,7 @@
     "circuitName": "Las Vegas Street Circuit",
     "year": 2024,
     "location": "Las Vegas, USA",
-    "lapTime": "1:34.700",
+    "lapTime": "1:32.567",
     "description": "A storming drive to second under the Vegas lights, completing a Mercedes one-two on a cold night that finally lit up the Silver Arrows.",
     "isFree": true,
     "telemetryFile": "hamilton_las_vegas_2024"
@@ -475,7 +475,7 @@
     "circuitName": "Jeddah Corniche Circuit",
     "year": 2024,
     "location": "Jeddah, Saudi Arabia",
-    "lapTime": "1:32.500",
+    "lapTime": "1:28.642",
     "description": "Eighteen years old, no practice, dropped into a sick Carlos Sainz's Ferrari on the morning of qualifying at one of the fastest street circuits on earth — Bearman answered with a composed run to seventh and points on his Formula 1 debut.",
     "isFree": true,
     "telemetryFile": "bearman_jeddah_2024"
@@ -488,7 +488,7 @@
     "circuitName": "Circuit Zandvoort",
     "year": 2021,
     "location": "Zandvoort, Netherlands",
-    "lapTime": "1:12.000",
+    "lapTime": "1:08.885",
     "description": "Home heaven for the Orange Army — Verstappen controlled his home Grand Prix at a reborn, banked Zandvoort to retake the championship lead.",
     "isFree": true,
     "telemetryFile": "verstappen_zandvoort_2021"
@@ -501,7 +501,7 @@
     "circuitName": "Circuit Zandvoort",
     "year": 2024,
     "location": "Zandvoort, Netherlands",
-    "lapTime": "1:11.900",
+    "lapTime": "1:09.673",
     "description": "A statement drive — Norris hunted down and passed Verstappen at his own home race, then pulled clear to win by over twenty seconds at Zandvoort.",
     "isFree": true,
     "telemetryFile": "norris_zandvoort_2024"
@@ -514,7 +514,7 @@
     "circuitName": "Circuit of the Americas",
     "year": 2018,
     "location": "Austin, USA",
-    "lapTime": "1:37.000",
+    "lapTime": "1:32.307",
     "description": "The Iceman's fairy tale — Räikkönen ended a 113-race victory drought with a tactical masterclass in Austin, proof the raw speed had never left.",
     "isFree": true,
     "telemetryFile": "raikkonen_usa_2018"
@@ -527,7 +527,7 @@
     "circuitName": "Autódromo Hermanos Rodríguez",
     "year": 2021,
     "location": "Mexico City, Mexico",
-    "lapTime": "1:19.000",
+    "lapTime": "1:16.225",
     "description": "A perfect launch into Turn 1 and never seen again — Verstappen dominated at altitude in Mexico City to stretch his title lead with a near-faultless drive.",
     "isFree": true,
     "telemetryFile": "verstappen_mexico_2021"
@@ -540,7 +540,7 @@
     "circuitName": "Autodromo Enzo e Dino Ferrari",
     "year": 2022,
     "location": "Imola, Italy",
-    "lapTime": "1:17.000",
+    "lapTime": "1:18.793",
     "description": "A weekend sweep in Ferrari's backyard — Verstappen took pole, the sprint and a commanding wet-to-dry win at Imola, silencing the Tifosi.",
     "isFree": true,
     "telemetryFile": "verstappen_imola_2022"
@@ -553,7 +553,7 @@
     "circuitName": "Albert Park Circuit",
     "year": 2022,
     "location": "Melbourne, Australia",
-    "lapTime": "1:20.000",
+    "lapTime": "1:17.868",
     "description": "A grand slam in Melbourne — pole, fastest lap, every lap led and a runaway win. Leclerc's perfect weekend at Albert Park was Ferrari at its 2022 peak.",
     "isFree": true,
     "telemetryFile": "leclerc_australia_2022"
@@ -566,7 +566,7 @@
     "circuitName": "Albert Park Circuit",
     "year": 2025,
     "location": "Melbourne, Australia",
-    "lapTime": "1:20.300",
+    "lapTime": "1:15.096",
     "description": "A cool head in chaos — Norris mastered a treacherous wet-dry season opener at Albert Park to win, the ideal start to a title campaign.",
     "isFree": true,
     "telemetryFile": "norris_australia_2025"
@@ -579,7 +579,7 @@
     "circuitName": "Silverstone Circuit",
     "year": 2025,
     "location": "Silverstone, England",
-    "lapTime": "1:29.500",
+    "lapTime": "1:26.574",
     "description": "The longest wait in Formula 1 history, finally over — after a record number of starts without a podium, Hülkenberg charged from nineteenth to third in a chaotic wet British Grand Prix to claim his first rostrum at last.",
     "isFree": true,
     "telemetryFile": "hulkenberg_silverstone_2025"

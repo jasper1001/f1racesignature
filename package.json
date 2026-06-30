@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbo",
+    "validate": "node scripts/validate-races.mjs",
+    "prebuild": "node scripts/validate-races.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
