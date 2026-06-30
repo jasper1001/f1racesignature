@@ -24,6 +24,19 @@ export interface GameMeta {
 
 export const GAMES: GameMeta[] = [
   {
+    id: 'livery-designer',
+    href: '/games/livery-designer',
+    tag: 'Car Design',
+    title: 'Livery Designer',
+    description:
+      'Design your own F1 car in 3D. Paint the bodywork, nose, wings, sidepods and wheels, pick a finish, add your number and name, then spin it and share it.',
+    blurb: 'Paint and style your own F1 car in 3D, then spin it and share it.',
+    duration: 'Endless',
+    accent: '#e0115f',
+    icon: '🎨',
+    badge: 'New',
+  },
+  {
     id: 'championship-decider',
     href: '/games/championship-decider',
     tag: 'F1 Strategy',
