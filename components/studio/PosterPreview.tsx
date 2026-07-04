@@ -216,6 +216,31 @@ function attrsAlongGeometry(
   })
 }
 
+// Sample a lap's speed/throttle/brake/distance at lap-distance fraction `t` (0..1).
+// Used to carry the real profile onto the deviation-amplified comparison lines, so
+// the ghost-race cars pace correctly (slow in corners) while driving those lines.
+function sampleLapByDistanceFrac(
+  pts: { speed: number; throttle?: number; brake?: number; distance?: number }[],
+  t: number,
+): { speed: number; throttle: number; brake: number; distance: number } {
+  const n = pts.length
+  const d0 = pts[0].distance ?? 0
+  const span = (pts[n - 1].distance ?? n - 1) - d0 || 1
+  const fracAt = (i: number) => (((pts[i].distance ?? i) - d0) / span)
+  let i = 0
+  while (i < n - 2 && fracAt(i + 1) < t) i++
+  const fa = fracAt(i), fb = fracAt(i + 1)
+  const u = fb > fa ? Math.min(1, Math.max(0, (t - fa) / (fb - fa))) : 0
+  const a = pts[i], b = pts[Math.min(n - 1, i + 1)]
+  const lp = (x: number, y: number) => x + (y - x) * u
+  return {
+    speed: lp(a.speed, b.speed),
+    throttle: lp(a.throttle ?? 0, b.throttle ?? 0),
+    brake: lp(a.brake ?? 0, b.brake ?? 0),
+    distance: lp(a.distance ?? 0, b.distance ?? 0),
+  }
+}
+
 function CircuitBackground({ path, fit }: { path: string; fit: CircuitFit }) {
   // The paths render inside a scale(fit.scale) group, so a raw strokeWidth gets
   // multiplied by the fit — fattening the ribbon on big/scaled-up circuits until
@@ -542,7 +567,16 @@ export function PosterPreview({
     })
     const toPoster = (pts: { x: number; y: number }[]) =>
       pts.map((p) => ({ x: (p.x * fit.scale + fit.tx) / POSTER_W, y: (p.y * fit.scale + fit.ty) / POSTER_H }))
-    return { center: toPoster(center), a: toPoster(a), b: toPoster(b) }
+    // Carry each source lap's speed/throttle/brake/distance onto its amplified line
+    // (sampled at the same uniform lap-distance fraction the geometry was built at),
+    // so the ghost-race playback drives these lines paced by the real profile.
+    const withAttrs = (poster: { x: number; y: number }[], tel: Telemetry) =>
+      poster.map((p, k) => ({ ...p, ...sampleLapByDistanceFrac(tel.points, k / (poster.length - 1)) }))
+    return {
+      center: toPoster(center),
+      a: withAttrs(toPoster(a), telemetry),
+      b: withAttrs(toPoster(b), pairCompareTel!),
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pairCompareTel, telemetry, rot, fit.scale, fit.tx, fit.ty])
 
@@ -647,11 +681,8 @@ export function PosterPreview({
         const compareColor = compareLaps[0].color
         return (
           <g>
-            {/* Dark keyline under each so the colours read on the asphalt */}
-            <path d={linePath(separatedPair.a)} fill="none" stroke="#111" strokeWidth={7} strokeLinecap="round" strokeLinejoin="round" opacity="0.5" />
-            <path d={linePath(separatedPair.b)} fill="none" stroke="#111" strokeWidth={7} strokeLinecap="round" strokeLinejoin="round" opacity="0.5" />
-            <path d={linePath(separatedPair.a)} fill="none" stroke={driverColor} strokeWidth={4} strokeLinecap="round" strokeLinejoin="round" />
-            <path d={linePath(separatedPair.b)} fill="none" stroke={compareColor} strokeWidth={4} strokeLinecap="round" strokeLinejoin="round" />
+            <path d={linePath(separatedPair.a)} fill="none" stroke={driverColor} strokeWidth={2.6} strokeLinecap="round" strokeLinejoin="round" />
+            <path d={linePath(separatedPair.b)} fill="none" stroke={compareColor} strokeWidth={2.6} strokeLinecap="round" strokeLinejoin="round" />
           </g>
         )
       }
@@ -783,7 +814,7 @@ export function PosterPreview({
                 d={linePath(o.points)}
                 fill="none"
                 stroke={o.color}
-                strokeWidth="3.5"
+                strokeWidth={separatedPair ? 2.6 : 3.5}
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeDasharray={len}
@@ -811,12 +842,20 @@ export function PosterPreview({
     if (isComparing) {
       const toScreen = (pts: { x: number; y: number; speed: number; distance?: number }[]) =>
         pts.map((p) => ({ x: p.x * POSTER_W, y: p.y * POSTER_H, speed: p.speed, distance: p.distance }))
-      const racers = [
-        { color: driverColor, name: driver?.shortName ?? '', lapSec: parseLapSeconds(telemetry.lapTime), pts: toScreen(vizPoints) },
-        ...compareLaps.map((c) => ({
-          color: c.color, name: c.driver.shortName, lapSec: parseLapSeconds(c.telemetry.lapTime), pts: toScreen(c.points),
-        })),
-      ].map((r) => ({ ...r, tau: lapTimeProfile(r.pts) }))
+      // Drive the deviation-amplified lines when we have them, so the two cars follow
+      // their DISTINCT lines (not the near-identical raw laps) during the ghost race.
+      const racerSrc = separatedPair
+        ? [
+            { color: driverColor, name: driver?.shortName ?? '', lapSec: parseLapSeconds(telemetry.lapTime), pts: toScreen(separatedPair.a) },
+            { color: compareLaps[0].color, name: compareLaps[0].driver.shortName, lapSec: parseLapSeconds(compareLaps[0].telemetry.lapTime), pts: toScreen(separatedPair.b) },
+          ]
+        : [
+            { color: driverColor, name: driver?.shortName ?? '', lapSec: parseLapSeconds(telemetry.lapTime), pts: toScreen(vizPoints) },
+            ...compareLaps.map((c) => ({
+              color: c.color, name: c.driver.shortName, lapSec: parseLapSeconds(c.telemetry.lapTime), pts: toScreen(c.points),
+            })),
+          ]
+      const racers = racerSrc.map((r) => ({ ...r, tau: lapTimeProfile(r.pts) }))
 
       const tMax = Math.max(...racers.map((r) => r.lapSec)) || 1
       const realT = playbackProgress * tMax
