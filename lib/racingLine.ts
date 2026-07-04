@@ -303,25 +303,27 @@ export function projectLapToRibbon(
   return { pts, frac }
 }
 
-// Two drivers' laps of the same circuit differ by only a car-width or two — real,
-// but invisible at a scale that shows the whole track. To compare their lines we
-// therefore build a shared reference (the mean of the two laps, matched by real
-// lap-distance so corners line up) and AMPLIFY each driver's lateral deviation from
-// it by `gain`, clamped so the lines stay within a drawable corridor. The result:
-// where both drivers took the same line the two lines converge; where they picked
-// different apexes they visibly fan apart — the actual comparison, legible full-lap.
+// Several drivers' laps of the same circuit differ by only a car-width or two —
+// real, but invisible at a scale that shows the whole track. To compare their lines
+// we build a shared reference (the mean of ALL the laps, matched by real lap-distance
+// so corners line up) and AMPLIFY each driver's lateral deviation from it by `gain`,
+// clamped so the lines stay within a drawable corridor. The result: where drivers
+// took the same line their lines converge; where they picked different apexes they
+// visibly fan apart — the actual comparison, legible full-lap, for any driver count.
 //
 // All coordinates are in one shared space (caller's choice — we use PATH space, so
 // the exaggeration is aspect-correct). `distance` (real per-point lap distance) is
-// used to correspond the two laps; index fraction is the fallback.
+// used to correspond the laps; index fraction is the fallback. `lines[j]` is the
+// amplified line for `laps[j]`, in the same order.
 export function separatedComparisonLines(
-  lapA: { x: number; y: number; distance?: number }[],
-  lapB: { x: number; y: number; distance?: number }[],
+  laps: { x: number; y: number; distance?: number }[][],
   opts?: { gain?: number; maxHalf?: number; samples?: number },
-): { center: Pt[]; a: Pt[]; b: Pt[] } {
+): { center: Pt[]; lines: Pt[][] } {
   const gain = opts?.gain ?? 3.2
   const maxHalf = opts?.maxHalf ?? Infinity
   const K = opts?.samples ?? 400
+  const J = laps.length
+  if (J === 0) return { center: [], lines: [] }
 
   // Non-decreasing 0..1 lap fraction per point: real distance when present, else index.
   const fracOf = (lap: { distance?: number }[]): number[] => {
@@ -351,22 +353,22 @@ export function separatedComparisonLines(
     return { x: lap[i].x + (lap[i + 1].x - lap[i].x) * u, y: lap[i].y + (lap[i + 1].y - lap[i].y) * u }
   }
 
-  const fa = fracOf(lapA)
-  const fb = fracOf(lapB)
-  const A = lapA.map((p) => ({ x: p.x, y: p.y }))
-  const B = lapB.map((p) => ({ x: p.x, y: p.y }))
+  const fracs = laps.map((l) => fracOf(l))
+  const xy = laps.map((l) => l.map((p) => ({ x: p.x, y: p.y })))
 
-  // Reference = mean of the two laps at each matched fraction, lightly smoothed.
+  // Reference = mean of all laps at each matched fraction, lightly smoothed.
   const center = new Array<Pt>(K)
-  const as = new Array<Pt>(K)
-  const bs = new Array<Pt>(K)
+  const sampled: Pt[][] = Array.from({ length: J }, () => new Array<Pt>(K))
   for (let k = 0; k < K; k++) {
     const t = k / (K - 1)
-    const pa = sampleAt(A, fa, t)
-    const pb = sampleAt(B, fb, t)
-    as[k] = pa
-    bs[k] = pb
-    center[k] = { x: (pa.x + pb.x) / 2, y: (pa.y + pb.y) / 2 }
+    let sx = 0, sy = 0
+    for (let j = 0; j < J; j++) {
+      const p = sampleAt(xy[j], fracs[j], t)
+      sampled[j][k] = p
+      sx += p.x
+      sy += p.y
+    }
+    center[k] = { x: sx / J, y: sy / J }
   }
   const smooth = (pts: Pt[], passes: number) => {
     for (let p = 0; p < passes; p++) {
@@ -379,22 +381,20 @@ export function separatedComparisonLines(
   smooth(center, 3)
 
   // Push each driver out from the reference along its local normal, amplified.
-  const a = new Array<Pt>(K)
-  const b = new Array<Pt>(K)
+  const lines: Pt[][] = Array.from({ length: J }, () => new Array<Pt>(K))
   for (let k = 0; k < K; k++) {
     const p = center[(k - 1 + K) % K]
     const n = center[(k + 1) % K]
-    let tx = n.x - p.x, ty = n.y - p.y
+    const tx = n.x - p.x, ty = n.y - p.y
     const tl = Math.hypot(tx, ty) || 1
     const nx = -ty / tl, ny = tx / tl
-    const offA = Math.max(-maxHalf, Math.min(maxHalf, ((as[k].x - center[k].x) * nx + (as[k].y - center[k].y) * ny) * gain))
-    const offB = Math.max(-maxHalf, Math.min(maxHalf, ((bs[k].x - center[k].x) * nx + (bs[k].y - center[k].y) * ny) * gain))
-    a[k] = { x: center[k].x + nx * offA, y: center[k].y + ny * offA }
-    b[k] = { x: center[k].x + nx * offB, y: center[k].y + ny * offB }
+    for (let j = 0; j < J; j++) {
+      const off = Math.max(-maxHalf, Math.min(maxHalf, ((sampled[j][k].x - center[k].x) * nx + (sampled[j][k].y - center[k].y) * ny) * gain))
+      lines[j][k] = { x: center[k].x + nx * off, y: center[k].y + ny * off }
+    }
   }
-  smooth(a, 1)
-  smooth(b, 1)
-  return { center, a, b }
+  for (const ln of lines) smooth(ln, 1)
+  return { center, lines }
 }
 
 // Resample a closed polyline to `m` points at uniform arc-length spacing.

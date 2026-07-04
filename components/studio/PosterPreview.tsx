@@ -540,30 +540,30 @@ export function PosterPreview({
     }))
   }, [realCenter, h2hRealLine, fit.scale, fit.tx, fit.ty])
 
-  // Head-to-head against exactly one rival, in a racing-line mode → the deviation-
-  // amplified comparison. Two real laps of the same track differ by only a car-width,
-  // invisible full-lap, so we build their shared mean line and push each driver's
-  // lateral deviation out by a gain so their different apex/entry choices read
-  // clearly. Returns the mean (for the wide ribbon) + each driver's exaggerated line,
-  // all in poster 0-1 space. Computed in rotated PATH space so it's aspect-correct.
-  const pairCompareTel =
-    (vizMode === 'racing_line_real' || vizMode === 'racing_line') && validCompares.length === 1
-      ? validCompares[0].telemetry
-      : null
-  const separatedPair = useMemo(() => {
-    if (!pairCompareTel || !telemetry || telemetry.points.length < 8) return null
+  // Head-to-head in a racing-line mode → the deviation-amplified comparison, for ANY
+  // number of rivals. Real laps of the same track differ by only a car-width, invisible
+  // full-lap, so we build the drivers' shared mean line and push each driver's lateral
+  // deviation out by a gain so their different apex/entry choices read clearly. Returns
+  // the mean (for the wide ribbon) + each driver's exaggerated line in [primary, ...
+  // compares] order, all in poster 0-1 space. Computed in rotated PATH space so it's
+  // aspect-correct. Up to two compare telemetries are referenced concretely (the cap is
+  // two) to keep the memo deps stable.
+  const isRacingLineMode = vizMode === 'racing_line_real' || vizMode === 'racing_line'
+  const cmp0Tel = isRacingLineMode ? validCompares[0]?.telemetry ?? null : null
+  const cmp1Tel = isRacingLineMode ? validCompares[1]?.telemetry ?? null : null
+  const separatedGroup = useMemo(() => {
+    if (!telemetry || telemetry.points.length < 8) return null
+    const tels = [telemetry, cmp0Tel, cmp1Tel].filter((t): t is Telemetry => !!t && t.points.length > 1)
+    if (tels.length < 2) return null
     const toPath = (tel: Telemetry) =>
       tel.points.map((pt) => {
         const p = rotatePathCoord(pt.x * PATH_VB.w, pt.y * PATH_VB.h, rot)
         return { x: p.x, y: p.y, distance: pt.distance }
       })
     // Corridor half-width in PATH units for the amplified lines (≈22px on-screen),
-    // so the two lines sit inside a comfortably wide drawn ribbon on every circuit.
+    // so the lines sit inside a comfortably wide drawn ribbon on every circuit.
     const maxHalf = 22 / fit.scale
-    const { center, a, b } = separatedComparisonLines(toPath(telemetry), toPath(pairCompareTel!), {
-      gain: 3.4,
-      maxHalf,
-    })
+    const { center, lines } = separatedComparisonLines(tels.map(toPath), { gain: 3.4, maxHalf })
     const toPoster = (pts: { x: number; y: number }[]) =>
       pts.map((p) => ({ x: (p.x * fit.scale + fit.tx) / POSTER_W, y: (p.y * fit.scale + fit.ty) / POSTER_H }))
     // Carry each source lap's speed/throttle/brake/distance onto its amplified line
@@ -573,11 +573,10 @@ export function PosterPreview({
       poster.map((p, k) => ({ ...p, ...sampleLapByDistanceFrac(tel.points, k / (poster.length - 1)) }))
     return {
       center: toPoster(center),
-      a: withAttrs(toPoster(a), telemetry),
-      b: withAttrs(toPoster(b), pairCompareTel!),
+      lines: lines.map((ln, i) => withAttrs(toPoster(ln), tels[i])),
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pairCompareTel, telemetry, rot, fit.scale, fit.tx, fit.ty])
+  }, [telemetry, cmp0Tel, cmp1Tel, rot, fit.scale, fit.tx, fit.ty])
 
   // The track outline in screen px — used to place overlay readouts in a corner the
   // ribbon doesn't reach (so they never sit on top of the circuit).
@@ -636,6 +635,8 @@ export function PosterPreview({
   const driverColor = palette[0]
   const compareLaps = compareBase.map((c, i) => ({ ...c, color: palette[i + 1] }))
   const isComparing = compareLaps.length > 0
+  // Colours aligned with separatedGroup.lines order: [primary, ...compares].
+  const groupColors = [driverColor, ...compareLaps.map((c) => c.color)]
 
   // The primary lap line for the static viz + draw-on reveal. In "Racing Line"
   // mode (single lap) this is the ideal geometric line; otherwise the telemetry.
@@ -673,15 +674,15 @@ export function PosterPreview({
       const linePath = (pts: { x: number; y: number }[]) =>
         pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${(p.x * POSTER_W).toFixed(1)} ${(p.y * POSTER_H).toFixed(1)}`).join(' ')
 
-      // Racing-line head-to-head vs one rival → deviation-amplified lines: each
-      // driver's exaggerated line in their colour, straddling the shared mean, so
-      // where they took different lines the two visibly fan apart (see separatedPair).
-      if (separatedPair) {
-        const compareColor = compareLaps[0].color
+      // Racing-line head-to-head → deviation-amplified lines: each driver's exaggerated
+      // line in their colour, straddling the shared mean, so where drivers took
+      // different lines they visibly fan apart (see separatedGroup). Any driver count.
+      if (separatedGroup) {
         return (
           <g>
-            <path d={linePath(separatedPair.a)} fill="none" stroke={driverColor} strokeWidth={2.6} strokeLinecap="round" strokeLinejoin="round" />
-            <path d={linePath(separatedPair.b)} fill="none" stroke={compareColor} strokeWidth={2.6} strokeLinecap="round" strokeLinejoin="round" />
+            {separatedGroup.lines.map((ln, i) => (
+              <path key={i} d={linePath(ln)} fill="none" stroke={groupColors[i]} strokeWidth={2.6} strokeLinecap="round" strokeLinejoin="round" />
+            ))}
           </g>
         )
       }
@@ -796,8 +797,8 @@ export function PosterPreview({
       }
     }
 
-    const lines = separatedPair
-      ? [{ points: separatedPair.a, color: driverColor }, { points: separatedPair.b, color: compareLaps[0].color }]
+    const lines = separatedGroup
+      ? separatedGroup.lines.map((ln, i) => ({ points: ln, color: groupColors[i] }))
       : isComparing
         ? [{ points: vizPoints, color: driverColor }, ...compareLaps.map((c) => ({ points: c.points, color: c.color }))]
         : [{ points: primaryLine, color: driverColor }]
@@ -813,7 +814,7 @@ export function PosterPreview({
                 d={linePath(o.points)}
                 fill="none"
                 stroke={o.color}
-                strokeWidth={separatedPair ? 2.6 : 3.5}
+                strokeWidth={separatedGroup ? 2.6 : 3.5}
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeDasharray={len}
@@ -841,13 +842,15 @@ export function PosterPreview({
     if (isComparing) {
       const toScreen = (pts: { x: number; y: number; speed: number; distance?: number }[]) =>
         pts.map((p) => ({ x: p.x * POSTER_W, y: p.y * POSTER_H, speed: p.speed, distance: p.distance }))
-      // Drive the deviation-amplified lines when we have them, so the two cars follow
-      // their DISTINCT lines (not the near-identical raw laps) during the ghost race.
-      const racerSrc = separatedPair
-        ? [
-            { color: driverColor, name: driver?.shortName ?? '', lapSec: parseLapSeconds(telemetry.lapTime), pts: toScreen(separatedPair.a) },
-            { color: compareLaps[0].color, name: compareLaps[0].driver.shortName, lapSec: parseLapSeconds(compareLaps[0].telemetry.lapTime), pts: toScreen(separatedPair.b) },
-          ]
+      // Drive the deviation-amplified lines when we have them, so every car follows its
+      // DISTINCT line (not the near-identical raw laps) during the ghost race.
+      const racerSrc = separatedGroup
+        ? separatedGroup.lines.map((ln, i) => ({
+            color: groupColors[i],
+            name: i === 0 ? driver?.shortName ?? '' : compareLaps[i - 1].driver.shortName,
+            lapSec: parseLapSeconds(i === 0 ? telemetry.lapTime : compareLaps[i - 1].telemetry.lapTime),
+            pts: toScreen(ln),
+          }))
         : [
             { color: driverColor, name: driver?.shortName ?? '', lapSec: parseLapSeconds(telemetry.lapTime), pts: toScreen(vizPoints) },
             ...compareLaps.map((c) => ({
@@ -1087,8 +1090,8 @@ export function PosterPreview({
         {/* Circuit area — real to-scale OSM track, the circuits.json outline, or (for
             real GPS laps with no matching outline, incl. head-to-head real lines)
             a ribbon built from the lap itself */}
-        {separatedPair
-          ? <PairRibbon pts={separatedPair.center} />
+        {separatedGroup
+          ? <PairRibbon pts={separatedGroup.center} />
           : h2hRealLine
             ? <LineRibbon pts={vizPoints} />
             : realTrackPath
