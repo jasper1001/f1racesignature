@@ -273,15 +273,12 @@ export const VIZ_MODES: VizModeConfig[] = [
     description: 'The exact GPS path the car traced around the lap',
     isFree: true,
   },
-  // Hidden for now — the ideal-line / real-track rendering needs more work before
-  // it ships. Re-add this entry to bring the "Racing Line" mode back (the render
-  // code in PosterPreview is still in place). See memory/racing-line-viz.md.
-  // {
-  //   id: 'racing_line_real',
-  //   name: 'Racing Line',
-  //   description: 'The lap overlaid on the real track, cutting the apexes',
-  //   isFree: true,
-  // },
+  {
+    id: 'racing_line_real',
+    name: 'Racing Line',
+    description: 'The ideal racing line on the real track — wide entry, apex, wide exit',
+    isFree: true,
+  },
   {
     id: 'speed_heatmap',
     name: 'Speed Heatmap',

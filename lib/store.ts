@@ -36,7 +36,9 @@ export const useStudioStore = create<StudioStore>((set) => ({
   // Default to a comparison-rich circuit so head-to-head works on first load:
   // Baku also has Leclerc '22, Verstappen '22, Vettel '18 and Pérez '21.
   selectedRaceId: 'hamilton_baku_2018',
-  vizMode: 'racing_line',
+  // Ideal racing line on the real OSM track — every circuit has a track file,
+  // and PosterPreview falls back to the lap trace if one fails to load.
+  vizMode: 'racing_line_real',
   theme: 'carbon_fiber',
   exportFormat: 'poster_portrait',
   showUpgradeModal: false,
