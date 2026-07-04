@@ -300,7 +300,7 @@ function LineRibbon({ pts }: { pts: { x: number; y: number }[] }) {
 // head-to-head. Rendered to read like a real circuit: dark asphalt, white edge lines
 // down both sides, and a start/finish line. The two exaggerated racing lines are
 // drawn on top (in renderViz), on the asphalt.
-const PAIR_HALF = 26 // asphalt half-width in px (racing lines are amplified to ±22)
+const PAIR_HALF = 15 // asphalt half-width in px (racing lines are amplified to ±11)
 function PairRibbon({ pts }: { pts: { x: number; y: number }[] }) {
   if (pts.length < 3) return null
   const P = pts.map((p) => ({ x: p.x * POSTER_W, y: p.y * POSTER_H }))
@@ -341,7 +341,7 @@ function PairRibbon({ pts }: { pts: { x: number; y: number }[] }) {
   return (
     <g>
       {/* Asphalt: darker run-off border, then the track surface */}
-      <path d={centerD} fill="none" stroke="#1c1c1c" strokeWidth={PAIR_HALF * 2 + 8} strokeLinecap="round" strokeLinejoin="round" />
+      <path d={centerD} fill="none" stroke="#1c1c1c" strokeWidth={PAIR_HALF * 2 + 5} strokeLinecap="round" strokeLinejoin="round" />
       <path d={centerD} fill="none" stroke="#333333" strokeWidth={PAIR_HALF * 2} strokeLinecap="round" strokeLinejoin="round" />
       {/* White track-edge lines down both sides */}
       <path d={toPath(leftEdge)} fill="none" stroke="#e8e8e8" strokeWidth={1.8} strokeLinejoin="round" opacity="0.5" />
@@ -601,9 +601,9 @@ export function PosterPreview({
         const p = rotatePathCoord(pt.x * PATH_VB.w, pt.y * PATH_VB.h, rot)
         return { x: p.x, y: p.y, distance: pt.distance }
       })
-    // Corridor half-width in PATH units for the amplified lines (≈22px on-screen),
-    // so the lines sit inside a comfortably wide drawn ribbon on every circuit.
-    const maxHalf = 22 / fit.scale
+    // Corridor half-width in PATH units for the amplified lines (≈11px on-screen),
+    // so the lines sit inside the drawn ribbon (PAIR_HALF) on every circuit.
+    const maxHalf = 11 / fit.scale
     const { center, lines } = separatedComparisonLines(tels.map(toPath), { gain: 3.4, maxHalf })
     const toPoster = (pts: { x: number; y: number }[]) =>
       pts.map((p) => ({ x: (p.x * fit.scale + fit.tx) / POSTER_W, y: (p.y * fit.scale + fit.ty) / POSTER_H }))
