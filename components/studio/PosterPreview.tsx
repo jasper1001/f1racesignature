@@ -298,8 +298,8 @@ function LineRibbon({ pts }: { pts: { x: number; y: number }[] }) {
 
 // Wide track drawn along the drivers' shared mean line, for the deviation-amplified
 // head-to-head. Rendered to read like a real circuit: dark asphalt, white edge lines
-// down both sides, red/white kerbs through the corners, and a start/finish line. The
-// two exaggerated racing lines are drawn on top (in renderViz), inside the kerbs.
+// down both sides, and a start/finish line. The two exaggerated racing lines are
+// drawn on top (in renderViz), on the asphalt.
 const PAIR_HALF = 26 // asphalt half-width in px (racing lines are amplified to ±22)
 function PairRibbon({ pts }: { pts: { x: number; y: number }[] }) {
   if (pts.length < 3) return null
@@ -319,18 +319,6 @@ function PairRibbon({ pts }: { pts: { x: number; y: number }[] }) {
     nrm.push({ x: -ty / tl, y: tx / tl })
   }
 
-  // Corner mask: local turning angle over a small window → kerb regions (dilated).
-  const W = 3
-  const corner = new Array<boolean>(n).fill(false)
-  for (let i = W; i < n - W; i++) {
-    const a = P[i - W], b = P[i], c = P[i + W]
-    const v1x = b.x - a.x, v1y = b.y - a.y, v2x = c.x - b.x, v2y = c.y - b.y
-    const ang = Math.abs(Math.atan2(v1x * v2y - v1y * v2x, v1x * v2x + v1y * v2y))
-    if (ang > 0.13) corner[i] = true
-  }
-  const dil = corner.slice()
-  for (let i = 0; i < n; i++) if (corner[i]) for (let d = -5; d <= 5; d++) { const j = i + d; if (j >= 0 && j < n) dil[j] = true }
-
   // De-folded edges for the continuous white track-edge lines: offset the mean line
   // by ±half, then drop any point that doesn't advance along the travel direction, so
   // the inside edge of a tight corner collapses to a clean chord instead of a spike.
@@ -347,34 +335,6 @@ function PairRibbon({ pts }: { pts: { x: number; y: number }[] }) {
   const leftEdge = cleanEdge(1)
   const rightEdge = cleanEdge(-1)
 
-  // Kerbs on the OUTSIDE edge of each corner ONLY. Drawing both edges makes the kerbs
-  // collide in tight sections (the reported overlap); the outside (convex) edge is
-  // also fold-free. Outside is opposite the turn, from a smoothed turn signal so the
-  // chosen side doesn't flicker point-to-point; runs break on a gap or a side change.
-  const cross = new Array<number>(n).fill(0)
-  for (let i = W; i < n - W; i++) {
-    const a = P[i - W], b = P[i], c = P[i + W]
-    cross[i] = (b.x - a.x) * (c.y - b.y) - (b.y - a.y) * (c.x - b.x)
-  }
-  const cs = cross.map((_, i) => {
-    let s = 0, w = 0
-    for (let k = -4; k <= 4; k++) { const j = i + k; if (j >= 0 && j < n) { s += cross[j]; w++ } }
-    return s / (w || 1)
-  })
-  const kerbRuns: { x: number; y: number }[][] = []
-  {
-    let cur: { x: number; y: number }[] = []
-    let curSide = 0
-    for (let i = 0; i < n; i++) {
-      if (!dil[i]) { if (cur.length > 1) kerbRuns.push(cur); cur = []; curSide = 0; continue }
-      const side = cs[i] >= 0 ? -1 : 1
-      if (curSide !== 0 && side !== curSide) { if (cur.length > 1) kerbRuns.push(cur); cur = [] }
-      curSide = side
-      cur.push({ x: P[i].x + side * nrm[i].x * PAIR_HALF, y: P[i].y + side * nrm[i].y * PAIR_HALF })
-    }
-    if (cur.length > 1) kerbRuns.push(cur)
-  }
-
   const centerD = toPath(P)
   const l0 = { x: P[0].x + nrm[0].x * PAIR_HALF, y: P[0].y + nrm[0].y * PAIR_HALF }
   const r0 = { x: P[0].x - nrm[0].x * PAIR_HALF, y: P[0].y - nrm[0].y * PAIR_HALF }
@@ -386,13 +346,6 @@ function PairRibbon({ pts }: { pts: { x: number; y: number }[] }) {
       {/* White track-edge lines down both sides */}
       <path d={toPath(leftEdge)} fill="none" stroke="#e8e8e8" strokeWidth={1.8} strokeLinejoin="round" opacity="0.5" />
       <path d={toPath(rightEdge)} fill="none" stroke="#e8e8e8" strokeWidth={1.8} strokeLinejoin="round" opacity="0.5" />
-      {/* Red/white kerbs on the outside of each corner (white base + red dashes) */}
-      {kerbRuns.map((run, i) => (
-        <g key={i}>
-          <path d={toPath(run)} fill="none" stroke="#f4f4f4" strokeWidth={4.5} strokeLinecap="round" strokeLinejoin="round" />
-          <path d={toPath(run)} fill="none" stroke="#d81f26" strokeWidth={4.5} strokeDasharray="6 6" strokeLinecap="round" strokeLinejoin="round" />
-        </g>
-      ))}
       {/* Start/finish line across the track */}
       <line x1={l0.x} y1={l0.y} x2={r0.x} y2={r0.y} stroke="#f4f4f4" strokeWidth={5} strokeLinecap="butt" />
       <line x1={l0.x} y1={l0.y} x2={r0.x} y2={r0.y} stroke="#1c1c1c" strokeWidth={5} strokeDasharray="4 4" strokeLinecap="butt" />
