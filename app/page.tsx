@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
@@ -9,6 +10,10 @@ import { GamesOfTheDay } from '@/components/landing/GamesOfTheDay'
 import { FAQ_ITEMS } from '@/lib/faq'
 import { ARTICLES } from '@/lib/articles'
 import { getAllDrivers } from '@/lib/serverData'
+
+export const metadata: Metadata = {
+  alternates: { canonical: '/' },
+}
 
 const faqJsonLd = {
   '@context': 'https://schema.org',

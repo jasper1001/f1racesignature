@@ -60,9 +60,6 @@ export const metadata: Metadata = {
     'Grand Prix poster',
     'F1 data art',
   ],
-  alternates: {
-    canonical: '/',
-  },
   robots: {
     index: true,
     follow: true,
