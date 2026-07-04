@@ -10,7 +10,7 @@ import { OvertakeMap } from '@/components/visualizations/OvertakeMap'
 import { VIZ_MODES } from '@/lib/themes'
 import { interpolateColor, distinctColors } from '@/lib/data'
 import { teamAtYear } from '@/lib/driverTeams'
-import { computeRacingLine, projectLapToRibbon, separatedComparisonLines } from '@/lib/racingLine'
+import { computeRacingLine, projectLapToRibbon } from '@/lib/racingLine'
 
 const POSTER_W = 720
 const POSTER_H = 800
@@ -216,31 +216,6 @@ function attrsAlongGeometry(
   })
 }
 
-// Sample a lap's speed/throttle/brake/distance at lap-distance fraction `t` (0..1).
-// Used to carry the real profile onto the deviation-amplified comparison lines, so
-// the ghost-race cars pace correctly (slow in corners) while driving those lines.
-function sampleLapByDistanceFrac(
-  pts: { speed: number; throttle?: number; brake?: number; distance?: number }[],
-  t: number,
-): { speed: number; throttle: number; brake: number; distance: number } {
-  const n = pts.length
-  const d0 = pts[0].distance ?? 0
-  const span = (pts[n - 1].distance ?? n - 1) - d0 || 1
-  const fracAt = (i: number) => (((pts[i].distance ?? i) - d0) / span)
-  let i = 0
-  while (i < n - 2 && fracAt(i + 1) < t) i++
-  const fa = fracAt(i), fb = fracAt(i + 1)
-  const u = fb > fa ? Math.min(1, Math.max(0, (t - fa) / (fb - fa))) : 0
-  const a = pts[i], b = pts[Math.min(n - 1, i + 1)]
-  const lp = (x: number, y: number) => x + (y - x) * u
-  return {
-    speed: lp(a.speed, b.speed),
-    throttle: lp(a.throttle ?? 0, b.throttle ?? 0),
-    brake: lp(a.brake ?? 0, b.brake ?? 0),
-    distance: lp(a.distance ?? 0, b.distance ?? 0),
-  }
-}
-
 function CircuitBackground({ path, fit }: { path: string; fit: CircuitFit }) {
   // The paths render inside a scale(fit.scale) group, so a raw strokeWidth gets
   // multiplied by the fit — fattening the ribbon on big/scaled-up circuits until
@@ -292,63 +267,6 @@ function LineRibbon({ pts }: { pts: { x: number; y: number }[] }) {
       <path d={d} fill="none" stroke="#3a3a3a" strokeWidth={34} strokeLinecap="round" strokeLinejoin="round" opacity="0.95" />
       {/* Lighter inner surface, leaving a darker edge so it reads as a road */}
       <path d={d} fill="none" stroke="#5a5a5a" strokeWidth={24} strokeLinecap="round" strokeLinejoin="round" opacity="0.5" />
-    </g>
-  )
-}
-
-// Wide track drawn along the drivers' shared mean line, for the deviation-amplified
-// head-to-head. Rendered to read like a real circuit: dark asphalt, white edge lines
-// down both sides, and a start/finish line. The two exaggerated racing lines are
-// drawn on top (in renderViz), on the asphalt.
-const PAIR_HALF = 15 // asphalt half-width in px (racing lines are amplified to ±11)
-function PairRibbon({ pts }: { pts: { x: number; y: number }[] }) {
-  if (pts.length < 3) return null
-  const P = pts.map((p) => ({ x: p.x * POSTER_W, y: p.y * POSTER_H }))
-  const n = P.length
-  const toPath = (q: { x: number; y: number }[]) =>
-    q.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ')
-
-  // Per-point unit tangent + left normal from neighbouring points.
-  const tan: { x: number; y: number }[] = []
-  const nrm: { x: number; y: number }[] = []
-  for (let i = 0; i < n; i++) {
-    const a = P[Math.max(0, i - 1)], b = P[Math.min(n - 1, i + 1)]
-    const tx = b.x - a.x, ty = b.y - a.y
-    const tl = Math.hypot(tx, ty) || 1
-    tan.push({ x: tx / tl, y: ty / tl })
-    nrm.push({ x: -ty / tl, y: tx / tl })
-  }
-
-  // De-folded edges for the continuous white track-edge lines: offset the mean line
-  // by ±half, then drop any point that doesn't advance along the travel direction, so
-  // the inside edge of a tight corner collapses to a clean chord instead of a spike.
-  const cleanEdge = (side: 1 | -1) => {
-    const pts: { x: number; y: number }[] = []
-    for (let i = 0; i < n; i++) {
-      const p = { x: P[i].x + side * nrm[i].x * PAIR_HALF, y: P[i].y + side * nrm[i].y * PAIR_HALF }
-      if (pts.length === 0) { pts.push(p); continue }
-      const last = pts[pts.length - 1]
-      if ((p.x - last.x) * tan[i].x + (p.y - last.y) * tan[i].y > 0) pts.push(p)
-    }
-    return pts
-  }
-  const leftEdge = cleanEdge(1)
-  const rightEdge = cleanEdge(-1)
-
-  const centerD = toPath(P)
-  const l0 = { x: P[0].x + nrm[0].x * PAIR_HALF, y: P[0].y + nrm[0].y * PAIR_HALF }
-  const r0 = { x: P[0].x - nrm[0].x * PAIR_HALF, y: P[0].y - nrm[0].y * PAIR_HALF }
-  return (
-    <g>
-      {/* Asphalt: darker run-off border, then the track surface */}
-      <path d={centerD} fill="none" stroke="#1c1c1c" strokeWidth={PAIR_HALF * 2 + 5} strokeLinecap="round" strokeLinejoin="round" />
-      <path d={centerD} fill="none" stroke="#333333" strokeWidth={PAIR_HALF * 2} strokeLinecap="round" strokeLinejoin="round" />
-      {/* White track-edge lines down both sides */}
-      <path d={toPath(leftEdge)} fill="none" stroke="#e8e8e8" strokeWidth={1.8} strokeLinejoin="round" opacity="0.5" />
-      <path d={toPath(rightEdge)} fill="none" stroke="#e8e8e8" strokeWidth={1.8} strokeLinejoin="round" opacity="0.5" />
-      {/* Start/finish line across the track */}
-      <line x1={l0.x} y1={l0.y} x2={r0.x} y2={r0.y} stroke="#f4f4f4" strokeWidth={5} strokeLinecap="butt" />
-      <line x1={l0.x} y1={l0.y} x2={r0.x} y2={r0.y} stroke="#1c1c1c" strokeWidth={5} strokeDasharray="4 4" strokeLinecap="butt" />
     </g>
   )
 }
@@ -462,22 +380,13 @@ export function PosterPreview({
   const realTrack = vizMode === 'racing_line_real' && trackCenterline ? trackCenterline : null
   const realTrackPath = realTrack ? rotatePath(realTrack.centerlinePath, rot) : null
 
-  // Head-to-head in 'Racing Line' mode. The OSM centreline is a DIFFERENT geometry
-  // than the stored GPS on many circuits (corners in different places — Zandvoort's
-  // laps sit ~30 m off the OSM ribbon), so snapping the laps onto it distorts each
-  // driver's real line and collapses the two drivers into one. When comparing we
-  // therefore show each lap's ACTUAL GPS line and build the ribbon from the lap
-  // itself. Single-driver mode is unaffected: it draws the ideal geometric line,
-  // derived from the centreline (not the telemetry), so the mismatch doesn't apply.
   const validCompares = compares.filter((c) => c.driver && c.telemetry && c.telemetry.points.length > 1)
-  const h2hRealLine = vizMode === 'racing_line_real' && validCompares.length > 0
 
   // The one fit shared by the outline (via CircuitBackground) and the racing
   // line below — computed once so the two paths can never diverge. In 'Racing Line'
   // mode the real-track ribbon is what's drawn, so frame the fit to IT (the lap may
   // be a GPS path with different bounds); otherwise frame the circuit outline/lap.
-  // For head-to-head real lines, frame the telemetry (the ribbon comes from the lap).
-  const fit = computeCircuitFit(fitBounds(h2hRealLine ? null : (realTrackPath ?? circuitPath), telemetry, rot))
+  const fit = computeCircuitFit(fitBounds(realTrackPath ?? circuitPath, telemetry, rot))
 
   // Parsed real-track centreline (rotated PATH space) + corridor half-width,
   // shared by the ideal racing line and the telemetry-to-ribbon alignment below.
@@ -560,10 +469,9 @@ export function PosterPreview({
     return v
   }
 
-  // Map raw 0-1 telemetry coords into poster-space 0-1
-  // Viz components then multiply by POSTER_W/H to get final pixels.
-  // Head-to-head real lines skip the OSM reconstruction and draw the lap as-is.
-  const vizPoints = h2hRealLine ? mapDirect(telemetry) : projectCached(telemetry)
+  // Map raw 0-1 telemetry coords into poster-space 0-1 (projected onto the OSM ribbon
+  // in 'Racing Line' mode). Viz components then multiply by POSTER_W/H for pixels.
+  const vizPoints = projectCached(telemetry)
 
   // "Racing Line" mode: instead of the centre-following telemetry template,
   // compute the IDEAL geometric racing line on the real track — wide on entry,
@@ -572,52 +480,73 @@ export function PosterPreview({
   // Computed in the (rotated) PATH space the ribbon is drawn in, then mapped to
   // poster space via the same shared fit so it sits exactly on the ribbon.
   const racingLinePoints = useMemo(() => {
-    // Skip in head-to-head: there the fit frames the telemetry, not the OSM ribbon,
-    // so the ideal line would be mis-framed — and it isn't drawn (real laps are).
-    if (!realCenter || h2hRealLine) return null
+    // Single-driver only: head-to-head draws each driver's own (projected) line, not
+    // the shared ideal line.
+    if (!realCenter || validCompares.length > 0) return null
     return computeRacingLine(realCenter.center, realCenter.corridorHalf).map((p) => ({
       x: (p.x * fit.scale + fit.tx) / POSTER_W,
       y: (p.y * fit.scale + fit.ty) / POSTER_H,
     }))
-  }, [realCenter, h2hRealLine, fit.scale, fit.tx, fit.ty])
+  }, [realCenter, validCompares.length, fit.scale, fit.tx, fit.ty])
 
-  // Head-to-head in a racing-line mode → the deviation-amplified comparison, for ANY
-  // number of rivals. Real laps of the same track differ by only a car-width, invisible
-  // full-lap, so we build the drivers' shared mean line and push each driver's lateral
-  // deviation out by a gain so their different apex/entry choices read clearly. Returns
-  // the mean (for the wide ribbon) + each driver's exaggerated line in [primary, ...
-  // compares] order, all in poster 0-1 space. Computed in rotated PATH space so it's
-  // aspect-correct. Up to two compare telemetries are referenced concretely (the cap is
-  // two) to keep the memo deps stable.
-  const isRacingLineMode = vizMode === 'racing_line_real' || vizMode === 'racing_line'
-  const cmp0Tel = isRacingLineMode ? validCompares[0]?.telemetry ?? null : null
-  const cmp1Tel = isRacingLineMode ? validCompares[1]?.telemetry ?? null : null
-  const separatedGroup = useMemo(() => {
-    if (!telemetry || telemetry.points.length < 8) return null
-    const tels = [telemetry, cmp0Tel, cmp1Tel].filter((t): t is Telemetry => !!t && t.points.length > 1)
-    if (tels.length < 2) return null
-    const toPath = (tel: Telemetry) =>
-      tel.points.map((pt) => {
-        const p = rotatePathCoord(pt.x * PATH_VB.w, pt.y * PATH_VB.h, rot)
-        return { x: p.x, y: p.y, distance: pt.distance }
-      })
-    // Corridor half-width in PATH units for the amplified lines (≈11px on-screen),
-    // so the lines sit inside the drawn ribbon (PAIR_HALF) on every circuit.
-    const maxHalf = 11 / fit.scale
-    const { center, lines } = separatedComparisonLines(tels.map(toPath), { gain: 3.4, maxHalf })
-    const toPoster = (pts: { x: number; y: number }[]) =>
-      pts.map((p) => ({ x: (p.x * fit.scale + fit.tx) / POSTER_W, y: (p.y * fit.scale + fit.ty) / POSTER_H }))
-    // Carry each source lap's speed/throttle/brake/distance onto its amplified line
-    // (sampled at the same uniform lap-distance fraction the geometry was built at),
-    // so the ghost-race playback drives these lines paced by the real profile.
-    const withAttrs = (poster: { x: number; y: number }[], tel: Telemetry) =>
-      poster.map((p, k) => ({ ...p, ...sampleLapByDistanceFrac(tel.points, k / (poster.length - 1)) }))
-    return {
-      center: toPoster(center),
-      lines: lines.map((ln, i) => withAttrs(toPoster(ln), tels[i])),
+  // Head-to-head racing lines that USE THE TRACK WIDTH, like single-driver mode. Each
+  // lap is first projected onto the OSM ribbon (projectCached — wide entry, apex, wide
+  // exit, and aligned to the track), so every driver's line already swings across the
+  // asphalt. Real laps then differ by only a car-width, so we amplify each driver's
+  // deviation from the group mean along the mean's normal, keeping the wide-apex-wide
+  // shape while their different lines through the corners fan apart. Needs the OSM
+  // centreline; without it (Lap Trace mode) this is null and the overlay fallback runs.
+  const separatedGroup = (() => {
+    if (!realCenter || !telemetry || validCompares.length === 0) return null
+    const tels = [telemetry, ...validCompares.map((c) => c.telemetry as Telemetry)]
+    const projs = tels.map((t) => projectCached(t))
+    if (projs.some((p) => p.length < 8)) return null
+    const J = projs.length
+    const K = 300
+    // Resample each projected lap to K px-space points, carrying its attributes.
+    const toPxK = (line: ReturnType<typeof projectCached>) => {
+      const last = line.length - 1
+      const out: { x: number; y: number; speed: number; throttle: number; brake: number; distance: number }[] = []
+      for (let k = 0; k < K; k++) {
+        const fi = (k / (K - 1)) * last
+        const i = Math.min(last - 1, Math.floor(fi))
+        const t = fi - i
+        const a = line[i], b = line[i + 1]
+        const lp = (u?: number, v?: number) => (u ?? 0) + ((v ?? 0) - (u ?? 0)) * t
+        out.push({ x: lp(a.x, b.x) * POSTER_W, y: lp(a.y, b.y) * POSTER_H, speed: lp(a.speed, b.speed), throttle: lp(a.throttle, b.throttle), brake: lp(a.brake, b.brake), distance: lp(a.distance, b.distance) })
+      }
+      return out
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [telemetry, cmp0Tel, cmp1Tel, rot, fit.scale, fit.tx, fit.ty])
+    const L = projs.map(toPxK)
+    // Shared mean line (px), lightly smoothed.
+    const M: { x: number; y: number }[] = []
+    for (let k = 0; k < K; k++) {
+      let sx = 0, sy = 0
+      for (const l of L) { sx += l[k].x; sy += l[k].y }
+      M.push({ x: sx / J, y: sy / J })
+    }
+    for (let pass = 0; pass < 2; pass++) {
+      const prev = M.map((p) => ({ ...p }))
+      for (let k = 1; k < K - 1; k++) M[k] = { x: (prev[k - 1].x + 2 * prev[k].x + prev[k + 1].x) / 4, y: (prev[k - 1].y + 2 * prev[k].y + prev[k + 1].y) / 4 }
+    }
+    // Amplify each driver's deviation from the mean along the mean's normal, clamped to
+    // stay just inside the corridor so the lines don't run off the asphalt.
+    const gain = 3.4
+    const maxHalfPx = realCenter.corridorHalf * fit.scale * 0.9
+    const lines = L.map((l) => l.map((p) => ({ ...p })))
+    for (let k = 0; k < K; k++) {
+      const p = M[(k - 1 + K) % K], q = M[(k + 1) % K]
+      const tx = q.x - p.x, ty = q.y - p.y
+      const tl = Math.hypot(tx, ty) || 1
+      const nx = -ty / tl, ny = tx / tl
+      for (let j = 0; j < J; j++) {
+        const off = Math.max(-maxHalfPx, Math.min(maxHalfPx, ((L[j][k].x - M[k].x) * nx + (L[j][k].y - M[k].y) * ny) * gain))
+        lines[j][k] = { ...L[j][k], x: M[k].x + nx * off, y: M[k].y + ny * off }
+      }
+    }
+    const to01 = (l: (typeof lines)[number]) => l.map((p) => ({ ...p, x: p.x / POSTER_W, y: p.y / POSTER_H }))
+    return { lines: lines.map(to01) }
+  })()
 
   // The track outline in screen px — used to place overlay readouts in a corner the
   // ribbon doesn't reach (so they never sit on top of the circuit).
@@ -668,7 +597,7 @@ export function PosterPreview({
     driver: c.driver!,
     race: c.race,
     telemetry: c.telemetry!,
-    points: h2hRealLine ? mapDirect(c.telemetry) : projectCached(c.telemetry),
+    points: projectCached(c.telemetry),
     baseColor: lapColor(c.driver!, c.race),
   }))
   // Keep every racer's colour distinct (two same-team drivers would otherwise clash).
@@ -728,15 +657,13 @@ export function PosterPreview({
         )
       }
 
-      // Overlay each driver's OWN line so their paths through the corners can be
-      // read against each other. This is what head-to-head is for in the two
-      // line-comparison modes — the ideal 'Racing Line' on the real track
-      // (h2hRealLine: each lap's actual GPS line, since the OSM ribbon is a
-      // different geometry we can't snap to without collapsing the two into one)
-      // and the raw 'Lap Trace' — plus any 3-car comparison. The speed-delta map
-      // further down shares ONE geometry (useful for "who's faster where", but it
-      // defeats a line comparison), so it's reserved for the remaining modes.
-      const overlayLines = h2hRealLine || vizMode === 'racing_line' || compareLaps.length > 1
+      // Fallback overlay when there's no deviation-amplified group (separatedGroup) —
+      // the raw 'Lap Trace' mode, 'Racing Line' with no OSM track file, or any 3-car
+      // comparison. Draw each driver's OWN line so their paths can be read against each
+      // other. The speed-delta map further down shares ONE geometry (useful for "who's
+      // faster where", but it defeats a line comparison), so it's reserved for the
+      // remaining modes with exactly one rival.
+      const overlayLines = vizMode === 'racing_line' || vizMode === 'racing_line_real' || compareLaps.length > 1
       if (overlayLines) {
         // Compares first (drawn widest), primary last (thinnest, on top), so each
         // line keeps a visible halo even where two laps run within ~1px of each
@@ -1128,18 +1055,14 @@ export function PosterPreview({
           )
         })()}
 
-        {/* Circuit area — real to-scale OSM track, the circuits.json outline, or (for
-            real GPS laps with no matching outline, incl. head-to-head real lines)
-            a ribbon built from the lap itself */}
-        {separatedGroup
-          ? <PairRibbon pts={separatedGroup.center} />
-          : h2hRealLine
-            ? <LineRibbon pts={vizPoints} />
-            : realTrackPath
-              ? <RealTrackRibbon path={realTrackPath} fit={fit} widthPx={REAL_RIBBON_PX} />
-              : circuitPath
-                ? <CircuitBackground path={circuitPath} fit={fit} />
-                : <LineRibbon pts={vizPoints} />}
+        {/* Circuit area — real to-scale OSM track (single-driver AND head-to-head, so
+            the lines visibly use the track width), the circuits.json outline, or a
+            ribbon built from the lap itself when neither is available */}
+        {realTrackPath
+          ? <RealTrackRibbon path={realTrackPath} fit={fit} widthPx={REAL_RIBBON_PX} />
+          : circuitPath
+            ? <CircuitBackground path={circuitPath} fit={fit} />
+            : <LineRibbon pts={vizPoints} />}
 
         {/* Visualization overlay — playback when playing, draw-on reveal while the
             line is still drawing itself, otherwise the settled static viz */}
