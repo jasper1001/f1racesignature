@@ -296,18 +296,90 @@ function LineRibbon({ pts }: { pts: { x: number; y: number }[] }) {
   )
 }
 
-// Wide asphalt ribbon drawn along the two drivers' shared mean line, for the
-// deviation-amplified head-to-head. Wider than LineRibbon so both exaggerated
-// racing lines sit on the track with clear air between them and the kerb.
+// Wide track drawn along the drivers' shared mean line, for the deviation-amplified
+// head-to-head. Rendered to read like a real circuit: dark asphalt, white edge lines
+// down both sides, red/white kerbs through the corners, and a start/finish line. The
+// two exaggerated racing lines are drawn on top (in renderViz), inside the kerbs.
+const PAIR_HALF = 26 // asphalt half-width in px (racing lines are amplified to ±22)
 function PairRibbon({ pts }: { pts: { x: number; y: number }[] }) {
-  if (pts.length < 2) return null
-  const d = pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${(p.x * POSTER_W).toFixed(1)} ${(p.y * POSTER_H).toFixed(1)}`).join(' ')
+  if (pts.length < 3) return null
+  const P = pts.map((p) => ({ x: p.x * POSTER_W, y: p.y * POSTER_H }))
+  const n = P.length
+  const toPath = (q: { x: number; y: number }[]) =>
+    q.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ')
+
+  // Per-point unit tangent + left normal from neighbouring points.
+  const tan: { x: number; y: number }[] = []
+  const nrm: { x: number; y: number }[] = []
+  for (let i = 0; i < n; i++) {
+    const a = P[Math.max(0, i - 1)], b = P[Math.min(n - 1, i + 1)]
+    const tx = b.x - a.x, ty = b.y - a.y
+    const tl = Math.hypot(tx, ty) || 1
+    tan.push({ x: tx / tl, y: ty / tl })
+    nrm.push({ x: -ty / tl, y: tx / tl })
+  }
+
+  // Corner mask: local turning angle over a small window → kerb regions (dilated).
+  const W = 3
+  const corner = new Array<boolean>(n).fill(false)
+  for (let i = W; i < n - W; i++) {
+    const a = P[i - W], b = P[i], c = P[i + W]
+    const v1x = b.x - a.x, v1y = b.y - a.y, v2x = c.x - b.x, v2y = c.y - b.y
+    const ang = Math.abs(Math.atan2(v1x * v2y - v1y * v2x, v1x * v2x + v1y * v2y))
+    if (ang > 0.13) corner[i] = true
+  }
+  const dil = corner.slice()
+  for (let i = 0; i < n; i++) if (corner[i]) for (let d = -5; d <= 5; d++) { const j = i + d; if (j >= 0 && j < n) dil[j] = true }
+
+  // Offset the mean line by ±half to get each edge, then DE-FOLD: on corners tighter
+  // than the half-width the inside edge crosses itself into a spike, so drop any point
+  // that doesn't advance along the local travel direction (collapses the fold to a
+  // clean chord). Carry the corner flag with the survivors so kerbs stay aligned.
+  const cleanEdge = (side: 1 | -1) => {
+    const pts: { x: number; y: number }[] = []
+    const cor: boolean[] = []
+    for (let i = 0; i < n; i++) {
+      const p = { x: P[i].x + side * nrm[i].x * PAIR_HALF, y: P[i].y + side * nrm[i].y * PAIR_HALF }
+      if (pts.length === 0) { pts.push(p); cor.push(dil[i]); continue }
+      const last = pts[pts.length - 1]
+      if ((p.x - last.x) * tan[i].x + (p.y - last.y) * tan[i].y > 0) { pts.push(p); cor.push(dil[i]) }
+    }
+    return { pts, cor }
+  }
+  const runsOf = (cor: boolean[]): [number, number][] => {
+    const runs: [number, number][] = []
+    for (let i = 0, s = -1; i <= cor.length; i++) {
+      if (i < cor.length && cor[i]) { if (s < 0) s = i } else if (s >= 0) { runs.push([s, i - 1]); s = -1 }
+    }
+    return runs
+  }
+  const left = cleanEdge(1)
+  const right = cleanEdge(-1)
+  const seg = (e: { pts: { x: number; y: number }[] }, r: [number, number]) => toPath(e.pts.slice(r[0], r[1] + 1))
+
+  const centerD = toPath(P)
+  const l0 = { x: P[0].x + nrm[0].x * PAIR_HALF, y: P[0].y + nrm[0].y * PAIR_HALF }
+  const r0 = { x: P[0].x - nrm[0].x * PAIR_HALF, y: P[0].y - nrm[0].y * PAIR_HALF }
   return (
     <g>
-      {/* Kerb / track edge */}
-      <path d={d} fill="none" stroke="#e3e3e3" strokeWidth={58} strokeLinecap="round" strokeLinejoin="round" opacity="0.18" />
-      {/* Flat asphalt surface — no inner highlight, so nothing reads as a centre line */}
-      <path d={d} fill="none" stroke="#333333" strokeWidth={54} strokeLinecap="round" strokeLinejoin="round" />
+      {/* Asphalt: darker run-off border, then the track surface */}
+      <path d={centerD} fill="none" stroke="#1c1c1c" strokeWidth={PAIR_HALF * 2 + 8} strokeLinecap="round" strokeLinejoin="round" />
+      <path d={centerD} fill="none" stroke="#333333" strokeWidth={PAIR_HALF * 2} strokeLinecap="round" strokeLinejoin="round" />
+      {/* White track-edge lines down both sides */}
+      <path d={toPath(left.pts)} fill="none" stroke="#e8e8e8" strokeWidth={1.8} strokeLinejoin="round" opacity="0.5" />
+      <path d={toPath(right.pts)} fill="none" stroke="#e8e8e8" strokeWidth={1.8} strokeLinejoin="round" opacity="0.5" />
+      {/* Red/white kerbs through the corners, on both edges (white base + red dashes) */}
+      {[left, right].map((e, ei) =>
+        runsOf(e.cor).map((r, i) => (
+          <g key={`${ei}-${i}`}>
+            <path d={seg(e, r)} fill="none" stroke="#f4f4f4" strokeWidth={4.5} strokeLinejoin="round" />
+            <path d={seg(e, r)} fill="none" stroke="#d81f26" strokeWidth={4.5} strokeDasharray="6 6" strokeLinejoin="round" />
+          </g>
+        )),
+      )}
+      {/* Start/finish line across the track */}
+      <line x1={l0.x} y1={l0.y} x2={r0.x} y2={r0.y} stroke="#f4f4f4" strokeWidth={5} strokeLinecap="butt" />
+      <line x1={l0.x} y1={l0.y} x2={r0.x} y2={r0.y} stroke="#1c1c1c" strokeWidth={5} strokeDasharray="4 4" strokeLinecap="butt" />
     </g>
   )
 }
