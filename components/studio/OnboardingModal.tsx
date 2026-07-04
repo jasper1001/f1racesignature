@@ -31,13 +31,6 @@ const TIPS = [
     ),
   },
   {
-    title: 'Compare head-to-head',
-    body: 'Turn on Compare to overlay two drivers’ laps on the same circuit, with sector deltas.',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5"><path d="M4 7h7M4 12h5M4 17h7M20 7h-3M20 12h-5M20 17h-3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/></svg>
-    ),
-  },
-  {
     title: 'Save, share & export',
     body: 'Keep favourites in My Garage, share a link that restores your exact poster, or export a print — free.',
     icon: (
@@ -55,7 +48,7 @@ export function OnboardingModal({ isOpen, onClose }: Props) {
           <h2 className="text-2xl text-white mb-1" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
             Welcome to the Studio
           </h2>
-          <p className="text-[#aaaaaa] text-sm">Five things you can do to turn a lap into art.</p>
+          <p className="text-[#aaaaaa] text-sm">Four things you can do to turn a lap into art.</p>
         </div>
 
         <div className="space-y-3 mb-6">
