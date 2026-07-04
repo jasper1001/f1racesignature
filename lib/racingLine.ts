@@ -303,6 +303,100 @@ export function projectLapToRibbon(
   return { pts, frac }
 }
 
+// Two drivers' laps of the same circuit differ by only a car-width or two — real,
+// but invisible at a scale that shows the whole track. To compare their lines we
+// therefore build a shared reference (the mean of the two laps, matched by real
+// lap-distance so corners line up) and AMPLIFY each driver's lateral deviation from
+// it by `gain`, clamped so the lines stay within a drawable corridor. The result:
+// where both drivers took the same line the two lines converge; where they picked
+// different apexes they visibly fan apart — the actual comparison, legible full-lap.
+//
+// All coordinates are in one shared space (caller's choice — we use PATH space, so
+// the exaggeration is aspect-correct). `distance` (real per-point lap distance) is
+// used to correspond the two laps; index fraction is the fallback.
+export function separatedComparisonLines(
+  lapA: { x: number; y: number; distance?: number }[],
+  lapB: { x: number; y: number; distance?: number }[],
+  opts?: { gain?: number; maxHalf?: number; samples?: number },
+): { center: Pt[]; a: Pt[]; b: Pt[] } {
+  const gain = opts?.gain ?? 3.2
+  const maxHalf = opts?.maxHalf ?? Infinity
+  const K = opts?.samples ?? 400
+
+  // Non-decreasing 0..1 lap fraction per point: real distance when present, else index.
+  const fracOf = (lap: { distance?: number }[]): number[] => {
+    const n = lap.length
+    const hasDist = lap.every((p) => typeof p.distance === 'number')
+    const f = new Array<number>(n)
+    if (hasDist) {
+      const d0 = lap[0].distance as number
+      const dN = lap[n - 1].distance as number
+      const span = dN - d0 || 1
+      let prev = 0
+      for (let i = 0; i < n; i++) {
+        prev = Math.max(prev, Math.min(1, ((lap[i].distance as number) - d0) / span))
+        f[i] = prev
+      }
+    } else {
+      for (let i = 0; i < n; i++) f[i] = i / Math.max(1, n - 1)
+    }
+    return f
+  }
+  // Sample a lap at lap-fraction `t` (0..1) by interpolating between bracketing points.
+  const sampleAt = (lap: Pt[], f: number[], t: number): Pt => {
+    let i = 0
+    while (i < f.length - 2 && f[i + 1] < t) i++
+    const span = f[i + 1] - f[i] || 1
+    const u = Math.min(1, Math.max(0, (t - f[i]) / span))
+    return { x: lap[i].x + (lap[i + 1].x - lap[i].x) * u, y: lap[i].y + (lap[i + 1].y - lap[i].y) * u }
+  }
+
+  const fa = fracOf(lapA)
+  const fb = fracOf(lapB)
+  const A = lapA.map((p) => ({ x: p.x, y: p.y }))
+  const B = lapB.map((p) => ({ x: p.x, y: p.y }))
+
+  // Reference = mean of the two laps at each matched fraction, lightly smoothed.
+  const center = new Array<Pt>(K)
+  const as = new Array<Pt>(K)
+  const bs = new Array<Pt>(K)
+  for (let k = 0; k < K; k++) {
+    const t = k / (K - 1)
+    const pa = sampleAt(A, fa, t)
+    const pb = sampleAt(B, fb, t)
+    as[k] = pa
+    bs[k] = pb
+    center[k] = { x: (pa.x + pb.x) / 2, y: (pa.y + pb.y) / 2 }
+  }
+  const smooth = (pts: Pt[], passes: number) => {
+    for (let p = 0; p < passes; p++) {
+      const prev = pts.map((q) => ({ ...q }))
+      for (let i = 1; i < pts.length - 1; i++) {
+        pts[i] = { x: (prev[i - 1].x + 2 * prev[i].x + prev[i + 1].x) / 4, y: (prev[i - 1].y + 2 * prev[i].y + prev[i + 1].y) / 4 }
+      }
+    }
+  }
+  smooth(center, 3)
+
+  // Push each driver out from the reference along its local normal, amplified.
+  const a = new Array<Pt>(K)
+  const b = new Array<Pt>(K)
+  for (let k = 0; k < K; k++) {
+    const p = center[(k - 1 + K) % K]
+    const n = center[(k + 1) % K]
+    let tx = n.x - p.x, ty = n.y - p.y
+    const tl = Math.hypot(tx, ty) || 1
+    const nx = -ty / tl, ny = tx / tl
+    const offA = Math.max(-maxHalf, Math.min(maxHalf, ((as[k].x - center[k].x) * nx + (as[k].y - center[k].y) * ny) * gain))
+    const offB = Math.max(-maxHalf, Math.min(maxHalf, ((bs[k].x - center[k].x) * nx + (bs[k].y - center[k].y) * ny) * gain))
+    a[k] = { x: center[k].x + nx * offA, y: center[k].y + ny * offA }
+    b[k] = { x: center[k].x + nx * offB, y: center[k].y + ny * offB }
+  }
+  smooth(a, 1)
+  smooth(b, 1)
+  return { center, a, b }
+}
+
 // Resample a closed polyline to `m` points at uniform arc-length spacing.
 function resampleUniform(pts: Pt[], m: number): { pts: Pt[]; ds: number } {
   const n = pts.length

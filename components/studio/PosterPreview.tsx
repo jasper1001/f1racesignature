@@ -10,7 +10,7 @@ import { OvertakeMap } from '@/components/visualizations/OvertakeMap'
 import { VIZ_MODES } from '@/lib/themes'
 import { interpolateColor, distinctColors } from '@/lib/data'
 import { teamAtYear } from '@/lib/driverTeams'
-import { computeRacingLine, projectLapToRibbon } from '@/lib/racingLine'
+import { computeRacingLine, projectLapToRibbon, separatedComparisonLines } from '@/lib/racingLine'
 
 const POSTER_W = 720
 const POSTER_H = 800
@@ -271,6 +271,23 @@ function LineRibbon({ pts }: { pts: { x: number; y: number }[] }) {
   )
 }
 
+// Wide asphalt ribbon drawn along the two drivers' shared mean line, for the
+// deviation-amplified head-to-head. Wider than LineRibbon so both exaggerated
+// racing lines sit on the track with clear air between them and the kerb.
+function PairRibbon({ pts }: { pts: { x: number; y: number }[] }) {
+  if (pts.length < 2) return null
+  const d = pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${(p.x * POSTER_W).toFixed(1)} ${(p.y * POSTER_H).toFixed(1)}`).join(' ')
+  return (
+    <g>
+      {/* Kerb / track edge */}
+      <path d={d} fill="none" stroke="#e3e3e3" strokeWidth={58} strokeLinecap="round" strokeLinejoin="round" opacity="0.18" />
+      {/* Asphalt surface */}
+      <path d={d} fill="none" stroke="#2c2c2c" strokeWidth={54} strokeLinecap="round" strokeLinejoin="round" />
+      <path d={d} fill="none" stroke="#4a4a4a" strokeWidth={34} strokeLinecap="round" strokeLinejoin="round" opacity="0.55" />
+    </g>
+  )
+}
+
 function wrapText(text: string, maxChars: number): string[] {
   const words = text.split(' ')
   const lines: string[] = []
@@ -499,6 +516,36 @@ export function PosterPreview({
     }))
   }, [realCenter, h2hRealLine, fit.scale, fit.tx, fit.ty])
 
+  // Head-to-head against exactly one rival, in a racing-line mode → the deviation-
+  // amplified comparison. Two real laps of the same track differ by only a car-width,
+  // invisible full-lap, so we build their shared mean line and push each driver's
+  // lateral deviation out by a gain so their different apex/entry choices read
+  // clearly. Returns the mean (for the wide ribbon) + each driver's exaggerated line,
+  // all in poster 0-1 space. Computed in rotated PATH space so it's aspect-correct.
+  const pairCompareTel =
+    (vizMode === 'racing_line_real' || vizMode === 'racing_line') && validCompares.length === 1
+      ? validCompares[0].telemetry
+      : null
+  const separatedPair = useMemo(() => {
+    if (!pairCompareTel || !telemetry || telemetry.points.length < 8) return null
+    const toPath = (tel: Telemetry) =>
+      tel.points.map((pt) => {
+        const p = rotatePathCoord(pt.x * PATH_VB.w, pt.y * PATH_VB.h, rot)
+        return { x: p.x, y: p.y, distance: pt.distance }
+      })
+    // Corridor half-width in PATH units for the amplified lines (≈22px on-screen),
+    // so the two lines sit inside a comfortably wide drawn ribbon on every circuit.
+    const maxHalf = 22 / fit.scale
+    const { center, a, b } = separatedComparisonLines(toPath(telemetry), toPath(pairCompareTel!), {
+      gain: 3.4,
+      maxHalf,
+    })
+    const toPoster = (pts: { x: number; y: number }[]) =>
+      pts.map((p) => ({ x: (p.x * fit.scale + fit.tx) / POSTER_W, y: (p.y * fit.scale + fit.ty) / POSTER_H }))
+    return { center: toPoster(center), a: toPoster(a), b: toPoster(b) }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pairCompareTel, telemetry, rot, fit.scale, fit.tx, fit.ty])
+
   // The track outline in screen px — used to place overlay readouts in a corner the
   // ribbon doesn't reach (so they never sit on top of the circuit).
   const trackScreenPts: { x: number; y: number }[] = (() => {
@@ -592,6 +639,22 @@ export function PosterPreview({
     if (isComparing) {
       const linePath = (pts: { x: number; y: number }[]) =>
         pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${(p.x * POSTER_W).toFixed(1)} ${(p.y * POSTER_H).toFixed(1)}`).join(' ')
+
+      // Racing-line head-to-head vs one rival → deviation-amplified lines: each
+      // driver's exaggerated line in their colour, straddling the shared mean, so
+      // where they took different lines the two visibly fan apart (see separatedPair).
+      if (separatedPair) {
+        const compareColor = compareLaps[0].color
+        return (
+          <g>
+            {/* Dark keyline under each so the colours read on the asphalt */}
+            <path d={linePath(separatedPair.a)} fill="none" stroke="#111" strokeWidth={7} strokeLinecap="round" strokeLinejoin="round" opacity="0.5" />
+            <path d={linePath(separatedPair.b)} fill="none" stroke="#111" strokeWidth={7} strokeLinecap="round" strokeLinejoin="round" opacity="0.5" />
+            <path d={linePath(separatedPair.a)} fill="none" stroke={driverColor} strokeWidth={4} strokeLinecap="round" strokeLinejoin="round" />
+            <path d={linePath(separatedPair.b)} fill="none" stroke={compareColor} strokeWidth={4} strokeLinecap="round" strokeLinejoin="round" />
+          </g>
+        )
+      }
 
       // Overlay each driver's OWN line so their paths through the corners can be
       // read against each other. This is what head-to-head is for in the two
@@ -703,9 +766,11 @@ export function PosterPreview({
       }
     }
 
-    const lines = isComparing
-      ? [{ points: vizPoints, color: driverColor }, ...compareLaps.map((c) => ({ points: c.points, color: c.color }))]
-      : [{ points: primaryLine, color: driverColor }]
+    const lines = separatedPair
+      ? [{ points: separatedPair.a, color: driverColor }, { points: separatedPair.b, color: compareLaps[0].color }]
+      : isComparing
+        ? [{ points: vizPoints, color: driverColor }, ...compareLaps.map((c) => ({ points: c.points, color: c.color }))]
+        : [{ points: primaryLine, color: driverColor }]
 
     return (
       <g>
@@ -984,13 +1049,15 @@ export function PosterPreview({
         {/* Circuit area — real to-scale OSM track, the circuits.json outline, or (for
             real GPS laps with no matching outline, incl. head-to-head real lines)
             a ribbon built from the lap itself */}
-        {h2hRealLine
-          ? <LineRibbon pts={vizPoints} />
-          : realTrackPath
-            ? <RealTrackRibbon path={realTrackPath} fit={fit} widthPx={REAL_RIBBON_PX} />
-            : circuitPath
-              ? <CircuitBackground path={circuitPath} fit={fit} />
-              : <LineRibbon pts={vizPoints} />}
+        {separatedPair
+          ? <PairRibbon pts={separatedPair.center} />
+          : h2hRealLine
+            ? <LineRibbon pts={vizPoints} />
+            : realTrackPath
+              ? <RealTrackRibbon path={realTrackPath} fit={fit} widthPx={REAL_RIBBON_PX} />
+              : circuitPath
+                ? <CircuitBackground path={circuitPath} fit={fit} />
+                : <LineRibbon pts={vizPoints} />}
 
         {/* Visualization overlay — playback when playing, draw-on reveal while the
             line is still drawing itself, otherwise the settled static viz */}
