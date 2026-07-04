@@ -306,9 +306,8 @@ function PairRibbon({ pts }: { pts: { x: number; y: number }[] }) {
     <g>
       {/* Kerb / track edge */}
       <path d={d} fill="none" stroke="#e3e3e3" strokeWidth={58} strokeLinecap="round" strokeLinejoin="round" opacity="0.18" />
-      {/* Asphalt surface */}
-      <path d={d} fill="none" stroke="#2c2c2c" strokeWidth={54} strokeLinecap="round" strokeLinejoin="round" />
-      <path d={d} fill="none" stroke="#4a4a4a" strokeWidth={34} strokeLinecap="round" strokeLinejoin="round" opacity="0.55" />
+      {/* Flat asphalt surface — no inner highlight, so nothing reads as a centre line */}
+      <path d={d} fill="none" stroke="#333333" strokeWidth={54} strokeLinecap="round" strokeLinejoin="round" />
     </g>
   )
 }
