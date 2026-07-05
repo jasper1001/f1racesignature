@@ -583,5 +583,44 @@
     "description": "The longest wait in Formula 1 history, finally over — after a record number of starts without a podium, Hülkenberg charged from nineteenth to third in a chaotic wet British Grand Prix to claim his first rostrum at last.",
     "isFree": true,
     "telemetryFile": "hulkenberg_silverstone_2025"
+  },
+  {
+    "id": "hamilton_silverstone_2026",
+    "driverId": "hamilton",
+    "name": "British Grand Prix 2026",
+    "circuit": "silverstone",
+    "circuitName": "Silverstone Circuit",
+    "year": 2026,
+    "location": "Silverstone, England",
+    "lapTime": "1:28.458",
+    "description": "In his second season in red, Hamilton lit up his home crowd with a P3 qualifying lap at Silverstone — just 0.347s adrift of Antonelli's pole and a breath behind Ferrari team-mate Leclerc — putting a Prancing Horse right in the fight at the front.",
+    "isFree": true,
+    "telemetryFile": "hamilton_silverstone_2026"
+  },
+  {
+    "id": "antonelli_silverstone_2026",
+    "driverId": "antonelli",
+    "name": "British Grand Prix 2026",
+    "circuit": "silverstone",
+    "circuitName": "Silverstone Circuit",
+    "year": 2026,
+    "location": "Silverstone, England",
+    "lapTime": "1:28.111",
+    "description": "The teenager delivered under the fiercest pressure in the sport — a flawless pole lap at Silverstone, 0.175s clear of Leclerc, stretching his grip on a championship lead few saw coming in only his second season.",
+    "isFree": true,
+    "telemetryFile": "antonelli_silverstone_2026"
+  },
+  {
+    "id": "verstappen_silverstone_2026",
+    "driverId": "verstappen",
+    "name": "British Grand Prix 2026",
+    "circuit": "silverstone",
+    "circuitName": "Silverstone Circuit",
+    "year": 2026,
+    "location": "Silverstone, England",
+    "lapTime": "1:28.893",
+    "description": "A rare off day for the four-time champion — Verstappen could wring only P7 from a recalcitrant Red Bull at Silverstone, nearly eight tenths adrift of Antonelli's pole with the car refusing to come alive over one lap.",
+    "isFree": true,
+    "telemetryFile": "verstappen_silverstone_2026"
   }
 ]

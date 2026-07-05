@@ -40,6 +40,7 @@ DRV_TLA = {
     "raikkonen": "RAI", "hulkenberg": "HUL", "ricciardo": "RIC", "ocon": "OCO",
     "alonso": "ALO", "gasly": "GAS", "bottas": "BOT", "vettel": "VET",
     "stroll": "STR", "albon": "ALB", "piastri": "PIA", "tsunoda": "TSU",
+    "antonelli": "ANT",
 }
 
 # Any modern (2018+) race whose telemetry isn't already real FastF1 GPS — i.e. still

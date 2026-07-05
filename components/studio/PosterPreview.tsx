@@ -14,16 +14,27 @@ import { computeRacingLine, projectLapToRibbon } from '@/lib/racingLine'
 
 const POSTER_W = 720
 const POSTER_H = 800
-// On-screen width (px) of the real-track asphalt ribbon in "Racing Line" mode.
+// MAX on-screen width (px) of the real-track asphalt ribbon in "Racing Line" mode.
 // Wide enough that the racing line visibly runs to the edges and clips apexes.
+// The ribbon shrinks below this where the circuit runs close to its own path, so a
+// fat stroke can't merge separate sections into one blob (see perVertexClearancePx).
 const REAL_RIBBON_PX = 30
-// Track container — the box the circuit outline + racing line are fitted into.
-const CIRCUIT_AREA = { x: 40, y: 86, w: 640, h: 464 }
+// Stats-block box (the readouts below the track) AND the vertical anchor for the
+// whole lower half: `statsY` = y + h + 10 = 560, so the stats never move. Its x/w
+// also set the stats column width — kept slightly inset from the wider track box so
+// the stats read as a tidy column under a track that runs nearly full-bleed.
+const CIRCUIT_AREA = { x: 28, y: 96, w: 664, h: 454 }
+// The track's OWN fit box — wider than the stats box so the circuit uses almost the
+// full poster width (width is the binding dimension for these landscape circuits, so
+// this is what actually enlarges them). Shares CIRCUIT_AREA's y/h so it clears the
+// header badge above (~y84) and lands exactly on the stats divider below.
+const TRACK_AREA = { x: 12, y: 96, w: 696, h: 454 }
 // Coordinate space the circuit paths are authored in (scripts/generate-circuits.mjs).
 const PATH_VB = { w: 500, h: 420 }
-// Padding kept inside CIRCUIT_AREA when fitting, so the track ribbon's half-stroke
-// (~17px on-screen) never butts against the box edge.
-const FIT_PAD = 0.055
+// Padding kept inside TRACK_AREA when fitting. Kept small so the track fills the box;
+// the ribbon's half-stroke may spill a few px past the fit edge but still lands
+// inside the poster's side margins, so nothing clips.
+const FIT_PAD = 0.02
 
 interface CircuitFit { scale: number; tx: number; ty: number }
 
@@ -82,7 +93,7 @@ function pathBounds(path: string): { x0: number; y0: number; x1: number; y1: num
 
 /**
  * THE single fit transform shared by both the circuit outline and the racing
- * line. Maps the track's path bounds into CIRCUIT_AREA (inset by FIT_PAD) with a
+ * line. Maps the track's path bounds into TRACK_AREA (inset by FIT_PAD) with a
  * uniform scale (aspect preserved, no distortion), centred. Both render paths
  * MUST consume the object this returns — never reimplement the maths — so the
  * racing line can never drift off the track.
@@ -93,11 +104,11 @@ function pathBounds(path: string): { x0: number; y0: number; x1: number; y1: num
 function computeCircuitFit(bounds: { x0: number; y0: number; x1: number; y1: number }): CircuitFit {
   const bw = bounds.x1 - bounds.x0
   const bh = bounds.y1 - bounds.y0
-  const innerW = CIRCUIT_AREA.w * (1 - 2 * FIT_PAD)
-  const innerH = CIRCUIT_AREA.h * (1 - 2 * FIT_PAD)
+  const innerW = TRACK_AREA.w * (1 - 2 * FIT_PAD)
+  const innerH = TRACK_AREA.h * (1 - 2 * FIT_PAD)
   const scale = Math.min(innerW / bw, innerH / bh)
-  const tx = CIRCUIT_AREA.x + (CIRCUIT_AREA.w - bw * scale) / 2 - bounds.x0 * scale
-  const ty = CIRCUIT_AREA.y + (CIRCUIT_AREA.h - bh * scale) / 2 - bounds.y0 * scale
+  const tx = TRACK_AREA.x + (TRACK_AREA.w - bw * scale) / 2 - bounds.x0 * scale
+  const ty = TRACK_AREA.y + (TRACK_AREA.h - bh * scale) / 2 - bounds.y0 * scale
   return { scale, tx, ty }
 }
 
@@ -234,21 +245,64 @@ function CircuitBackground({ path, fit }: { path: string; fit: CircuitFit }) {
   )
 }
 
-// Real circuit surface for the "Racing Line" viz: an OSM-derived centreline drawn
-// as an asphalt ribbon at true track width (in PATH units, so it scales with the
-// fit), with a kerb-like edge. The actual racing line is overlaid separately, so
-// it visibly runs wide on entry and clips the apex inside this ribbon.
-function RealTrackRibbon({ path, fit, widthPx }: { path: string; fit: CircuitFit; widthPx: number }) {
-  // Paths render inside scale(fit.scale), so divide by it to keep the ribbon a
-  // CONSTANT on-screen thickness (widthPx) on every circuit and zoom level.
+// On-screen gap (px), at every vertex, to the nearest NON-ADJACENT part of the
+// centreline — i.e. how close the circuit runs to a *different* piece of its own
+// path at that point (Baku's parallel out-and-back, a hairpin's two straights, …).
+// The Racing Line ribbon is capped to this locally so a fat stroke can't paint over
+// itself and merge separate sections into one blob. Closed-loop aware: neighbours
+// along the path (either direction) are skipped so the ribbon isn't limited by its
+// own local thickness. Open stretches return Infinity → they keep the full width.
+function perVertexClearancePx(center: { x: number; y: number }[], scale: number): number[] {
+  const n = center.length
+  const SKIP = 6 // vertices within this many steps (around the loop) are "adjacent"
+  const distPtSeg = (p: { x: number; y: number }, a: { x: number; y: number }, b: { x: number; y: number }) => {
+    const dx = b.x - a.x, dy = b.y - a.y
+    const l2 = dx * dx + dy * dy
+    let t = l2 ? ((p.x - a.x) * dx + (p.y - a.y) * dy) / l2 : 0
+    t = Math.max(0, Math.min(1, t))
+    return Math.hypot(p.x - (a.x + t * dx), p.y - (a.y + t * dy))
+  }
+  const out = new Array<number>(n).fill(Infinity)
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) {
+      const sep = Math.min(Math.abs(i - j), n - Math.abs(i - j)) // steps apart around the loop
+      if (sep < SKIP) continue
+      const d = distPtSeg(center[i], center[j], center[(j + 1) % n])
+      if (d < out[i]) out[i] = d
+    }
+  }
+  return out.map((d) => (d === Infinity ? Infinity : d * scale))
+}
+
+// Real circuit surface for the "Racing Line" viz: an OSM-derived centreline drawn as
+// an asphalt ribbon, with a kerb-like edge. Drawn as a chain of round-capped segments
+// (a "brush"), each at its own width, so the ribbon can NARROW exactly where the
+// circuit runs close to its own path — keeping the full width everywhere else — and
+// never merges two separate sections into one blob. Round caps blend the joints, so
+// (unlike a filled offset polygon) hairpins can't produce bow-tie artefacts. The
+// racing line is overlaid separately and visibly runs wide inside this ribbon.
+function RealTrackRibbon({ center, halfPx, fit }: { center: { x: number; y: number }[]; halfPx: number[]; fit: CircuitFit }) {
+  // Segments render inside scale(fit.scale), so divide widths by it to keep the
+  // on-screen thickness fixed on every circuit and zoom level. Each segment's width
+  // is the narrower of its two endpoints, so it never exceeds the local clearance.
   const sw = (px: number) => px / fit.scale
+  const n = center.length
+  const seg = (i: number) => {
+    const a = center[i], b = center[(i + 1) % n]
+    return { d: `M ${a.x} ${a.y} L ${b.x} ${b.y}`, w: 2 * Math.min(halfPx[i], halfPx[(i + 1) % n]) }
+  }
+  const segs = Array.from({ length: n }, (_, i) => seg(i))
+  const layer = (stroke: string, pad: number, scaleW: number, opacity?: number) =>
+    segs.map((s, i) => (
+      <path key={i} d={s.d} fill="none" stroke={stroke} strokeWidth={sw(Math.max(0.5, s.w * scaleW + pad))} strokeLinecap="round" strokeLinejoin="round" opacity={opacity} />
+    ))
   return (
     <g transform={`translate(${fit.tx}, ${fit.ty}) scale(${fit.scale})`}>
       {/* Kerb / track edge */}
-      <path d={path} fill="none" stroke="#e3e3e3" strokeWidth={sw(widthPx + 2.5)} strokeLinecap="round" strokeLinejoin="round" opacity="0.28" />
+      <g opacity="0.28">{layer('#e3e3e3', 2.5, 1)}</g>
       {/* Asphalt surface */}
-      <path d={path} fill="none" stroke="#2c2c2c" strokeWidth={sw(widthPx)} strokeLinecap="round" strokeLinejoin="round" />
-      <path d={path} fill="none" stroke="#444444" strokeWidth={sw(widthPx * 0.62)} strokeLinecap="round" strokeLinejoin="round" opacity="0.6" />
+      <g>{layer('#2c2c2c', 0, 1)}</g>
+      <g opacity="0.6">{layer('#444444', 0, 0.62)}</g>
     </g>
   )
 }
@@ -293,8 +347,8 @@ function Watermark({ theme }: { theme: ThemeConfig }) {
       {/* Bottom-left corner tag — sits inside the circuit area, clear of the
           centred driver name in the header row */}
       <text
-        x={CIRCUIT_AREA.x + 8}
-        y={CIRCUIT_AREA.y + CIRCUIT_AREA.h - 6}
+        x={TRACK_AREA.x + 8}
+        y={TRACK_AREA.y + TRACK_AREA.h - 6}
         fill={theme.primaryLine}
         fontSize="9"
         fontFamily="monospace"
@@ -399,12 +453,32 @@ export function PosterPreview({
     // Drop a duplicated closing point so the loop wraps cleanly.
     const first = center[0], last = center[center.length - 1]
     if (Math.hypot(first.x - last.x, first.y - last.y) < 1.5) center.pop()
-    // Corridor half-width in PATH units: the on-screen ribbon stroke is
-    // REAL_RIBBON_PX, drawn inside scale(fit), so its PATH width is /scale.
-    // Keep a kerb margin so the line stays on asphalt, not the white edge.
-    const corridorHalf = Math.max(2, (REAL_RIBBON_PX / 2 - 4) / fit.scale)
-    return { center, corridorHalf }
+    // Per-vertex ribbon half-width (px): the full REAL_RIBBON_PX everywhere the track
+    // is clear of itself, narrowing to the local self-clearance where it runs close to
+    // its own path (Baku's parallel out-and-back), so a fat stroke can't merge the two
+    // sections into one blob. 0.45 (= 0.9 / 2 width) leaves a hairline of white between
+    // neighbouring sections; a small floor keeps it a visible road.
+    const clearancePx = perVertexClearancePx(center, fit.scale)
+    const ribbonHalfPx = clearancePx.map((c) => Math.min(REAL_RIBBON_PX / 2, Math.max(1.25, c * 0.45)))
+    // Corridor half-width (PATH units) for the racing line — how far it may swing off
+    // centre. Tie it to the ACTUAL ribbon width so the line stays on asphalt now that
+    // the ribbon narrows on self-close sections: use a low percentile of the per-vertex
+    // half-widths (not the min — the very thinnest points are straights, where the ideal
+    // line sits mid-track and doesn't use the corridor anyway). Minus a kerb margin.
+    const sortedHalf = [...ribbonHalfPx].sort((a, b) => a - b)
+    const p20HalfPx = sortedHalf[Math.floor(sortedHalf.length * 0.2)]
+    const corridorHalf = Math.max(2, (p20HalfPx - 4) / fit.scale)
+    return { center, corridorHalf, ribbonHalfPx }
   }, [realTrackPath, fit.scale])
+
+  // The real-track ribbon element, memoised: it builds ~3 strokes per centreline
+  // vertex (variable-width brush), so recompute it only when the geometry changes —
+  // not on every playback frame's re-render of the parent.
+  const realRibbon = useMemo(
+    () => (realCenter ? <RealTrackRibbon center={realCenter.center} halfPx={realCenter.ribbonHalfPx} fit={fit} /> : null),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [realCenter, fit.scale, fit.tx, fit.ty],
+  )
 
   // Direct path→poster mapping: the lap drawn exactly as stored (path space →
   // rotate → shared fit → poster 0-1), no ribbon reconstruction.
@@ -480,73 +554,14 @@ export function PosterPreview({
   // Computed in the (rotated) PATH space the ribbon is drawn in, then mapped to
   // poster space via the same shared fit so it sits exactly on the ribbon.
   const racingLinePoints = useMemo(() => {
-    // Single-driver only: head-to-head draws each driver's own (projected) line, not
-    // the shared ideal line.
+    // Single-driver only: head-to-head doesn't draw an ideal racing line — it shows a
+    // speed-comparison map on the real lap path instead (see the compare branch below).
     if (!realCenter || validCompares.length > 0) return null
     return computeRacingLine(realCenter.center, realCenter.corridorHalf).map((p) => ({
       x: (p.x * fit.scale + fit.tx) / POSTER_W,
       y: (p.y * fit.scale + fit.ty) / POSTER_H,
     }))
   }, [realCenter, validCompares.length, fit.scale, fit.tx, fit.ty])
-
-  // Head-to-head racing lines that USE THE TRACK WIDTH, like single-driver mode. Each
-  // lap is first projected onto the OSM ribbon (projectCached — wide entry, apex, wide
-  // exit, and aligned to the track), so every driver's line already swings across the
-  // asphalt. Real laps then differ by only a car-width, so we amplify each driver's
-  // deviation from the group mean along the mean's normal, keeping the wide-apex-wide
-  // shape while their different lines through the corners fan apart. Needs the OSM
-  // centreline; without it (Lap Trace mode) this is null and the overlay fallback runs.
-  const separatedGroup = (() => {
-    if (!realCenter || !telemetry || validCompares.length === 0) return null
-    const tels = [telemetry, ...validCompares.map((c) => c.telemetry as Telemetry)]
-    const projs = tels.map((t) => projectCached(t))
-    if (projs.some((p) => p.length < 8)) return null
-    const J = projs.length
-    const K = 300
-    // Resample each projected lap to K px-space points, carrying its attributes.
-    const toPxK = (line: ReturnType<typeof projectCached>) => {
-      const last = line.length - 1
-      const out: { x: number; y: number; speed: number; throttle: number; brake: number; distance: number }[] = []
-      for (let k = 0; k < K; k++) {
-        const fi = (k / (K - 1)) * last
-        const i = Math.min(last - 1, Math.floor(fi))
-        const t = fi - i
-        const a = line[i], b = line[i + 1]
-        const lp = (u?: number, v?: number) => (u ?? 0) + ((v ?? 0) - (u ?? 0)) * t
-        out.push({ x: lp(a.x, b.x) * POSTER_W, y: lp(a.y, b.y) * POSTER_H, speed: lp(a.speed, b.speed), throttle: lp(a.throttle, b.throttle), brake: lp(a.brake, b.brake), distance: lp(a.distance, b.distance) })
-      }
-      return out
-    }
-    const L = projs.map(toPxK)
-    // Shared mean line (px), lightly smoothed.
-    const M: { x: number; y: number }[] = []
-    for (let k = 0; k < K; k++) {
-      let sx = 0, sy = 0
-      for (const l of L) { sx += l[k].x; sy += l[k].y }
-      M.push({ x: sx / J, y: sy / J })
-    }
-    for (let pass = 0; pass < 2; pass++) {
-      const prev = M.map((p) => ({ ...p }))
-      for (let k = 1; k < K - 1; k++) M[k] = { x: (prev[k - 1].x + 2 * prev[k].x + prev[k + 1].x) / 4, y: (prev[k - 1].y + 2 * prev[k].y + prev[k + 1].y) / 4 }
-    }
-    // Amplify each driver's deviation from the mean along the mean's normal, clamped to
-    // stay just inside the corridor so the lines don't run off the asphalt.
-    const gain = 3.4
-    const maxHalfPx = realCenter.corridorHalf * fit.scale * 0.9
-    const lines = L.map((l) => l.map((p) => ({ ...p })))
-    for (let k = 0; k < K; k++) {
-      const p = M[(k - 1 + K) % K], q = M[(k + 1) % K]
-      const tx = q.x - p.x, ty = q.y - p.y
-      const tl = Math.hypot(tx, ty) || 1
-      const nx = -ty / tl, ny = tx / tl
-      for (let j = 0; j < J; j++) {
-        const off = Math.max(-maxHalfPx, Math.min(maxHalfPx, ((L[j][k].x - M[k].x) * nx + (L[j][k].y - M[k].y) * ny) * gain))
-        lines[j][k] = { ...L[j][k], x: M[k].x + nx * off, y: M[k].y + ny * off }
-      }
-    }
-    const to01 = (l: (typeof lines)[number]) => l.map((p) => ({ ...p, x: p.x / POSTER_W, y: p.y / POSTER_H }))
-    return { lines: lines.map(to01) }
-  })()
 
   // The track outline in screen px — used to place overlay readouts in a corner the
   // ribbon doesn't reach (so they never sit on top of the circuit).
@@ -568,8 +583,8 @@ export function PosterPreview({
   // Preference order favours the top-right (where the readout has always lived).
   const cornerForBox = (boxW: number, boxH: number) => {
     const m = 6, wm = 14 // bottom-left watermark reserve
-    const L = CIRCUIT_AREA.x, R = CIRCUIT_AREA.x + CIRCUIT_AREA.w
-    const T = CIRCUIT_AREA.y, B = CIRCUIT_AREA.y + CIRCUIT_AREA.h
+    const L = TRACK_AREA.x, R = TRACK_AREA.x + TRACK_AREA.w
+    const T = TRACK_AREA.y, B = TRACK_AREA.y + TRACK_AREA.h
     const corners = [
       { x: R - m - boxW, y: T + m },          // top-right
       { x: L + m, y: T + m },                 // top-left
@@ -605,8 +620,6 @@ export function PosterPreview({
   const driverColor = palette[0]
   const compareLaps = compareBase.map((c, i) => ({ ...c, color: palette[i + 1] }))
   const isComparing = compareLaps.length > 0
-  // Colours aligned with separatedGroup.lines order: [primary, ...compares].
-  const groupColors = [driverColor, ...compareLaps.map((c) => c.color)]
 
   // The primary lap line for the static viz + draw-on reveal. In "Racing Line"
   // mode (single lap) this is the ideal geometric line; otherwise the telemetry.
@@ -639,89 +652,65 @@ export function PosterPreview({
   const renderViz = () => {
     if (!telemetry || vizPoints.length === 0) return null
 
-    // ── Compare mode ──
+    // ── Compare mode: strictly-honest speed-comparison map ──
+    // Two fast laps of the same circuit share essentially the same line in space (they
+    // differ by ~a car-width — far less than the poster can resolve), so we do NOT draw
+    // separate per-driver "racing lines": that only works by fabricating separation.
+    // Instead we draw ONE real track path (the primary lap, projected on the ribbon) and
+    // colour it, point by point, by WHICH DRIVER IS FASTEST THERE. The other real, large
+    // differences — the outright time gap and who leads — live in the legend and the
+    // ghost-race playback. Generalises to any number of drivers.
     if (isComparing) {
-      const linePath = (pts: { x: number; y: number }[]) =>
-        pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${(p.x * POSTER_W).toFixed(1)} ${(p.y * POSTER_H).toFixed(1)}`).join(' ')
-
-      // Racing-line head-to-head → deviation-amplified lines: each driver's exaggerated
-      // line in their colour, straddling the shared mean, so where drivers took
-      // different lines they visibly fan apart (see separatedGroup). Any driver count.
-      if (separatedGroup) {
-        return (
-          <g>
-            {separatedGroup.lines.map((ln, i) => (
-              <path key={i} d={linePath(ln)} fill="none" stroke={groupColors[i]} strokeWidth={2.6} strokeLinecap="round" strokeLinejoin="round" />
-            ))}
-          </g>
-        )
-      }
-
-      // Fallback overlay when there's no deviation-amplified group (separatedGroup) —
-      // the raw 'Lap Trace' mode, 'Racing Line' with no OSM track file, or any 3-car
-      // comparison. Draw each driver's OWN line so their paths can be read against each
-      // other. The speed-delta map further down shares ONE geometry (useful for "who's
-      // faster where", but it defeats a line comparison), so it's reserved for the
-      // remaining modes with exactly one rival.
-      const overlayLines = vizMode === 'racing_line' || vizMode === 'racing_line_real' || compareLaps.length > 1
-      if (overlayLines) {
-        // Compares first (drawn widest), primary last (thinnest, on top), so each
-        // line keeps a visible halo even where two laps run within ~1px of each
-        // other (e.g. Zandvoort) — a uniform width would bury the lines beneath.
-        const overlay = [...compareLaps.map((c) => ({ points: c.points, color: c.color })), { points: vizPoints, color: driverColor }]
-        return (
-          <g>
-            {overlay.map((o, i) => (
-              <path key={i} d={linePath(o.points)} fill="none" stroke={o.color} strokeWidth={3 + 2 * (overlay.length - 1 - i)} strokeLinecap="round" strokeLinejoin="round" opacity="0.92" />
-            ))}
-          </g>
-        )
-      }
-
-      // Exactly one rival in a speed-focused mode → speed-delta map (segments
-      // coloured by who's faster at each point along the primary lap's geometry).
-      {
-        const cmpPoints = compareLaps[0].points
-        const compareColor = compareLaps[0].color
-        const n = Math.min(vizPoints.length, cmpPoints.length)
-        const basePath = vizPoints.slice(0, n).map((p, i) =>
-          `${i === 0 ? 'M' : 'L'} ${(p.x * POSTER_W).toFixed(1)} ${(p.y * POSTER_H).toFixed(1)}`
-        ).join(' ')
-
-        type Seg = { d: string; d1: boolean }
-        const segs: Seg[] = []
-        const faster = (i: number) => vizPoints[i].speed >= cmpPoints[i].speed
-        let cur: Seg = {
-          d: `M ${(vizPoints[0].x * POSTER_W).toFixed(1)} ${(vizPoints[0].y * POSTER_H).toFixed(1)}`,
-          d1: faster(0),
-        }
-        for (let i = 1; i < n; i++) {
-          const f = faster(i)
-          if (f !== cur.d1) {
-            segs.push(cur)
-            cur = {
-              d: `M ${(vizPoints[i - 1].x * POSTER_W).toFixed(1)} ${(vizPoints[i - 1].y * POSTER_H).toFixed(1)}`,
-              d1: f,
-            }
+      const laps = [
+        { color: driverColor, pts: vizPoints },
+        ...compareLaps.map((c) => ({ color: c.color, pts: c.points })),
+      ]
+      // A lap's speed at lap-distance d (0..1), interpolated from its own samples — so
+      // rivals are compared at the SAME track position even if sampled differently.
+      const speedAt = (pts: typeof vizPoints, d: number) => {
+        for (let k = 0; k < pts.length - 1; k++) {
+          const da = pts[k].distance ?? k / (pts.length - 1)
+          const db = pts[k + 1].distance ?? (k + 1) / (pts.length - 1)
+          if (d <= db) {
+            const t = db > da ? (d - da) / (db - da) : 0
+            return pts[k].speed + (pts[k + 1].speed - pts[k].speed) * t
           }
-          cur.d += ` L ${(vizPoints[i].x * POSTER_W).toFixed(1)} ${(vizPoints[i].y * POSTER_H).toFixed(1)}`
         }
-        segs.push(cur)
-
-        return (
-          <g>
-            <path d={basePath} fill="none" stroke="#1e1e1e" strokeWidth="10" strokeLinecap="round" strokeLinejoin="round" />
-            {segs.map((s, i) => {
-              const color = s.d1 ? driverColor : compareColor
-              return (
-                <g key={i}>
-                  <path d={s.d} fill="none" stroke={color} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" opacity="0.95" />
-                </g>
-              )
-            })}
-          </g>
-        )
+        return pts[pts.length - 1].speed
       }
+      // Index (into `laps`) of the fastest driver at primary-lap point i.
+      const fastestAt = (i: number) => {
+        const d = vizPoints[i].distance ?? i / (vizPoints.length - 1)
+        let best = 0, bestSpd = vizPoints[i].speed
+        for (let j = 1; j < laps.length; j++) {
+          const s = speedAt(laps[j].pts, d)
+          if (s > bestSpd) { bestSpd = s; best = j }
+        }
+        return best
+      }
+      const px = (p: { x: number; y: number }) => `${(p.x * POSTER_W).toFixed(1)} ${(p.y * POSTER_H).toFixed(1)}`
+      const n = vizPoints.length
+      const basePath = 'M ' + vizPoints.map((p) => px(p)).join(' L ')
+      // Break the shared path into runs where the fastest driver is constant; each new
+      // run re-starts at the previous point so the coloured runs join without a gap.
+      type Seg = { d: string; who: number }
+      const segs: Seg[] = []
+      let cur: Seg = { d: 'M ' + px(vizPoints[0]), who: fastestAt(0) }
+      for (let i = 1; i < n; i++) {
+        const w = fastestAt(i)
+        if (w !== cur.who) { segs.push(cur); cur = { d: 'M ' + px(vizPoints[i - 1]) + ' L ' + px(vizPoints[i]), who: w }; continue }
+        cur.d += ' L ' + px(vizPoints[i])
+      }
+      segs.push(cur)
+
+      return (
+        <g>
+          <path d={basePath} fill="none" stroke="#1e1e1e" strokeWidth="10" strokeLinecap="round" strokeLinejoin="round" />
+          {segs.map((s, i) => (
+            <path key={i} d={s.d} fill="none" stroke={laps[s.who].color} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" opacity="0.95" />
+          ))}
+        </g>
+      )
     }
 
     const props = { points: vizPoints, theme, width: POSTER_W, height: POSTER_H, driverColor }
@@ -765,11 +754,9 @@ export function PosterPreview({
       }
     }
 
-    const lines = separatedGroup
-      ? separatedGroup.lines.map((ln, i) => ({ points: ln, color: groupColors[i] }))
-      : isComparing
-        ? [{ points: vizPoints, color: driverColor }, ...compareLaps.map((c) => ({ points: c.points, color: c.color }))]
-        : [{ points: primaryLine, color: driverColor }]
+    // One sweeping line: in compare mode the shared track path (which becomes the
+    // speed-comparison map); otherwise the single-driver racing line.
+    const lines = [{ points: isComparing ? vizPoints : primaryLine, color: driverColor }]
 
     return (
       <g>
@@ -782,7 +769,7 @@ export function PosterPreview({
                 d={linePath(o.points)}
                 fill="none"
                 stroke={o.color}
-                strokeWidth={separatedGroup ? 2.6 : 3.5}
+                strokeWidth={3.5}
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeDasharray={len}
@@ -810,21 +797,16 @@ export function PosterPreview({
     if (isComparing) {
       const toScreen = (pts: { x: number; y: number; speed: number; distance?: number }[]) =>
         pts.map((p) => ({ x: p.x * POSTER_W, y: p.y * POSTER_H, speed: p.speed, distance: p.distance }))
-      // Drive the deviation-amplified lines when we have them, so every car follows its
-      // DISTINCT line (not the near-identical raw laps) during the ghost race.
-      const racerSrc = separatedGroup
-        ? separatedGroup.lines.map((ln, i) => ({
-            color: groupColors[i],
-            name: i === 0 ? driver?.shortName ?? '' : compareLaps[i - 1].driver.shortName,
-            lapSec: parseLapSeconds(i === 0 ? telemetry.lapTime : compareLaps[i - 1].telemetry.lapTime),
-            pts: toScreen(ln),
-          }))
-        : [
-            { color: driverColor, name: driver?.shortName ?? '', lapSec: parseLapSeconds(telemetry.lapTime), pts: toScreen(vizPoints) },
-            ...compareLaps.map((c) => ({
-              color: c.color, name: c.driver.shortName, lapSec: parseLapSeconds(c.telemetry.lapTime), pts: toScreen(c.points),
-            })),
-          ]
+      // Every car drives its OWN real (projected) lap. Real laps of the same circuit
+      // sit almost on top of each other in space, so the race reads through TIME: each
+      // car is paced by its own distance/speed profile, so the faster lap pulls ahead
+      // along the track and reaches the line first — the honest head-to-head.
+      const racerSrc = [
+        { color: driverColor, name: driver?.shortName ?? '', lapSec: parseLapSeconds(telemetry.lapTime), pts: toScreen(vizPoints) },
+        ...compareLaps.map((c) => ({
+          color: c.color, name: c.driver.shortName, lapSec: parseLapSeconds(c.telemetry.lapTime), pts: toScreen(c.points),
+        })),
+      ]
       const racers = racerSrc.map((r) => ({ ...r, tau: lapTimeProfile(r.pts) }))
 
       const tMax = Math.max(...racers.map((r) => r.lapSec)) || 1
@@ -1037,11 +1019,12 @@ export function PosterPreview({
             : driver?.name ?? 'Select a Driver'}
         </text>
 
-        {/* Badge — viz mode, plus HEAD TO HEAD when comparing, so the label always
-            reflects what's actually on screen (e.g. "RACING LINE · HEAD TO HEAD"). */}
+        {/* Badge — the viz mode when single-driver. Head-to-head always renders the
+            same speed-comparison map (not the selected mode), so the label reflects that
+            rather than naming a mode that isn't what's on screen. */}
         {(() => {
           const modeName = (VIZ_MODES.find((v) => v.id === vizMode)?.name ?? vizMode).toUpperCase()
-          const label = isComparing ? `${modeName} · HEAD TO HEAD` : modeName
+          const label = isComparing ? 'HEAD TO HEAD · FASTEST BY SECTION' : modeName
           const badgeW = label.length * 7.4 + 30
           return (
             <g transform={`translate(${POSTER_W / 2 - badgeW / 2}, 66)`}>
@@ -1058,8 +1041,8 @@ export function PosterPreview({
         {/* Circuit area — real to-scale OSM track (single-driver AND head-to-head, so
             the lines visibly use the track width), the circuits.json outline, or a
             ribbon built from the lap itself when neither is available */}
-        {realTrackPath
-          ? <RealTrackRibbon path={realTrackPath} fit={fit} widthPx={REAL_RIBBON_PX} />
+        {realRibbon
+          ? realRibbon
           : circuitPath
             ? <CircuitBackground path={circuitPath} fit={fit} />
             : <LineRibbon pts={vizPoints} />}
@@ -1098,8 +1081,8 @@ export function PosterPreview({
           } else {
             for (const p of vizPoints) trackPts.push({ x: p.x * POSTER_W, y: p.y * POSTER_H })
           }
-          const areaL = CIRCUIT_AREA.x, areaR = CIRCUIT_AREA.x + CIRCUIT_AREA.w
-          const areaT = CIRCUIT_AREA.y, areaB = CIRCUIT_AREA.y + CIRCUIT_AREA.h
+          const areaL = TRACK_AREA.x, areaR = TRACK_AREA.x + TRACK_AREA.w
+          const areaT = TRACK_AREA.y, areaB = TRACK_AREA.y + TRACK_AREA.h
           const wmReserve = 16 // keep clear of the bottom-left watermark
           // Candidates in preference order: bottom-left, top-left, bottom-right, top-right.
           const candidates = [

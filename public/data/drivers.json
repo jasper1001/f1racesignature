@@ -141,5 +141,16 @@
     "isFree": true,
     "championships": 0,
     "bio": "For years the finest driver never to stand on a Formula 1 podium — a qualifying specialist whose record wait finally ended with a stunning charge through the wet to third at Silverstone in 2025."
+  },
+  {
+    "id": "antonelli",
+    "name": "Andrea Kimi Antonelli",
+    "shortName": "ANT",
+    "team": "Mercedes",
+    "nationality": "Italian",
+    "color": "#00d2be",
+    "isFree": true,
+    "championships": 0,
+    "bio": "Mercedes' teenage prodigy and the heir to Hamilton's old seat. Fearless raw speed and a maturity beyond his years that had him fighting at the very front almost from the moment he arrived."
   }
 ]
