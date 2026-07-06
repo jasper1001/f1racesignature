@@ -56,7 +56,6 @@ const PANEL = '#0a0a0a'
 const BORDER = '#1f1f1f'
 const WHITE = '#ffffff'
 const DIM = 'rgba(255,255,255,0.65)'
-const FAINT = 'rgba(255,255,255,0.35)'
 const GREEN = '#22c55e'
 const MEDALS = ['#d4a017', '#b8b8b8', '#cd7f32']
 
@@ -166,7 +165,7 @@ function drawFooter(ctx: Ctx, credit?: string) {
   tracked(ctx, 'F1RACESIGNATURE.SITE', MARGIN, 592, 3)
 
   if (credit) {
-    ctx.fillStyle = FAINT
+    ctx.fillStyle = DIM
     ctx.font = `400 13px ${SANS}`
     ctx.textAlign = 'right'
     ctx.fillText(credit, CARD_W - MARGIN, 592)
@@ -203,7 +202,7 @@ function drawStandingsBody(ctx: Ctx, spec: StandingsCardSpec) {
     roundedRect(ctx, x + 44, y + 14, 4, 30, 2)
     ctx.fill()
 
-    ctx.fillStyle = FAINT
+    ctx.fillStyle = DIM
     ctx.font = `400 13px ${MONO}`
     ctx.textAlign = 'right'
     ctx.fillText('pts', x + colW, baseline)
@@ -269,8 +268,8 @@ function drawPodiumBody(ctx: Ctx, spec: PodiumCardSpec) {
     ctx.fillText(row.team, x + 40, y + 168)
 
     if (row.detail) {
-      ctx.fillStyle = FAINT
-      fitFont(ctx, row.detail, `400 {s}px ${MONO}`, 14, 11, maxW)
+      ctx.fillStyle = WHITE
+      fitFont(ctx, row.detail, `600 {s}px ${MONO}`, 19, 14, maxW)
       ctx.fillText(row.detail, x + 40, y + h - 30)
     }
   })
@@ -306,7 +305,7 @@ function drawPredictionBody(ctx: Ctx, spec: PredictionCardSpec) {
   const badge = {
     exact: { text: 'EXACT', color: GREEN },
     partial: { text: 'ON PODIUM', color: GOLD },
-    miss: { text: 'MISS', color: FAINT },
+    miss: { text: 'MISS', color: DIM },
   }
 
   for (const row of spec.rows.slice(0, 4)) {
@@ -316,7 +315,7 @@ function drawPredictionBody(ctx: Ctx, spec: PredictionCardSpec) {
     ctx.lineWidth = 1
     ctx.beginPath(); ctx.moveTo(x, y + rowH - 0.5); ctx.lineTo(x + colW, y + rowH - 0.5); ctx.stroke()
 
-    ctx.fillStyle = FAINT
+    ctx.fillStyle = DIM
     ctx.font = `600 13px ${MONO}`
     tracked(ctx, row.label, x, baseline, 2)
 
@@ -371,7 +370,7 @@ function drawStoryFooter(ctx: Ctx, credit?: string) {
   tracked(ctx, 'F1RACESIGNATURE.SITE', cx, 1726, 4, 'center')
 
   if (credit) {
-    ctx.fillStyle = FAINT
+    ctx.fillStyle = DIM
     ctx.font = `400 18px ${SANS}`
     ctx.textAlign = 'center'
     ctx.fillText(credit, cx, 1766)
@@ -404,7 +403,7 @@ function drawStoryStandingsBody(ctx: Ctx, spec: StandingsCardSpec) {
     roundedRect(ctx, x + 66, y + 24, 5, 46, 2.5)
     ctx.fill()
 
-    ctx.fillStyle = FAINT
+    ctx.fillStyle = DIM
     ctx.font = `400 19px ${MONO}`
     ctx.textAlign = 'right'
     ctx.fillText('pts', x + colW, baseline)
@@ -458,8 +457,8 @@ function drawStoryPodiumBody(ctx: Ctx, spec: PodiumCardSpec) {
     ctx.fillText(row.team, tx, y + (i === 0 ? 204 : 182))
 
     if (row.detail) {
-      ctx.fillStyle = FAINT
-      fitFont(ctx, row.detail, `400 {s}px ${MONO}`, 20, 14, maxW)
+      ctx.fillStyle = WHITE
+      fitFont(ctx, row.detail, `600 {s}px ${MONO}`, 27, 18, maxW)
       ctx.fillText(row.detail, tx, y + h - 42)
     }
 
@@ -499,7 +498,7 @@ function drawStoryPredictionBody(ctx: Ctx, spec: PredictionCardSpec) {
   const badge = {
     exact: { text: 'EXACT', color: GREEN },
     partial: { text: 'ON PODIUM', color: GOLD },
-    miss: { text: 'MISS', color: FAINT },
+    miss: { text: 'MISS', color: DIM },
   }
 
   for (const row of spec.rows.slice(0, 4)) {
@@ -509,7 +508,7 @@ function drawStoryPredictionBody(ctx: Ctx, spec: PredictionCardSpec) {
     ctx.lineWidth = 1
     ctx.beginPath(); ctx.moveTo(x, y + rowH - 0.5); ctx.lineTo(x + colW, y + rowH - 0.5); ctx.stroke()
 
-    ctx.fillStyle = FAINT
+    ctx.fillStyle = DIM
     ctx.font = `600 20px ${MONO}`
     tracked(ctx, row.label, x, baseline, 3)
 

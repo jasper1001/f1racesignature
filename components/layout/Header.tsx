@@ -40,7 +40,7 @@ export function Header() {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-40 bg-[#030303]/90 backdrop-blur-md border-b border-[#111111]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+        <div className="px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5 group" onClick={() => setMenuOpen(false)}>
             <SteeringWheelIcon className="w-7 h-7 text-[#d4a017] group-hover:rotate-12 transition-transform duration-300" />
             <span className="text-white font-semibold tracking-tight" style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}>
