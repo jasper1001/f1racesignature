@@ -15,6 +15,9 @@ import {
 import type { DriverStanding, ConstructorStanding, RacePodium } from '@/lib/f1api'
 import { findStudioLapsForWinners } from '@/lib/serverData'
 import { DriverStandingsTable } from '@/components/results/DriverStandingsTable'
+import { ShareCardButton } from '@/components/ShareCardButton'
+import type { PodiumCardSpec, StandingsCardSpec } from '@/lib/resultCards'
+import { SITE_URL } from '@/lib/site'
 
 export const revalidate = 3600
 
@@ -78,6 +81,43 @@ export default async function ResultsPage() {
       .map((p) => ({ round: p.round, familyName: p.podium[0].Driver.familyName, circuitName: p.circuitName })),
     Number(season),
   )
+
+  // Shareable card specs (plain data; rendered to PNG client-side on demand).
+  const leader = drivers[0]
+  const standingsCard: StandingsCardSpec | null = drivers.length
+    ? {
+        type: 'standings',
+        eyebrow: round !== '0' ? `Formula 1 ${season} · After Round ${round}` : `Formula 1 ${season}`,
+        title: 'Driver Standings',
+        sub: leader
+          ? `${leader.Driver.givenName} ${leader.Driver.familyName} leads on ${leader.points} points`
+          : undefined,
+        credit: 'Real F1 data · Jolpica API',
+        rows: drivers.slice(0, 10).map((d) => ({
+          pos: d.position,
+          name: `${d.Driver.givenName} ${d.Driver.familyName}`,
+          color: teamColor(d.Constructors[0]?.constructorId ?? ''),
+          points: d.points,
+        })),
+      }
+    : null
+
+  const lastRaceCard: PodiumCardSpec | null =
+    lastRace?.Results && lastRace.Results.length >= 3
+      ? {
+          type: 'podium',
+          eyebrow: `Formula 1 ${season} · Round ${lastRace.round}`,
+          title: lastRace.raceName,
+          sub: `${lastRace.Circuit.circuitName} · ${formatRaceDate(lastRace.date)}`,
+          credit: 'Real F1 data · Jolpica API',
+          rows: lastRace.Results.slice(0, 3).map((r) => ({
+            name: `${r.Driver.givenName} ${r.Driver.familyName}`,
+            team: r.Constructor.name,
+            color: teamColor(r.Constructor.constructorId),
+            detail: `${r.Time?.time ?? r.status} · +${r.points} pts`,
+          })),
+        }
+      : null
 
   const standingsJsonLd = drivers.length
     ? {
@@ -145,11 +185,20 @@ export default async function ResultsPage() {
               {/* Latest race podium */}
               {lastRace?.Results && lastRace.Results.length >= 3 && (
                 <section>
-                  <SectionHeading
-                    eyebrow="Most Recent Race"
-                    title={lastRace.raceName}
-                    sub={`${lastRace.Circuit.circuitName} · ${formatRaceDate(lastRace.date)}`}
-                  />
+                  <div className="flex items-start justify-between gap-4">
+                    <SectionHeading
+                      eyebrow="Most Recent Race"
+                      title={lastRace.raceName}
+                      sub={`${lastRace.Circuit.circuitName} · ${formatRaceDate(lastRace.date)}`}
+                    />
+                    {lastRaceCard && (
+                      <ShareCardButton
+                        spec={lastRaceCard}
+                        filename={`f1racesignature-${season}-round-${lastRace.round}-podium.png`}
+                        shareText={`${lastRace.raceName} podium: ${lastRace.Results.slice(0, 3).map((r, i) => `${i + 1}. ${r.Driver.familyName}`).join('  ')} 🏁 ${SITE_URL}/results`}
+                      />
+                    )}
+                  </div>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6">
                     {lastRace.Results.slice(0, 3).map((r, i) => {
                       const color = teamColor(r.Constructor.constructorId)
@@ -181,7 +230,20 @@ export default async function ResultsPage() {
 
               {/* Driver standings */}
               <section>
-                <SectionHeading eyebrow="Championship" title="Driver Standings" />
+                <div className="flex items-start justify-between gap-4">
+                  <SectionHeading eyebrow="Championship" title="Driver Standings" />
+                  {standingsCard && (
+                    <ShareCardButton
+                      spec={standingsCard}
+                      filename={`f1racesignature-${season}-driver-standings.png`}
+                      shareText={
+                        leader
+                          ? `F1 ${season} standings after round ${round}: ${leader.Driver.givenName} ${leader.Driver.familyName} leads on ${leader.points} pts 🏁 ${SITE_URL}/results`
+                          : `F1 ${season} driver standings 🏁 ${SITE_URL}/results`
+                      }
+                    />
+                  )}
+                </div>
                 <p className="text-white/65 text-sm mt-1">Tap a driver to see their points from every race.</p>
                 <div className="mt-6">
                   <DriverStandingsTable drivers={drivers} breakdowns={breakdowns} />
@@ -323,6 +385,19 @@ function RaceResultsList({
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
       {podiums.map((race) => {
         const studio = studioLinks?.[race.round]
+        const year = race.date.slice(0, 4)
+        const raceCard: PodiumCardSpec = {
+          type: 'podium',
+          eyebrow: `Formula 1 ${year} · Round ${race.round}`,
+          title: race.raceName,
+          sub: `${race.circuitName} · ${formatRaceDate(race.date)}`,
+          credit: 'Real F1 data · Jolpica API',
+          rows: race.podium.map((r) => ({
+            name: `${r.Driver.givenName} ${r.Driver.familyName}`,
+            team: r.Constructor.name,
+            color: teamColor(r.Constructor.constructorId),
+          })),
+        }
         return (
           <div key={race.round} className="rounded-xl border border-[#161616] bg-[#0a0a0a] overflow-hidden">
             <div className="flex items-center justify-between px-4 py-3 border-b border-[#141414]">
@@ -332,9 +407,17 @@ function RaceResultsList({
                 </span>
                 <span className="text-white/65 text-xs ml-2 font-mono">{race.country}</span>
               </div>
-              <span className="text-white/65 text-[10px] font-mono uppercase tracking-wider shrink-0">
-                Rnd {race.round} · {formatRaceDate(race.date)}
-              </span>
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="text-white/65 text-[10px] font-mono uppercase tracking-wider">
+                  Rnd {race.round} · {formatRaceDate(race.date)}
+                </span>
+                <ShareCardButton
+                  compact
+                  spec={raceCard}
+                  filename={`f1racesignature-${year}-round-${race.round}-podium.png`}
+                  shareText={`${year} ${race.raceName} podium: ${race.podium.map((r, i) => `${i + 1}. ${r.Driver.familyName}`).join('  ')} 🏁 ${SITE_URL}/results`}
+                />
+              </div>
             </div>
             <div className="divide-y divide-[#0d0d0d]">
               {race.podium.map((r, i) => {
