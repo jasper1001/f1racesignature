@@ -27,8 +27,6 @@ interface StudioStore extends StudioState {
   setCompareDriver: (driverId: string) => void
   toggleCompareRace: (raceId: string) => void
   clearCompare: () => void
-  openUpgradeModal: (reason: string) => void
-  closeUpgradeModal: () => void
 }
 
 export const useStudioStore = create<StudioStore>((set) => ({
@@ -41,8 +39,6 @@ export const useStudioStore = create<StudioStore>((set) => ({
   vizMode: 'racing_line_real',
   theme: 'carbon_fiber',
   exportFormat: 'poster_portrait',
-  showUpgradeModal: false,
-  upgradeModalReason: null,
 
   compareEnabled: false,
   compareDriverId: null,
@@ -91,10 +87,4 @@ export const useStudioStore = create<StudioStore>((set) => ({
 
   clearCompare: () =>
     set({ compareEnabled: false, compareRaceIds: [], compareDriverId: null }),
-
-  openUpgradeModal: (reason) =>
-    set({ showUpgradeModal: true, upgradeModalReason: reason }),
-
-  closeUpgradeModal: () =>
-    set({ showUpgradeModal: false, upgradeModalReason: null }),
 }))

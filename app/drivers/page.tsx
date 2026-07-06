@@ -86,7 +86,7 @@ export default function DriversIndexPage() {
 
         <div className="max-w-5xl mx-auto px-6 pt-10 pb-12 text-center">
           <p className="text-[#d4a017] text-xs font-medium uppercase tracking-widest mb-4">The Drivers</p>
-          <h1 className="text-4xl md:text-5xl text-white mb-4" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+          <h1 className="text-4xl md:text-5xl text-white mb-4 font-display">
             Legends of Formula 1
           </h1>
           <p className="text-white/65 max-w-xl mx-auto">

@@ -41,9 +41,6 @@ export const Analytics = {
   exportCompleted: (format: string, driverId: string, raceId: string) =>
     trackEvent('export_completed', { format, driver_id: driverId, race_id: raceId }),
 
-  upgradeModalOpened: (reason: string) =>
-    trackEvent('upgrade_modal_opened', { reason }),
-
   compareToggled: (enabled: boolean) =>
     trackEvent('compare_toggled', { enabled }),
 

@@ -199,8 +199,7 @@ export function TeamRadioGame() {
                 &#x2758; radio transcript &#x2758;
               </p>
               <blockquote
-                className="text-[#1a1712] text-xl md:text-2xl leading-relaxed"
-                style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+                className="text-[#1a1712] text-xl md:text-2xl leading-relaxed font-display"
               >
                 &ldquo;{quote.quote}&rdquo;
               </blockquote>
@@ -250,8 +249,7 @@ export function TeamRadioGame() {
                   key={option}
                   onClick={() => handleAnswer(option)}
                   disabled={answered}
-                  className={`flex items-center gap-2.5 px-5 py-4 rounded-xl border text-left font-medium transition-all duration-200 disabled:cursor-default ${cls}`}
-                  style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+                  className={`flex items-center gap-2.5 px-5 py-4 rounded-xl border text-left font-medium transition-all duration-200 disabled:cursor-default font-display ${cls}`}
                 >
                   {answered && isCorrectOption && (
                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="shrink-0">
@@ -356,8 +354,7 @@ function ResultScreen({
           )}
 
           <h2
-            className="text-3xl md:text-4xl text-[#1a1712] mb-2"
-            style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+            className="text-3xl md:text-4xl text-[#1a1712] mb-2 font-display"
           >
             {result.title}
           </h2>

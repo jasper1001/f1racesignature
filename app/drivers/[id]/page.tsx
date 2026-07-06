@@ -132,7 +132,7 @@ export default async function DriverPage({ params }: { params: Promise<{ id: str
               {driver.shortName}
             </div>
             <div>
-              <h1 className="text-4xl md:text-5xl text-white" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+              <h1 className="text-4xl md:text-5xl text-white font-display">
                 {driver.name}
               </h1>
               <p className="text-white/65 mt-2">
@@ -164,7 +164,7 @@ export default async function DriverPage({ params }: { params: Promise<{ id: str
         {/* Team transfer timeline */}
         {teamStints.length > 0 && (
           <div className="max-w-5xl mx-auto px-6 py-8 border-t border-[#0f0f0f]">
-            <h2 className="text-2xl text-white mb-6" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+            <h2 className="text-2xl text-white mb-6 font-display">
               Career path
             </h2>
             <TeamTransferDiagram stints={teamStints} />
@@ -174,7 +174,7 @@ export default async function DriverPage({ params }: { params: Promise<{ id: str
         {/* Career biography */}
         {career.length > 0 && (
           <div className="max-w-5xl mx-auto px-6 py-8 border-t border-[#0f0f0f]">
-            <h2 className="text-2xl text-white mb-6" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+            <h2 className="text-2xl text-white mb-6 font-display">
               Career
             </h2>
             <div className="max-w-3xl space-y-4">
@@ -187,7 +187,7 @@ export default async function DriverPage({ params }: { params: Promise<{ id: str
 
         {/* Races */}
         <div className="max-w-5xl mx-auto px-6 py-8 border-t border-[#0f0f0f]">
-          <h2 className="text-2xl text-white mb-6" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+          <h2 className="text-2xl text-white mb-6 font-display">
             Legendary {driver.name.split(' ')[1] ?? driver.name} drives
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

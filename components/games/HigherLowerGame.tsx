@@ -238,8 +238,7 @@ export function HigherLowerGame() {
 
           <p className="text-[#1a1712] text-[10px] font-mono uppercase tracking-widest mb-3 opacity-50">Driver A</p>
           <p
-            className="text-[#1a1712] text-xl font-semibold leading-snug mb-4"
-            style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+            className="text-[#1a1712] text-xl font-semibold leading-snug mb-4 font-display"
           >
             {driverA.name}
           </p>
@@ -294,8 +293,7 @@ export function HigherLowerGame() {
 
           <p className="text-[#1a1712] text-[10px] font-mono uppercase tracking-widest mb-3 opacity-50">Driver B</p>
           <p
-            className="text-[#1a1712] text-xl font-semibold leading-snug mb-4"
-            style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+            className="text-[#1a1712] text-xl font-semibold leading-snug mb-4 font-display"
           >
             {driverB.name}
           </p>
@@ -370,7 +368,7 @@ export function HigherLowerGame() {
                 className="absolute top-1 left-3 font-serif text-5xl leading-none select-none pointer-events-none"
                 style={{ color: 'rgba(212,160,23,0.12)' }}
               >
-                "
+                &ldquo;
               </span>
               <p className="text-[#d4a017] text-[10px] font-mono uppercase tracking-widest mb-1.5 pl-2">Did you know?</p>
               <p className="text-[#1a1712] text-sm leading-relaxed pl-2">{winner.fact}</p>

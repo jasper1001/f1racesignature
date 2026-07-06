@@ -1,6 +1,5 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import type { Driver, Race, Telemetry } from '@/lib/types'
 import type { ComparisonLap } from './PosterPreview'
 import { teamAtYear } from '@/lib/driverTeams'
@@ -180,7 +179,7 @@ export function StatsPanel({ driver, race, telemetry, mobile = false, compares =
         {race && (
           <div className="rounded-lg border border-[#111111] p-3">
             <p className="text-[#aaaaaa] text-xs leading-relaxed italic">
-              "{race.description}"
+              &ldquo;{race.description}&rdquo;
             </p>
           </div>
         )}

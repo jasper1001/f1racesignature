@@ -64,8 +64,7 @@ function ProductCard({
           </span>
         </div>
         <h3
-          className="text-white text-base leading-snug"
-          style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+          className="text-white text-base leading-snug font-display"
         >
           {teamLabel(product.team)} Merch
         </h3>
@@ -104,8 +103,7 @@ export function AffiliateShelf({
               {subtitle}
             </p>
             <h2
-              className="text-2xl md:text-3xl text-white"
-              style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+              className="text-2xl md:text-3xl text-white font-display"
             >
               {title}
             </h2>

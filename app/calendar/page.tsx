@@ -126,7 +126,7 @@ export default async function CalendarPage() {
           <p className="relative text-[10px] font-mono uppercase tracking-widest mb-4 text-[#d4a017]">
             Formula 1 · {season} Season
           </p>
-          <h1 className="relative text-4xl md:text-5xl text-white mb-3" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+          <h1 className="relative text-4xl md:text-5xl text-white mb-3 font-display">
             F1 {season} Calendar
           </h1>
           <p className="relative text-white/65 text-sm max-w-2xl mx-auto">
@@ -180,7 +180,7 @@ export default async function CalendarPage() {
               {/* Add to Google Calendar — per race */}
               <section className="border-t border-[#0f0f0f] pt-10">
                 <p className="text-[#d4a017] text-xs font-medium uppercase tracking-widest mb-2">Add to Google Calendar</p>
-                <h2 className="text-2xl md:text-3xl text-white mb-1" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+                <h2 className="text-2xl md:text-3xl text-white mb-1 font-display">
                   One-click reminders
                 </h2>
                 <p className="text-white/65 text-sm mb-6">

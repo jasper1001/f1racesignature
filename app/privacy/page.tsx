@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 
@@ -32,8 +33,7 @@ export default function PrivacyPage() {
         <div className="border-b border-[#0f0f0f] py-16 px-6 text-center">
           <p className="text-white/65 text-xs font-mono uppercase tracking-widest mb-4">Legal</p>
           <h1
-            className="text-4xl md:text-5xl text-white mb-4"
-            style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+            className="text-4xl md:text-5xl text-white mb-4 font-display"
           >
             Privacy Policy
           </h1>
@@ -191,9 +191,9 @@ export default function PrivacyPage() {
           <Section title="5. Cookies">
             <p>
               We use cookies and browser local storage as described in our{' '}
-              <a href="/cookies" className="text-[#d4a017] hover:underline">
+              <Link href="/cookies" className="text-[#d4a017] hover:underline">
                 Cookie Policy
-              </a>
+              </Link>
               . In summary: we use Google Analytics cookies for usage measurement and local storage
               for saving your poster configurations. We do not use advertising or tracking cookies
               from any ad network at this time.

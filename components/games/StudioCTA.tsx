@@ -109,8 +109,7 @@ export function StudioCTA() {
                 From the makers
               </p>
               <p
-                className="text-[#1a1712] text-lg leading-snug mb-3"
-                style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+                className="text-[#1a1712] text-lg leading-snug mb-3 font-display"
               >
                 You know your F1. Now see your favourite driver&apos;s data as art.
               </p>

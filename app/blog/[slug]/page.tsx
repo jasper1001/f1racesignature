@@ -206,8 +206,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             )}
           </div>
           <h1
-            className="text-3xl md:text-5xl text-white leading-tight mb-6"
-            style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+            className="text-3xl md:text-5xl text-white leading-tight mb-6 font-display"
           >
             {article.title}
           </h1>
@@ -220,8 +219,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             <section key={si} className="mb-10">
               {section.heading && (
                 <h2
-                  className="text-xl md:text-2xl text-white mb-4"
-                  style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+                  className="text-xl md:text-2xl text-white mb-4 font-display"
                 >
                   {section.heading}
                 </h2>
@@ -266,8 +264,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 >
                   <p className="text-white/65 text-[10px] font-mono mb-2">{a.readMinutes} min read</p>
                   <h4
-                    className="text-white text-sm leading-snug group-hover:text-[#d4a017] transition-colors"
-                    style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+                    className="text-white text-sm leading-snug group-hover:text-[#d4a017] transition-colors font-display"
                   >
                     {a.title}
                   </h4>

@@ -1,7 +1,8 @@
 import type { Race } from '@/lib/f1api'
 import { formatRaceDate } from '@/lib/f1api'
 
-export const SITE_URL = 'https://f1racesignature.site'
+export { SITE_URL } from '@/lib/site'
+import { SITE_URL } from '@/lib/site'
 
 // Race weekend "end" — race time + ~2h, or the race date for all-day entries.
 function eventEnd(race: Race): string {

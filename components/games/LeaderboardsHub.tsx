@@ -20,7 +20,7 @@ export function LeaderboardsHub() {
     <section className="max-w-3xl mx-auto px-4 pb-16">
       <div className="text-center mb-6">
         <p className="text-[10px] font-mono uppercase tracking-widest text-[#1a1712]/55 mb-2">Compete</p>
-        <h2 className="text-3xl text-[#1a1712]" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+        <h2 className="text-3xl text-[#1a1712] font-display">
           🏆 Leaderboards
         </h2>
         <p className="text-[#1a1712]/65 text-sm mt-1">Top scores from players around the world.</p>

@@ -32,8 +32,7 @@ export default function CookiesPage() {
         <div className="border-b border-[#0f0f0f] py-16 px-6 text-center">
           <p className="text-white/65 text-xs font-mono uppercase tracking-widest mb-4">Legal</p>
           <h1
-            className="text-4xl md:text-5xl text-white mb-4"
-            style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+            className="text-4xl md:text-5xl text-white mb-4 font-display"
           >
             Cookie Policy
           </h1>

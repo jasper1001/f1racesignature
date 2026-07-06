@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useId, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 interface ModalProps {
@@ -10,14 +10,49 @@ interface ModalProps {
   title?: string
 }
 
+const FOCUSABLE =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+
 export function Modal({ isOpen, onClose, children, title }: ModalProps) {
+  const panelRef = useRef<HTMLDivElement>(null)
+  const titleId = useId()
+
+  // Escape closes; Tab is trapped inside the dialog.
   useEffect(() => {
+    if (!isOpen) return
     const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
+      if (e.key === 'Escape') {
+        onClose()
+        return
+      }
+      if (e.key !== 'Tab' || !panelRef.current) return
+      const focusable = panelRef.current.querySelectorAll<HTMLElement>(FOCUSABLE)
+      if (focusable.length === 0) {
+        e.preventDefault()
+        return
+      }
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      const active = document.activeElement
+      if (e.shiftKey && (active === first || active === panelRef.current)) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault()
+        first.focus()
+      }
     }
-    if (isOpen) document.addEventListener('keydown', handleKey)
+    document.addEventListener('keydown', handleKey)
     return () => document.removeEventListener('keydown', handleKey)
   }, [isOpen, onClose])
+
+  // Move focus into the dialog on open, restore it to the opener on close.
+  useEffect(() => {
+    if (!isOpen) return
+    const previouslyFocused = document.activeElement as HTMLElement | null
+    panelRef.current?.focus()
+    return () => previouslyFocused?.focus()
+  }, [isOpen])
 
   useEffect(() => {
     if (isOpen) document.body.style.overflow = 'hidden'
@@ -38,16 +73,21 @@ export function Modal({ isOpen, onClose, children, title }: ModalProps) {
         >
           <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
           <motion.div
+            ref={panelRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={title ? titleId : undefined}
+            tabIndex={-1}
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="relative z-10 w-full max-w-md bg-[#0f0f0f] border border-[#222222] rounded-2xl overflow-hidden"
+            className="relative z-10 w-full max-w-md bg-[#0f0f0f] border border-[#222222] rounded-2xl overflow-hidden outline-none"
             onClick={(e) => e.stopPropagation()}
           >
             {title && (
               <div className="flex items-center justify-between px-6 py-4 border-b border-[#1a1a1a]">
-                <h2 className="text-base font-semibold text-white">{title}</h2>
+                <h2 id={titleId} className="text-base font-semibold text-white">{title}</h2>
                 <button
                   onClick={onClose}
                   className="text-[#aaaaaa] hover:text-white transition-colors"

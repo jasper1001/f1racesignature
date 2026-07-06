@@ -13,7 +13,6 @@ import { SurpriseButton } from '@/components/studio/SurpriseButton'
 import { ShareButton } from '@/components/studio/ShareButton'
 import { PlayButton } from '@/components/studio/PlayButton'
 import { SaveButton } from '@/components/studio/SaveButton'
-import { UpgradeModal } from '@/components/studio/UpgradeModal'
 import { OnboardingModal } from '@/components/studio/OnboardingModal'
 import { hasSeen, markSeen } from '@/lib/onboarding'
 import Link from 'next/link'
@@ -397,7 +396,7 @@ export default function StudioPage() {
                 <EmptyState />
               ) : (
                 <div className="poster-wrapper" style={{ zoom: zoom }}>
-                  <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compares={compares} playbackProgress={livePlayback} trackCenterline={trackCenterline} />
+                  <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} compares={compares} playbackProgress={livePlayback} trackCenterline={trackCenterline} />
                 </div>
               )}
             </div>
@@ -463,7 +462,7 @@ export default function StudioPage() {
                         className="poster-wrapper"
                         style={{ transform: `scale(${mobileScale})`, transformOrigin: 'top left' }}
                       >
-                        <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compares={compares} playbackProgress={livePlayback} trackCenterline={trackCenterline} />
+                        <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} compares={compares} playbackProgress={livePlayback} trackCenterline={trackCenterline} />
                       </div>
                     </div>
                   )}
@@ -523,13 +522,12 @@ export default function StudioPage() {
               </button>
             </div>
             <div className="poster-wrapper" style={{ transform: `scale(${fsScale})`, transformOrigin: 'center' }}>
-              <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} isFreeTier compares={compares} playbackProgress={livePlayback} trackCenterline={trackCenterline} />
+              <PosterPreview driver={selectedDriver} race={selectedRace} telemetry={telemetry} circuit={selectedCircuit} theme={activeTheme} vizMode={vizMode} compares={compares} playbackProgress={livePlayback} trackCenterline={trackCenterline} />
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <UpgradeModal />
       <OnboardingModal isOpen={showOnboarding} onClose={closeOnboarding} />
     </>
   )

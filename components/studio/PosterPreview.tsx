@@ -139,7 +139,6 @@ interface PosterPreviewProps {
   circuit: Circuit | null
   theme: ThemeConfig
   vizMode: VizMode
-  isFreeTier?: boolean
   // Head-to-head comparison — up to two extra laps on the same circuit.
   compares?: ComparisonLap[]
   // Lap playback: 0..1 progress, or null when not playing
@@ -384,7 +383,6 @@ export function PosterPreview({
   circuit,
   theme,
   vizMode,
-  isFreeTier = true,
   compares = [],
   playbackProgress = null,
   trackCenterline = null,
@@ -1263,8 +1261,8 @@ export function PosterPreview({
         {/* Bottom accent line */}
         <line x1="0" y1={POSTER_H - 1} x2={POSTER_W} y2={POSTER_H - 1} stroke={theme.primaryLine} strokeWidth="2" opacity="0.4" />
 
-        {/* Free tier watermark */}
-        {isFreeTier && <Watermark theme={theme} />}
+        {/* Site watermark */}
+        <Watermark theme={theme} />
       </svg>
     </motion.div>
   )

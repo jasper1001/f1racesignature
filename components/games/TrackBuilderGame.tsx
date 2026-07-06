@@ -382,7 +382,7 @@ export function TrackBuilderGame() {
               ★ New Personal Best
             </span>
           )}
-          <p className="text-3xl md:text-4xl font-bold mb-1" style={{ color: ACCENT, fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+          <p className="text-3xl md:text-4xl font-bold mb-1 font-display" style={{ color: ACCENT }}>
             Track Rebuilt!
           </p>
           <p className="text-[#1a1712]/70 text-sm">{puzzle.circuit.name} · {LABEL[difficulty]}</p>

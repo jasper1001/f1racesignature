@@ -5,6 +5,18 @@ import Link from 'next/link'
 
 const CONSENT_KEY = 'f1rs_cookie_consent'
 
+/** Fired (on window) whenever the visitor answers the cookie banner. */
+export const CONSENT_SET_EVENT = 'f1rs-consent-set'
+
+/** True once the visitor has answered the cookie banner (either choice). */
+export function hasAnsweredConsent(): boolean {
+  try {
+    return Boolean(localStorage.getItem(CONSENT_KEY))
+  } catch {
+    return false
+  }
+}
+
 declare global {
   interface Window {
     gtag?: (...args: unknown[]) => void
@@ -27,11 +39,13 @@ export function CookieBanner() {
     localStorage.setItem(CONSENT_KEY, 'all')
     window.gtag?.('consent', 'update', { analytics_storage: 'granted' })
     setVisible(false)
+    window.dispatchEvent(new Event(CONSENT_SET_EVENT))
   }
 
   const essentialOnly = () => {
     localStorage.setItem(CONSENT_KEY, 'essential')
     setVisible(false)
+    window.dispatchEvent(new Event(CONSENT_SET_EVENT))
   }
 
   if (!visible) return null

@@ -335,7 +335,7 @@ export function GuessTheDriverGame() {
 
             <div>
               <p className="text-[#38b000] text-xs font-mono uppercase tracking-widest mb-2">Correct!</p>
-              <p className="text-[#1a1712] text-3xl font-bold" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+              <p className="text-[#1a1712] text-3xl font-bold font-display">
                 {driver.name}
               </p>
             </div>
@@ -385,7 +385,7 @@ export function GuessTheDriverGame() {
           >
             <div>
               <p className="text-[#1a1712]/65 text-xs font-mono uppercase tracking-widest mb-2">The answer was</p>
-              <p className="text-[#1a1712] text-3xl font-bold" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+              <p className="text-[#1a1712] text-3xl font-bold font-display">
                 {driver.name}
               </p>
             </div>

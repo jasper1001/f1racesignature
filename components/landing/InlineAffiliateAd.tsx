@@ -85,8 +85,7 @@ export function InlineAffiliateAd({
             {label}
           </span>
           <span
-            className="text-[#1a1712] text-sm leading-snug truncate"
-            style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+            className="text-[#1a1712] text-sm leading-snug truncate font-display"
           >
             {label} Merch
           </span>

@@ -7,9 +7,9 @@ import { CookieBanner } from '@/components/layout/CookieBanner'
 import { ExploreRail } from '@/components/layout/ExploreRail'
 import { FloatingAffiliateAd } from '@/components/landing/FloatingAffiliateAd'
 import { SiteSearch } from '@/components/layout/SiteSearch'
+import { SITE_URL, CONTACT_EMAIL } from '@/lib/site'
 
 const GA_MEASUREMENT_ID = 'G-HVKDBEVYBD'
-const SITE_URL = 'https://f1racesignature.site'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -122,40 +122,43 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <head>
         {/* Structured data — WebSite + Organization */}
-        <Script id="ld-json" type="application/ld+json" strategy="beforeInteractive">
-          {JSON.stringify({
-            '@context': 'https://schema.org',
-            '@graph': [
-              {
-                '@type': 'WebSite',
-                '@id': `${SITE_URL}/#website`,
-                url: SITE_URL,
-                name: 'F1RaceSignature',
-                description: DESCRIPTION,
-                publisher: { '@id': `${SITE_URL}/#org` },
-              },
-              {
-                '@type': 'Organization',
-                '@id': `${SITE_URL}/#org`,
-                name: 'F1RaceSignature',
-                url: SITE_URL,
-                slogan: 'Where speed becomes art',
-                email: 'wayfarerwondersblog@gmail.com',
-                logo: {
-                  '@type': 'ImageObject',
-                  url: `${SITE_URL}/opengraph-image`,
-                  width: 1200,
-                  height: 630,
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@graph': [
+                {
+                  '@type': 'WebSite',
+                  '@id': `${SITE_URL}/#website`,
+                  url: SITE_URL,
+                  name: 'F1RaceSignature',
+                  description: DESCRIPTION,
+                  publisher: { '@id': `${SITE_URL}/#org` },
                 },
-                contactPoint: {
-                  '@type': 'ContactPoint',
-                  email: 'wayfarerwondersblog@gmail.com',
-                  contactType: 'customer support',
+                {
+                  '@type': 'Organization',
+                  '@id': `${SITE_URL}/#org`,
+                  name: 'F1RaceSignature',
+                  url: SITE_URL,
+                  slogan: 'Where speed becomes art',
+                  email: CONTACT_EMAIL,
+                  logo: {
+                    '@type': 'ImageObject',
+                    url: `${SITE_URL}/opengraph-image`,
+                    width: 1200,
+                    height: 630,
+                  },
+                  contactPoint: {
+                    '@type': 'ContactPoint',
+                    email: CONTACT_EMAIL,
+                    contactType: 'customer support',
+                  },
                 },
-              },
-            ],
-          })}
-        </Script>
+              ],
+            }),
+          }}
+        />
 
         {/* Google Consent Mode v2 — deny by default until user accepts */}
         <Script id="google-consent-init" strategy="beforeInteractive">

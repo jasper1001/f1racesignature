@@ -38,7 +38,7 @@ export function GamesOfTheDay() {
             <p className="text-[#d4a017] text-xs font-mono uppercase tracking-widest mb-2">
               Games of the Day
             </p>
-            <h2 className="text-2xl md:text-3xl text-white" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+            <h2 className="text-2xl md:text-3xl text-white font-display">
               Today&apos;s Picks
             </h2>
             <p className="text-white/65 text-sm mt-2">
@@ -78,7 +78,7 @@ export function GamesOfTheDay() {
                     {g.tag}
                   </span>
                 </div>
-                <h3 className="text-xl text-white mb-1.5" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+                <h3 className="text-xl text-white mb-1.5 font-display">
                   {g.title}
                 </h3>
                 <p className="text-white/65 text-sm leading-snug">{g.blurb}</p>

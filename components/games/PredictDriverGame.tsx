@@ -548,8 +548,7 @@ function ResultScreen({
             {won ? (dailyAlreadyPlayed ? 'Already completed today' : 'Correct!') : 'The answer was'}
           </p>
           <h2
-            className="text-2xl md:text-3xl text-[#1a1712]"
-            style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+            className="text-2xl md:text-3xl text-[#1a1712] font-display"
           >
             {mystery.name}
           </h2>

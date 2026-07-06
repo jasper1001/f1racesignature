@@ -243,7 +243,7 @@ export function projectLapToRibbon(
     const x = a.x + (b.x - a.x) * u
     const y = a.y + (b.y - a.y) * u
     // Normal from the segment tangent (left normal).
-    let tx = b.x - a.x, ty = b.y - a.y
+    const tx = b.x - a.x, ty = b.y - a.y
     const tl = Math.hypot(tx, ty) || 1
     return { x, y, nx: -ty / tl, ny: tx / tl }
   }

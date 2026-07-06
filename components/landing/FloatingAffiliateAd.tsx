@@ -4,25 +4,26 @@ import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { pickRandomProduct, TEAM_META, teamLabel, type AffiliateProduct } from '@/lib/affiliateProducts'
 import { Analytics } from '@/lib/analytics'
+import { CONSENT_SET_EVENT, hasAnsweredConsent } from '@/components/layout/CookieBanner'
 
-// Floating ad — a single Amazon-affiliate product, styled like a Google display
-// ad. Mounted once in the root layout so it rides along on every page except the
-// Studio (the poster editor needs the full canvas).
+// Floating ad — a single Amazon-affiliate product, honestly branded in the
+// site's own style. Mounted once in the root layout so it rides along on every
+// page except the Studio (the poster editor needs the full canvas).
 //
 //  - Desktop (xl+): vertical side rail pinned to the LEFT edge (the right edge
 //    already has the EXPLORE tab). Shows on all non-Studio pages.
 //  - Mobile (< xl): bottom banner — but only on NON-game pages, since game pages
 //    already carry the in-content InlineAffiliateAd slots on mobile.
 //
-// Picks a product after mount and re-picks on every route change (client-only →
-// no hydration mismatch). It also auto-rotates to a fresh random product every
-// ROTATE_MS so the banner keeps cycling the catalog without a navigation.
-// Dismissible for the session.
+// Waits until the visitor has answered the cookie banner (so the two never
+// stack at the bottom of a first-visit mobile screen), picks a product after
+// mount, re-picks on route change, and rotates on a slow timer. Dismissible
+// for the session.
 
 const DISMISS_KEY = 'f1rs_floating_ad_dismissed_v2'
 
 // How often the banner swaps to another random product while it stays on screen.
-const ROTATE_MS = 10_000
+const ROTATE_MS = 45_000
 
 // Routes the floating ad must never appear on.
 const HIDDEN_PREFIXES = ['/studio']
@@ -39,6 +40,9 @@ export function FloatingAffiliateAd() {
   // Render nothing on the server / first paint, then reveal after mount.
   const [product, setProduct] = useState<AffiliateProduct | null>(null)
   const [dismissed, setDismissed] = useState(false)
+  // Hold the ad back until the cookie banner has been answered, so it never
+  // fights the banner for the bottom of the screen.
+  const [consentAnswered, setConsentAnswered] = useState(false)
 
   // Honour a prior dismissal for the session (sessionStorage is client-only, so
   // read it after mount). If storage is unavailable, hide to be safe.
@@ -48,13 +52,17 @@ export function FloatingAffiliateAd() {
     } catch {
       setDismissed(true)
     }
+    setConsentAnswered(hasAnsweredConsent())
+    const onConsent = () => setConsentAnswered(true)
+    window.addEventListener(CONSENT_SET_EVENT, onConsent)
+    return () => window.removeEventListener(CONSENT_SET_EVENT, onConsent)
   }, [])
 
   // Pick a random product on mount / route change, then keep rotating to another
   // random one every ROTATE_MS. Each pick excludes the current product so it
   // never shows the same one twice in a row.
   useEffect(() => {
-    if (hidden || dismissed) {
+    if (hidden || dismissed || !consentAnswered) {
       setProduct(null)
       return
     }
@@ -71,7 +79,7 @@ export function FloatingAffiliateAd() {
     rotate()
     const timer = window.setInterval(rotate, ROTATE_MS)
     return () => window.clearInterval(timer)
-  }, [pathname, hidden, dismissed])
+  }, [pathname, hidden, dismissed, consentAnswered])
 
   function dismiss() {
     setDismissed(true)
@@ -87,7 +95,6 @@ export function FloatingAffiliateAd() {
 
   const accent = TEAM_META[product.team]?.color ?? '#d4a017'
   const label = teamLabel(product.team)
-  const sans = 'arial, "Helvetica Neue", Helvetica, sans-serif'
 
   const linkProps = {
     href: product.affiliateUrl,
@@ -103,21 +110,16 @@ export function FloatingAffiliateAd() {
       }),
   } as const
 
-  // AdChoices info glyph + dismiss — shared by both layouts.
+  // Honest ad chrome: a plain "Ad" tag + dismiss. No borrowed ad-network UI.
   const chrome = (
     <>
-      <span className="flex items-center gap-0.5 text-[#5f6368] text-[10px] leading-none select-none">
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 5a1.3 1.3 0 110 2.6A1.3 1.3 0 0112 7zm1.2 10h-2.4v-5.6h2.4V17z" />
-        </svg>
-        <svg width="7" height="7" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true">
-          <path d="M1 3l4 4 4-4z" />
-        </svg>
+      <span className="text-white/45 text-[9px] font-mono uppercase tracking-wider leading-none select-none">
+        Ad
       </span>
       <button
         onClick={dismiss}
         aria-label="Close ad"
-        className="w-4 h-4 flex items-center justify-center rounded-sm text-[#5f6368] hover:bg-[#e8eaed] transition-colors"
+        className="w-4 h-4 flex items-center justify-center rounded-sm text-white/45 hover:text-white hover:bg-white/10 transition-colors"
       >
         <svg width="9" height="9" viewBox="0 0 14 14" fill="none">
           <path d="M2 2l10 10M12 2L2 12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
@@ -129,12 +131,9 @@ export function FloatingAffiliateAd() {
   return (
     <>
       {/* ── Desktop: vertical side rail (left edge) ─────────────────────────── */}
-      <div
-        className="hidden xl:block fixed left-4 top-1/2 -translate-y-1/2 z-40 w-[190px]"
-        style={{ fontFamily: sans }}
-      >
-        <div className="relative rounded-lg border border-[#dadce0] bg-white overflow-hidden shadow-[0_1px_6px_rgba(32,33,36,0.28)]">
-          <div className="flex items-center justify-end gap-1.5 px-2 py-1 bg-[#f8f9fa] border-b border-[#ebedf0]">
+      <div className="hidden xl:block fixed left-4 top-1/2 -translate-y-1/2 z-40 w-[190px]">
+        <div className="relative rounded-xl border border-[#222222] bg-[#0a0a0a] overflow-hidden shadow-[0_2px_16px_rgba(0,0,0,0.6)]">
+          <div className="flex items-center justify-between gap-1.5 px-2.5 py-1.5 bg-[#0f0f0f] border-b border-[#1a1a1a]">
             {chrome}
           </div>
 
@@ -155,20 +154,20 @@ export function FloatingAffiliateAd() {
               </span>
             </div>
 
-            <div className="px-3 pt-2.5 pb-3 border-t border-[#ebedf0]">
-              <p className="text-[#202124] text-[13px] font-medium leading-snug">
+            <div className="px-3 pt-2.5 pb-3 border-t border-[#1a1a1a]">
+              <p className="text-white text-[13px] font-medium leading-snug">
                 {label} Merch
               </p>
-              <p className="text-[#188038] text-[11px] leading-snug mt-0.5">amazon.com</p>
-              <span className="mt-2.5 flex items-center justify-center gap-1.5 w-full px-3 py-2 rounded-[18px] bg-[#1a73e8] text-white text-[13px] font-medium group-hover:bg-[#1765cc] transition-colors">
+              <p className="text-white/65 text-[11px] leading-snug mt-0.5">Fan pick on Amazon</p>
+              <span className="mt-2.5 flex items-center justify-center gap-1.5 w-full px-3 py-2 rounded-lg bg-[#d4a017] text-black text-[13px] font-semibold group-hover:bg-[#e8b84b] transition-colors">
                 Shop on Amazon
               </span>
             </div>
           </a>
 
           <div className="px-3 pb-2 -mt-1.5">
-            <span className="text-[#9aa0a6] text-[9px] leading-none">
-              Ad · As an Amazon Associate we earn from qualifying purchases
+            <span className="text-white/45 text-[9px] leading-none">
+              As an Amazon Associate we earn from qualifying purchases
             </span>
           </div>
         </div>
@@ -176,15 +175,12 @@ export function FloatingAffiliateAd() {
 
       {/* ── Mobile: bottom banner (non-game pages only) ─────────────────────── */}
       {!isGamePage && (
-        <div
-          className="xl:hidden fixed inset-x-0 bottom-0 z-40 px-3 pb-3 pointer-events-none"
-          style={{ fontFamily: sans }}
-        >
-          <div className="pointer-events-auto relative mx-auto flex max-w-md items-center gap-3 rounded-lg border border-[#dadce0] bg-white p-2.5 pr-8 shadow-[0_-2px_12px_rgba(32,33,36,0.22)]">
+        <div className="xl:hidden fixed inset-x-0 bottom-0 z-40 px-3 pb-3 pointer-events-none">
+          <div className="pointer-events-auto relative mx-auto flex max-w-md items-center gap-3 rounded-xl border border-[#222222] bg-[#0a0a0a] p-2.5 pr-9 shadow-[0_-2px_16px_rgba(0,0,0,0.6)]">
             <div className="absolute top-1.5 right-1.5 flex items-center gap-1.5">{chrome}</div>
 
             <a {...linkProps} className="group flex flex-1 items-center gap-3 min-w-0">
-              <span className="relative shrink-0 w-14 h-14 rounded bg-white flex items-center justify-center p-1 overflow-hidden border border-[#ebedf0]">
+              <span className="relative shrink-0 w-14 h-14 rounded-lg bg-white flex items-center justify-center p-1 overflow-hidden">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={product.imageUrl}
@@ -195,13 +191,13 @@ export function FloatingAffiliateAd() {
               </span>
 
               <span className="flex flex-1 flex-col min-w-0">
-                <span className="text-[#202124] text-[13px] font-medium leading-snug truncate">
+                <span className="text-white text-[13px] font-medium leading-snug truncate">
                   {label} Merch
                 </span>
-                <span className="text-[#188038] text-[11px] leading-snug">amazon.com</span>
+                <span className="text-white/65 text-[11px] leading-snug">Fan pick on Amazon</span>
               </span>
 
-              <span className="shrink-0 flex items-center justify-center px-3.5 py-2 rounded-[18px] bg-[#1a73e8] text-white text-[12px] font-medium group-hover:bg-[#1765cc] transition-colors">
+              <span className="shrink-0 flex items-center justify-center px-3.5 py-2 rounded-lg bg-[#d4a017] text-black text-[12px] font-semibold group-hover:bg-[#e8b84b] transition-colors">
                 Shop
               </span>
             </a>

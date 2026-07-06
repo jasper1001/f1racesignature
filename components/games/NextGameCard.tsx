@@ -47,8 +47,7 @@ export function NextGameCard({ currentId }: { currentId: string }) {
             {next.tag}
           </p>
           <h3
-            className="text-lg text-[#1a1712] leading-tight"
-            style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+            className="text-lg text-[#1a1712] leading-tight font-display"
           >
             {next.title}
           </h3>

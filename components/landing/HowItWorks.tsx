@@ -67,8 +67,7 @@ export function HowItWorks() {
             How It Works
           </p>
           <h2
-            className="text-4xl text-white mb-4"
-            style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+            className="text-4xl text-white mb-4 font-display"
           >
             Four Steps to Museum Quality
           </h2>

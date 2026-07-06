@@ -69,8 +69,7 @@ export default function PitStopTimerPage() {
             Pit Wall
           </p>
           <h1
-            className="relative text-4xl md:text-5xl text-[#1a1712] mb-4"
-            style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+            className="relative text-4xl md:text-5xl text-[#1a1712] mb-4 font-display"
           >
             Pit Stop Timer
           </h1>

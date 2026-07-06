@@ -9,7 +9,7 @@ export function FaqSection({ items, title = 'Frequently asked questions' }: { it
   return (
     <section className="border-t border-[#0f0f0f] pt-10">
       <p className="text-[#d4a017] text-xs font-medium uppercase tracking-widest mb-2">FAQ</p>
-      <h2 className="text-2xl md:text-3xl text-white mb-6" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+      <h2 className="text-2xl md:text-3xl text-white mb-6 font-display">
         {title}
       </h2>
       <div className="space-y-3">

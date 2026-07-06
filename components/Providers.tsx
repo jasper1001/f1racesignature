@@ -1,6 +1,7 @@
 'use client'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { MotionConfig } from 'framer-motion'
 import { useState } from 'react'
 import { ClickTracker } from './ClickTracker'
 
@@ -24,8 +25,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ClickTracker />
-      {children}
+      {/* Respect the OS "reduce motion" setting for all framer-motion animations */}
+      <MotionConfig reducedMotion="user">
+        <ClickTracker />
+        {children}
+      </MotionConfig>
     </QueryClientProvider>
   )
 }

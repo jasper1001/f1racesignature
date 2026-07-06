@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useStudioStore } from '@/lib/store'
-import { isExportFree, UPGRADE_REASONS } from '@/lib/freemium'
 import { canDownload, recordDownload, DAILY_DOWNLOAD_LIMIT } from '@/lib/downloadLimit'
 import { EXPORT_FORMATS, themeById } from '@/lib/themes'
 import { Analytics } from '@/lib/analytics'
@@ -13,16 +12,11 @@ const POSTER_H = 800
 
 export function ExportButton({ onBeforeExport }: { onBeforeExport?: () => void } = {}) {
   const [isExporting, setIsExporting] = useState(false)
-  const { selectedDriverId, selectedRaceId, exportFormat, theme, openUpgradeModal } = useStudioStore()
+  const { selectedDriverId, selectedRaceId, exportFormat, theme } = useStudioStore()
 
   const formatConfig = EXPORT_FORMATS.find((f) => f.id === exportFormat)!
 
   const handleExport = async () => {
-    if (!isExportFree(exportFormat)) {
-      Analytics.upgradeModalOpened('exportFormat')
-      openUpgradeModal(UPGRADE_REASONS.exportFormat)
-      return
-    }
     if (!selectedDriverId || !selectedRaceId) return
 
     if (!canDownload()) {

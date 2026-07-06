@@ -87,8 +87,7 @@ export default function GamesPage() {
             Mini Games
           </p>
           <h1
-            className="relative text-4xl md:text-5xl text-[#1a1712] mb-4"
-            style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+            className="relative text-4xl md:text-5xl text-[#1a1712] mb-4 font-display"
           >
             Test Your F1 Instincts
           </h1>
@@ -155,8 +154,7 @@ export default function GamesPage() {
 
                 {/* Title */}
                 <h2
-                  className="text-2xl text-[#1a1712] mb-3 transition-colors duration-200"
-                  style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+                  className="text-2xl text-[#1a1712] mb-3 transition-colors duration-200 font-display"
                 >
                   {game.title}
                 </h2>
@@ -188,8 +186,7 @@ export default function GamesPage() {
               </div>
               <p className="text-[#a89f8c] text-xs font-mono uppercase tracking-widest mb-2">Coming Soon</p>
               <h2
-                className="text-2xl text-[#a89f8c] mb-3"
-                style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+                className="text-2xl text-[#a89f8c] mb-3 font-display"
               >
                 More Challenges
               </h2>

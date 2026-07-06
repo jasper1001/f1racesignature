@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { SteeringWheelIcon } from '@/components/icons/SteeringWheel'
+import { SEASON } from '@/lib/site'
 
 export function Footer() {
   return (
@@ -40,7 +41,7 @@ export function Footer() {
               <span className="text-white/65 font-medium uppercase tracking-widest text-xs">Navigate</span>
               <div className="grid grid-cols-2 gap-x-8 gap-y-2">
                 <Link href="/" className="text-white/65 hover:text-white transition-colors">Home</Link>
-                <Link href="/results" className="text-white/65 hover:text-white transition-colors">2026 Season</Link>
+                <Link href="/results" className="text-white/65 hover:text-white transition-colors">{SEASON} Season</Link>
                 <Link href="/studio" className="text-white/65 hover:text-white transition-colors">Studio</Link>
                 <Link href="/schedule" className="text-white/65 hover:text-white transition-colors">Schedule</Link>
                 <Link href="/calendar" className="text-white/65 hover:text-white transition-colors">Calendar</Link>

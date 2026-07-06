@@ -6,8 +6,9 @@
  * Docs: https://github.com/jolpica/jolpica-f1
  */
 
+import { SEASON } from '@/lib/site'
+
 const BASE = 'https://api.jolpi.ca/ergast/f1'
-const SEASON = '2026'
 const REVALIDATE = 3600 // 1 hour
 
 async function getJson<T>(path: string): Promise<T | null> {

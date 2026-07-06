@@ -186,8 +186,8 @@ export function TierListGame() {
             <div key={t.id} className="flex border-b border-[#e2dccd] last:border-b-0">
               {/* Label cell */}
               <div
-                className="w-12 sm:w-14 shrink-0 flex items-center justify-center text-xl font-bold"
-                style={{ background: t.color, color: t.text, fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+                className="w-12 sm:w-14 shrink-0 flex items-center justify-center text-xl font-bold font-display"
+                style={{ background: t.color, color: t.text }}
               >
                 {t.id}
               </div>

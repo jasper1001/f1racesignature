@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
+import { SEASON } from '@/lib/site'
 
 interface Feature {
   label: string
@@ -46,7 +47,7 @@ const FEATURES: Feature[] = [
   {
     label: 'Schedule',
     href: '/schedule',
-    desc: '2026 race calendar',
+    desc: `${SEASON} race calendar`,
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" strokeWidth="1.5"/>
@@ -55,7 +56,7 @@ const FEATURES: Feature[] = [
     ),
   },
   {
-    label: '2026 Season',
+    label: `${SEASON} Season`,
     href: '/results',
     desc: 'Live standings',
     icon: (

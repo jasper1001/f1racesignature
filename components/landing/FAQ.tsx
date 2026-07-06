@@ -16,8 +16,7 @@ export function FAQ() {
           </p>
           <h2
             id="faq-heading"
-            className="text-3xl md:text-4xl text-white"
-            style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+            className="text-3xl md:text-4xl text-white font-display"
           >
             Frequently Asked
           </h2>

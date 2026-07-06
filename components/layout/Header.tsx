@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { SteeringWheelIcon } from '@/components/icons/SteeringWheel'
 import { OPEN_SITE_SEARCH } from '@/components/layout/SiteSearch'
+import { SEASON } from '@/lib/site'
 
 function openSearch() {
   window.dispatchEvent(new Event(OPEN_SITE_SEARCH))
@@ -21,13 +22,12 @@ function SearchIcon({ className }: { className?: string }) {
 }
 
 const NAV_LINKS = [
-  { href: '/', label: 'Home' },
   { href: '/studio', label: 'Studio' },
   { href: '/games', label: 'Mini Games' },
   { href: '/drivers', label: 'Drivers' },
   { href: '/blog', label: 'Blog' },
   { href: '/garage', label: 'My Garage' },
-  { href: '/results', label: '2026 Season' },
+  { href: '/results', label: `${SEASON} Season` },
   { href: '/schedule', label: 'Schedule' },
   { href: '/calendar', label: 'Calendar' },
 ]
@@ -56,7 +56,7 @@ export function Header() {
                   key={link.href}
                   href={link.href}
                   className={`relative px-4 py-1.5 text-sm font-medium transition-colors rounded-lg ${
-                    active ? 'text-white' : 'text-[#aaaaaa] hover:text-[#aaaaaa]'
+                    active ? 'text-white' : 'text-[#aaaaaa] hover:text-white'
                   }`}
                 >
                   {active && (
@@ -79,7 +79,7 @@ export function Header() {
               className="ml-1 flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-[#aaaaaa] hover:text-white rounded-lg border border-[#222222] hover:border-[#333333] transition-colors"
             >
               <SearchIcon />
-              <kbd className="font-mono text-[10px] text-white/45">⌘K</kbd>
+              <kbd className="font-mono text-[10px] text-white/60">⌘K</kbd>
             </button>
             {pathname !== '/studio' && !pathname.startsWith('/games') && (
               <Link href="/studio" className="ml-2 px-4 py-1.5 text-sm font-medium bg-[#d4a017] text-black rounded-lg hover:bg-[#e8b84b] transition-colors">
@@ -106,6 +106,7 @@ export function Header() {
               onClick={() => setMenuOpen((o) => !o)}
               className="w-9 h-9 flex flex-col items-center justify-center gap-1.5 text-[#aaaaaa] hover:text-white transition-colors"
               aria-label="Menu"
+              aria-expanded={menuOpen}
             >
               <span className={`block w-5 h-0.5 bg-current transition-all duration-200 ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
               <span className={`block w-5 h-0.5 bg-current transition-all duration-200 ${menuOpen ? 'opacity-0' : ''}`} />

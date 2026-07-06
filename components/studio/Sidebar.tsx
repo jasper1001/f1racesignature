@@ -1,9 +1,6 @@
 'use client'
 
-import { motion, AnimatePresence } from 'framer-motion'
-import { LockBadge } from '@/components/ui/LockBadge'
 import { useStudioStore } from '@/lib/store'
-import { isDriverFree, isRaceFree, isVizModeFree, isThemeFree, isExportFree, UPGRADE_REASONS } from '@/lib/freemium'
 import { THEMES, VIZ_MODES, EXPORT_FORMATS } from '@/lib/themes'
 import { Analytics } from '@/lib/analytics'
 import type { Driver, Race, VizMode, ArtTheme, ExportFormat } from '@/lib/types'
@@ -26,57 +23,31 @@ export function Sidebar({ drivers, races, mobile = false }: SidebarProps) {
     setVizMode,
     setTheme,
     setExportFormat,
-    openUpgradeModal,
   } = useStudioStore()
 
   const driverRaces = races.filter((r) => r.driverId === selectedDriverId)
 
   const handleDriverSelect = (driverId: string) => {
-    if (!isDriverFree(driverId)) {
-      Analytics.upgradeModalOpened('driver')
-      openUpgradeModal(UPGRADE_REASONS.driver)
-      return
-    }
     Analytics.driverSelected(driverId)
     setDriver(driverId)
   }
 
   const handleRaceSelect = (raceId: string) => {
-    if (!isRaceFree(raceId)) {
-      Analytics.upgradeModalOpened('race')
-      openUpgradeModal(UPGRADE_REASONS.race)
-      return
-    }
     Analytics.raceSelected(raceId)
     setRace(raceId)
   }
 
   const handleVizMode = (mode: VizMode) => {
-    if (!isVizModeFree(mode)) {
-      Analytics.upgradeModalOpened('vizMode')
-      openUpgradeModal(UPGRADE_REASONS.vizMode)
-      return
-    }
     Analytics.vizModeChanged(mode)
     setVizMode(mode)
   }
 
   const handleTheme = (t: ArtTheme) => {
-    if (!isThemeFree(t)) {
-      Analytics.upgradeModalOpened('theme')
-      openUpgradeModal(UPGRADE_REASONS.theme)
-      return
-    }
     Analytics.themeChanged(t)
     setTheme(t)
   }
 
   const handleExportFormat = (f: ExportFormat) => {
-    if (!isExportFree(f)) {
-      Analytics.upgradeModalOpened('exportFormat')
-      openUpgradeModal(UPGRADE_REASONS.exportFormat)
-      return
-    }
     Analytics.exportFormatChanged(f)
     setExportFormat(f)
   }
@@ -88,7 +59,6 @@ export function Sidebar({ drivers, races, mobile = false }: SidebarProps) {
         <Section title="Driver">
           <div className="grid grid-cols-2 gap-1.5">
             {drivers.map((d) => {
-              const free = isDriverFree(d.id)
               const active = selectedDriverId === d.id
               return (
                 <button
@@ -105,9 +75,6 @@ export function Sidebar({ drivers, races, mobile = false }: SidebarProps) {
                     style={{ backgroundColor: d.color }}
                   />
                   <span className="truncate font-medium">{d.shortName}</span>
-                  {!free && (
-                    <LockBadge className="ml-auto text-[#aaaaaa]" />
-                  )}
                 </button>
               )
             })}
@@ -121,7 +88,6 @@ export function Sidebar({ drivers, races, mobile = false }: SidebarProps) {
               <p className="text-[#aaaaaa] text-xs px-1 py-2">Select a driver first</p>
             )}
             {driverRaces.map((r) => {
-              const free = isRaceFree(r.id)
               const active = selectedRaceId === r.id
               return (
                 <button
@@ -137,7 +103,6 @@ export function Sidebar({ drivers, races, mobile = false }: SidebarProps) {
                     <div className="text-xs font-medium text-white truncate">{r.circuit.toUpperCase()} {r.year}</div>
                     <div className="text-[10px] text-[#aaaaaa] mt-0.5">{r.lapTime}</div>
                   </div>
-                  {!free && <LockBadge className="text-[#aaaaaa] ml-2" />}
                 </button>
               )
             })}
@@ -163,7 +128,6 @@ export function Sidebar({ drivers, races, mobile = false }: SidebarProps) {
                     <div className="text-xs font-medium text-white">{vm.name}</div>
                     <div className="text-[10px] text-[#aaaaaa] mt-0.5">{vm.description}</div>
                   </div>
-                  {!isVizModeFree(vm.id as VizMode) && <LockBadge className="text-[#aaaaaa] ml-2" />}
                 </button>
               )
             })}
@@ -186,13 +150,10 @@ export function Sidebar({ drivers, races, mobile = false }: SidebarProps) {
                   }`}
                   style={{ background: t.bg }}
                 >
-                  <div className="flex items-center justify-between">
-                    <div
-                      className="w-5 h-1.5 rounded-full"
-                      style={{ backgroundColor: t.primaryLine }}
-                    />
-                    {!isThemeFree(t.id as ArtTheme) && <LockBadge className="text-[#aaaaaa]" />}
-                  </div>
+                  <div
+                    className="w-5 h-1.5 rounded-full"
+                    style={{ backgroundColor: t.primaryLine }}
+                  />
                   <span className="text-[10px] font-medium" style={{ color: t.textColor }}>
                     {t.name}
                   </span>

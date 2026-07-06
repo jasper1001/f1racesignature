@@ -380,7 +380,7 @@ function OverPanel({
         <p className="text-xs font-mono uppercase tracking-widest" style={{ color: won ? '#38b000' : '#cc4444' }}>
           {alreadyDone ? 'Already played today' : won ? 'Solved it!' : 'Out of lives'}
         </p>
-        <h3 className="text-2xl text-[#1a1712]" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+        <h3 className="text-2xl text-[#1a1712] font-display">
           {won ? 'All four groups cracked' : 'Better luck next time'}
         </h3>
         {streak && (

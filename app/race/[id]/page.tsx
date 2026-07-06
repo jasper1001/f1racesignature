@@ -105,7 +105,7 @@ export default async function RacePage({ params }: { params: Promise<{ id: strin
             <p className="text-[#d4a017] text-xs font-medium uppercase tracking-widest mb-3">
               {race.circuitName} · {race.year}
             </p>
-            <h1 className="text-3xl md:text-4xl text-white mb-4" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+            <h1 className="text-3xl md:text-4xl text-white mb-4 font-display">
               {driver.name}
             </h1>
             <p className="text-white/65 leading-relaxed mb-6">{race.description}</p>
@@ -142,7 +142,7 @@ export default async function RacePage({ params }: { params: Promise<{ id: strin
         {/* Full race story */}
         {story.length > 0 && (
           <div className="max-w-5xl mx-auto px-6 py-10 border-t border-[#0f0f0f]">
-            <h2 className="text-2xl text-white mb-6" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+            <h2 className="text-2xl text-white mb-6 font-display">
               The Race
             </h2>
             <div className="max-w-3xl space-y-4">

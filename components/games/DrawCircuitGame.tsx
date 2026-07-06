@@ -348,7 +348,7 @@ export function DrawCircuitGame() {
             <div className="flex items-center justify-between px-1">
               <div>
                 <p className="text-[10px] font-mono uppercase tracking-widest mb-0.5" style={{ color: ACCENT }}>Draw this circuit</p>
-                <h3 className="text-2xl text-[#1a1712] leading-none" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+                <h3 className="text-2xl text-[#1a1712] leading-none font-display">
                   {shortName(circuit)}
                 </h3>
               </div>

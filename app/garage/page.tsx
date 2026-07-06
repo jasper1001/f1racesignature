@@ -27,7 +27,7 @@ export default function GaragePage() {
       <main className="pt-14 min-h-screen">
         <div className="max-w-5xl mx-auto px-6 py-14 text-center">
           <p className="text-[#d4a017] text-xs font-medium uppercase tracking-widest mb-4">Your Collection</p>
-          <h1 className="text-4xl md:text-5xl text-white mb-3" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+          <h1 className="text-4xl md:text-5xl text-white mb-3 font-display">
             My Garage
           </h1>
           <p className="text-white/65 max-w-md mx-auto">

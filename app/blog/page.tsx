@@ -57,8 +57,7 @@ export default function BlogPage() {
           <div className="relative max-w-4xl mx-auto px-6 text-center">
             <p className="text-[#d4a017] text-xs font-medium uppercase tracking-widest mb-4">Analysis & History</p>
             <h1
-              className="text-4xl md:text-6xl text-white mb-4"
-              style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+              className="text-4xl md:text-6xl text-white mb-4 font-display"
             >
               F1 Articles
             </h1>
@@ -90,8 +89,7 @@ export default function BlogPage() {
                       <span className="text-[10px] text-white/65 font-mono">{article.readMinutes} min read</span>
                     </div>
                     <h2
-                      className="text-white text-lg leading-snug mb-2 group-hover:text-[#d4a017] transition-colors"
-                      style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+                      className="text-white text-lg leading-snug mb-2 group-hover:text-[#d4a017] transition-colors font-display"
                     >
                       {article.title}
                     </h2>

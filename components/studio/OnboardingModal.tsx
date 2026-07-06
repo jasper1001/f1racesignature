@@ -45,7 +45,7 @@ export function OnboardingModal({ isOpen, onClose }: Props) {
       <div className="p-6">
         <div className="text-center mb-6">
           <SteeringWheelIcon className="w-9 h-9 text-[#d4a017] mx-auto mb-3" />
-          <h2 className="text-2xl text-white mb-1" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+          <h2 className="text-2xl text-white mb-1 font-display">
             Welcome to the Studio
           </h2>
           <p className="text-[#aaaaaa] text-sm">Four things you can do to turn a lap into art.</p>

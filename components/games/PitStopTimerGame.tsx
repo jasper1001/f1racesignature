@@ -284,8 +284,8 @@ export function PitStopTimerGame() {
         {/* Result heading */}
         <div className="mb-8 text-center md:text-left">
           <p
-            className="text-3xl md:text-4xl font-bold mb-1"
-            style={{ color: result.color, fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+            className="text-3xl md:text-4xl font-bold mb-1 font-display"
+            style={{ color: result.color }}
           >
             {result.label}
           </p>

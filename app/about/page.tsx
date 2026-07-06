@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 
@@ -24,8 +25,7 @@ export default function AboutPage() {
         <div className="border-b border-[#0f0f0f] py-16 px-6 text-center">
           <p className="text-white/65 text-xs font-mono uppercase tracking-widest mb-4">About</p>
           <h1
-            className="text-4xl md:text-5xl text-white mb-4"
-            style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+            className="text-4xl md:text-5xl text-white mb-4 font-display"
           >
             Where speed becomes art
           </h1>
@@ -107,7 +107,7 @@ export default function AboutPage() {
             <div className="space-y-4 text-white/65 leading-relaxed">
               <p>
                 We also publish a growing{' '}
-                <a href="/blog" className="text-[#d4a017] hover:underline">F1 blog</a>{' '}
+                <Link href="/blog" className="text-[#d4a017] hover:underline">F1 blog</Link>{' '}
                 — free, in-depth articles for fans of every level. Whether you are completely new to
                 the sport or want to understand the data behind it, there is something to read.
               </p>
@@ -197,7 +197,7 @@ export default function AboutPage() {
             <div className="rounded-2xl border border-[#1a1a1a] bg-[#0a0a0a] p-8 space-y-4">
               <p className="text-white/65 leading-relaxed">
                 Have a question, a bug report, a feature idea, or a licensing enquiry? Send us an email
-                and we'll get back to you as soon as possible.
+                and we&apos;ll get back to you as soon as possible.
               </p>
               <a
                 href="mailto:wayfarerwondersblog@gmail.com"

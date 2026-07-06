@@ -5,7 +5,6 @@ export interface Driver {
   team: string
   nationality: string
   color: string
-  isFree: boolean
   championships: number
   bio: string
 }
@@ -20,7 +19,6 @@ export interface Race {
   location: string
   lapTime: string
   description: string
-  isFree: boolean
   telemetryFile: string
 }
 
@@ -132,7 +130,6 @@ export interface ThemeConfig {
   s1Color: string
   s2Color: string
   s3Color: string
-  isFree: boolean
   // Surface texture overlaid on the poster background.
   texture: ThemeTexture
   // CSS font-family for the large display title (driver name / hero).
@@ -143,7 +140,6 @@ export interface VizModeConfig {
   id: VizMode
   name: string
   description: string
-  isFree: boolean
 }
 
 export interface ExportFormatConfig {
@@ -151,7 +147,6 @@ export interface ExportFormatConfig {
   name: string
   width: number
   height: number
-  isFree: boolean
 }
 
 export interface StudioState {
@@ -160,6 +155,4 @@ export interface StudioState {
   vizMode: VizMode
   theme: ArtTheme
   exportFormat: ExportFormat
-  showUpgradeModal: boolean
-  upgradeModalReason: string | null
 }

@@ -57,7 +57,7 @@ export default function GuessLapTimePage() {
           <p className="relative text-xs font-mono uppercase tracking-widest mb-4" style={{ color: '#e11d48' }}>
             Time Trial
           </p>
-          <h1 className="relative text-4xl md:text-5xl text-[#1a1712] mb-4" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+          <h1 className="relative text-4xl md:text-5xl text-[#1a1712] mb-4 font-display">
             Guess the Lap Time
           </h1>
           <p className="relative text-[#6b6358] text-sm max-w-sm mx-auto">

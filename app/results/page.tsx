@@ -122,8 +122,7 @@ export default async function ResultsPage() {
               Live · Real F1 Data
             </p>
             <h1
-              className="text-4xl md:text-6xl text-white mb-4"
-              style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+              className="text-4xl md:text-6xl text-white mb-4 font-display"
             >
               {season} Season
             </h1>
@@ -230,7 +229,7 @@ export default async function ResultsPage() {
                   <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-5">
                     <div>
                       <p className="text-[#d4a017] text-xs font-medium uppercase tracking-widest mb-2">Calendar</p>
-                      <h2 className="text-2xl md:text-3xl text-white" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+                      <h2 className="text-2xl md:text-3xl text-white font-display">
                         {season} Race Schedule
                       </h2>
                       <p className="text-white/65 text-sm mt-2 max-w-md">
@@ -278,7 +277,7 @@ function SectionHeading({ eyebrow, title, sub }: { eyebrow: string; title: strin
   return (
     <div>
       <p className="text-[#d4a017] text-xs font-medium uppercase tracking-widest mb-2">{eyebrow}</p>
-      <h2 className="text-2xl md:text-3xl text-white" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+      <h2 className="text-2xl md:text-3xl text-white font-display">
         {title}
       </h2>
       {sub && <p className="text-white/65 text-sm mt-1">{sub}</p>}
@@ -387,8 +386,7 @@ function PastSeasonPanel({ season }: { season: { year: string; drivers: DriverSt
       <summary className="flex items-center justify-between gap-4 px-4 py-4 cursor-pointer list-none select-none hover:bg-white/[0.02] transition-colors">
         <div className="flex items-center gap-4 min-w-0">
           <span
-            className="text-2xl md:text-3xl text-white shrink-0"
-            style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+            className="text-2xl md:text-3xl text-white shrink-0 font-display"
           >
             {season.year}
           </span>

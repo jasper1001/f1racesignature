@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback, useRef } from 'react'
+import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { SCENARIOS, getRating, type Scenario, type StrategyOption, type ResultType } from '@/lib/games/strategyScenarios'
 import { ShareButtons } from '@/components/games/ShareButtons'
@@ -177,7 +178,7 @@ export function ChampionshipDeciderGame() {
                       <p className="text-[#d4a017] text-[10px] font-mono uppercase tracking-widest mb-1.5">
                         {current.grandPrix} · {current.year}
                       </p>
-                      <h3 className="text-[#1a1712] text-lg font-semibold" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+                      <h3 className="text-[#1a1712] text-lg font-semibold font-display">
                         {current.title}
                       </h3>
                       <p className="text-[#1a1712] text-xs mt-1 opacity-50">{current.subtitle}</p>
@@ -334,11 +335,11 @@ export function ChampionshipDeciderGame() {
                 >
                   Play Again
                 </button>
-                <a href="/games"
+                <Link href="/games"
                   className="block w-full px-6 py-3 border border-[#dcd5c6] text-[#1a1712]/65 text-sm font-medium rounded-xl hover:border-[#c4bca8] hover:text-[#1a1712] transition-all text-center"
                 >
                   Back to Mini Games
-                </a>
+                </Link>
                 <Leaderboard gameId="championship-decider" score={finalScore} accent="#3b82f6" />
                 <NextGameCard currentId="championship-decider" />
               </div>

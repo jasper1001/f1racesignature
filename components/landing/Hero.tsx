@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { SteeringWheelIcon } from '@/components/icons/SteeringWheel'
+import { SEASON } from '@/lib/site'
 
 const FEATURES = [
   {
@@ -21,7 +22,7 @@ const FEATURES = [
   {
     href: '/results',
     tag: 'Live',
-    title: '2026 Season',
+    title: `${SEASON} Season`,
     description: 'Live driver standings, constructor points, and the full race calendar.',
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -81,8 +82,7 @@ export function Hero() {
             </div>
 
             <h1
-              className="text-5xl sm:text-6xl md:text-7xl text-white leading-[0.95] mb-6"
-              style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+              className="text-5xl sm:text-6xl md:text-7xl text-white leading-[0.95] mb-6 font-display"
             >
               Where Speed
               <br />
@@ -107,7 +107,7 @@ export function Hero() {
                 href="/results"
                 className="inline-flex items-center gap-2 px-8 py-4 bg-white/5 text-white font-medium rounded-xl border border-white/10 hover:bg-white/8 hover:border-white/15 transition-all"
               >
-                2026 Standings
+                {SEASON} Standings
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                   <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
@@ -155,8 +155,7 @@ export function Hero() {
                       {feature.tag}
                     </p>
                     <h3
-                      className="text-lg text-white mb-2 group-hover:text-[#d4a017] transition-colors duration-200"
-                      style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+                      className="text-lg text-white mb-2 group-hover:text-[#d4a017] transition-colors duration-200 font-display"
                     >
                       {feature.title}
                     </h3>

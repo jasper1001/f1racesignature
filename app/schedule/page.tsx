@@ -89,8 +89,7 @@ export default async function SchedulePage() {
             Formula 1 · {season} Season
           </p>
           <h1
-            className="relative text-4xl md:text-5xl text-white mb-3"
-            style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+            className="relative text-4xl md:text-5xl text-white mb-3 font-display"
           >
             F1 {season} Race Schedule — Every Session Time in Your Local Timezone
           </h1>

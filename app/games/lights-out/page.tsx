@@ -83,8 +83,7 @@ export default function LightsOutPage() {
             Reaction Test
           </p>
           <h1
-            className="relative text-4xl md:text-5xl text-[#1a1712] mb-4"
-            style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+            className="relative text-4xl md:text-5xl text-[#1a1712] mb-4 font-display"
           >
             Lights Out
           </h1>
