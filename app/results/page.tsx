@@ -8,11 +8,13 @@ import {
   getLastRaceResults,
   getPastSeason,
   getSeasonPodiums,
+  getSeasonDriverBreakdowns,
   teamColor,
   formatRaceDate,
 } from '@/lib/f1api'
 import type { DriverStanding, ConstructorStanding, RacePodium } from '@/lib/f1api'
 import { findStudioLapsForWinners } from '@/lib/serverData'
+import { DriverStandingsTable } from '@/components/results/DriverStandingsTable'
 
 export const revalidate = 3600
 
@@ -57,11 +59,12 @@ export default async function ResultsPage() {
   const season = await getSeason()
   const pastYears = Array.from({ length: 13 }, (_, i) => String(Number(season) - 1 - i))
 
-  const [driverData, constructors, lastRace, podiums, ...pastSeasons] = await Promise.all([
+  const [driverData, constructors, lastRace, podiums, breakdowns, ...pastSeasons] = await Promise.all([
     getDriverStandings(),
     getConstructorStandings(),
     getLastRaceResults(),
     getSeasonPodiums(season),
+    getSeasonDriverBreakdowns(season),
     ...pastYears.map((y) => getPastSeason(y)),
   ])
 
@@ -180,8 +183,9 @@ export default async function ResultsPage() {
               {/* Driver standings */}
               <section>
                 <SectionHeading eyebrow="Championship" title="Driver Standings" />
+                <p className="text-white/65 text-sm mt-1">Tap a driver to see their points from every race.</p>
                 <div className="mt-6">
-                  <DriverStandingsTable drivers={drivers} />
+                  <DriverStandingsTable drivers={drivers} breakdowns={breakdowns} />
                 </div>
               </section>
 
@@ -278,55 +282,6 @@ function SectionHeading({ eyebrow, title, sub }: { eyebrow: string; title: strin
         {title}
       </h2>
       {sub && <p className="text-white/65 text-sm mt-1">{sub}</p>}
-    </div>
-  )
-}
-
-function DriverStandingsTable({ drivers }: { drivers: DriverStanding[] }) {
-  return (
-    <div className="overflow-x-auto rounded-xl border border-[#161616]">
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="text-left text-white/65 text-[11px] uppercase tracking-wider border-b border-[#161616]">
-            <th className="py-3 px-4 font-medium">Pos</th>
-            <th className="py-3 px-4 font-medium">Driver</th>
-            <th className="py-3 px-4 font-medium hidden sm:table-cell">Team</th>
-            <th className="py-3 px-4 font-medium text-center">Wins</th>
-            <th className="py-3 px-4 font-medium text-right">Points</th>
-          </tr>
-        </thead>
-        <tbody>
-          {drivers.map((d) => {
-            const color = teamColor(d.Constructors[0]?.constructorId ?? '')
-            return (
-              <tr
-                key={d.Driver.driverId}
-                className="border-b border-[#0f0f0f] last:border-0 hover:bg-white/[0.02] transition-colors"
-              >
-                <td className="py-3 px-4 text-[#aaaaaa] font-mono">{d.position}</td>
-                <td className="py-3 px-4">
-                  <div className="flex items-center gap-2.5">
-                    <span className="w-1 h-5 rounded-full" style={{ backgroundColor: color }} />
-                    <span className="text-white font-medium">
-                      {d.Driver.givenName} {d.Driver.familyName}
-                    </span>
-                    {d.Driver.code && (
-                      <span className="text-white/65 text-[10px] font-mono hidden md:inline">
-                        {d.Driver.code}
-                      </span>
-                    )}
-                  </div>
-                </td>
-                <td className="py-3 px-4 text-[#aaaaaa] hidden sm:table-cell">
-                  {d.Constructors[0]?.name ?? '—'}
-                </td>
-                <td className="py-3 px-4 text-center text-[#aaaaaa] font-mono">{d.wins}</td>
-                <td className="py-3 px-4 text-right text-white font-mono font-semibold">{d.points}</td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
     </div>
   )
 }

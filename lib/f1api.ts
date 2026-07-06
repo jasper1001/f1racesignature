@@ -54,6 +54,7 @@ export interface ConstructorStanding {
 
 export interface RaceResult {
   position: string
+  positionText?: string
   points: string
   Driver: ApiDriver
   Constructor: ApiConstructor
@@ -188,6 +189,116 @@ export async function getLastRaceResults(): Promise<Race | null> {
     `${SEASON}/last/results.json`,
   )
   return data?.MRData?.RaceTable?.Races?.[0] ?? null
+}
+
+// ── Per-driver, per-race points breakdown ─────────────────────────────────────
+
+export interface DriverRaceEntry {
+  round: string
+  raceName: string
+  country: string
+  position: string // finishing position ("18") or classification code ("R", "D")
+  status: string // "Finished", "+1 Lap", "Accident", "Engine", …
+  points: number // total points from this round (race + sprint)
+  racePoints: number
+  sprintPoints: number
+  hasSprint: boolean
+  dnf: boolean // did not finish / not classified
+}
+
+// A driver is "DNF" when the API classifies them with a non-numeric positionText
+// ("R" retired, "D" disqualified, "E" excluded, "W" withdrawn, "F" failed to qualify).
+function isDnf(positionText: string | undefined, status: string): boolean {
+  if (positionText && /^\d+$/.test(positionText)) return false
+  if (status === 'Finished' || /^\+\d+ Lap/.test(status)) return false
+  return true
+}
+
+// Fetch every result row for a season, following pagination (Jolpica caps limit at 100).
+async function fetchAllResultRaces(
+  endpoint: 'results' | 'sprint',
+  year: string,
+): Promise<Race[]> {
+  type Page = { MRData: { total: string; RaceTable: { Races: Race[] } } }
+  const url = (offset: number) => `${year}/${endpoint}.json?limit=100&offset=${offset}`
+
+  const first = await getJson<Page>(url(0))
+  if (!first) return []
+  const total = Number(first.MRData.total) || 0
+  const races: Race[] = [...(first.MRData.RaceTable.Races ?? [])]
+
+  const offsets: number[] = []
+  for (let o = 100; o < total; o += 100) offsets.push(o)
+  const rest = await Promise.all(offsets.map((o) => getJson<Page>(url(o))))
+  for (const page of rest) {
+    if (page) races.push(...(page.MRData.RaceTable.Races ?? []))
+  }
+  return races
+}
+
+// Build a map of driverId → their round-by-round scoring for the season. Includes
+// rounds where the driver retired (DNF) or scored zero, and folds in sprint points
+// so the per-round totals reconcile with the championship standings.
+export async function getSeasonDriverBreakdowns(
+  year: string,
+): Promise<Record<string, DriverRaceEntry[]>> {
+  const [raceRaces, sprintRaces] = await Promise.all([
+    fetchAllResultRaces('results', year),
+    fetchAllResultRaces('sprint', year),
+  ])
+
+  const byDriver = new Map<string, Map<string, DriverRaceEntry>>()
+
+  const ensure = (driverId: string, race: Race): DriverRaceEntry => {
+    let rounds = byDriver.get(driverId)
+    if (!rounds) {
+      rounds = new Map()
+      byDriver.set(driverId, rounds)
+    }
+    let entry = rounds.get(race.round)
+    if (!entry) {
+      entry = {
+        round: race.round,
+        raceName: race.raceName,
+        country: race.Circuit.Location.country,
+        position: '',
+        status: '',
+        points: 0,
+        racePoints: 0,
+        sprintPoints: 0,
+        hasSprint: false,
+        dnf: false,
+      }
+      rounds.set(race.round, entry)
+    }
+    return entry
+  }
+
+  for (const race of raceRaces) {
+    for (const res of race.Results ?? []) {
+      const entry = ensure(res.Driver.driverId, race)
+      entry.position = res.positionText ?? res.position
+      entry.status = res.status
+      entry.racePoints = Number(res.points) || 0
+      entry.points += entry.racePoints
+      entry.dnf = isDnf(res.positionText, res.status)
+    }
+  }
+
+  for (const race of sprintRaces) {
+    for (const res of (race as Race & { SprintResults?: RaceResult[] }).SprintResults ?? []) {
+      const entry = ensure(res.Driver.driverId, race)
+      entry.sprintPoints = Number(res.points) || 0
+      entry.points += entry.sprintPoints
+      entry.hasSprint = true
+    }
+  }
+
+  const out: Record<string, DriverRaceEntry[]> = {}
+  for (const [driverId, rounds] of byDriver) {
+    out[driverId] = [...rounds.values()].sort((a, b) => Number(a.round) - Number(b.round))
+  }
+  return out
 }
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
