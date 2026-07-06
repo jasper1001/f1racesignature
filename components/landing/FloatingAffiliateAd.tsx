@@ -15,9 +15,14 @@ import { Analytics } from '@/lib/analytics'
 //    already carry the in-content InlineAffiliateAd slots on mobile.
 //
 // Picks a product after mount and re-picks on every route change (client-only →
-// no hydration mismatch). Dismissible for the session.
+// no hydration mismatch). It also auto-rotates to a fresh random product every
+// ROTATE_MS so the banner keeps cycling the catalog without a navigation.
+// Dismissible for the session.
 
 const DISMISS_KEY = 'f1rs_floating_ad_dismissed_v2'
+
+// How often the banner swaps to another random product while it stays on screen.
+const ROTATE_MS = 10_000
 
 // Routes the floating ad must never appear on.
 const HIDDEN_PREFIXES = ['/studio']
@@ -33,23 +38,43 @@ export function FloatingAffiliateAd() {
 
   // Render nothing on the server / first paint, then reveal after mount.
   const [product, setProduct] = useState<AffiliateProduct | null>(null)
+  const [dismissed, setDismissed] = useState(false)
 
-  // Re-pick a fresh random product on every route change (the ad stays mounted
-  // across client-side navigations, so this is what makes the content rotate).
+  // Honour a prior dismissal for the session (sessionStorage is client-only, so
+  // read it after mount). If storage is unavailable, hide to be safe.
   useEffect(() => {
-    if (hidden) {
+    try {
+      if (sessionStorage.getItem(DISMISS_KEY)) setDismissed(true)
+    } catch {
+      setDismissed(true)
+    }
+  }, [])
+
+  // Pick a random product on mount / route change, then keep rotating to another
+  // random one every ROTATE_MS. Each pick excludes the current product so it
+  // never shows the same one twice in a row.
+  useEffect(() => {
+    if (hidden || dismissed) {
       setProduct(null)
       return
     }
-    try {
-      if (sessionStorage.getItem(DISMISS_KEY)) return
-    } catch {
-      return
+    let currentId: string | undefined
+    const rotate = () => {
+      const next = pickRandomProduct(
+        currentId ? { exclude: [currentId] } : undefined,
+      )
+      if (next) {
+        currentId = next.id
+        setProduct(next)
+      }
     }
-    setProduct(pickRandomProduct())
-  }, [pathname, hidden])
+    rotate()
+    const timer = window.setInterval(rotate, ROTATE_MS)
+    return () => window.clearInterval(timer)
+  }, [pathname, hidden, dismissed])
 
   function dismiss() {
+    setDismissed(true)
     setProduct(null)
     try {
       sessionStorage.setItem(DISMISS_KEY, '1')

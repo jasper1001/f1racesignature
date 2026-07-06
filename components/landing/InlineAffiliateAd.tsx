@@ -8,8 +8,12 @@ import { Analytics } from '@/lib/analytics'
 // page flow (one below the hero, one above the footer). Mobile/tablet only
 // (xl:hidden); on desktop the FloatingAffiliateAd side rail covers this instead.
 //
-// A random product is chosen on mount (client-only) so the ad rotates per load.
-// Rendering nothing until mounted keeps server markup stable (no hydration flash).
+// A random product is chosen on mount (client-only) so the ad rotates per load,
+// then it keeps auto-rotating to another random product every ROTATE_MS while on
+// screen. Rendering nothing until mounted keeps server markup stable (no flash).
+
+// How often the card swaps to another random product while it stays on screen.
+const ROTATE_MS = 10_000
 
 export function InlineAffiliateAd({
   placement,
@@ -19,8 +23,22 @@ export function InlineAffiliateAd({
 }) {
   const [product, setProduct] = useState<AffiliateProduct | null>(null)
 
+  // Pick immediately, then rotate to a fresh random product (never the current
+  // one) on an interval so the catalog cycles without a page reload.
   useEffect(() => {
-    setProduct(pickRandomProduct())
+    let currentId: string | undefined
+    const rotate = () => {
+      const next = pickRandomProduct(
+        currentId ? { exclude: [currentId] } : undefined,
+      )
+      if (next) {
+        currentId = next.id
+        setProduct(next)
+      }
+    }
+    rotate()
+    const timer = window.setInterval(rotate, ROTATE_MS)
+    return () => window.clearInterval(timer)
   }, [])
 
   if (!product) return null
