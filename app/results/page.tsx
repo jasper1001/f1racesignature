@@ -102,6 +102,25 @@ export default async function ResultsPage() {
       }
     : null
 
+  const teamLeader = constructors[0]
+  const constructorsCard: StandingsCardSpec | null = constructors.length
+    ? {
+        type: 'standings',
+        eyebrow: round !== '0' ? `Formula 1 ${season} · After Round ${round}` : `Formula 1 ${season}`,
+        title: 'Constructor Standings',
+        sub: teamLeader
+          ? `${teamLeader.Constructor.name} leads on ${teamLeader.points} points`
+          : undefined,
+        credit: 'Real F1 data · Jolpica API',
+        rows: constructors.slice(0, 10).map((c) => ({
+          pos: c.position,
+          name: c.Constructor.name,
+          color: teamColor(c.Constructor.constructorId),
+          points: c.points,
+        })),
+      }
+    : null
+
   const lastRaceCard: PodiumCardSpec | null =
     lastRace?.Results && lastRace.Results.length >= 3
       ? {
@@ -253,7 +272,20 @@ export default async function ResultsPage() {
               {/* Constructor standings */}
               {constructors.length > 0 && (
                 <section>
-                  <SectionHeading eyebrow="Championship" title="Constructor Standings" />
+                  <div className="flex items-start justify-between gap-4">
+                    <SectionHeading eyebrow="Championship" title="Constructor Standings" />
+                    {constructorsCard && (
+                      <ShareCardButton
+                        spec={constructorsCard}
+                        filename={`f1racesignature-${season}-constructor-standings.png`}
+                        shareText={
+                          teamLeader
+                            ? `F1 ${season} constructor standings after round ${round}: ${teamLeader.Constructor.name} leads on ${teamLeader.points} pts 🏁 ${SITE_URL}/results`
+                            : `F1 ${season} constructor standings 🏁 ${SITE_URL}/results`
+                        }
+                      />
+                    )}
+                  </div>
                   <div className="mt-6">
                     <ConstructorStandingsGrid constructors={constructors} />
                   </div>
