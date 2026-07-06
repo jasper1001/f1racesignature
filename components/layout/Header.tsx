@@ -5,6 +5,20 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { SteeringWheelIcon } from '@/components/icons/SteeringWheel'
+import { OPEN_SITE_SEARCH } from '@/components/layout/SiteSearch'
+
+function openSearch() {
+  window.dispatchEvent(new Event(OPEN_SITE_SEARCH))
+}
+
+function SearchIcon({ className }: { className?: string }) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
+      <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="1.7" />
+      <path d="M21 21l-4.3-4.3" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+    </svg>
+  )
+}
 
 const NAV_LINKS = [
   { href: '/', label: 'Home' },
@@ -58,6 +72,15 @@ export function Header() {
                 </Link>
               )
             })}
+            <button
+              onClick={openSearch}
+              aria-label="Search the site"
+              title="Search (⌘K)"
+              className="ml-1 flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-[#aaaaaa] hover:text-white rounded-lg border border-[#222222] hover:border-[#333333] transition-colors"
+            >
+              <SearchIcon />
+              <kbd className="font-mono text-[10px] text-white/45">⌘K</kbd>
+            </button>
             {pathname !== '/studio' && !pathname.startsWith('/games') && (
               <Link href="/studio" className="ml-2 px-4 py-1.5 text-sm font-medium bg-[#d4a017] text-black rounded-lg hover:bg-[#e8b84b] transition-colors">
                 Create Poster
@@ -65,8 +88,15 @@ export function Header() {
             )}
           </nav>
 
-          {/* Mobile: Create Poster + hamburger */}
+          {/* Mobile: search + Create Poster + hamburger */}
           <div className="flex md:hidden items-center gap-2">
+            <button
+              onClick={openSearch}
+              aria-label="Search the site"
+              className="w-9 h-9 flex items-center justify-center text-[#aaaaaa] hover:text-white transition-colors"
+            >
+              <SearchIcon className="w-[18px] h-[18px]" />
+            </button>
             {pathname !== '/studio' && !pathname.startsWith('/games') && (
               <Link href="/studio" className="px-3 py-1.5 text-xs font-medium bg-[#d4a017] text-black rounded-lg hover:bg-[#e8b84b] transition-colors">
                 Create

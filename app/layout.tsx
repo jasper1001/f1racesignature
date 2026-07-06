@@ -6,6 +6,7 @@ import { Providers } from '@/components/Providers'
 import { CookieBanner } from '@/components/layout/CookieBanner'
 import { ExploreRail } from '@/components/layout/ExploreRail'
 import { FloatingAffiliateAd } from '@/components/landing/FloatingAffiliateAd'
+import { SiteSearch } from '@/components/layout/SiteSearch'
 
 const GA_MEASUREMENT_ID = 'G-HVKDBEVYBD'
 const SITE_URL = 'https://f1racesignature.site'
@@ -187,6 +188,7 @@ export default function RootLayout({
       </head>
       <body>
         <Providers>{children}</Providers>
+        <SiteSearch />
         <ExploreRail />
         <FloatingAffiliateAd />
         <CookieBanner />
