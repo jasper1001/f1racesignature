@@ -33,6 +33,7 @@ const PAGES: SearchDoc[] = [
   { id: 'page-blog', group: 'Page', title: 'Blog', subtitle: 'F1 articles & analysis', href: '/blog', keywords: 'articles reading history technology circuits' },
   { id: 'page-garage', group: 'Page', title: 'My Garage', subtitle: 'Your saved posters', href: '/garage', keywords: 'saved collection favourites downloads' },
   { id: 'page-results', group: 'Page', title: '2026 Season', subtitle: 'Live standings, results & championship', href: '/results', keywords: 'standings constructors results championship live points' },
+  { id: 'page-predictions', group: 'Page', title: 'Race Predictions', subtitle: 'Predict pole & podium, climb the league', href: '/predictions', keywords: 'predictions league fantasy podium pole picks points table' },
   { id: 'page-schedule', group: 'Page', title: 'Schedule', subtitle: '2026 race calendar & session times', href: '/schedule', keywords: 'calendar sessions times grand prix rounds' },
   { id: 'page-calendar', group: 'Page', title: 'Calendar', subtitle: 'Add the F1 season to your calendar', href: '/calendar', keywords: 'ics google calendar subscribe reminder' },
   { id: 'page-about', group: 'Page', title: 'About', subtitle: 'About F1RaceSignature', href: '/about', keywords: 'faq contact info story' },

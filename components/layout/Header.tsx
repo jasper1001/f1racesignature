@@ -28,6 +28,7 @@ const NAV_LINKS = [
   { href: '/blog', label: 'Blog' },
   { href: '/garage', label: 'My Garage' },
   { href: '/results', label: `${SEASON} Season` },
+  { href: '/predictions', label: 'Predictions' },
   { href: '/schedule', label: 'Schedule' },
   { href: '/calendar', label: 'Calendar' },
 ]

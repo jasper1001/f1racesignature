@@ -158,6 +158,78 @@ export async function getSeasonPodiums(year: string): Promise<RacePodium[]> {
     .sort((a, b) => Number(b.round) - Number(a.round)) // most recent first
 }
 
+// ── Pole positions (qualifying P1) per round ────────────────────────────────
+
+export interface RacePole {
+  round: string
+  raceName: string
+  date: string
+  driver: ApiDriver
+  constructorId: string
+}
+
+// One row per completed qualifying session — the compact /qualifying/1 endpoint
+// returns only the P1 driver of each round (same trick as getSeasonPodiums).
+export async function getSeasonPoles(year: string): Promise<RacePole[]> {
+  type QualiRace = Race & { QualifyingResults?: { Driver: ApiDriver; Constructor: ApiConstructor }[] }
+  const data = await getJson<{ MRData: { RaceTable: { Races: QualiRace[] } } }>(
+    `${year}/qualifying/1.json?limit=100`,
+  )
+  const out: RacePole[] = []
+  for (const r of data?.MRData?.RaceTable?.Races ?? []) {
+    const p1 = r.QualifyingResults?.[0]
+    if (p1) {
+      out.push({
+        round: r.round,
+        raceName: r.raceName,
+        date: r.date,
+        driver: p1.Driver,
+        constructorId: p1.Constructor.constructorId,
+      })
+    }
+  }
+  return out.sort((a, b) => Number(a.round) - Number(b.round))
+}
+
+// ── Current grid (for pick lists) ────────────────────────────────────────────
+
+export interface GridDriver {
+  driverId: string
+  name: string
+  code?: string
+  constructorId: string
+  teamName: string
+}
+
+// The season's drivers with their current team, ordered by championship position
+// (standings carry the constructor). Falls back to the plain driver list for the
+// pre-season window when no standings exist yet.
+export async function getGridDrivers(): Promise<GridDriver[]> {
+  const { standings } = await getDriverStandings()
+  if (standings.length > 0) {
+    return standings.map((s) => {
+      const team = s.Constructors[s.Constructors.length - 1]
+      return {
+        driverId: s.Driver.driverId,
+        name: `${s.Driver.givenName} ${s.Driver.familyName}`,
+        code: s.Driver.code,
+        constructorId: team?.constructorId ?? '',
+        teamName: team?.name ?? '',
+      }
+    })
+  }
+  const data = await getJson<{ MRData: { DriverTable: { Drivers: ApiDriver[] } } }>(
+    `${SEASON}/drivers.json?limit=100`,
+  )
+  return (data?.MRData?.DriverTable?.Drivers ?? []).map((d) => ({
+    driverId: d.driverId,
+    name: `${d.givenName} ${d.familyName}`,
+    code: d.code,
+    constructorId: '',
+    teamName: '',
+  }))
+}
+
 // ── Past-season final standings (completed years) ──────────────────────────────
 
 export interface PastSeason {
