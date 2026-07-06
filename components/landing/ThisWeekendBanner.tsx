@@ -18,16 +18,19 @@ const CIRCUIT_MAP: Record<string, string> = {
 }
 
 const DAY = 86_400_000
+const HOUR = 3_600_000
+// A race runs ~2h; treat it as over 4h after the start
+const RACE_DURATION = 4 * HOUR
 
 export async function ThisWeekendBanner() {
   const schedule = await getSchedule()
   if (schedule.length === 0) return null
 
   const now = Date.now()
-  // Find the next race that hasn't finished yet (race day + 1)
+  // Find the next race that hasn't finished yet
   const upcoming = schedule
-    .map((r) => ({ race: r, t: new Date(r.date + 'T14:00:00Z').getTime() }))
-    .filter(({ t }) => t + DAY >= now)
+    .map((r) => ({ race: r, t: new Date(`${r.date}T${r.time ?? '14:00:00Z'}`).getTime() }))
+    .filter(({ t }) => t + RACE_DURATION >= now)
     .sort((a, b) => a.t - b.t)[0]
 
   if (!upcoming) return null
@@ -40,7 +43,7 @@ export async function ThisWeekendBanner() {
   const ourCircuit = CIRCUIT_MAP[race.Circuit.circuitId]
   const historic = ourCircuit ? getAllRaces().find((r) => r.circuit === ourCircuit) : undefined
 
-  const when = daysAway <= 0 ? 'Live this weekend' : daysAway === 1 ? 'Tomorrow' : `In ${daysAway} days`
+  const when = daysAway <= 0 ? 'Live now' : daysAway === 1 ? 'Tomorrow' : `In ${daysAway} days`
 
   return (
     <div className="relative z-30 border-b border-[#d4a017]/20 bg-gradient-to-r from-[#0a0a0a] via-[#12100a] to-[#0a0a0a]">

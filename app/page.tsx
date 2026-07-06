@@ -19,6 +19,8 @@ export const metadata: Metadata = {
   alternates: { canonical: '/' },
 }
 
+export const revalidate = 3600
+
 const faqJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
