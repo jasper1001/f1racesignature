@@ -48,7 +48,7 @@ export default function DriversIndexPage() {
       {
         '@type': 'CollectionPage',
         name: 'F1 Driver Collection',
-        description: `Every Formula 1 driver in the F1RaceSignature collection — ${drivers.length} legends whose laps can be turned into telemetry poster art.`,
+        description: `Every Formula 1 driver in the F1RaceSignature collection — ${drivers.length} featured drivers whose laps can be turned into telemetry poster art.`,
         url: `${SITE_URL}/drivers`,
         isPartOf: { '@id': `${SITE_URL}/#website` },
         breadcrumb: {
@@ -87,11 +87,11 @@ export default function DriversIndexPage() {
         <div className="max-w-5xl mx-auto px-6 pt-10 pb-12 text-center">
           <p className="text-[#d4a017] text-xs font-medium uppercase tracking-widest mb-4">The Drivers</p>
           <h1 className="text-4xl md:text-5xl text-white mb-4 font-display">
-            Legends of Formula 1
+            Featured Drivers
           </h1>
           <p className="text-white/65 max-w-xl mx-auto">
-            {drivers.length} drivers, decades of greatness — {champions} world champions and a new generation of
-            Grand Prix winners. Pick a name to explore their iconic laps and turn them into art.
+            {drivers.length} drivers, past and present — {champions} world champions and a new generation of
+            Grand Prix winners. Pick a name to explore their standout laps and turn them into art.
           </p>
         </div>
 
