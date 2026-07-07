@@ -21,8 +21,8 @@ function SearchIcon({ className }: { className?: string }) {
   )
 }
 
-const NAV_LINKS = [
-  { href: '/studio', label: 'Studio' },
+const NAV_LINKS: { href: string; label: string; badge?: string }[] = [
+  { href: '/studio', label: 'Studio', badge: 'Beta' },
   { href: '/games', label: 'Mini Games' },
   { href: '/drivers', label: 'Drivers' },
   { href: '/blog', label: 'Blog' },
@@ -69,6 +69,11 @@ export function Header() {
                   )}
                   <span className="relative flex items-center gap-1.5">
                     {link.label}
+                    {link.badge && (
+                      <span className="px-1.5 py-px text-[9px] font-semibold uppercase tracking-wider text-gold border border-gold/40 rounded-full leading-normal">
+                        {link.badge}
+                      </span>
+                    )}
                   </span>
                 </Link>
               )
@@ -141,6 +146,11 @@ export function Header() {
                 >
                   <span className="flex items-center gap-2">
                     {link.label}
+                    {link.badge && (
+                      <span className="px-1.5 py-px text-[9px] font-semibold uppercase tracking-wider text-gold border border-gold/40 rounded-full leading-normal">
+                        {link.badge}
+                      </span>
+                    )}
                   </span>
                 </Link>
               ))}

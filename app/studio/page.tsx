@@ -354,6 +354,7 @@ export default function StudioPage() {
                 ?
               </button>
               <span className="text-[#aaaaaa] font-mono uppercase tracking-widest">Studio</span>
+              <span className="px-1.5 py-px text-[9px] font-semibold uppercase tracking-wider text-gold border border-gold/40 rounded-full leading-normal">Beta</span>
               {selectedDriver && <><span className="text-[#1a1a1a]">/</span><span className="text-[#aaaaaa]">{selectedDriver.name}</span></>}
               {selectedRace   && <><span className="text-[#1a1a1a]">/</span><span className="text-[#aaaaaa]">{selectedRace.circuit} {selectedRace.year}</span></>}
             </div>
