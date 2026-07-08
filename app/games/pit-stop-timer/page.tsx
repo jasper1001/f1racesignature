@@ -60,6 +60,12 @@ export default function PitStopTimerPage() {
             }}
           />
           <div
+            className="absolute inset-0 pointer-events-none anim-streaks opacity-60"
+            style={{
+              backgroundImage: 'repeating-linear-gradient(115deg, transparent 0 46px, rgba(6,182,212,0.05) 46px 48px, transparent 48px 94px)',
+            }}
+          />
+          <div
             className="absolute inset-0 pointer-events-none"
             style={{
               background: 'radial-gradient(ellipse 55% 35% at 50% 0%, rgba(6,182,212,0.07) 0%, transparent 70%)',

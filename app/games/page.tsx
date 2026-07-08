@@ -76,6 +76,14 @@ export default function GamesPage() {
               backgroundSize: '28px 28px',
             }}
           />
+          {/* Drifting diagonal speed streaks */}
+          <div
+            className="absolute inset-0 pointer-events-none anim-streaks opacity-60"
+            style={{
+              backgroundImage:
+                'repeating-linear-gradient(115deg, transparent 0 46px, rgba(212,160,23,0.05) 46px 48px, transparent 48px 94px)',
+            }}
+          />
           {/* Gold top glow */}
           <div
             className="absolute inset-0 pointer-events-none"
@@ -84,7 +92,7 @@ export default function GamesPage() {
             }}
           />
           <p className="relative text-[#d4a017] text-xs font-mono uppercase tracking-widest mb-4">
-            Mini Games
+            🏁 Mini Games
           </p>
           <h1
             className="relative text-4xl md:text-5xl text-[#1a1712] mb-4 font-display"
@@ -95,20 +103,35 @@ export default function GamesPage() {
             Lightweight F1-themed challenges you can complete in under two minutes.
             Best scores saved automatically.
           </p>
+
+          {/* Fun stats strip */}
+          <div className="relative mt-7 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-[11px] font-mono uppercase tracking-widest text-[#7a7264]">
+            {[
+              `${GAMES.length} games`,
+              'Free to play',
+              'No sign-up',
+              'Scores saved',
+            ].map((stat, i) => (
+              <span key={stat} className="inline-flex items-center gap-3">
+                {i > 0 && <span className="text-[#d4a017]/50">•</span>}
+                {stat}
+              </span>
+            ))}
+          </div>
         </div>
 
         {/* Games grid */}
         <div className="max-w-7xl mx-auto px-6 py-16">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {GAMES.map((game) => (
+            {GAMES.map((game, i) => (
               <Link
                 key={game.id}
                 href={game.href}
-                className="group relative block rounded-2xl border border-[#dcd5c6] bg-[#fbf9f4] p-6 transition-all duration-300 overflow-hidden hover:border-[#c4bca8] hover:-translate-y-0.5 hover:shadow-xl"
+                className="group relative block rounded-2xl border border-[#dcd5c6] bg-[#fbf9f4] p-6 transition-all duration-300 overflow-hidden hover:border-[#c4bca8] hover:-translate-y-1 hover:shadow-xl"
               >
-                {/* Left accent stripe */}
+                {/* Left accent stripe — widens on hover */}
                 <div
-                  className="absolute left-0 top-0 bottom-0 w-[3px] rounded-l-2xl transition-opacity duration-300"
+                  className="absolute left-0 top-0 bottom-0 w-[3px] rounded-l-2xl transition-all duration-300 group-hover:w-1.5"
                   style={{ background: game.accent }}
                 />
 
@@ -123,7 +146,7 @@ export default function GamesPage() {
                 {/* Engagement badge */}
                 {game.badge && (
                   <span
-                    className="absolute top-5 right-5 inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-mono uppercase tracking-widest font-semibold"
+                    className="anim-badge-pulse absolute top-5 right-5 inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-mono uppercase tracking-widest font-semibold"
                     style={{
                       color: game.accent,
                       background: `${game.accent}14`,
@@ -134,11 +157,15 @@ export default function GamesPage() {
                   </span>
                 )}
 
-                {/* Game icon */}
+                {/* Game icon — gently floats, pops on hover */}
                 <div className="mb-5">
                   <span
-                    className="inline-flex items-center justify-center w-12 h-12 rounded-xl text-2xl"
-                    style={{ background: `${game.accent}15`, border: `1px solid ${game.accent}25` }}
+                    className="anim-float inline-flex items-center justify-center w-12 h-12 rounded-xl text-2xl transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6"
+                    style={{
+                      background: `${game.accent}15`,
+                      border: `1px solid ${game.accent}25`,
+                      animationDelay: `${(i % 6) * 0.4}s`,
+                    }}
                   >
                     {game.icon}
                   </span>

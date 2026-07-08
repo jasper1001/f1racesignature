@@ -53,6 +53,7 @@ export default function GuessLapTimePage() {
         {/* Hero */}
         <div className="relative border-b border-[#dcd5c6] py-16 px-6 text-center overflow-hidden">
           <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.045) 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
+          <div className="absolute inset-0 pointer-events-none anim-streaks opacity-60" style={{ backgroundImage: 'repeating-linear-gradient(115deg, transparent 0 46px, rgba(225,29,72,0.05) 46px 48px, transparent 48px 94px)' }} />
           <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 55% 35% at 50% 0%, rgba(225,29,72,0.08) 0%, transparent 70%)' }} />
           <p className="relative text-xs font-mono uppercase tracking-widest mb-4" style={{ color: '#e11d48' }}>
             Time Trial

@@ -30,9 +30,9 @@ export function NextGameCard({ currentId }: { currentId: string }) {
           style={{ background: `radial-gradient(ellipse 70% 60% at 0% 50%, ${next.accent}14 0%, transparent 65%)` }}
         />
 
-        {/* Icon */}
+        {/* Icon — gently floats, pops on hover */}
         <span
-          className="relative inline-flex items-center justify-center w-12 h-12 rounded-xl text-2xl shrink-0"
+          className="anim-float relative inline-flex items-center justify-center w-12 h-12 rounded-xl text-2xl shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6"
           style={{ background: `${next.accent}15`, border: `1px solid ${next.accent}25` }}
         >
           {next.icon}

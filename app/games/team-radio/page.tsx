@@ -64,6 +64,12 @@ export default function TeamRadioPage() {
             }}
           />
           <div
+            className="absolute inset-0 pointer-events-none anim-streaks opacity-60"
+            style={{
+              backgroundImage: `repeating-linear-gradient(115deg, transparent 0 46px, ${ACCENT}0d 46px 48px, transparent 48px 94px)`,
+            }}
+          />
+          <div
             className="absolute inset-0 pointer-events-none"
             style={{
               background: `radial-gradient(ellipse 60% 40% at 50% 0%, ${ACCENT}14 0%, transparent 70%)`,

@@ -118,4 +118,40 @@
     pointer-events: none;
     z-index: 0;
   }
+
+  /* ── Playful motion for the games hub & game pages ──────────────────────── */
+  /* Gentle vertical bob — used on game-card icons so the grid feels alive. */
+  .anim-float {
+    animation: rs-float 3.5s ease-in-out infinite;
+  }
+  /* Attention pulse for engagement badges (New / Most Played). */
+  .anim-badge-pulse {
+    animation: rs-badge-pulse 2.4s ease-in-out infinite;
+  }
+  /* Slow drift for the diagonal speed streaks behind the hero. */
+  .anim-streaks {
+    animation: rs-streaks 8s linear infinite;
+  }
+
+  @keyframes rs-float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-4px); }
+  }
+  @keyframes rs-badge-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
+    50%      { box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.04); }
+  }
+  @keyframes rs-streaks {
+    from { background-position: 0 0; }
+    to   { background-position: 120px 0; }
+  }
+
+  /* Respect users who prefer less motion. */
+  @media (prefers-reduced-motion: reduce) {
+    .anim-float,
+    .anim-badge-pulse,
+    .anim-streaks {
+      animation: none;
+    }
+  }
 }
