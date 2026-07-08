@@ -7,7 +7,18 @@ export const SITE_URL = 'https://f1racesignature.site'
 export const CONTACT_EMAIL = 'wayfarerwondersblog@gmail.com'
 
 /**
- * The current F1 season. Bump once a year — everything (nav labels, metadata,
- * API queries) derives from this.
+ * The current F1 season — derived automatically from the calendar year.
+ *
+ * The season and the calendar year line up (races run Mar–Dec), so the current
+ * year is the active season for all of it, and it rolls over to the new season
+ * each January — by which point the F1 API's schedule for the new year has been
+ * published. Everything (nav labels, metadata, API queries) derives from this,
+ * so no yearly code change is needed.
+ *
+ * Kept as the current year (not rolled forward in December) on purpose: it keeps
+ * the just-completed championship standings visible through the off-season.
+ *
+ * Escape hatch: set NEXT_PUBLIC_F1_SEASON to pin a specific year (e.g. if the API
+ * is slow to publish a new calendar in early January).
  */
-export const SEASON = '2026'
+export const SEASON = process.env.NEXT_PUBLIC_F1_SEASON || String(new Date().getUTCFullYear())
