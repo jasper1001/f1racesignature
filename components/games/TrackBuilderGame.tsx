@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { ShareButtons } from '@/components/games/ShareButtons'
 import { NextGameCard } from '@/components/games/NextGameCard'
+import { Confetti } from '@/components/games/Confetti'
 import { Leaderboard } from '@/components/games/Leaderboard'
 import { fetchCircuits } from '@/lib/data'
 import type { Circuit } from '@/lib/types'
@@ -376,6 +377,7 @@ export function TrackBuilderGame() {
     return (
       <div className="p-6 md:p-10">
         <div className="mb-8 text-center md:text-left">
+          {isBest && <Confetti />}
           {isBest && (
             <span className="inline-flex items-center gap-1.5 px-3 py-1 mb-3 rounded-full text-xs font-mono uppercase tracking-widest"
               style={{ color: '#5a8a10', background: 'rgba(132,204,22,0.12)', border: '1px solid rgba(132,204,22,0.35)' }}>

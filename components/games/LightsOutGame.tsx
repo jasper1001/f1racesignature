@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ShareButtons } from '@/components/games/ShareButtons'
 import { NextGameCard } from '@/components/games/NextGameCard'
+import { Confetti } from '@/components/games/Confetti'
 import { Leaderboard } from '@/components/games/Leaderboard'
 
 const LIGHT_INTERVAL = 800
@@ -314,6 +315,7 @@ function ResultPanel({
       animate={{ opacity: 1, y: 0 }}
       className="text-center space-y-4 w-full max-w-xs"
     >
+      {isNewBest && <Confetti />}
       {isNewBest && (
         <motion.div
           initial={{ opacity: 0, scale: 0.4 }}

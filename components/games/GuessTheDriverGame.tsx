@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { DRIVERS, CLUE_DEFS, scorePotential, type DriverEntry } from '@/lib/games/guessDriverData'
 import { ShareButtons } from '@/components/games/ShareButtons'
+import { Confetti } from '@/components/games/Confetti'
 import { NextGameCard } from '@/components/games/NextGameCard'
 import { Leaderboard } from '@/components/games/Leaderboard'
 
@@ -322,6 +323,7 @@ export function GuessTheDriverGame() {
             exit={{ opacity: 0 }}
             className="rounded-2xl border border-[#dcd5c6] bg-[#fbf9f4] p-8 text-center space-y-5"
           >
+            {isNewBest && <Confetti />}
             {isNewBest && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.5 }}

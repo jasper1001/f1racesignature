@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { RADIO_QUOTES, type RadioQuote } from '@/lib/games/teamRadioData'
 import { ShareButtons } from '@/components/games/ShareButtons'
+import { Confetti } from '@/components/games/Confetti'
 import { NextGameCard } from '@/components/games/NextGameCard'
 import { Leaderboard } from '@/components/games/Leaderboard'
 
@@ -347,6 +348,7 @@ function ResultScreen({
         />
 
         <div className="relative px-6 py-10 md:px-10 md:py-12 text-center">
+          {isNewBest && <Confetti />}
           {isNewBest && (
             <p className="text-[#d4a017] text-[10px] font-mono uppercase tracking-widest mb-4">
               ★ New best score

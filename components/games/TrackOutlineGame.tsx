@@ -4,6 +4,7 @@ import { useState, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
 import { ShareButtons } from '@/components/games/ShareButtons'
+import { Confetti } from '@/components/games/Confetti'
 import { NextGameCard } from '@/components/games/NextGameCard'
 import { Leaderboard } from '@/components/games/Leaderboard'
 import { fetchCircuits } from '@/lib/data'
@@ -294,6 +295,7 @@ export function TrackOutlineGame() {
             <motion.div key="finished" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
               className="rounded-2xl border border-[#dcd5c6] bg-[#fbf9f4] p-8 text-center space-y-5"
             >
+              {isNewBest && <Confetti />}
               {isNewBest && (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }}

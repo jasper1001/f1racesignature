@@ -4,6 +4,7 @@ import { useState, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ShareButtons } from '@/components/games/ShareButtons'
 import { NextGameCard } from '@/components/games/NextGameCard'
+import { Confetti } from '@/components/games/Confetti'
 import { Leaderboard } from '@/components/games/Leaderboard'
 import {
   PODIUM_RACES, ROUNDS_PER_GAME, ratingFor, shuffle, composeScore,
@@ -233,6 +234,7 @@ export function PodiumScrambleGame() {
           return (
             <motion.div key="finished" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
               className="rounded-2xl border border-[#dcd5c6] bg-[#fbf9f4] p-8 text-center space-y-5">
+              {isBest && <Confetti />}
               {isBest && (
                 <motion.div initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 14 }}

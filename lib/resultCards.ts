@@ -38,7 +38,17 @@ export interface PredictionCardSpec {
   rows: { label: string; pick: string; result: 'exact' | 'partial' | 'miss' }[]
 }
 
-export type CardSpec = StandingsCardSpec | PodiumCardSpec | PredictionCardSpec
+export interface ScheduleCardSpec {
+  type: 'schedule'
+  eyebrow: string
+  title: string
+  sub?: string
+  credit?: string
+  /** Full season, already ordered by round. */
+  rows: { round: string; name: string; date: string; status: 'past' | 'next' | 'upcoming' }[]
+}
+
+export type CardSpec = StandingsCardSpec | PodiumCardSpec | PredictionCardSpec | ScheduleCardSpec
 
 /** 'wide' = 1200×630 (posts, link previews) · 'story' = 1080×1920 (TikTok/Reels/Stories). */
 export type CardFormat = 'wide' | 'story'
@@ -332,6 +342,48 @@ function drawPredictionBody(ctx: Ctx, spec: PredictionCardSpec) {
   }
 }
 
+function drawScheduleBody(ctx: Ctx, spec: ScheduleCardSpec) {
+  const rows = spec.rows.slice(0, 24)
+  const perCol = Math.ceil(rows.length / 2)
+  const colW = 500
+  const topY = 228
+  const rowH = Math.min(44, Math.floor(320 / perCol)) // body must clear the footer rule at y=556
+  const PAST = 'rgba(255,255,255,0.3)'
+
+  rows.forEach((row, i) => {
+    const col = Math.floor(i / perCol)
+    const x = MARGIN + col * (colW + 40)
+    const y = topY + (i % perCol) * rowH
+    const baseline = y + rowH / 2 + 5
+    const past = row.status === 'past'
+    const next = row.status === 'next'
+
+    if (next) {
+      ctx.fillStyle = 'rgba(212,160,23,0.12)'
+      roundedRect(ctx, x - 10, y + 1, colW + 20, rowH - 2, 6)
+      ctx.fill()
+    } else if ((i % perCol) < perCol - 1 && i !== rows.length - 1) {
+      ctx.strokeStyle = 'rgba(255,255,255,0.04)'
+      ctx.lineWidth = 1
+      ctx.beginPath(); ctx.moveTo(x, y + rowH - 0.5); ctx.lineTo(x + colW, y + rowH - 0.5); ctx.stroke()
+    }
+
+    ctx.fillStyle = next ? GOLD : past ? PAST : DIM
+    ctx.font = `700 13px ${MONO}`
+    ctx.textAlign = 'right'
+    ctx.fillText(row.round, x + 26, baseline)
+
+    ctx.font = `${next ? 700 : 400} 13px ${MONO}`
+    ctx.fillText(row.date, x + colW, baseline)
+    const dateW = ctx.measureText(row.date).width
+    ctx.textAlign = 'left'
+
+    ctx.fillStyle = past ? PAST : WHITE
+    fitFont(ctx, row.name, `600 {s}px ${SANS}`, 15, 11, colW - 40 - dateW - 16)
+    ctx.fillText(row.name, x + 40, baseline)
+  })
+}
+
 // ── Story format (9:16 — TikTok / Reels / Stories) ───────────────────────────
 // Same palette and faces, recomposed vertically: centered header, stacked
 // panels, everything inside the middle of the frame so platform UI (captions,
@@ -525,6 +577,46 @@ function drawStoryPredictionBody(ctx: Ctx, spec: PredictionCardSpec) {
   }
 }
 
+function drawStoryScheduleBody(ctx: Ctx, spec: ScheduleCardSpec) {
+  const rows = spec.rows.slice(0, 24)
+  const x = SM
+  const colW = STORY_W - SM * 2
+  const topY = 512
+  const rowH = Math.min(64, Math.floor(1130 / rows.length)) // body must clear the footer rule at y=1668
+  const PAST = 'rgba(255,255,255,0.3)'
+
+  rows.forEach((row, i) => {
+    const y = topY + i * rowH
+    const baseline = y + rowH / 2 + 8
+    const past = row.status === 'past'
+    const next = row.status === 'next'
+
+    if (next) {
+      ctx.fillStyle = 'rgba(212,160,23,0.12)'
+      roundedRect(ctx, x - 14, y + 2, colW + 28, rowH - 4, 10)
+      ctx.fill()
+    } else if (i !== rows.length - 1) {
+      ctx.strokeStyle = 'rgba(255,255,255,0.04)'
+      ctx.lineWidth = 1
+      ctx.beginPath(); ctx.moveTo(x, y + rowH - 0.5); ctx.lineTo(x + colW, y + rowH - 0.5); ctx.stroke()
+    }
+
+    ctx.fillStyle = next ? GOLD : past ? PAST : DIM
+    ctx.font = `700 20px ${MONO}`
+    ctx.textAlign = 'right'
+    ctx.fillText(row.round, x + 44, baseline)
+
+    ctx.font = `${next ? 700 : 400} 20px ${MONO}`
+    ctx.fillText(row.date, x + colW, baseline)
+    const dateW = ctx.measureText(row.date).width
+    ctx.textAlign = 'left'
+
+    ctx.fillStyle = past ? PAST : WHITE
+    fitFont(ctx, row.name, `600 {s}px ${SANS}`, 24, 16, colW - 68 - dateW - 24)
+    ctx.fillText(row.name, x + 68, baseline)
+  })
+}
+
 // ── Entry point ───────────────────────────────────────────────────────────────
 
 /** Renders a card spec to a PNG blob + data URL (for the preview <img>). */
@@ -546,12 +638,14 @@ export async function renderCard(
     drawStoryHeader(ctx, spec.eyebrow, spec.title, spec.sub)
     if (spec.type === 'standings') drawStoryStandingsBody(ctx, spec)
     else if (spec.type === 'podium') drawStoryPodiumBody(ctx, spec)
+    else if (spec.type === 'schedule') drawStoryScheduleBody(ctx, spec)
     else drawStoryPredictionBody(ctx, spec)
     drawStoryFooter(ctx, spec.credit)
   } else {
     drawHeader(ctx, spec.eyebrow, spec.title, spec.sub)
     if (spec.type === 'standings') drawStandingsBody(ctx, spec)
     else if (spec.type === 'podium') drawPodiumBody(ctx, spec)
+    else if (spec.type === 'schedule') drawScheduleBody(ctx, spec)
     else drawPredictionBody(ctx, spec)
     drawFooter(ctx, spec.credit)
   }

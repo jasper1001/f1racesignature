@@ -3,7 +3,9 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { ScheduleView } from '@/components/schedule/ScheduleView'
 import { FaqSection } from '@/components/seo/FaqSection'
+import { ShareCardButton } from '@/components/ShareCardButton'
 import { getSchedule, getSeason } from '@/lib/f1api'
+import { buildScheduleCard, scheduleShareText } from '@/lib/scheduleCard'
 import { SITE_URL, raceSportsEvent, faqPageJsonLd, scheduleFaqs } from '@/lib/seo'
 
 export const revalidate = 3600
@@ -43,6 +45,9 @@ export default async function SchedulePage() {
   const [season, races] = await Promise.all([getSeason(), getSchedule()])
 
   const faqs = scheduleFaqs(races, season)
+
+  // Shareable card spec (plain data; rendered to PNG client-side on demand).
+  const scheduleCard = buildScheduleCard(races, season)
 
   // Per-race SportsEvent JSON-LD enables Event rich results in Google Search.
   const eventsLd = races.map((race) => raceSportsEvent(race, season, '/schedule'))
@@ -96,6 +101,16 @@ export default async function SchedulePage() {
           <p className="relative text-white/65 text-sm max-w-2xl mx-auto">
             The complete {season} Formula 1 race calendar — every Grand Prix timetable with Practice, Qualifying, Sprint and Race times. Select your timezone and the full fixtures convert instantly to your local time, so you never have to work out UTC by hand.
           </p>
+          {scheduleCard && (
+            <div className="relative mt-6 flex justify-center">
+              <ShareCardButton
+                spec={scheduleCard}
+                filename={`f1racesignature-${season}-schedule.png`}
+                shareText={scheduleShareText(races, season, SITE_URL)}
+                label="Share calendar"
+              />
+            </div>
+          )}
         </div>
 
         {/* Schedule */}

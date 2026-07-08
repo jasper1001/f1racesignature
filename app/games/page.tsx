@@ -120,10 +120,74 @@ export default function GamesPage() {
           </div>
         </div>
 
-        {/* Games grid */}
+        {/* Featured spotlight + games grid */}
         <div className="max-w-7xl mx-auto px-6 py-16">
+          {/* Spotlight — the flagship game, given the full-width hero treatment */}
+          {(() => {
+            const f = GAMES[0]
+            return (
+              <Link
+                href={f.href}
+                className="group relative mb-10 grid md:grid-cols-[1.4fr_1fr] items-stretch rounded-3xl border border-[#dcd5c6] bg-[#fbf9f4] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
+                style={{ boxShadow: `0 0 0 1px ${f.accent}18` }}
+              >
+                {/* Accent wash */}
+                <div
+                  className="absolute inset-0 pointer-events-none opacity-90"
+                  style={{ background: `radial-gradient(ellipse 90% 120% at 100% 50%, ${f.accent}1f 0%, transparent 60%)` }}
+                />
+                {/* Drifting streaks */}
+                <div
+                  className="absolute inset-0 pointer-events-none anim-streaks opacity-70"
+                  style={{ backgroundImage: `repeating-linear-gradient(115deg, transparent 0 54px, ${f.accent}12 54px 56px, transparent 56px 110px)` }}
+                />
+                {/* Top accent bar */}
+                <div className="absolute left-0 right-0 top-0 h-1" style={{ background: f.accent }} />
+
+                {/* Text side */}
+                <div className="relative p-8 md:p-10 flex flex-col justify-center">
+                  <div className="flex items-center gap-3 mb-4">
+                    <span
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono uppercase tracking-widest font-semibold"
+                      style={{ color: f.accent, background: `${f.accent}18`, border: `1px solid ${f.accent}40` }}
+                    >
+                      ★ Featured
+                    </span>
+                    {f.badge && (
+                      <span className="text-[10px] font-mono uppercase tracking-widest text-[#7a7264]">{f.badge}</span>
+                    )}
+                  </div>
+                  <h2 className="text-3xl md:text-4xl text-[#1a1712] mb-3 font-display">{f.title}</h2>
+                  <p className="text-[#1a1712] text-sm md:text-base leading-relaxed max-w-lg mb-6">{f.description}</p>
+                  <div className="flex items-center gap-5">
+                    <span
+                      className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-[#fbf9f4] transition-transform duration-200 group-hover:translate-x-0.5"
+                      style={{ background: f.accent }}
+                    >
+                      Play now
+                      <svg width="15" height="15" viewBox="0 0 14 14" fill="none">
+                        <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </span>
+                    <span className="text-[#7a7264] text-xs font-mono uppercase tracking-widest">{f.duration}</span>
+                  </div>
+                </div>
+
+                {/* Visual side — oversized icon watermark that floats */}
+                <div className="relative hidden md:flex items-center justify-center overflow-hidden">
+                  <span
+                    className="anim-float select-none leading-none opacity-90"
+                    style={{ fontSize: '10rem', filter: `drop-shadow(0 12px 30px ${f.accent}30)` }}
+                  >
+                    {f.icon}
+                  </span>
+                </div>
+              </Link>
+            )
+          })()}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {GAMES.map((game, i) => (
+            {GAMES.slice(1).map((game, i) => (
               <Link
                 key={game.id}
                 href={game.href}

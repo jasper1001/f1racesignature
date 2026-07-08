@@ -4,6 +4,7 @@ import { useState, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { SCENARIOS, getRating, type Scenario, type StrategyOption, type ResultType } from '@/lib/games/strategyScenarios'
+import { Confetti } from '@/components/games/Confetti'
 import { ShareButtons } from '@/components/games/ShareButtons'
 import { NextGameCard } from '@/components/games/NextGameCard'
 import { Leaderboard } from '@/components/games/Leaderboard'
@@ -286,6 +287,7 @@ export function ChampionshipDeciderGame() {
             <motion.div key="finished" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
               className="rounded-2xl border border-[#dcd5c6] bg-[#fbf9f4] p-8 space-y-6"
             >
+              {isNewBest && <Confetti />}
               {isNewBest && (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }}

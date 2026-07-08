@@ -146,12 +146,39 @@
     to   { background-position: 120px 0; }
   }
 
+  /* One-shot confetti burst celebrated on a personal best. */
+  .rs-confetti {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 60;
+  }
+  .rs-confetti-piece {
+    position: absolute;
+    top: -8%;
+    opacity: 0;
+    animation-name: rs-confetti-fall;
+    animation-timing-function: cubic-bezier(0.25, 0.6, 0.4, 1);
+    animation-fill-mode: forwards;
+    will-change: transform, opacity;
+  }
+  @keyframes rs-confetti-fall {
+    0%   { transform: translate(0, -10vh) rotate(0deg); opacity: 0; }
+    10%  { opacity: 1; }
+    92%  { opacity: 1; }
+    100% { transform: translate(var(--rs-drift), 108vh) rotate(var(--rs-rot)); opacity: 0; }
+  }
+
   /* Respect users who prefer less motion. */
   @media (prefers-reduced-motion: reduce) {
     .anim-float,
     .anim-badge-pulse,
     .anim-streaks {
       animation: none;
+    }
+    .rs-confetti {
+      display: none;
     }
   }
 }

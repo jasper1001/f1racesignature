@@ -5,6 +5,8 @@ import { Footer } from '@/components/layout/Footer'
 import { getSeason, getSchedule, formatRaceDate } from '@/lib/f1api'
 import type { Race } from '@/lib/f1api'
 import { googleCalUrl, buildSeasonIcs, icsDataUri } from '@/lib/calendar'
+import { ShareCardButton } from '@/components/ShareCardButton'
+import { buildScheduleCard, scheduleShareText } from '@/lib/scheduleCard'
 import { FaqSection } from '@/components/seo/FaqSection'
 import { SITE_URL, raceSportsEvent, faqPageJsonLd, calendarFaqs } from '@/lib/seo'
 
@@ -86,6 +88,9 @@ export default async function CalendarPage() {
   const faqs = calendarFaqs(races, season)
   const seasonIcs = races.length > 0 ? icsDataUri(buildSeasonIcs(races, season)) : null
 
+  // Shareable card spec (plain data; rendered to PNG client-side on demand).
+  const scheduleCard = buildScheduleCard(races, season)
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -153,6 +158,14 @@ export default async function CalendarPage() {
                 >
                   Need session times? View the schedule
                 </Link>
+                {scheduleCard && (
+                  <ShareCardButton
+                    spec={scheduleCard}
+                    filename={`f1racesignature-${season}-schedule.png`}
+                    shareText={scheduleShareText(races, season, SITE_URL)}
+                    label="Share calendar"
+                  />
+                )}
               </div>
             </div>
           )}
