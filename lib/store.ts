@@ -34,9 +34,9 @@ export const useStudioStore = create<StudioStore>((set) => ({
   // Default to a comparison-rich circuit so head-to-head works on first load:
   // Silverstone '26 also has Antonelli and Verstappen for the head-to-head.
   selectedRaceId: 'hamilton_silverstone_2026',
-  // Ideal racing line on the real OSM track — every circuit has a track file,
-  // and PosterPreview falls back to the lap trace if one fails to load.
-  vizMode: 'racing_line_real',
+  // Default to the raw lap trace (the ideal 'Racing Line' mode is temporarily
+  // disabled — see VIZ_MODES in lib/themes.ts).
+  vizMode: 'racing_line',
   theme: 'carbon_fiber',
   exportFormat: 'poster_portrait',
 

@@ -259,11 +259,14 @@ export const VIZ_MODES: VizModeConfig[] = [
     name: 'Lap Trace',
     description: 'The exact GPS path the car traced around the lap',
   },
-  {
-    id: 'racing_line_real',
-    name: 'Racing Line',
-    description: 'The ideal racing line on the real track — wide entry, apex, wide exit',
-  },
+  // Temporarily disabled — hidden from the studio (and the Surprise picker) for
+  // now. Re-add this entry to bring the 'Racing Line' mode back; the type,
+  // rendering (PosterPreview), and track data all remain in place.
+  // {
+  //   id: 'racing_line_real',
+  //   name: 'Racing Line',
+  //   description: 'The ideal racing line on the real track — wide entry, apex, wide exit',
+  // },
   {
     id: 'speed_heatmap',
     name: 'Speed Heatmap',
