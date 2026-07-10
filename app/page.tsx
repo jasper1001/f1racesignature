@@ -2,10 +2,12 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-import { Hero } from '@/components/landing/Hero'
 import { HowItWorks } from '@/components/landing/HowItWorks'
 import { FAQ } from '@/components/landing/FAQ'
-import { ThisWeekendBanner } from '@/components/landing/ThisWeekendBanner'
+import { FactTicker } from '@/components/landing/racehub/FactTicker'
+import { RaceHub } from '@/components/landing/racehub/RaceHub'
+import { TitleRaceSection } from '@/components/landing/racehub/TitleRaceSection'
+import { FormGuide } from '@/components/landing/racehub/FormGuide'
 import { GamesOfTheDay } from '@/components/landing/GamesOfTheDay'
 import { SectionHeader } from '@/components/landing/SectionHeader'
 import { ArrowRightIcon } from '@/components/ui/ArrowRightIcon'
@@ -61,8 +63,14 @@ export default function HomePage() {
       </a>
 
       <main className="pt-14">
-        <ThisWeekendBanner />
-        <Hero />
+        {/* Race hub — leads the page: rotating fact, next-race card, season progress */}
+        <FactTicker />
+        <RaceHub />
+
+        {/* F1 depth — championship progression + recent winners */}
+        <TitleRaceSection />
+        <FormGuide />
+
         <HowItWorks />
 
         {/* Games of the Day — three daily-rotating picks */}
