@@ -3,6 +3,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { InlineAffiliateAd } from '@/components/landing/InlineAffiliateAd'
 import { LeaderboardView } from '@/components/games/LeaderboardView'
+import { GameAbout } from '@/components/games/GameAbout'
 import { GuessLapTimeGame } from '@/components/games/GuessLapTimeGame'
 
 export const metadata: Metadata = {
@@ -75,6 +76,14 @@ export default function GuessLapTimePage() {
           </div>
           <div className="mt-6"><LeaderboardView gameId="guess-the-lap-time" /></div>
         </div>
+        <GameAbout
+          title="Guess a real F1 lap time on a slider"
+          accent="#e11d48"
+          paragraphs={[
+            "Every lap in this game is real — a specific driver, circuit and year, pulled from actual F1 telemetry. You see the context but not the number, and have to slide to your best guess of the lap time. The closer you land, the lower your score for that lap.",
+            "It's a genuinely useful gut-check for how well-calibrated your sense of F1 pace really is — the gap between a Monaco lap and a Monza lap is enormous, and a circuit you don't watch often can throw off even a confident guess by several seconds.",
+          ]}
+        />
 
         <InlineAffiliateAd placement="game-bottom" />
 

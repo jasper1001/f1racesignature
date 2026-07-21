@@ -3,6 +3,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { InlineAffiliateAd } from '@/components/landing/InlineAffiliateAd'
 import { LeaderboardView } from '@/components/games/LeaderboardView'
+import { GameAbout } from '@/components/games/GameAbout'
 import { PodiumScrambleGame } from '@/components/games/PodiumScrambleGame'
 
 export const metadata: Metadata = {
@@ -75,6 +76,14 @@ export default function PodiumScramblePage() {
           </div>
           <div className="mt-6"><LeaderboardView gameId="podium-scramble" /></div>
         </div>
+        <GameAbout
+          title="Reorder a scrambled F1 podium"
+          accent="#d4a017"
+          paragraphs={[
+            "The three drivers who finished on the rostrum in a famous race, presented out of order — your job is to put them back into P1, P2, P3. Six races per round, scored by how many positions off you land in total.",
+            "Some podiums are locked into F1 memory and go quickly. Others depend on remembering a specific race's late drama — a safety car that reshuffled positions, a penalty applied after the flag — rather than just who the fastest driver that weekend generally was.",
+          ]}
+        />
 
         <InlineAffiliateAd placement="game-bottom" />
 

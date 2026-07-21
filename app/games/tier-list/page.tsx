@@ -4,6 +4,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { InlineAffiliateAd } from '@/components/landing/InlineAffiliateAd'
 import { TierListGame } from '@/components/games/TierListGame'
+import { GameAbout } from '@/components/games/GameAbout'
 
 const ACCENT = '#f43f5e'
 
@@ -101,7 +102,14 @@ export default function TierListPage() {
             <TierListGame />
           </div>
         </div>
-        <InlineAffiliateAd placement="game-bottom" />
+        <GameAbout
+          title="Build your own F1 tier list"
+          accent={ACCENT}
+          paragraphs={[
+            "Drag drivers, teams and circuits into S-through-D tiers and build the ranking you'd actually defend in an argument. There's no single correct answer here — it's a tool for settling (or starting) the debates every F1 fan has an opinion on.",
+            "Rank by era, by current form, by all-time greatness — whatever axis you're arguing. Once it's built, it's yours to save and share, so the ranking becomes something to compare against a friend's rather than just a private list.",
+          ]}
+        /><InlineAffiliateAd placement="game-bottom" />
       </main>
       <Footer />
     </>

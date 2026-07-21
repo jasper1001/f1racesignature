@@ -4,6 +4,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { InlineAffiliateAd } from '@/components/landing/InlineAffiliateAd'
 import { LeaderboardView } from '@/components/games/LeaderboardView'
+import { GameAbout } from '@/components/games/GameAbout'
 import { LightsOutGame } from '@/components/games/LightsOutGame'
 
 export const metadata: Metadata = {
@@ -126,7 +127,14 @@ export default function LightsOutPage() {
             </div>
           </div>
         </div>
-        <InlineAffiliateAd placement="game-bottom" />
+        <GameAbout
+          title="Test the reflex F1 drivers train for years"
+          accent={ACCENT}
+          paragraphs={[
+            "The five red lights go out and the race starts — your reaction time from that instant is what separates a good launch from a jumped start. This game measures exactly that: watch the lights, react the moment they go dark, and see your time in milliseconds.",
+            "The scale on the right is calibrated against real F1 driver reaction data, so a result in the 'F1 Driver Level' band isn't a participation trophy — it's genuinely competitive with what happens on the grid before lights out.",
+          ]}
+        /><InlineAffiliateAd placement="game-bottom" />
       </main>
       <Footer />
     </>

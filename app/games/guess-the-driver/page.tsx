@@ -4,6 +4,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { InlineAffiliateAd } from '@/components/landing/InlineAffiliateAd'
 import { LeaderboardView } from '@/components/games/LeaderboardView'
+import { GameAbout } from '@/components/games/GameAbout'
 import { GuessTheDriverGame } from '@/components/games/GuessTheDriverGame'
 
 export const metadata: Metadata = {
@@ -108,7 +109,14 @@ export default function GuessTheDriverPage() {
           </div>
           <div className="mt-6"><LeaderboardView gameId="guess-the-driver" /></div>
         </div>
-        <InlineAffiliateAd placement="game-bottom" />
+        <GameAbout
+          title="Name the driver from the clues alone"
+          accent={ACCENT}
+          paragraphs={[
+            "A driver is described one clue at a time — nationality, number, team history, a signature result — and the goal is to name them in as few clues as possible. The first clue is usually vague on purpose; the later ones narrow it down fast.",
+            "It works as well for die-hards chasing a low clue-count as it does for newer fans learning who's who, since every wrong guess still teaches you something about the grid before the answer is revealed.",
+          ]}
+        /><InlineAffiliateAd placement="game-bottom" />
       </main>
       <Footer />
     </>

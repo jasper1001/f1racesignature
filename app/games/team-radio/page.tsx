@@ -4,6 +4,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { InlineAffiliateAd } from '@/components/landing/InlineAffiliateAd'
 import { LeaderboardView } from '@/components/games/LeaderboardView'
+import { GameAbout } from '@/components/games/GameAbout'
 import { TeamRadioGame } from '@/components/games/TeamRadioGame'
 import { RADIO_QUOTES } from '@/lib/games/teamRadioData'
 
@@ -108,7 +109,14 @@ export default function TeamRadioPage() {
           </div>
           <div className="mt-6"><LeaderboardView gameId="team-radio" /></div>
         </div>
-        <InlineAffiliateAd placement="game-bottom" />
+        <GameAbout
+          title="Who said it? Real F1 team radio, no names attached"
+          accent={ACCENT}
+          paragraphs={[
+            "F1's most memorable moments often live in the radio message, not the on-track action — a driver's frustration, a race engineer's calm under pressure, a call that changed a strategy in real time. Team Radio strips the name off a real transcribed message and asks you to identify who said it.",
+            "Some quotes are iconic enough to place instantly. Others need you to know a driver's voice — their phrasing, their relationship with their engineer, the kind of thing they'd actually say mid-race — rather than just the words on the page.",
+          ]}
+        /><InlineAffiliateAd placement="game-bottom" />
       </main>
       <Footer />
     </>

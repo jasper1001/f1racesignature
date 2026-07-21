@@ -4,6 +4,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { InlineAffiliateAd } from '@/components/landing/InlineAffiliateAd'
 import { LeaderboardView } from '@/components/games/LeaderboardView'
+import { GameAbout } from '@/components/games/GameAbout'
 import { PredictDriverGame } from '@/components/games/PredictDriverGame'
 
 export const metadata: Metadata = {
@@ -107,7 +108,14 @@ export default function PredictDriverPage() {
           </div>
           <div className="mt-6"><LeaderboardView gameId="predict-driver" /></div>
         </div>
-        <InlineAffiliateAd placement="game-bottom" />
+        <GameAbout
+          title="Guess who the season belongs to"
+          accent={ACCENT}
+          paragraphs={[
+            "A season is described through its shape — results trending a certain way, team form, a driver on the rise or fading — and the challenge is naming who it belongs to before the reveal. It rewards reading a season's story, not just memorizing final standings.",
+            "Some rounds are recent enough to be fresh in memory; others reach back to seasons whose shape only makes sense once you remember the wider context of who was competitive that year and who wasn't.",
+          ]}
+        /><InlineAffiliateAd placement="game-bottom" />
       </main>
       <Footer />
     </>

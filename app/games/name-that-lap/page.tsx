@@ -3,6 +3,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { InlineAffiliateAd } from '@/components/landing/InlineAffiliateAd'
 import { LeaderboardView } from '@/components/games/LeaderboardView'
+import { GameAbout } from '@/components/games/GameAbout'
 import { NameThatLapGame } from '@/components/games/NameThatLapGame'
 
 export const metadata: Metadata = {
@@ -93,6 +94,14 @@ export default function NameThatLapPage() {
           </div>
           <div className="mt-6"><LeaderboardView gameId="name-that-lap" /></div>
         </div>
+        <GameAbout
+          title="Name the circuit from its racing line"
+          accent="#8b5cf6"
+          paragraphs={[
+            "A real F1 lap, drawn purely as the racing line it traced — no track labels, no corner markers, just the shape the car actually followed. Read the sequence of turns and pick the circuit from four options. Ten laps per round.",
+            "This is a harder read than a circuit outline, since a racing line compresses and stretches with braking and acceleration zones rather than showing the track's true geometry — it rewards knowing how a lap actually feels to drive, not just what the map looks like.",
+          ]}
+        />
 
         <InlineAffiliateAd placement="game-bottom" />
 

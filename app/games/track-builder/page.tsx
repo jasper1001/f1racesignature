@@ -4,6 +4,7 @@ import { Footer } from '@/components/layout/Footer'
 import { InlineAffiliateAd } from '@/components/landing/InlineAffiliateAd'
 import { TrackBuilderLeaderboards } from '@/components/games/TrackBuilderLeaderboards'
 import { TrackBuilderGame } from '@/components/games/TrackBuilderGame'
+import { GameAbout } from '@/components/games/GameAbout'
 
 export const metadata: Metadata = {
   title: 'F1 Track Builder — Circuit Jigsaw Puzzle Game | F1RaceSignature',
@@ -94,7 +95,14 @@ export default function TrackBuilderPage() {
           <div className="mt-6"><TrackBuilderLeaderboards /></div>
         </div>
 
-        <InlineAffiliateAd placement="game-bottom" />
+        <GameAbout
+          title="Rebuild a real F1 circuit from scrambled tiles"
+          accent="#84cc16"
+          paragraphs={[
+            "A real F1 circuit, cut into tiles and shuffled — the challenge is putting it back together as fast as you can, using nothing but your sense of how the corners actually connect. Each puzzle is drawn from an actual Grand Prix layout, not an invented shape.",
+            "It's a different kind of track knowledge than naming a circuit from an outline: here you have to reconstruct the sequence of corners piece by piece, which rewards genuinely knowing how a lap flows rather than just recognizing a silhouette.",
+          ]}
+        /><InlineAffiliateAd placement="game-bottom" />
 
       </main>
       <Footer />

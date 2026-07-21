@@ -4,6 +4,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { InlineAffiliateAd } from '@/components/landing/InlineAffiliateAd'
 import { LeaderboardView } from '@/components/games/LeaderboardView'
+import { GameAbout } from '@/components/games/GameAbout'
 import { TrackOutlineGame } from '@/components/games/TrackOutlineGame'
 
 export const metadata: Metadata = {
@@ -108,7 +109,14 @@ export default function TrackOutlinePage() {
           </div>
           <div className="mt-6"><LeaderboardView gameId="track-outline" /></div>
         </div>
-        <InlineAffiliateAd placement="game-bottom" />
+        <GameAbout
+          title="Name the circuit from its outline alone"
+          accent={ACCENT}
+          paragraphs={[
+            "A circuit shown as nothing but a silhouette — no landmarks, no braking zones marked, no corner names. Just the outline every Grand Prix layout ultimately reduces to, and the task of matching it to a name from a shortlist of options.",
+            "Distinctive tracks like Silverstone's high-speed sweeps or Suzuka's crossover give themselves away quickly. Tighter, more generic street or purpose-built layouts are where this actually gets hard — the kind of circuits that look similar in outline but race completely differently in person.",
+          ]}
+        /><InlineAffiliateAd placement="game-bottom" />
       </main>
       <Footer />
     </>

@@ -4,6 +4,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { InlineAffiliateAd } from '@/components/landing/InlineAffiliateAd'
 import { LeaderboardView } from '@/components/games/LeaderboardView'
+import { GameAbout } from '@/components/games/GameAbout'
 import { HigherLowerGame } from '@/components/games/HigherLowerGame'
 
 export const metadata: Metadata = {
@@ -107,7 +108,14 @@ export default function HigherLowerPage() {
           </div>
           <div className="mt-6"><LeaderboardView gameId="higher-lower" /></div>
         </div>
-        <InlineAffiliateAd placement="game-bottom" />
+        <GameAbout
+          title="Higher or lower, one driver stat at a time"
+          accent={ACCENT}
+          paragraphs={[
+            "Two drivers, one real stat — career wins, podiums, poles, whatever the round throws at you. You see one driver's number and have to guess whether the next driver is higher or lower. Get it wrong once and the run ends.",
+            "The trap is obvious stats being wrong more often than you'd think — a driver with a long career but few wins can still edge out a short, dominant one depending on which stat is in play that round, so instinct alone won't carry a long streak.",
+          ]}
+        /><InlineAffiliateAd placement="game-bottom" />
       </main>
       <Footer />
     </>

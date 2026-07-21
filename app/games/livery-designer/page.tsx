@@ -4,6 +4,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { InlineAffiliateAd } from '@/components/landing/InlineAffiliateAd'
 import { LiveryDesignerGame } from '@/components/games/LiveryDesignerGame'
+import { GameAbout } from '@/components/games/GameAbout'
 
 const ACCENT = '#e0115f'
 
@@ -102,7 +103,14 @@ export default function LiveryDesignerPage() {
           </div>
         </div>
 
-        <InlineAffiliateAd placement="game-bottom" />
+        <GameAbout
+          title="Design your own F1 livery in 3D"
+          accent={ACCENT}
+          paragraphs={[
+            "A full 3D F1 car model, ready to paint — bodywork, wings, wheels, and finish, all customizable in real time. Spin it around, try color combinations you'd never see on an actual grid, add your own number and name, and see it rendered as a proper 3D livery rather than a flat template.",
+            "Whether you're recreating a favorite team's colors, designing a fantasy livery, or just experimenting with what works visually on an F1 car's surfaces, the result is yours to save and share once you're happy with it.",
+          ]}
+        /><InlineAffiliateAd placement="game-bottom" />
       </main>
       <Footer />
     </>

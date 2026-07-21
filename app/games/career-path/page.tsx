@@ -4,6 +4,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { InlineAffiliateAd } from '@/components/landing/InlineAffiliateAd'
 import { LeaderboardView } from '@/components/games/LeaderboardView'
+import { GameAbout } from '@/components/games/GameAbout'
 import { CareerPathGame } from '@/components/games/CareerPathGame'
 
 const ACCENT = '#0ea5e9'
@@ -103,7 +104,14 @@ export default function CareerPathPage() {
           </div>
           <div className="mt-6"><LeaderboardView gameId="career-path" /></div>
         </div>
-        <InlineAffiliateAd placement="game-bottom" />
+        <GameAbout
+          title="Guess the driver from their career path"
+          accent={ACCENT}
+          paragraphs={[
+            "Career Path strips a driver down to the one thing that never lies about who they are: the teams they've raced for, revealed one at a time in order. No photos, no names, no liveries — just the sequence of garages a career passed through, from junior-team debutant to wherever they ended up.",
+            "It rewards a different kind of F1 knowledge than a stats quiz does — the ability to trace a career arc from a short list of team names alone. Some paths are obvious after one team. Others stay ambiguous for four or five, especially for drivers who bounced between midfield seats before finding a home.",
+          ]}
+        /><InlineAffiliateAd placement="game-bottom" />
       </main>
       <Footer />
     </>

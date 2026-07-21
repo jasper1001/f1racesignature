@@ -4,6 +4,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { InlineAffiliateAd } from '@/components/landing/InlineAffiliateAd'
 import { LeaderboardView } from '@/components/games/LeaderboardView'
+import { GameAbout } from '@/components/games/GameAbout'
 import { DrawCircuitGame } from '@/components/games/DrawCircuitGame'
 
 const ACCENT = '#ec4899'
@@ -103,7 +104,14 @@ export default function DrawCircuitPage() {
           </div>
           <div className="mt-6"><LeaderboardView gameId="draw-the-circuit" /></div>
         </div>
-        <InlineAffiliateAd placement="game-bottom" />
+        <GameAbout
+          title="Draw a circuit from memory"
+          accent={ACCENT}
+          paragraphs={[
+            "No map, no reference — just a blank canvas and a circuit name. Draw the Grand Prix layout freehand, and your line is scored against the real track geometry for shape accuracy, not just a pass/fail guess.",
+            "Some circuits are muscle memory even for casual fans — Monaco's harbourfront kinks, Suzuka's figure-eight crossover. Others, especially older or less-televised venues, expose how much of what you 'know' about a track actually came from watching a broadcast graphic rather than the layout itself.",
+          ]}
+        /><InlineAffiliateAd placement="game-bottom" />
       </main>
       <Footer />
     </>

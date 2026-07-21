@@ -4,6 +4,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { InlineAffiliateAd } from '@/components/landing/InlineAffiliateAd'
 import { LeaderboardView } from '@/components/games/LeaderboardView'
+import { GameAbout } from '@/components/games/GameAbout'
 import { ConnectionsGame } from '@/components/games/ConnectionsGame'
 
 const ACCENT = '#14b8a6'
@@ -103,7 +104,14 @@ export default function ConnectionsPage() {
           </div>
           <div className="mt-6"><LeaderboardView gameId="connections" /></div>
         </div>
-        <InlineAffiliateAd placement="game-bottom" />
+        <GameAbout
+          title="Find the hidden F1 groupings"
+          accent={ACCENT}
+          paragraphs={[
+            "Sixteen names, four hidden categories — drivers, teams, circuits, or moments from F1 history grouped by a connection that isn't stated anywhere on the board. Some groupings are obvious. Others are deliberately built to bait you into the wrong category first.",
+            "A new puzzle is set for every day, so there's a fresh set of categories to untangle rather than a static bank you can memorize. Four mistakes and it's over, so the safest play is often the group you're most certain of, not the one that looks easiest.",
+          ]}
+        /><InlineAffiliateAd placement="game-bottom" />
       </main>
       <Footer />
     </>

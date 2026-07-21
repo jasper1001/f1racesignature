@@ -3,6 +3,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { InlineAffiliateAd } from '@/components/landing/InlineAffiliateAd'
 import { LeaderboardView } from '@/components/games/LeaderboardView'
+import { GameAbout } from '@/components/games/GameAbout'
 import { PitStopTimerGame } from '@/components/games/PitStopTimerGame'
 
 export const metadata: Metadata = {
@@ -93,8 +94,14 @@ export default function PitStopTimerPage() {
           </div>
           <div className="mt-6"><LeaderboardView gameId="pit-stop-timer" /></div>
         </div>
-
-        <InlineAffiliateAd placement="game-bottom" />
+        <GameAbout
+          title="Release the car at exactly the right instant"
+          accent="#06b6d4"
+          paragraphs={[
+            "A pit stop is won or lost in a fraction of a second. Release the car too early and the wheel isn't fully secured — an unsafe release. Too late and you've handed away track position you fought for. This game strips that decision down to raw reaction: watch the signal, release at the right instant, three difficulty modes.",
+            "Real pit crews train this exact reflex thousands of times before a season starts, because the margin between a championship-winning stop and a costly one is measured in milliseconds, not seconds — the benchmark here is set to reflect that reality, not to be easy.",
+          ]}
+        /><InlineAffiliateAd placement="game-bottom" />
 
       </main>
       <Footer />

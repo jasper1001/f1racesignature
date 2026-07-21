@@ -4,6 +4,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { InlineAffiliateAd } from '@/components/landing/InlineAffiliateAd'
 import { LeaderboardView } from '@/components/games/LeaderboardView'
+import { GameAbout } from '@/components/games/GameAbout'
 import { ChampionshipDeciderGame } from '@/components/games/ChampionshipDeciderGame'
 
 export const metadata: Metadata = {
@@ -108,7 +109,14 @@ export default function ChampionshipDeciderPage() {
           </div>
           <div className="mt-6"><LeaderboardView gameId="championship-decider" /></div>
         </div>
-        <InlineAffiliateAd placement="game-bottom" />
+        <GameAbout
+          title="Play pit wall and decide the title"
+          accent={ACCENT}
+          paragraphs={[
+            "Championship Decider drops you into a real season-finale scenario — the points gap, the tyre options, the weather — and asks the question a pit wall actually has to answer under pressure: what call wins the title?",
+            "Each scenario is drawn from an actual title fight, so the trade-offs aren't invented — they're the same ones that decided real championships. It's less a trivia quiz than a strategy call, testing whether you'd have made the same read a title-winning pit wall did.",
+          ]}
+        /><InlineAffiliateAd placement="game-bottom" />
       </main>
       <Footer />
     </>
