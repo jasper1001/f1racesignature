@@ -175,6 +175,13 @@ export default function RootLayout({
           `}
         </Script>
 
+        {/* Google AdSense */}
+        <Script
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6124787857767080"
+          strategy="beforeInteractive"
+          crossOrigin="anonymous"
+        />
+
         {/* Google tag (gtag.js) */}
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
