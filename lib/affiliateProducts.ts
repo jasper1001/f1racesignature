@@ -1,8 +1,8 @@
 // Affiliate products — official F1 team merch on Amazon, shown ad-style across the
 // site (think Google Ads slots, but hand-curated). Each entry is a single product.
 //
-// Revenue model: `affiliateUrl` is an Amazon short link (amzn.to) carrying our
-// Associates tag. Clicks are tracked via our own `id` so we can attribute
+// Revenue model: `affiliateUrl` is an Amazon product link carrying our
+// Associates tag (anikanik04-20). Clicks are tracked via our own `id` so we can attribute
 // impressions/clicks without depending on Amazon's reporting alone.
 //
 // Conventions:
@@ -11,7 +11,7 @@
 //  - `team`      kebab-case team slug. Keep in sync with display names in driverTeams.ts.
 //  - `type`      the product noun (Hat, Cap, T-Shirt, Hoodie, Mug, Keychain, ...).
 //  - `category`  broad bucket used for filtering/placement (see ProductCategory).
-//  - `affiliateUrl` Amazon Associates short link (amzn.to/...).
+//  - `affiliateUrl` amazon.com/dp/<ASIN>?tag=anikanik04-20.
 //  - `imageUrl`  Amazon CDN image (m.media-amazon.com/...).
 //  - `enabled`   flip to false to pull a product without deleting its history.
 
@@ -32,7 +32,7 @@ export interface AffiliateProduct {
   type: string
   /** Broad category bucket for filtering and ad placement. */
   category: ProductCategory
-  /** Amazon Associates short link. */
+  /** Amazon product link with our Associates tag. */
   affiliateUrl: string
   /** Product image (Amazon CDN). */
   imageUrl: string
@@ -47,7 +47,7 @@ export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
     team: 'red-bull-racing',
     type: 'Hat',
     category: 'Wearables',
-    affiliateUrl: 'https://amzn.to/3SOi3gE',
+    affiliateUrl: 'https://www.amazon.com/dp/B0BSJWVF99?tag=anikanik04-20',
     imageUrl: 'https://m.media-amazon.com/images/I/61h34GJWudL._AC_SX679_.jpg',
     enabled: true,
   },
@@ -56,7 +56,7 @@ export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
     team: 'red-bull-racing',
     type: 'Toy',
     category: 'Collectibles',
-    affiliateUrl: 'https://amzn.to/4eMNuiF',
+    affiliateUrl: 'https://www.amazon.com/dp/B0G2SJM6CW?tag=anikanik04-20',
     imageUrl: 'https://m.media-amazon.com/images/I/61Q-OJCHOfL._AC_SX679_.jpg',
     enabled: true,
   },
@@ -65,7 +65,7 @@ export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
     team: 'red-bull-racing',
     type: 'Toy',
     category: 'Collectibles',
-    affiliateUrl: 'https://amzn.to/3T8xwIv',
+    affiliateUrl: 'https://www.amazon.com/dp/B0DJ1BZD97?tag=anikanik04-20',
     imageUrl: 'https://m.media-amazon.com/images/I/718Awlob4IL._AC_SX679_.jpg',
     enabled: true,
   },
@@ -76,7 +76,7 @@ export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
     team: 'ferrari',
     type: 'Hat',
     category: 'Wearables',
-    affiliateUrl: 'https://amzn.to/4eQ13hB',
+    affiliateUrl: 'https://www.amazon.com/dp/B0G543F789?tag=anikanik04-20',
     imageUrl: 'https://m.media-amazon.com/images/I/71K4bQOCqSL._AC_SX679_.jpg',
     enabled: true,
   },
@@ -85,7 +85,7 @@ export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
     team: 'ferrari',
     type: 'Toy',
     category: 'Collectibles',
-    affiliateUrl: 'https://amzn.to/4fa3Tiw',
+    affiliateUrl: 'https://www.amazon.com/dp/B0DM1JP8DS?tag=anikanik04-20',
     imageUrl: 'https://m.media-amazon.com/images/I/61RVcfh6zaL._AC_SX679_.jpg',
     enabled: true,
   },
@@ -94,7 +94,7 @@ export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
     team: 'ferrari',
     type: 'T-Shirt',
     category: 'Fashion',
-    affiliateUrl: 'https://amzn.to/44lBAb3',
+    affiliateUrl: 'https://www.amazon.com/dp/B0FKPFCKBK?tag=anikanik04-20',
     imageUrl: 'https://m.media-amazon.com/images/I/61pVqdcIhZL._AC_SX679_.jpg',
     enabled: true,
   },
@@ -105,7 +105,7 @@ export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
     team: 'mclaren',
     type: 'Toy',
     category: 'Collectibles',
-    affiliateUrl: 'https://amzn.to/43XzjCC',
+    affiliateUrl: 'https://www.amazon.com/dp/B0FMZRRYFP?tag=anikanik04-20',
     imageUrl: 'https://m.media-amazon.com/images/I/71u0+pxhtOL._AC_SX679_.jpg',
     enabled: true,
   },
@@ -116,7 +116,7 @@ export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
     team: 'mercedes',
     type: 'Toy',
     category: 'Collectibles',
-    affiliateUrl: 'https://amzn.to/4xVBoMS',
+    affiliateUrl: 'https://www.amazon.com/dp/B0CGXZQYMV?tag=anikanik04-20',
     imageUrl: 'https://m.media-amazon.com/images/I/71U3eRb0M5L._AC_SX679_.jpg',
     enabled: true,
   },
@@ -125,7 +125,7 @@ export const AFFILIATE_PRODUCTS: AffiliateProduct[] = [
     team: 'mercedes',
     type: 'Jacket',
     category: 'Fashion',
-    affiliateUrl: 'https://amzn.to/3QvKbVg',
+    affiliateUrl: 'https://www.amazon.com/dp/B0F55NN21X?tag=anikanik04-20',
     imageUrl: 'https://m.media-amazon.com/images/I/618aCJo+meL._AC_SX679_.jpg',
     enabled: true,
   },
