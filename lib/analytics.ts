@@ -81,6 +81,17 @@ export const Analytics = {
   hlPlayAgain: () =>
     trackEvent('hl_play_again'),
 
+  // ── Donations (PayPal / Ko-fi) ────────────────────────────────────────────
+  donatePromptShown: (interactions: number) =>
+    trackEvent('donate_prompt_shown', { interactions }),
+
+  donatePromptDismissed: (method: string) =>
+    trackEvent('donate_prompt_dismissed', { method }),
+
+  // Conversion-intent click on a donation link. `method` = paypal | kofi.
+  donateClicked: (method: string, placement: string) =>
+    trackEvent('donate_click', { method, placement }),
+
   // ── Affiliate shelf (Amazon merch) ────────────────────────────────────────
   // Conversion-intent click on a product → Amazon. `product_id` is our own id
   // from affiliateProducts.ts so we can attribute without Amazon's reporting.

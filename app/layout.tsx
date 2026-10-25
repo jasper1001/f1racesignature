@@ -4,6 +4,7 @@ import { Inter, Playfair_Display } from 'next/font/google'
 import './globals.css'
 import { Providers } from '@/components/Providers'
 import { CookieBanner } from '@/components/layout/CookieBanner'
+import { DonatePrompt } from '@/components/layout/DonatePrompt'
 import { ExploreRail } from '@/components/layout/ExploreRail'
 import { FloatingAffiliateAd } from '@/components/landing/FloatingAffiliateAd'
 import { SiteSearch } from '@/components/layout/SiteSearch'
@@ -202,6 +203,7 @@ export default function RootLayout({
         <ExploreRail />
         <FloatingAffiliateAd />
         <CookieBanner />
+        <DonatePrompt />
       </body>
     </html>
   )

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { SteeringWheelIcon } from '@/components/icons/SteeringWheel'
-import { SEASON } from '@/lib/site'
+import { PayPalIcon } from '@/components/icons/PayPal'
+import { SEASON, PAYPAL_URL, KOFI_URL } from '@/lib/site'
 
 export function Footer() {
   return (
@@ -21,19 +22,31 @@ export function Footer() {
               Where speed becomes art. F1 telemetry rendered as museum-quality collectible prints.
             </p>
 
-            <a
-              href="https://ko-fi.com/jascodingvibes"
-              target="_blank"
-              rel="noopener noreferrer"
-              data-track="footer_kofi_support"
-              title="Support on Ko-fi"
-              className="mt-4 inline-flex items-center justify-center w-8 h-8 rounded-lg border border-[#1c1c1c] text-white/65 hover:text-[#d4a017] hover:border-[#d4a017]/25 transition-all"
-            >
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
-                <path d="M4 5h13a3 3 0 0 1 0 6h-1M4 5v8a4 4 0 0 0 4 4h5a4 4 0 0 0 4-4v-2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M7 2v1.5M10 2v1.5M13 2v1.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-              </svg>
-            </a>
+            <div className="mt-4 flex items-center gap-2">
+              <a
+                href={KOFI_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-track="footer_kofi_support"
+                title="Support on Ko-fi"
+                className="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-[#1c1c1c] text-white/65 hover:text-[#d4a017] hover:border-[#d4a017]/25 transition-all"
+              >
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+                  <path d="M4 5h13a3 3 0 0 1 0 6h-1M4 5v8a4 4 0 0 0 4 4h5a4 4 0 0 0 4-4v-2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M7 2v1.5M10 2v1.5M13 2v1.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                </svg>
+              </a>
+              <a
+                href={PAYPAL_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-track="footer_paypal_donate"
+                title="Donate with PayPal"
+                className="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-[#1c1c1c] text-white/65 hover:text-[#d4a017] hover:border-[#d4a017]/25 transition-all"
+              >
+                <PayPalIcon size={15} />
+              </a>
+            </div>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-8 text-sm">

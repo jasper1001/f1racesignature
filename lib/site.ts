@@ -6,6 +6,10 @@ export const SITE_URL = 'https://f1racesignature.site'
 /** Single contact inbox shown on About/Privacy/Terms/Cookies and in schema.org data. */
 export const CONTACT_EMAIL = 'wayfarerwondersblog@gmail.com'
 
+/** Donation links — PayPal is the primary ask, Ko-fi the secondary. */
+export const PAYPAL_URL = 'https://paypal.me/jasman24'
+export const KOFI_URL = 'https://ko-fi.com/jascodingvibes'
+
 /**
  * The current F1 season — derived automatically from the calendar year.
  *
