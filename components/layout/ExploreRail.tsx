@@ -2,13 +2,17 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
-import { SEASON } from '@/lib/site'
+import { PayPalIcon } from '@/components/icons/PayPal'
+import { Analytics } from '@/lib/analytics'
+import { SEASON, PAYPAL_URL } from '@/lib/site'
 
 interface Feature {
   label: string
   href: string
   desc: string
   icon: React.ReactNode
+  /** Donation method, so clicks also fire the GA donate_click event. */
+  donate?: string
 }
 
 const FEATURES: Feature[] = [
@@ -66,15 +70,11 @@ const FEATURES: Feature[] = [
     ),
   },
   {
-    label: 'Support on Ko-fi',
-    href: 'https://ko-fi.com/jascodingvibes',
-    desc: 'Help fund the project',
-    icon: (
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M4 5h13a3 3 0 0 1 0 6h-1M4 5v8a4 4 0 0 0 4 4h5a4 4 0 0 0 4-4v-2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M7 2v1.5M10 2v1.5M13 2v1.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-      </svg>
-    ),
+    label: 'Donate via PayPal',
+    href: PAYPAL_URL,
+    desc: 'Kidney transplant fund',
+    icon: <PayPalIcon size={16} />,
+    donate: 'paypal',
   },
 ]
 
@@ -152,6 +152,10 @@ export function ExploreRail() {
                 href={f.href}
                 target="_blank"
                 rel="noopener noreferrer"
+                {...(f.donate && {
+                  'data-track': `explore_rail_${f.donate}_donate`,
+                  onClick: () => Analytics.donateClicked(f.donate!, 'explore-rail'),
+                })}
                 className="group flex items-center gap-3 rounded-xl px-3 py-3 text-white/70 hover:text-white hover:bg-white/[0.05] transition-colors"
               >
                 <span className="text-white/65 group-hover:text-[#d4a017] transition-colors shrink-0">
