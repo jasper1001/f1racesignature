@@ -6,10 +6,11 @@ import { Analytics } from '@/lib/analytics'
 import { PAYPAL_URL, KOFI_URL } from '@/lib/site'
 import { CONSENT_SET_EVENT, hasAnsweredConsent } from '@/components/layout/CookieBanner'
 
-// One-time donation ask. Counts the visitor's clicks on links/buttons across
-// pages (persisted in localStorage), and once they've clearly engaged with the
-// site it shows a single polite modal — PayPal first, Ko-fi second. Closing it
-// (or clicking either donate link) marks it seen, so it never appears again.
+// Once-per-visit donation ask. Counts the visitor's clicks on links/buttons
+// across pages (in sessionStorage), and once they've clearly engaged with the
+// site it shows a polite modal — PayPal first, Ko-fi second. Closing it (or
+// clicking either donate link) hides it for the rest of the visit; the next
+// visit starts the count over.
 //
 // Held back until the cookie banner has been answered so the two never stack.
 
@@ -25,8 +26,8 @@ const SHOW_DELAY_MS = 1_500
 
 function markSeen() {
   try {
-    localStorage.setItem(SEEN_KEY, '1')
-    localStorage.removeItem(COUNT_KEY)
+    sessionStorage.setItem(SEEN_KEY, '1')
+    sessionStorage.removeItem(COUNT_KEY)
   } catch {
     /* ignore */
   }
@@ -39,7 +40,7 @@ export function DonatePrompt() {
 
   useEffect(() => {
     try {
-      if (localStorage.getItem(SEEN_KEY)) return
+      if (sessionStorage.getItem(SEEN_KEY)) return
     } catch {
       // Storage blocked — we couldn't remember a dismissal, so never ask.
       return
@@ -47,7 +48,7 @@ export function DonatePrompt() {
 
     let count = 0
     try {
-      count = Number(localStorage.getItem(COUNT_KEY)) || 0
+      count = Number(sessionStorage.getItem(COUNT_KEY)) || 0
     } catch {
       /* ignore */
     }
@@ -67,7 +68,7 @@ export function DonatePrompt() {
       if (!el) return
       count += 1
       try {
-        localStorage.setItem(COUNT_KEY, String(count))
+        sessionStorage.setItem(COUNT_KEY, String(count))
       } catch {
         /* ignore */
       }
