@@ -1,15 +1,14 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { PayPalIcon } from '@/components/icons/PayPal'
 import { Analytics } from '@/lib/analytics'
-import { PAYPAL_URL, KOFI_URL } from '@/lib/site'
+import { KOFI_URL } from '@/lib/site'
 import { CONSENT_SET_EVENT, hasAnsweredConsent } from '@/components/layout/CookieBanner'
 
 // Once-per-visit donation ask. Counts the visitor's clicks on links/buttons
 // across pages (in sessionStorage), and once they've clearly engaged with the
-// site it shows a polite modal — PayPal first, Ko-fi second. Closing it (or
-// clicking either donate link) hides it for the rest of the visit; the next
+// site it shows a polite Ko-fi modal. Closing it (or clicking the donate
+// link) hides it for the rest of the visit; the next
 // visit starts the count over.
 //
 // Held back until the cookie banner has been answered so the two never stack.
@@ -112,9 +111,9 @@ export function DonatePrompt() {
     setOpen(false)
   }
 
-  function donate(method: 'paypal' | 'kofi') {
+  function donate() {
     markSeen()
-    Analytics.donateClicked(method, 'donate-prompt')
+    Analytics.donateClicked('kofi', 'donate-prompt')
     setOpen(false)
   }
 
@@ -158,25 +157,14 @@ export function DonatePrompt() {
         <div className="mt-5 flex flex-col gap-2">
           <a
             ref={primaryRef}
-            href={PAYPAL_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-track="donate_prompt_paypal"
-            onClick={() => donate('paypal')}
-            className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl bg-[#d4a017] text-black text-sm font-semibold hover:bg-[#e8b84b] transition-colors"
-          >
-            <PayPalIcon size={16} />
-            Donate with PayPal
-          </a>
-          <a
             href={KOFI_URL}
             target="_blank"
             rel="noopener noreferrer"
             data-track="donate_prompt_kofi"
-            onClick={() => donate('kofi')}
-            className="flex items-center justify-center w-full px-4 py-2.5 rounded-xl border border-[#2a2a2a] text-white text-sm hover:border-[#d4a017]/40 hover:text-[#d4a017] transition-colors"
+            onClick={donate}
+            className="flex items-center justify-center w-full px-4 py-3 rounded-xl bg-[#d4a017] text-black text-sm font-semibold hover:bg-[#e8b84b] transition-colors"
           >
-            Or support on Ko-fi
+            Support on Ko-fi
           </a>
           <button
             onClick={() => close('maybe_later')}

@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { SteeringWheelIcon } from '@/components/icons/SteeringWheel'
-import { PayPalIcon } from '@/components/icons/PayPal'
-import { SEASON, PAYPAL_URL, KOFI_URL } from '@/lib/site'
+import { SEASON, KOFI_URL } from '@/lib/site'
 
 export function Footer() {
   return (
@@ -35,16 +34,6 @@ export function Footer() {
                   <path d="M4 5h13a3 3 0 0 1 0 6h-1M4 5v8a4 4 0 0 0 4 4h5a4 4 0 0 0 4-4v-2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                   <path d="M7 2v1.5M10 2v1.5M13 2v1.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
                 </svg>
-              </a>
-              <a
-                href={PAYPAL_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-track="footer_paypal_donate"
-                title="Donate with PayPal"
-                className="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-[#1c1c1c] text-white/65 hover:text-[#d4a017] hover:border-[#d4a017]/25 transition-all"
-              >
-                <PayPalIcon size={15} />
               </a>
             </div>
           </div>
