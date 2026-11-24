@@ -122,6 +122,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <head>
+        {/* Impact.com site ownership verification — Impact expects the
+            non-standard `value` attribute, so render the tag verbatim. */}
+        <meta name="impact-site-verification" {...{ value: '26fecbb9-6dc4-4227-aeb8-edfb7895746f' }} />
+
         {/* Structured data — WebSite + Organization */}
         <script
           type="application/ld+json"
