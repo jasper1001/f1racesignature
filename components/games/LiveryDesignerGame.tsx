@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useCallback, type ReactNode } from 'react'
 import dynamic from 'next/dynamic'
 import { ShareButtons } from '@/components/games/ShareButtons'
 import { NextGameCard } from '@/components/games/NextGameCard'
@@ -33,6 +33,23 @@ export function LiveryDesignerGame() {
   const [garage, setGarage] = useState<SavedLivery[]>([])
   const [justSaved, setJustSaved] = useState(false)
   const captureRef = useRef<(() => string) | null>(null)
+  const stageRef = useRef<HTMLDivElement>(null)
+  const [canFullscreen, setCanFullscreen] = useState(false)
+  const [isFullscreen, setIsFullscreen] = useState(false)
+
+  // Element fullscreen isn't available everywhere (e.g. iPhone Safari): only
+  // offer the button where it works, and mirror the real fullscreen state.
+  useEffect(() => {
+    setCanFullscreen(Boolean(document.fullscreenEnabled))
+    const onChange = () => setIsFullscreen(document.fullscreenElement === stageRef.current)
+    document.addEventListener('fullscreenchange', onChange)
+    return () => document.removeEventListener('fullscreenchange', onChange)
+  }, [])
+
+  function toggleFullscreen() {
+    if (document.fullscreenElement) void document.exitFullscreen()
+    else void stageRef.current?.requestFullscreen()
+  }
 
   // Load saved designs after mount (localStorage is client-only).
   useEffect(() => {
@@ -101,6 +118,8 @@ export function LiveryDesignerGame() {
   const shareText = `I just designed my own F1 car${design.name ? ` — "${design.name}" #${design.number}` : ''} in the 3D Livery Designer 🏎️🎨 Build yours:`
 
   // ── Shared styles ──
+  const stageBtn =
+    'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#1a1712]/80 text-white hover:bg-[#1a1712] transition-colors cursor-pointer backdrop-blur'
   const segBtn = (active: boolean) =>
     `px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer border ${
       active
@@ -109,38 +128,55 @@ export function LiveryDesignerGame() {
     }`
 
   return (
-    <div className="grid lg:grid-cols-[1.15fr_1fr] gap-5">
-      {/* ── 3D viewport ── */}
-      <div className="flex flex-col gap-3">
+    <div className="grid lg:grid-cols-[minmax(0,1fr)_minmax(340px,400px)] gap-5 lg:gap-6 items-start">
+      {/* ── 3D studio stage — pinned on desktop while the controls scroll ── */}
+      <div className="flex flex-col gap-3 lg:sticky lg:top-[72px]">
         <div
-          className="relative rounded-2xl overflow-hidden border border-[#dcd5c6]"
-          style={{ height: 'clamp(340px, 52vh, 520px)', background: '#e9e4d7' }}
+          ref={stageRef}
+          className="relative overflow-hidden rounded-2xl border border-[#dcd5c6] h-[62vh] min-h-[360px] lg:h-[calc(100dvh-200px)] lg:min-h-[540px] [&:fullscreen]:h-screen [&:fullscreen]:rounded-none [&:fullscreen]:border-0"
+          style={{ background: '#e8e2d5' }}
         >
           <Scene design={design} autoRotate={autoRotate} captureRef={captureRef} />
-          <button
-            onClick={() => setAutoRotate((v) => !v)}
-            className="absolute top-3 right-3 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#1a1712]/80 text-white hover:bg-[#1a1712] transition-colors cursor-pointer backdrop-blur"
-          >
-            {autoRotate ? '⏸ Stop spin' : '↻ Auto-spin'}
-          </button>
-          <p className="absolute bottom-3 left-3 text-[10px] font-mono uppercase tracking-widest text-[#1a1712]/50">
+
+          <div className="absolute top-3 right-3 flex gap-2">
+            <button onClick={() => setAutoRotate((v) => !v)} className={stageBtn}>
+              {autoRotate ? <IconPause /> : <IconRotate />}
+              {autoRotate ? 'Stop spin' : 'Auto-spin'}
+            </button>
+            {canFullscreen && (
+              <button onClick={toggleFullscreen} className={stageBtn} aria-label={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}>
+                {isFullscreen ? <IconCollapse /> : <IconExpand />}
+                <span className="hidden sm:inline">{isFullscreen ? 'Exit' : 'Fullscreen'}</span>
+              </button>
+            )}
+          </div>
+
+          {/* Livery plate: what you're building, studio-caption style */}
+          <div className="absolute top-3 left-3 rounded-lg bg-[#fbf9f4]/85 backdrop-blur px-3 py-2 border border-[#dcd5c6]">
+            <p className="text-[9px] font-mono uppercase tracking-widest text-[#6b6358]">Livery</p>
+            <p className="text-sm font-semibold text-[#1a1712] leading-tight">
+              {design.name || 'Unnamed'} <span className="font-mono" style={{ color: ACCENT }}>#{design.number || '0'}</span>
+            </p>
+          </div>
+
+          <p className="absolute bottom-3 left-3 text-[10px] font-mono uppercase tracking-widest text-[#1a1712]/55">
             Drag to orbit · scroll to zoom
           </p>
         </div>
 
         {/* Actions */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          <button onClick={handleSave} className="py-2.5 rounded-xl text-sm font-medium text-white transition-all active:scale-95 cursor-pointer" style={{ background: ACCENT }}>
-            {justSaved ? '✓ Saved' : '♥ Save'}
+          <button onClick={handleSave} className="inline-flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-medium text-white transition-all active:scale-95 cursor-pointer" style={{ background: ACCENT }}>
+            {justSaved ? <IconCheck /> : <IconHeart />}{justSaved ? 'Saved' : 'Save'}
           </button>
-          <button onClick={handleDownload} className="py-2.5 rounded-xl text-sm font-medium border border-[#dcd5c6] bg-[#f3eee3] hover:bg-[#e9e2d3] text-[#1a1712] transition-all active:scale-95 cursor-pointer">
-            ↓ PNG
+          <button onClick={handleDownload} className="inline-flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-medium border border-[#dcd5c6] bg-[#f3eee3] hover:bg-[#e9e2d3] text-[#1a1712] transition-all active:scale-95 cursor-pointer">
+            <IconDownload />PNG
           </button>
-          <button onClick={handleRandomize} className="py-2.5 rounded-xl text-sm font-medium border border-[#dcd5c6] bg-[#f3eee3] hover:bg-[#e9e2d3] text-[#1a1712] transition-all active:scale-95 cursor-pointer">
-            🎲 Surprise
+          <button onClick={handleRandomize} className="inline-flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-medium border border-[#dcd5c6] bg-[#f3eee3] hover:bg-[#e9e2d3] text-[#1a1712] transition-all active:scale-95 cursor-pointer">
+            <IconShuffle />Surprise
           </button>
-          <button onClick={() => setDesign(DEFAULT_DESIGN)} className="py-2.5 rounded-xl text-sm font-medium border border-[#dcd5c6] bg-[#f3eee3] hover:bg-[#e9e2d3] text-[#1a1712] transition-all active:scale-95 cursor-pointer">
-            ↺ Reset
+          <button onClick={() => setDesign(DEFAULT_DESIGN)} className="inline-flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-medium border border-[#dcd5c6] bg-[#f3eee3] hover:bg-[#e9e2d3] text-[#1a1712] transition-all active:scale-95 cursor-pointer">
+            <IconReset />Reset
           </button>
         </div>
         {/* CC BY 4.0 attribution for the 3D car model */}
@@ -309,3 +345,21 @@ export function LiveryDesignerGame() {
     </div>
   )
 }
+
+// ── Toolbar icons (line style, matches the site's game icon set) ──────────────
+function Svg({ children }: { children: ReactNode }) {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      {children}
+    </svg>
+  )
+}
+const IconPause = () => <Svg><path d="M9 5v14M15 5v14" /></Svg>
+const IconRotate = () => <Svg><path d="M20 12a8 8 0 1 1-2.3-5.7" /><path d="M20 3.5V7h-3.5" /></Svg>
+const IconExpand = () => <Svg><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" /></Svg>
+const IconCollapse = () => <Svg><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" /></Svg>
+const IconHeart = () => <Svg><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" /></Svg>
+const IconCheck = () => <Svg><path d="M5 12.5l4.5 4.5L19 7.5" /></Svg>
+const IconDownload = () => <Svg><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14" /></Svg>
+const IconShuffle = () => <Svg><path d="M4 7h3.5c4 0 5 10 9 10H20M4 17h3.5c1.6 0 2.7-1.6 3.6-3.5M14 7.5c.7-.3 1.5-.5 2.5-.5H20M17.5 4.5 20 7l-2.5 2.5M17.5 14.5 20 17l-2.5 2.5" /></Svg>
+const IconReset = () => <Svg><path d="M4 12a8 8 0 1 0 2.3-5.7" /><path d="M4 3.5V7h3.5" /></Svg>

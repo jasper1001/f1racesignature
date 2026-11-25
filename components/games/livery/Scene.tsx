@@ -18,6 +18,48 @@ function CaptureBridge({ captureRef }: { captureRef: MutableRefObject<(() => str
   return null
 }
 
+// Photo-studio cyclorama: a soft vertical gradient set as the scene background,
+// so it is part of the rendered frame (PNG export + garage thumbnails included).
+function StudioBackdrop() {
+  const scene = useThree((s) => s.scene)
+  useEffect(() => {
+    const c = document.createElement('canvas')
+    c.width = 4
+    c.height = 512
+    const ctx = c.getContext('2d')!
+    const g = ctx.createLinearGradient(0, 0, 0, 512)
+    g.addColorStop(0, '#f6f3ec')
+    g.addColorStop(0.55, '#e8e2d5')
+    g.addColorStop(1, '#d6cebd')
+    ctx.fillStyle = g
+    ctx.fillRect(0, 0, 4, 512)
+    const tex = new THREE.CanvasTexture(c)
+    tex.colorSpace = THREE.SRGBColorSpace
+    scene.background = tex
+    return () => { scene.background = null; tex.dispose() }
+  }, [scene])
+  return null
+}
+
+// Keeps the whole car in frame for any stage shape: a wide desktop studio sits
+// close, a tall phone viewport backs the camera off. Runs on resize only, so it
+// never fights the user's own orbit / zoom in between.
+const ORBIT_TARGET = new THREE.Vector3(0, 0.1, 0)
+function AutoFrame() {
+  const camera = useThree((s) => s.camera)
+  const width = useThree((s) => s.size.width)
+  const height = useThree((s) => s.size.height)
+  useEffect(() => {
+    if (!width || !height) return
+    const aspect = width / height
+    const dist = THREE.MathUtils.clamp(10 / Math.min(aspect, 1.8), 6.4, 15)
+    const dir = camera.position.clone().sub(ORBIT_TARGET).normalize()
+    camera.position.copy(ORBIT_TARGET).addScaledVector(dir, dist)
+    camera.lookAt(ORBIT_TARGET)
+  }, [camera, width, height])
+  return null
+}
+
 export interface SceneProps {
   design: LiveryDesign
   autoRotate: boolean
@@ -30,10 +72,11 @@ export default function Scene({ design, autoRotate, captureRef }: SceneProps) {
       shadows="soft"
       dpr={[1, 2]}
       gl={{ preserveDrawingBuffer: true, antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.05 }}
-      camera={{ position: [4.0, 2.0, 4.8], fov: 32 }}
-      onCreated={({ scene }) => { scene.background = new THREE.Color('#e7e2d4') }}
+      camera={{ position: [4.6, 2.1, 5.6], fov: 32 }}
     >
       <CaptureBridge captureRef={captureRef} />
+      <StudioBackdrop />
+      <AutoFrame />
 
       {/* Key + fill lighting */}
       <ambientLight intensity={0.35} />
@@ -70,12 +113,12 @@ export default function Scene({ design, autoRotate, captureRef }: SceneProps) {
       <OrbitControls
         enablePan={false}
         minDistance={3}
-        maxDistance={9}
+        maxDistance={16}
         minPolarAngle={0.2}
         maxPolarAngle={Math.PI / 2 - 0.02}
         autoRotate={autoRotate}
         autoRotateSpeed={1.1}
-        target={[0, 0.1, 0]}
+        target={ORBIT_TARGET}
       />
     </Canvas>
   )

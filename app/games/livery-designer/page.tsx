@@ -54,7 +54,7 @@ export default function LiveryDesignerPage() {
       <main className="pt-14 min-h-screen" style={{ background: '#f4f1ea' }}>
 
         {/* Hero */}
-        <div className="relative border-b border-[#dcd5c6] py-16 px-6 text-center overflow-hidden">
+        <div className="relative border-b border-[#dcd5c6] py-10 px-6 text-center overflow-hidden">
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
@@ -97,10 +97,9 @@ export default function LiveryDesignerPage() {
 
         <InlineAffiliateAd placement="game-top" />
 
-        <div className="max-w-6xl mx-auto px-4 py-10">
-          <div className="rounded-2xl bg-[#fbf9f4] overflow-hidden p-4 md:p-6" style={{ border: '1px solid rgba(224,17,95,0.25)', boxShadow: '0 0 0 1px rgba(224,17,95,0.06), 0 0 40px rgba(224,17,95,0.06)' }}>
-            <LiveryDesignerGame />
-          </div>
+        {/* Studio: near full-width so the 3D stage gets the room */}
+        <div className="max-w-[1600px] mx-auto px-3 md:px-6 py-6">
+          <LiveryDesignerGame />
         </div>
 
         <GameAbout
