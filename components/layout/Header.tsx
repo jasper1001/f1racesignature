@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { SteeringWheelIcon } from '@/components/icons/SteeringWheel'
+import { BrandMark } from '@/components/icons/BrandMark'
 import { OPEN_SITE_SEARCH } from '@/components/layout/SiteSearch'
 import { SEASON } from '@/lib/site'
 
@@ -42,7 +42,7 @@ export function Header() {
       <header className="fixed top-0 left-0 right-0 z-40 bg-[#030303]/90 backdrop-blur-md border-b border-[#111111]">
         <div className="px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5 group" onClick={() => setMenuOpen(false)}>
-            <SteeringWheelIcon className="w-7 h-7 text-[#d4a017] group-hover:rotate-12 transition-transform duration-300" />
+            <BrandMark className="w-7 h-7 group-hover:-translate-y-0.5 transition-transform duration-300" />
             <span className="text-white font-semibold tracking-tight" style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}>
               F1Race<span className="text-[#d4a017]">Signature</span>
             </span>

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { GAMES, type GameMeta } from '@/lib/games/registry'
+import { GameIcon } from '@/components/games/GameIcon'
 
 // Three daily-rotating mini-game picks for the homepage. The selection is
 // deterministic per calendar day (epoch-day index, timezone-independent) so it's
@@ -69,10 +70,10 @@ export function GamesOfTheDay() {
               <div className="relative">
                 <div className="flex items-center justify-between mb-4">
                   <span
-                    className="inline-flex items-center justify-center w-11 h-11 rounded-xl text-xl"
-                    style={{ background: `${g.accent}15`, border: `1px solid ${g.accent}25` }}
+                    className="inline-flex items-center justify-center w-11 h-11 rounded-xl"
+                    style={{ color: g.accent, background: `${g.accent}15`, border: `1px solid ${g.accent}25` }}
                   >
-                    {g.icon}
+                    <GameIcon id={g.id} size={22} />
                   </span>
                   <span className="text-[10px] font-mono uppercase tracking-widest" style={{ color: g.accent }}>
                     {g.tag}

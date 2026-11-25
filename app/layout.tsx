@@ -96,8 +96,12 @@ export const metadata: Metadata = {
     images: [`${SITE_URL}/opengraph-image`],
   },
   icons: {
-    icon: '/favicon.svg',
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon-48.png', sizes: '48x48', type: 'image/png' },
+    ],
     shortcut: '/favicon.svg',
+    apple: { url: '/apple-touch-icon.png', sizes: '180x180' },
   },
   verification: {
     google: [

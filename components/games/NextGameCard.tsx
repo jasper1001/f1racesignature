@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { getNextGame } from '@/lib/games/registry'
+import { GameIcon } from '@/components/games/GameIcon'
 
 // ── "Next Game" suggestion shown after a game ends ──────────────────────────────
 // Keeps players in the games loop by surfacing a different game to try next.
@@ -32,10 +33,10 @@ export function NextGameCard({ currentId }: { currentId: string }) {
 
         {/* Icon — gently floats, pops on hover */}
         <span
-          className="anim-float relative inline-flex items-center justify-center w-12 h-12 rounded-xl text-2xl shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6"
-          style={{ background: `${next.accent}15`, border: `1px solid ${next.accent}25` }}
+          className="anim-float relative inline-flex items-center justify-center w-12 h-12 rounded-xl shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6"
+          style={{ color: next.accent, background: `${next.accent}15`, border: `1px solid ${next.accent}25` }}
         >
-          {next.icon}
+          <GameIcon id={next.id} size={24} />
         </span>
 
         {/* Text */}

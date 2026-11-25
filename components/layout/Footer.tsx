@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { SteeringWheelIcon } from '@/components/icons/SteeringWheel'
+import { BrandMark } from '@/components/icons/BrandMark'
 import { SEASON, KOFI_URL } from '@/lib/site'
 
 export function Footer() {
@@ -9,7 +9,7 @@ export function Footer() {
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
           <div>
             <div className="flex items-center gap-2.5 mb-3">
-              <SteeringWheelIcon className="w-6 h-6 text-[#d4a017]" />
+              <BrandMark className="w-6 h-6" />
               <span
                 className="text-white font-semibold"
                 style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}

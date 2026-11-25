@@ -4,6 +4,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { GAMES } from '@/lib/games/registry'
 import { LeaderboardsHub } from '@/components/games/LeaderboardsHub'
+import { GameIcon } from '@/components/games/GameIcon'
 
 export const metadata: Metadata = {
   title: 'F1 Mini Games — Reaction Tests, Trivia & Circuit Puzzles',
@@ -92,7 +93,7 @@ export default function GamesPage() {
             }}
           />
           <p className="relative text-[#d4a017] text-xs font-mono uppercase tracking-widest mb-4">
-            🏁 Mini Games
+            Mini Games
           </p>
           <h1
             className="relative text-4xl md:text-5xl text-[#1a1712] mb-4 font-display"
@@ -177,9 +178,9 @@ export default function GamesPage() {
                 <div className="relative hidden md:flex items-center justify-center overflow-hidden">
                   <span
                     className="anim-float select-none leading-none opacity-90"
-                    style={{ fontSize: '10rem', filter: `drop-shadow(0 12px 30px ${f.accent}30)` }}
+                    style={{ color: f.accent, filter: `drop-shadow(0 12px 30px ${f.accent}30)` }}
                   >
-                    {f.icon}
+                    <GameIcon id={f.id} size={160} strokeWidth={1.25} />
                   </span>
                 </div>
               </Link>
@@ -224,14 +225,15 @@ export default function GamesPage() {
                 {/* Game icon — gently floats, pops on hover */}
                 <div className="mb-5">
                   <span
-                    className="anim-float inline-flex items-center justify-center w-12 h-12 rounded-xl text-2xl transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6"
+                    className="anim-float inline-flex items-center justify-center w-12 h-12 rounded-xl transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6"
                     style={{
+                      color: game.accent,
                       background: `${game.accent}15`,
                       border: `1px solid ${game.accent}25`,
                       animationDelay: `${(i % 6) * 0.4}s`,
                     }}
                   >
-                    {game.icon}
+                    <GameIcon id={game.id} size={24} />
                   </span>
                 </div>
 

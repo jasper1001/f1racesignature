@@ -16,8 +16,8 @@ export interface GameMeta {
   /** One-line teaser used in the "Next Game" suggestion card */
   blurb: string
   duration: string
+  /** Accent colour; the game's line icon (components/games/GameIcon) is drawn in it */
   accent: string
-  icon: string
   /** Optional engagement badge shown on the hub card */
   badge?: string
 }
@@ -33,7 +33,6 @@ export const GAMES: GameMeta[] = [
     blurb: 'Rebuild a scrambled F1 circuit against the clock — fastest build wins.',
     duration: '~1 minute',
     accent: '#84cc16',
-    icon: '🏗️',
     badge: 'New',
   },
   {
@@ -46,7 +45,6 @@ export const GAMES: GameMeta[] = [
     blurb: 'Real F1 strategy calls from the pit wall — would you have got them right?',
     duration: '~10 minutes',
     accent: '#3b82f6',
-    icon: '🏆',
     badge: 'Most Played',
   },
   {
@@ -59,7 +57,6 @@ export const GAMES: GameMeta[] = [
     blurb: 'Release the car at the perfect moment. How sharp are your reactions?',
     duration: '~1 minute',
     accent: '#06b6d4',
-    icon: '⏱️',
     badge: 'Fan Favourite',
   },
   {
@@ -72,7 +69,6 @@ export const GAMES: GameMeta[] = [
     blurb: 'Name the circuit from its silhouette alone. Easy at Monaco, brutal at Bahrain.',
     duration: '~2 minutes',
     accent: '#a855f7',
-    icon: '🗺️',
     badge: 'Quick Play',
   },
   {
@@ -85,7 +81,6 @@ export const GAMES: GameMeta[] = [
     blurb: 'Sketch an F1 track from memory and get scored on accuracy.',
     duration: '~1 minute',
     accent: '#ec4899',
-    icon: '✏️',
     badge: 'New',
   },
   {
@@ -98,7 +93,6 @@ export const GAMES: GameMeta[] = [
     blurb: 'A racing line with no labels — can you name the circuit from its shape?',
     duration: '~2 minutes',
     accent: '#8b5cf6',
-    icon: '📈',
     badge: 'New',
   },
   {
@@ -111,7 +105,6 @@ export const GAMES: GameMeta[] = [
     blurb: 'How fast was that F1 lap? Slide to guess — closest wins.',
     duration: '~2 minutes',
     accent: '#e11d48',
-    icon: '⏲️',
     badge: 'New',
   },
   {
@@ -124,7 +117,6 @@ export const GAMES: GameMeta[] = [
     blurb: 'A scrambled F1 podium — can you put P1, P2 and P3 back in order?',
     duration: '~2 minutes',
     accent: '#d4a017',
-    icon: '🥇',
     badge: 'New',
   },
   {
@@ -137,7 +129,6 @@ export const GAMES: GameMeta[] = [
     blurb: 'Sort 16 F1 tiles into four hidden groups — mind the overlaps.',
     duration: '~3 minutes',
     accent: '#14b8a6',
-    icon: '🧩',
     badge: 'New',
   },
   {
@@ -150,7 +141,6 @@ export const GAMES: GameMeta[] = [
     blurb: 'Drag drivers and teams into S–D tiers and share your ranking.',
     duration: '~2 minutes',
     accent: '#f43f5e',
-    icon: '🏅',
     badge: 'New',
   },
   {
@@ -163,7 +153,6 @@ export const GAMES: GameMeta[] = [
     blurb: 'Name the F1 driver from the teams they raced for.',
     duration: '~2 minutes',
     accent: '#0ea5e9',
-    icon: '🔀',
     badge: 'New',
   },
   {
@@ -176,7 +165,6 @@ export const GAMES: GameMeta[] = [
     blurb: 'More wins or fewer? Compare F1 driver stats and build your streak.',
     duration: 'Endless',
     accent: '#f97316',
-    icon: '⚡',
   },
   {
     id: 'predict-driver',
@@ -188,7 +176,6 @@ export const GAMES: GameMeta[] = [
     blurb: 'Wordle for F1 — crack the mystery driver in six guesses.',
     duration: '~2 minutes',
     accent: '#6366f1',
-    icon: '🎯',
   },
   {
     id: 'guess-the-driver',
@@ -200,7 +187,6 @@ export const GAMES: GameMeta[] = [
     blurb: 'Clues drop one by one — name the driver early for maximum points.',
     duration: '~1 minute',
     accent: '#f59e0b',
-    icon: '🏎️',
   },
   {
     id: 'team-radio',
@@ -212,7 +198,6 @@ export const GAMES: GameMeta[] = [
     blurb: 'A famous radio transmission plays — can you pick the driver?',
     duration: '~3 minutes',
     accent: '#10b981',
-    icon: '📻',
   },
   {
     id: 'lights-out',
@@ -224,7 +209,6 @@ export const GAMES: GameMeta[] = [
     blurb: 'Five lights, then go. Tap the instant they go dark — no jump starts.',
     duration: '~30 seconds',
     accent: '#ef4444',
-    icon: '🚦',
   },
   {
     id: 'livery-designer',
@@ -236,7 +220,6 @@ export const GAMES: GameMeta[] = [
     blurb: 'Paint and style your own F1 car in 3D, then spin it and share it.',
     duration: 'Endless',
     accent: '#e0115f',
-    icon: '🎨',
     badge: 'New',
   },
 ]
