@@ -2,7 +2,7 @@
 
 import { Canvas, useThree } from '@react-three/fiber'
 import { OrbitControls, ContactShadows, Environment, Lightformer } from '@react-three/drei'
-import { useEffect, type MutableRefObject } from 'react'
+import { Suspense, useEffect, type MutableRefObject } from 'react'
 import * as THREE from 'three'
 import type { LiveryDesign } from '@/lib/games/livery'
 import { F1Car } from './F1Car'
@@ -60,7 +60,10 @@ export default function Scene({ design, autoRotate, captureRef }: SceneProps) {
         <Lightformer intensity={1.0} position={[0, 2, -6]} scale={[8, 5, 1]} rotation-y={Math.PI} />
       </Environment>
 
-      <F1Car design={design} />
+      {/* The car is a self-hosted GLB; suspend until it has loaded. */}
+      <Suspense fallback={null}>
+        <F1Car design={design} />
+      </Suspense>
 
       <ContactShadows position={[0, -0.4, 0]} opacity={0.5} scale={9} blur={2.6} far={4} resolution={1024} color="#332f22" />
 

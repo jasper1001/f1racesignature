@@ -143,6 +143,22 @@ export function LiveryDesignerGame() {
             ↺ Reset
           </button>
         </div>
+        {/* CC BY 4.0 attribution for the 3D car model */}
+        <p className="text-[10px] text-[#6b6358] leading-snug">
+          3D model:{' '}
+          <a href="https://sketchfab.com/3d-models/formula-1-2022-car-65dcd974798f4f03be5cdf4f79e228d8" target="_blank" rel="noopener noreferrer" className="underline hover:text-[#1a1712]">
+            &ldquo;Formula 1 2022 Car&rdquo;
+          </a>{' '}
+          by{' '}
+          <a href="https://sketchfab.com/luis.adrian.villagrana" target="_blank" rel="noopener noreferrer" className="underline hover:text-[#1a1712]">
+            luis.adrian.villagrana
+          </a>
+          , licensed{' '}
+          <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer" className="underline hover:text-[#1a1712]">
+            CC BY 4.0
+          </a>
+          ; paint zones adapted.
+        </p>
       </div>
 
       {/* ── Control panel ── */}
